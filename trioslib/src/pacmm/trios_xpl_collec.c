@@ -357,7 +357,7 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
                         k = j+offset[i] ;
                         /* Only pixels with the same value as of the pixel j    */
                         /* will be turned on in the w-pattern                   */
-                        if(s1[k]==s1[j]) {
+                        if(k < npixels && s1[k]==s1[j]) {
                             s = i/NB ;
                             nshifts = i%NB ;
                             wpat[s] = (wpat[s] | bitmsk[nshifts]) ;
