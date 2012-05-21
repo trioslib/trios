@@ -1,14 +1,12 @@
 #include <paclib.h>
 #include <stdlib.h>
 
-typedef img_t mmimage; //TODO: replace all mmimage
-
 xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int cv);
 
 /**
 
   */
-int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, mmimage **img1, mmimage **img2, mmimage **img3) {
+int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t **img1, img_t **img2, img_t **img3) {
     /* Read first image */
     char *filename = imgset_get_fname(imgset, 1, k);
     img_t *img = img_readPGM(filename);
@@ -165,7 +163,7 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
     int      width, wsize, npixels ;
     unsigned short    *s1, *s2 ;
     unsigned char     *c1, *c2, *c3 ;
-    mmimage  *img1 = NULL, *img2 = NULL, *img3 = NULL ;
+    img_t *img1 = NULL, *img2 = NULL, *img3 = NULL ;
     FILE     *fd = NULL ;
 
     /* if log file is given, open it */
@@ -197,13 +195,13 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
                 pac_error(MSG, "lcollec_main: get_images() failed.") ;
                 goto END_lcollec_main ;
             }
-            width = mm_width(img1) ;
-            npixels = mm_npixels(img1) ;
+            width = img_get_width(img1);
+            npixels = img_get_width(img1) * img_get_height(img1) ;
             /* set vector of offsets */
             offset_set(offset, win, width, 1) ;
-            s1 = (unsigned short *)mm_pixels(img1) ; /* treat a labeled image as binary */
-            c2 = (unsigned char *)mm_pixels(img2) ;  
-            c3 = (unsigned char *)mm_pixels(img3) ;  
+            s1 = (unsigned short *)img_get_data(img1) ; /* treat a labeled image as binary */
+            c2 = (unsigned char *)img_get_data(img2) ;
+            c3 = (unsigned char *)img_get_data(img3) ;
             xpl_new = collec_BB(s1, c2, c3, offset, wsize, npixels, cv_flag) ;
             if(xpl_new==NULL) {
                 pac_error(MSG, "lcollec_main: collec_BB() failed.") ;
@@ -218,9 +216,9 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
         }
 
         /* Release memory used by the images */
-        mm_freeimage(img1) ; img1 = NULL ;
-        mm_freeimage(img2) ; img2 = NULL ;
-        mm_freeimage(img3) ; img3 = NULL ;
+        img_free(img1) ; img1 = NULL ;
+        img_free(img2) ; img2 = NULL ;
+        img_free(img3) ; img3 = NULL ;
 
         /* merge xpl_new into xpl */
         if(!xpl_merge(xpl, xpl_new)) {
@@ -241,9 +239,9 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
     return 1;
 
 END_lcollec_main:
-    if (img1!=NULL) mm_freeimage(img1) ;
-    if (img2!=NULL) mm_freeimage(img2) ;
-    if (img3!=NULL) mm_freeimage(img3) ;
+    if (img1!=NULL) img_free(img1) ;
+    if (img2!=NULL) img_free(img2) ;
+    if (img3!=NULL) img_free(img3) ;
     if (offset!=NULL) free(offset) ;
     if (xpl_new!=NULL) xpl_free(xpl_new) ;
     return 0;

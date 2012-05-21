@@ -60,5 +60,11 @@ TEST(read_image)
 	    img_free(img);
 TEST_END
 
+TEST(read_real_image) {
+    img_t *img  = img_readPGM("test_img/input1.pgm");
+    img_free(img);
+
+} TEST_END
+
 #include "runner.h"
 
