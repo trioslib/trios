@@ -5,6 +5,20 @@
 #include <pac_img.h>
 #include <pac_error.h>
 
+void removeComments(FILE *f) {
+    int c;
+    do {
+        c = fgetc(f);
+    } while (isspace(c) != 0);
+    if (c == '#') {
+        do {
+            c = fgetc(f);
+        } while (c != '\n');
+    } else {
+        ungetc(c, f);
+    }
+}
+
 img_t *img_readPGM(char *filename) {
     int w, h, val, maxval;
     int i, j, k;
@@ -13,6 +27,7 @@ img_t *img_readPGM(char *filename) {
     FILE *f = fopen(filename, "r");
     magic1 = fgetc(f); magic2 = fgetc(f);
     if (tolower(magic1) == 'p' && magic2 == '5') {
+        removeComments(f);
         fscanf(f, "%d %d %d", &w, &h, &maxval);
         fgetc(f);
         if (maxval > 255) {

@@ -14,6 +14,7 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
         return 0;
     }
     *img1 = img_convert_type(img, sz16BIT);
+    img_free(img);
     /* Read second image */
     filename = imgset_get_fname(imgset, 2, k);
     img = img_readPGM(filename);
@@ -30,7 +31,13 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
         }
         *img3 = img;
     } else {
-        *img3 = NULL;
+        int i, j;
+        *img3 = img_create(img_get_width(*img1), img_get_height(*img1), 1, sz8BIT);
+        for (i = 0; i < img_get_height(*img1); i++) {
+            for (j = 0; j < img_get_width(*img1); j++) {
+                img_set_pixel(*img3, i, j, 0, 1);
+            }
+        }
     }
     return 1;
 }
@@ -310,7 +317,7 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
                 /* gets the w-pattern centered at the point j */
                 for(i=0; i<wsize; i++) {  /* for each point of the window...*/
                     k = j+offset[i] ;
-                    if(s1[k] != 0) {
+                    if(k < npixels && s1[k] != 0) { // TODO: see if changes here impact something. It shouldn't, but who knows.
                         s = i/NB ;
                         nshifts = i%NB ;
                         wpat[s] = (wpat[s] | bitmsk[nshifts]) ;

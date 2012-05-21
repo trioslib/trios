@@ -17,9 +17,7 @@ TEST(create_img_set) {
     win_write("WIN.w", win);
     win_free(win);
 
-    img_t *im1, *im2, *im3;
-    lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL);
-
+    printf("RESULT: %d\n", lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
 } TEST_END
 
 #include "runner.h"
