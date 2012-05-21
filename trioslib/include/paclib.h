@@ -35,8 +35,10 @@
 #include <pacbasic.h>
 #include <pacio.h>
 #include <paclearn.h>
+#include <pac_img.h>
+#include <xpl_collec.h>
 /*
-#include <pacmm.h>
+
 #include <pacappl.h>
 #include <pacdt.h>
 #include <pacbayes.h>

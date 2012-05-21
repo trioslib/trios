@@ -1,9 +1,42 @@
 #include <paclib.h>
 #include <stdlib.h>
 
-typedef int mmimage;
+typedef img_t mmimage; //TODO: replace all mmimage
 
 xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int cv);
+
+/**
+
+  */
+int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, mmimage **img1, mmimage **img2, mmimage **img3) {
+    /* Read first image */
+    char *filename = imgset_get_fname(imgset, 1, k);
+    img_t *img = img_readPGM(filename);
+    if (img == NULL) {
+        return 0;
+    }
+    *img1 = img_convert_type(img, sz16BIT);
+    /* Read second image */
+    filename = imgset_get_fname(imgset, 2, k);
+    img = img_readPGM(filename);
+    if (img == NULL) {
+        return 0;
+    }
+    *img2 = img;
+    /* If there is a mask, read it */
+    if (imgset_get_grpsize(imgset) >= 3) {
+        filename = imgset_get_fname(imgset, 3, k);
+        img = img_readPGM(filename);
+        if (img == NULL) {
+            return 0;
+        }
+        *img3 = img;
+    } else {
+        *img3 = NULL;
+    }
+    return 1;
+}
+
 
 /**
     Collects examples from a set of images.
@@ -224,9 +257,9 @@ END_lcollec_main:
     These three images are considered binary ones, i.e, all pixels which
     value is not ZERO are treated as a pixel with value equal to ONE.
     
-    \param s1 Input image data 
-    \param p2 Output image data
-    \param p3 Mask image data
+    \param s1 Input image data (short-valued image)
+    \param p2 Output image data (byte-valued image)
+    \param p3 Mask image data (byte-valued image)
     \param offset Vector of offsets (with window information)
     \param wsize Size of vector of offsets.
     \param npixels Number of pixels in the image
@@ -344,4 +377,3 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
     free(wpat);
     return xpl;
 }
-

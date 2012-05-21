@@ -1,4 +1,6 @@
+
 PROJECT(PACBASIC)
+SET(CMAKE_BUILD_TYPE debug)
 SET(PACBASIC_SRCS 
 pac_cmp.c 
 pac_common.c 

@@ -22,6 +22,23 @@ img_t *img_create(int w, int h, int n, int sz) {
     return t;
 }
 
+img_t *img_convert_type(img_t *img, int pixel_size) {
+    int i, j, k, w, h, n;
+    w = img_get_width(img);
+    h = img_get_height(img);
+    n = img_get_nbands(img);
+    img_t *cvt = img_create(w, h, n, pixel_size);
+    for (i = 0; i < h; i++) {
+        for (j = 0; j < w; j++) {
+            for (k = 0; k < n; k++) {
+                unsigned int val = img_get_pixel(img, i, j, k);
+                img_set_pixel(cvt, i, j, k, val);
+            }
+        }
+    }
+    return cvt;
+}
+
 void img_set_pixel(img_t *t, int i, int j, int k, unsigned int v) {
     if (t->pixel_size == sz8BIT) {
         unsigned char val = (unsigned char) v;

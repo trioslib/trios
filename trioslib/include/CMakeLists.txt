@@ -10,6 +10,7 @@ SET (PAC_HEADERS pacbasic.h
                  pac_show.h
                  pac_win.h
                  pac_xpl.h
+                 xpl_collec.h
                  )
 
 INSTALL(FILES ${PAC_HEADERS}  DESTINATION include)
