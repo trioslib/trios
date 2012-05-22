@@ -48,7 +48,7 @@ TEST(write_image)
 TEST_END
 
 TEST(read_image) 
-    img_t *img  = img_readPGM("test_read.pgm");
+    img_t *img  = img_readPGM("test_img/test_read.pgm");
     mu_assert("read: width fail", img_get_width(img) == 3);
     mu_assert("read: height fail", img_get_height(img) == 2);
     mu_assert("read: pixel fail", img_get_pixel(img, 0, 0, 0) == 20);
@@ -63,7 +63,16 @@ TEST_END
 TEST(read_real_image) {
     img_t *img  = img_readPGM("test_img/input1.pgm");
     img_free(img);
-
+    img  = img_readPGM("test_img/input2.pgm");
+    img_free(img);
+    img  = img_readPGM("test_img/input3.pgm");
+    img_free(img);
+    img  = img_readPGM("test_img/ideal1.pgm");
+    img_free(img);
+    img  = img_readPGM("test_img/ideal2.pgm");
+    img_free(img);
+    img  = img_readPGM("test_img/ideal3.pgm");
+    img_free(img);
 } TEST_END
 
 #include "runner.h"

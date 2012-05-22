@@ -13,5 +13,4 @@ add_executable(trios_collec_test trios_collec_test.c)
 target_link_libraries(trios_collec_test pacio pacbasic trios_collec m)
 
 file(COPY test_read_win.txt DESTINATION  ${CMAKE_BINARY_DIR}/bin)
-file(COPY test_read.pgm DESTINATION  ${CMAKE_BINARY_DIR}/bin)
 file(COPY test_img DESTINATION  ${CMAKE_BINARY_DIR}/bin)
