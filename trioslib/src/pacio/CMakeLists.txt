@@ -3,6 +3,7 @@ SET(PACIO_SRCS
 io_header.c			   
 io_imgset.c
 io_img.c
+io_mtm.c
 io_showxpl.c			  
 io_win.c
 io_xpl.c

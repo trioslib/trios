@@ -12,5 +12,9 @@ target_link_libraries(pac_img_test pacio pacbasic m)
 add_executable(trios_collec_test trios_collec_test.c)
 target_link_libraries(trios_collec_test pacio pacbasic trios_collec m)
 
+add_executable(trios_decision_test trios_decision_test.c)
+target_link_libraries(trios_decision_test pacio pacbasic trios_collec paclearn m)
+
+
 file(COPY test_read_win.txt DESTINATION  ${CMAKE_BINARY_DIR}/bin)
 file(COPY test_img DESTINATION  ${CMAKE_BINARY_DIR}/bin)
