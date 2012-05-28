@@ -4,7 +4,17 @@
 xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int cv);
 
 /**
+    Reads three images from an IMGSET: the input image, the ideal image and the mask. If no mask is present,
+    an img_t with all pixels set to 1 is returned.
 
+    \param imgset Image set with the images.
+    \param map_type Type of the operator that will use the images.
+    \param win Estimation window.
+    \param k Index of the images in the IMGSET.
+    \param img1 Address to put the input image.
+    \param img2 Address to put ideal image.
+    \param img3 Address to put mask image.
+    \return 1 on sucess. 0 on failure.
   */
 int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t **img1, img_t **img2, img_t **img3) {
     /* Read first image */

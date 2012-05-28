@@ -2,25 +2,14 @@
 
 /* #define _DEBUG_ */
 
+/*!
+  Compare two files in ASCII format and evaluate if they are equal or not. It ignores tabs, '\n' and spaces.
 
-/*
-     -------------------------------------------
-     FUNCTION: lpaccmp
-     -------------------------------------------
-*/
-
-int  /*+ Purpose: compare two files in ASCII format and evaluate if they are
-	          equal or not. It ignores tabs, '\n' and spaces.           +*/
-  lpaccmp(
-    char *i1,  /*+ In: name of the first file to be compared                +*/
-    char *i2   /*+ In: name of the second file to be compared               +*/
-  )
-/*+ Return: -1 if there was any error while opening the files, 0 if the files
-            are different or 1 if they are equal                            +*/
-{
-/* author: Daniel Imamura (nina@ime.usp.br)                                  */
-/* date: Mon Oct 21 1996                                                     */
-
+  \param i1 Name of the first file to be compared.
+  \param i2 Name of the second file to be compared.
+  \return Return: -1 if there was any error while opening the files, 0 if the files are different or 1 if they are equal.
+  */
+int lpaccmp(char *i1, char *i2) {
   FILE *f1, *f2;
   int  a, igual;
   char ch1, ch2, *palavra1, *palavra2;
