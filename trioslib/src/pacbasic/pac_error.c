@@ -1,24 +1,15 @@
 #include <pacbasic.h>
+/* 003 120 950 828 718 */
 
+/*!
+  Prints error messages. Works like printf.
 
-/*
-     -------------------------------------------
-     FUNCTION: pac_error
-     -------------------------------------------
+  \param type A flag 1 : print message; 0 : do not print message.
+  \param format The error message and the arguments.
+  \param va_list Arguments to the error message (like printf).
+  \return Always return 0.
 */
-
-int        /*+ Purpose: Prints the error messages of the pac routines      +*/
-  pac_error( 
-    int type,              /*+ In: A flag
-                                   1 : print message
-                                   0 : do not print message                +*/
-    const char* format,          /*+ In: The error message and the arguments     +*/
-  ... )
-/*+ Return: ZERO                                                           +*/
-{
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
+int pac_error(int type, const char* format, ...) {
    va_list     args;
 
   if (type == 1) {
@@ -38,23 +29,14 @@ int        /*+ Purpose: Prints the error messages of the pac routines      +*/
   return 0;
 }
 
+/*!
+  Prints fatal error messsages and exit. Works like printf.
 
-
-/*
-     -------------------------------------------
-     FUNCTION: pac_fatal
-     -------------------------------------------
+  \param type A flag 1 : print message; 0 : do not print message.
+  \param format The error message and the arguments.
+  \param va_list Arguments to the error message (like printf).
 */
-
-void       /*+ Purpose: Prints the error messages of the pac routines     +*/
-  pac_fatal( 
-    const char* format,       /*+ In: The error message and the arguments       +*/
-  ... )
-/*+ Return: nothing                                                       +*/ 
-{
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/* date: Fri Nov 29 1996                                                   */
-
+void pac_fatal(const char* format, ...) {
   va_list     args;
 
   fprintf(stderr, "\n *** FATAL ERROR: ") ;
@@ -67,22 +49,14 @@ void       /*+ Purpose: Prints the error messages of the pac routines     +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: pac_debug
-     -------------------------------------------
-*/
- 
-void            /*+ Purpose: print message for debugging purposes         +*/
-  pac_debug(                                                                  
-    const char* format,       /*+ In: The error message and the arguments       +*/
-  ... )
-/*+ Return: nothing                                                       +*/
-{
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                */
-/*  date: Mon Mar 30 1998                                                  */
+/*!
+  Prints debug messages. Works like printf.
 
+  \param type A flag 1 : print message; 0 : do not print message.
+  \param format The error message and the arguments.
+  \param va_list Arguments to the error message (like printf).
+*/
+void pac_debug(const char* format, ...) {
   va_list     args;
 
   fprintf(stderr, "(debug) ") ;
@@ -92,22 +66,14 @@ void            /*+ Purpose: print message for debugging purposes         +*/
   va_end( args );
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: pac_warning
-     -------------------------------------------
-*/
- 
-void            /*+ Purpose: print message for warning purposes           +*/
-  pac_warning(                                                                  
-    const char* format,       /*+ In: The warning message and the arguments     +*/
-  ... )
-/*+ Return: nothing                                                       +*/
-{
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                */
-/*  date: Mon Mar 30 1998                                                  */
+/*!
+  Prints warning messages. Works like printf.
 
+  \param type A flag 1 : print message; 0 : do not print message.
+  \param format The error message and the arguments.
+  \param va_list Arguments to the error message (like printf).
+*/
+void pac_warning(const char* format, ...) {
   va_list     args;
 
   fprintf(stderr, "\n *** WARNING: ") ;
