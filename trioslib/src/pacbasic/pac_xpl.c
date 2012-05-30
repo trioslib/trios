@@ -3,22 +3,14 @@
 /* #define _DEBUG_ */
 
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_create
-     -------------------------------------------
-*/
+/*!
+  Allocate a XPL structure.
 
-xpl_t *            /*+ Purpose: allocate a XPL structure                   +*/
-  xpl_create(
-    int wsize,              /*+ In: w-pattern size                         +*/
-    int type                /*+ In: transformation type (BB, BG, GB or GG) +*/
-  )
-/*+ Return: a pointer to the XPL structure                                 +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param wsize W-pattern size.
+  \param type Transformation type (BB, BG, GB or GG).
+  \return A pointer to the XPL structure.
+  */
+xpl_t * xpl_create(int wsize, int type) {
   xpl_t *xpl ;
 
   if((xpl=(xpl_t *)malloc(sizeof(xpl_t))) == NULL) {
@@ -36,21 +28,12 @@ xpl_t *            /*+ Purpose: allocate a XPL structure                   +*/
 
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_free
-     -------------------------------------------
-*/
+/*!
+  Free the memory used by a XPL structure.
 
-void        /*+ Purpose: free memory area used by a XPL structure          +*/
-  xpl_free(
-    xpl_t *xpl         /*+ In/Out: pointer to the XPL structure            +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param xpl Pointer to the structure.
+  */
+void xpl_free(xpl_t *xpl) {
   if(xpl->root) {
 
     switch(xpl->type) {
@@ -84,256 +67,135 @@ void        /*+ Purpose: free memory area used by a XPL structure          +*/
 
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_get_wsize
-     -------------------------------------------
-*/
+/*!
+  Get the w-pattern size of examples.
 
-int               /*+ Purpose: get the w-pattern size of examples          +*/      
-  xpl_get_wsize(
-    xpl_t *xpl              /*+ In: pointer to the XPL                     +*/
-  )
-/*+ Return: the w-pattern size (integer between 1 and 256)                 +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param xpl Pointer to the XPL.
+  \return The W-pattern size.
+  */
+int xpl_get_wsize(xpl_t *xpl) {
   return(xpl->wsize) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_get_wzip
-     -------------------------------------------
-*/
+/*!
+  Get the compacted size of W-patterns.
 
-int             /*+ Purpose: get the compacted size of w-patterns          +*/
-  xpl_get_wzip(
-    xpl_t *xpl                /*+ In: pointer to the XPL                   +*/
-  )
-/*+ Return: the w-pattern compacted size                                   +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param xpl Pointer to the XPL.
+  \return The W-pattern compacted size.
+  */
+int xpl_get_wzip(xpl_t *xpl) {
   return(xpl->wzip) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_get_n_nodes
-     -------------------------------------------
-*/
+/*!
+  Get the w-pattern size of examples.
 
-unsigned int  /*+ Purpose: get the number of distinct examples in the XPL tree +*/
-  xpl_get_n_nodes(
-    xpl_t *xpl             /*+ In: pointer to the XPL                      +*/
-  )
-/*+ Return: number of nodes in the XPL tree                                +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param xpl Pointer to the XPL.
+  \return Number of nodes in the XPL tree.
+  */
+unsigned int xpl_get_n_nodes(xpl_t *xpl) {
   return(xpl->n_nodes) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_get_sum
-     -------------------------------------------
-*/
+/*!
+  Get the number of examples in the XPL.
 
-unsigned int     /*+ Purpose: get the number of examples in the XPL        +*/
-  xpl_get_sum(
-    xpl_t *xpl                       /*+ In: pointer to the XPL            +*/
-  )
-/*+ Return: the number of examples in the XPL                              +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param xpl Pointer to the XPL.
+  \return Number of examples in the XPL tree.
+  */
+unsigned int xpl_get_sum(xpl_t *xpl) {
   return(xpl->sum) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_get_root
-     -------------------------------------------
-*/
+/*!
+  Get the pointer to the tree that corresponds to the examples set.
 
-int *       /*+ Purpose: get the pointer to the tree that corresponds to the     
-                    examples set                                           +*/
-  xpl_get_root(
-    xpl_t *xpl                     /*+ In: pointer to the XPL              +*/
-  )
-/*+ Return: the pointer to the XPL tree                                    +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param xpl Pointer to the XPL.
+  \return The pointer to the XPL tree.
+  */
+int *xpl_get_root(xpl_t *xpl) {
   return(xpl->root) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_get_type
-     -------------------------------------------
-*/
+/*!
+  Get the transformation type.
 
-int          /*+ Purpose: get the transformation type (BB, BG, GB or GG)   +*/
-  xpl_get_type(
-    xpl_t *xpl                     /*+ In: pointer to the XPL              +*/
-  )
-/*+ Return: the transformation type (BB, BG, GB or GG)                     +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param xpl Pointer to the XPL.
+  \return The transformation type.
+  */
+int xpl_get_type(xpl_t *xpl) {
   return(xpl->type) ;
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_set_root
-     -------------------------------------------
-*/
+/*!
+  Set the pointer to the XPL tree.
 
-void            /*+ Purpose: set a pointer to a XPL tree                   +*/
-  xpl_set_root(
-    xpl_t *xpl,             /*+ In/Out: pointer to the XPL                 +*/
-    int *root               /*+ In: pointer to the XPL tree                +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date Tue May 13 1997                                                    */
-
+  \param xpl Pointer to the XPL.
+  \param root Pointer to the XPL tree.
+  */
+void xpl_set_root(xpl_t *xpl, int *root) {
   xpl->root = (int *)root ;
-
 }
 
+/*!
+  Set the w-pattern size associated to the XPL.
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_set_wsize
-     -------------------------------------------
-*/
-
-void             /*+ Purpose: set the w-pattern size associated to the XPL +*/
-  xpl_set_wsize(
-    xpl_t *xpl,           /*+ In/Out: pointer to the XPL                   +*/
-    int   wsize           /*+ In: w-pattern size to be set                 +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 17:02:32 EDT 1996                                      */
-
+  \param xpl Pointer to the XPL.
+  \param wsize W-pattern size to be set.
+  */
+void xpl_set_wsize(xpl_t *xpl, int wsize) {
   xpl->wsize = wsize ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_set_wzip
-     -------------------------------------------
-*/
+/*!
+  Set the compacted size of w-patterns.
 
-void                  /*+ Purpose: set the compacted size of w-patterns    +*/
-  xpl_set_wzip(
-    xpl_t *xpl,               /*+ In/Out: pointer to the XPL               +*/
-    int   wzip                /*+ In: compacted size of w-patterns         +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param xpl Pointer to the XPL.
+  \param wzip Compacted size of w-patterns.
+  */
+void xpl_set_wzip(xpl_t *xpl, int wzip) {
   xpl->wzip = wzip ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_set_n_nodes
-     -------------------------------------------
-*/
+/*!
+  Set the number of nodes in the tree. Usually used to initialize a XPL structure.
 
-void            /*+ Purpose: set the number of nodes in the tree. Usually
-                             used to initialize a XPL structure            +*/
-  xpl_set_n_nodes(
-    xpl_t *xpl,             /*+ In/Out: pointer to the XPL                 +*/
-    unsigned int n_nodes    /*+ In: number of nodes in the XPL tree        +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param xpl Pointer to the XPL.
+  \param n_nodes Number of nodes in the XPL tree.
+  */
+void xpl_set_n_nodes(xpl_t *xpl, unsigned int n_nodes) {
   xpl->n_nodes = n_nodes ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_set_sum
-     -------------------------------------------
-*/
+/*!
+  Set the number of examples in the XPL.
 
-void           /*+ Purpose: set the number of examples in the XPL          +*/
-  xpl_set_sum(
-    xpl_t *xpl,           /*+ In/Out: pointer to the XPL                   +*/
-    unsigned int sum      /*+ In: amount of examples                       +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param xpl Pointer to the XPL.
+  \param sum Amount of examples.
+  */
+void xpl_set_sum(xpl_t *xpl, unsigned int sum) {
   xpl->sum = sum ;
 }
 
+/*!
+  Set the transformation type.
 
-
-/*
-     -------------------------------------------
-     FUNCTION: xpl_set_type
-     -------------------------------------------
-*/
-
-void          /*+ Purpose: set the transformation type                     +*/
-  xpl_set_type(
-    xpl_t *xpl,                /*+ In/Out: pointer to the XPL              +*/
-    int  type /*+ In: the transformation type to be set (BB, BG, GB or GG) +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
+  \param xpl Pointer to the XPL.
+  \param sum The transformation type to be set (BB, BG, GB or GG).
+  */
+void xpl_set_type(xpl_t *xpl, int type) {
   xpl->type = type ;
 }
 
+/*!
+  Merge two XPLs and assign the result to the first one.
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_merge
-     -------------------------------------------
-*/
-
-int       /*+ Purpose: merge two XPLs and assign the result to the first one +*/
-  xpl_merge(
-    xpl_t *xpl1,       /*+ In/Out: pointer to the first XPL                +*/
-    xpl_t *xpl2        /*+ In/Out: pointer to the second XPL               +*/
-  )
-/*+ Return: 1 on success, 0 on failure                                     +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan 13 1998                                                   */
-/*  Mod: Modified to treat the case WK                                      */
-
+  \param xpl Pointer to the first XPL.
+  \param xpl Pointer to the second XPL.
+  \return 1 on success. 0 on failure.
+  */
+int xpl_merge(xpl_t *xpl1, xpl_t *xpl2) {
   int type ;
 
 
@@ -383,33 +245,15 @@ int       /*+ Purpose: merge two XPLs and assign the result to the first one +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_tree2ll
-     -------------------------------------------
-*/
+/*!
+  Change the tree structure of a XPL set to the linked list structure.
 
-int              /*+ Purpose: change the tree structure of a XPL set to 
-                   the linked list structure                               +*/
-  xpl_tree2ll(
-    xpl_t *xpl,                   /*+ In/Out: XPL structure                +*/
-    int   order_type              /*+ In: Ascendent(1) or descendent(2)    +*/
-  )
-/*+ Return: 1 on success, 0 on failure                                     +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan 13 1998                                                   */
-/*  Mod: Modified to treat the case WK                                      */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Jul 21 1999                                                   */
-/*  Mod: Modified to treat the case BG                                      */
-
+  \param xpl Pointer to XPL.
+  \param order_type Ascendent(1) or descendent(2).
+  \return 1 on success. 0 on failure.
+  */
+int xpl_tree2ll(xpl_t *xpl, int order_type) {
   int type ;
-
 
   type = xpl_get_type(xpl) ;
 
@@ -497,31 +341,13 @@ int              /*+ Purpose: change the tree structure of a XPL set to
 }
 
 
+/*!
+  Count the number of conflicting examples in a XPL set.
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_conflicts
-     -------------------------------------------
-*/
-
-int            /*+ Purpose: count the number of conflicting examples
-                            in a XPL set                                   +*/
-  xpl_conflicts(
-    xpl_t *xpl                       /*+ In: XPL set                       +*/
-  )
-/*+ Return: -1 on failure, >=0 on success                                  +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan 13 1998                                                   */
-/*  Mod: Modified to treat the case WK                                      */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Jul 21 1999                                                   */
-/*  Mod: Modified to treat the case BG                                      */
-
+  \param xpl Pointer to XPL.
+  \return >= 0 on success. -1 on failure.
+  */
+int xpl_conflicts(xpl_t *xpl) {
   int type ;
   int ncflt = 0 ;
   
@@ -587,31 +413,13 @@ int            /*+ Purpose: count the number of conflicting examples
 
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_sort
-     -------------------------------------------
-*/
+/*!
+  Sort examples in a XPL set by frequency.
 
-int         /*+ Purpose: sort examples in a XPL set by frequency           +*/
-  xpl_sort(
-    xpl_t *xpl                         /*+ In/Out: XPL set                 +*/
-  )
-/*+ Return: 1 on success, 0 on failure                                     +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan 13 1998                                                   */
-/*  Mod: Modified to treat the case WK                                      */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Jul 21 1999                                                   */
-/*  Mod: Modified to treat the case BG                                      */
-
-
-
+  \param xpl Pointer to XPL.
+  \return 1 on success. 0 on failure.
+  */
+int xpl_sort(xpl_t *xpl) {
   int type ;
 
   type = xpl_get_type(xpl) ;

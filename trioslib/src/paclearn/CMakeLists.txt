@@ -10,9 +10,9 @@ ipac_mtm.c
 #ipac_mtmBG.c			   
 #ipac_mtmGG.c
 #dp_newdec.c
-#ip_group.c
+ip_group.c
 dp_isi.c
-#dp_group.c
+dp_group.c
 #dp_partition.c
 #dp_itvconcat.c  
 #dp_shannon.c

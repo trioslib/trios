@@ -18,6 +18,9 @@ target_link_libraries(trios_decision_test pacio pacbasic trios_collec paclearn m
 add_executable(trios_isi_test trios_isi_test.c)
 target_link_libraries(trios_isi_test pacio pacbasic trios_collec paclearn m)
 
+add_executable(trios_group_test trios_group_test.c)
+target_link_libraries(trios_group_test pacio pacbasic trios_collec paclearn m)
+
 
 file(COPY test_read_win.txt DESTINATION  ${CMAKE_BINARY_DIR}/bin)
 file(COPY test_img DESTINATION  ${CMAKE_BINARY_DIR}/bin)

@@ -279,18 +279,14 @@ int DIM[256] = {
      FUNCTION: wpat_dimension
      -------------------------------------------
 */
+/*!
+  Computes the number of bits ON in a W-pattern.
 
-int             /*+ Purpose: Computes the number of bits ON in a w-pattern +*/
-  wpat_dimension(
-    unsigned int *wpat,/*+ In: binary w-pattern                            +*/
-    int  wzip          /*+ In: w-pattern compacted size                    +*/
-)
-/*+ Return: number of bits ON in the w-pattern                             +*/
-{
-
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Thu Dec 18 1997                                                   */
-
+  \param wpat Binary W-pattern.
+  \param wzip W-pattern compacted size.
+  \return Number of bits ON in a W-pattern
+*/
+int wpat_dimension(unsigned int *wpat, int wzip) {
   int i, dimension, aux ;
 
   dimension = 0 ;
@@ -303,35 +299,17 @@ int             /*+ Purpose: Computes the number of bits ON in a w-pattern +*/
   return(dimension) ;
 }
 
+/*!
+  Verify the order relation between two w-patterns.
 
-/*
-     -------------------------------------------
-     FUNCTION: wpat_order
-     -------------------------------------------
-*/
-
-int          /*+ Purpose: verify the order relation between two w-patterns +*/
-  wpat_order(
-    unsigned int *wpat1, /*+ In: first w-pattern                           +*/
-    unsigned int *wpat2, /*+ In: second w-pattern                          +*/
-    int  wzip          /*+ In: compacted w-pattern size                    +*/
-)
-/*+ Return: 3 if they cannot be compared, 0 if they are equal, 1 if
-            wpat1 < wpat2, and 2 if wpat1 > wpat2                          +*/
-{
-
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Jan  2 1998                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Jul 30 1999                                                   */
-/*  Mod: bug found and fixed. Code 3 was being returned in some cases       */
-/*       where right code was 2. Now the routine also returns code 0,       */
-/*       meaning both patterns are the same.                                */
-
+  \param wpat1 First W-pattern.
+  \param wpat2 Second W-pattern.
+  \param wzip Compacted W-pattern size.
+  \return 3 if they cannot be compared, 0 if they are equal, 1 if wpat1 < wpat2, and 2 if wpat1 > wpat2.
+  */
+int wpat_order(unsigned int *wpat1, unsigned int *wpat2, int wzip) {
   int i ;
   int retcode ;
-
 
   retcode = 0 ;
 
@@ -353,26 +331,15 @@ int          /*+ Purpose: verify the order relation between two w-patterns +*/
   return(retcode) ;
 }
 
+/*!
+  Verify whether a given w-pattern is greater than another one.
 
-/*
-     -------------------------------------------
-     FUNCTION: wpat_greater_than
-     -------------------------------------------
-*/
-
-int          /*+ Purpose: verify whether a given w-pattern is greater than
-                          another one                                      +*/
-  wpat_greater_than(
-    unsigned int *wpat1,    /*+ In: first w-pattern                        +*/
-    unsigned int *wpat2,    /*+ In: second w-pattern                       +*/
-    int  wzip          /*+ In: compacted w-pattern size                    +*/
-)
-/*+ Return: 1 if wpat1 > wpat2, 0 otherwise                                +*/
-{
-
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  Date: Fri Jul 30 1999                                                   */
-
+  \param wpat1 First W-pattern.
+  \param wpat2 Second W-pattern.
+  \param wzip Compacted W-pattern size.
+  \return 1 if wpat1 > wpat2, 0 otherwise.
+  */
+int wpat_greater_than(unsigned int *wpat1, unsigned int *wpat2, int  wzip) {
   int i ;
 
   for(i=0; i<wzip; i++) {
@@ -383,47 +350,28 @@ int          /*+ Purpose: verify whether a given w-pattern is greater than
   return(1) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: offset_create
-     -------------------------------------------
-*/
-int* /*+ Purpose: create the offset vector according to window size +*/
-    offset_create(
-        int wsize /*+ In: window size +*/
-    )
-    /*+ Return: Pointer to offset vector if successful or NULL in case of
-            failure +*/
-{
-/*  author: Carlos S. Santos. (csantos@ime.usp.br) */
-/*  date: Sat Jan 06 2007 */
+/*!
+  Create the offset vector according to window size.
+
+  \param wsize Window size.
+  \return Pointer to offset vector if successful or NULL in case of failure.
+ */
+int* offset_create(int wsize) {
     int *offset;
     offset = (int *) malloc(sizeof(int)*wsize);
     return offset;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: offset_set
-     -------------------------------------------
+/*!
+  Set the offset vector according to a window and an image.
+
+  \param offset Offset vector.
+  \param win Pointer to the window.
+  \param width Width of the image.
+  \param band Band of the image.
 */
 
-void  /*+ Purpose: set the offset vector according to a window and an image +*/
-  offset_set(
-    int      *offset, /*+ In/Out: the offset vector                         +*/
-    window_t *win,    /*+ In: pointer to the window                         +*/
-    int       width,  /*+ In: the width of the image                        +*/
-    int       band    /*+ In: band of the window                            +*/
-  )
-/*+ Return: nothing                                                         +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/*  date: Mon Oct 21 1996                                                    */
-
-/* Date: Thu Feb 17 2000                                                   */
-/* Mod: Window structure changed to support multiple bands. Changes to     */
-/*      adequate to the structure changing (parameter "band")              */
-
+void offset_set(int *offset, window_t *win, int width, int band) {
   int  h_low, h_high, w_low, w_high ;
   int  i, j, k, l ;
   char *windata ;
@@ -457,25 +405,16 @@ void  /*+ Purpose: set the offset vector according to a window and an image +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: wpat_compare
-     -------------------------------------------
+/*!
+  Compate two W-patterns.
+
+  \param wpat1 First W-pattern.
+  \param wpat2 Second W-pattern.
+  \param wzip Compacted W-pattern size.
+  \return 0 if they are equal, -1 if the first is less and 1 if the first is greater than the second.
 */
 
-int             /*+ Purpose: compare two w-patterns (taken as integers)    +*/
-  wpat_compare(
-    unsigned int *wpat1,  /*+ In: first w-pattern                          +*/
-    unsigned int *wpat2,  /*+ In: second w-pattern                         +*/
-    int  wzip             /*+ In: compacted w-pattern size                 +*/
-)
-/*+ Return: 0 if they are equal, -1 if the first is less and 1 if the first
-            is greater than the second                                     +*/
-{
-
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Thu Nov 28 1996                                                   */
-
+int wpat_compare(unsigned int *wpat1, unsigned int *wpat2, int wzip) {
   int i ;
 
   for(i=wzip-1; i>=0; i--) {
@@ -487,55 +426,16 @@ int             /*+ Purpose: compare two w-patterns (taken as integers)    +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: wpat_compareXG
-     -------------------------------------------
+/*!
+  Computes the Hamming distance between two binary w-patterns.
+
+  \param wpat1 First W-pattern.
+  \param wpat2 Second W-pattern.
+  \param wzip Compacted W-pattern size.
+  \return An integer between 0 and n (where n stands for wsize).
 */
 
-int             /*+ Purpose: compare two XG w-patterns                     +*/
-  wpat_compareXG(
-    char  *wpat1,      /*+ In: first w-pattern                             +*/
-    char  *wpat2,      /*+ In: second w-pattern                            +*/
-    int  wsize         /*+ In: w-pattern size                              +*/
-)
-/*+ Return: 0 if they are equal, -1 if the first is less and 1 if the first
-            is greater than the second                                     +*/
-{
-
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date Thu Apr 24 1997                                                    */
-
-  int i ;
-
-  for(i=wsize-1; i>=0; i--) {
-    if(wpat1[i] > wpat2[i]) return(1) ;
-    if(wpat1[i] < wpat2[i]) return(-1) ;
-  }
-
-  return(0) ;
-}
-
-
-/*
-     -------------------------------------------
-     FUNCTION: wpat_hamming
-     -------------------------------------------
-*/
-
-int             /*+ Purpose: computes the Hamming distance between two
-                    binary w-patterns                                      +*/
-  wpat_hamming(
-    unsigned int *wpat1,   /*+ In: first w-pattern                         +*/
-    unsigned int *wpat2,   /*+ In: second w-pattern                        +*/
-    int    wzip           /*+ In: compacted w-pattern's size               +*/
-)
-/*+ Return: an integer between 0 and n (where n stands for wsize)          +*/
-{
-
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 22 1996                                                   */
-
+int wpat_hamming(unsigned int *wpat1, unsigned int *wpat2, int wzip) {
   int wpat_xor, dist ;
   int i, j ;
 
@@ -550,22 +450,14 @@ int             /*+ Purpose: computes the Hamming distance between two
   return(dist) ;
 }
 
+/*!
+  Calculate the size of compacted w-pattern.
 
-/*
-     -------------------------------------------
-     FUNCTION: size_of_zpat
-     -------------------------------------------
+  \param wsize Size of W-pattern.
+  \return The compacted W-pattern size.
 */
 
-int               /*+ Purpose: calculate the size of compacted w-pattern +*/
-  size_of_zpat(
-    int  wsize    /*+ size of w-pattern                                  +*/
-  )
-/*+ Return: the compacted w-pattern size                                 +*/
-{
-/*  author: Nina S. Tomita                                                */
-/*  date: Mon Nov 25 1996                                                 */
-
+int size_of_zpat(int wsize) {
   return((wsize+31)/32) ;
 }
 
@@ -573,28 +465,15 @@ int               /*+ Purpose: calculate the size of compacted w-pattern +*/
 /*======================================================================== */
 /*        Routines to do the treatment of the list of frequencies          */
 
-/*
-     -------------------------------------------
-     FUNCTION: freq_node_create
-     -------------------------------------------
+/*!
+  Creates a node for the frequency list.
+
+  \param label Label of the pattern.
+  \param freq Frequency of the pattern.
+  \return Created freq_node.
 */
-
-freq_node *              /*+ Purpose: Creates a node for the frequency list +*/
- freq_node_create(
-    int label,           /*+ In: label of the pattern                       +*/
-    unsigned int freq    /*+ In: frequency of the pattern                   +*/
-)
-/*+ Return: pointer to the created node                                     +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/*  date: Thu Apr 24 1997                                                    */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)        */
-/*  Date: Thu Jul 29 1999                                                    */
-/*  Mod: Changed label to int                                                */
-
+freq_node *freq_node_create(int label, unsigned int freq) {
   freq_node *p ;
-
 
   p = (freq_node *)malloc(sizeof(freq_node)) ;
   if(p == NULL) {
@@ -610,26 +489,15 @@ freq_node *              /*+ Purpose: Creates a node for the frequency list +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: freqlist_free
-     -------------------------------------------
+/*!
+  Free the memory of a freq_node.
+
+  \param freq_list freq_node to free.
 */
 
-void           /*+ Purpose: To free a frequency list                     +*/
-  freqlist_free(
-    freq_node *freq_list      /*+ In: frequency list to be free          +*/
-)
-/*+ Return: nothing                                                      +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)               */
-/*  date: Tue Apr 29 1997                                                 */
-
+void freqlist_free(freq_node *freq_list) {
   /* A non-recursive algorithm will be used here */
-
   freq_node *p, *paux ;
-
-
   p = freq_list ;
 
   while(p) {
@@ -643,28 +511,15 @@ void           /*+ Purpose: To free a frequency list                     +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: set_freq
-     -------------------------------------------
+/*!
+  Searches for each label of the input freq list in the frequency list and adjusts its frequency if it exists, if it doesn't exist, puts the label into the list.
+
+  \param freqlstin Pointer to the input frequency list.
+  \param freqlist Pointer to another frequency list.
+  \return 1 on succes, 0 on failure.
 */
 
-int /*+ Purpose: Searches for each label of the input freq list in the
-        frequency list and adjusts its frequency if it exists, if it
-        doesn't exist, puts the label into the list                        +*/
-  set_freq(
-    freq_node *freqlstin,     /*+ In: pointer to the input frequency list  +*/
-    freq_node **freqlist      /*+ In/Out: pointer to the frequency list    +*/
-)
-/*+ Return: 1 on success, 0 on failure                                     +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Apr 25 1997                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Jul 29 1999                                                   */
-/*  Mod: Changed label to int                                               */
-
+int set_freq(freq_node *freqlstin, freq_node **freqlist) {
   int  label ;
   int  freq ;
   freq_node *pfreq, *pfreqprev, *qfreq, *qfreqnext;
@@ -753,31 +608,20 @@ pac_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: FREQ_SUM
-     -------------------------------------------
+/*!
+  Sums the frequency of a W-pattern.
+
+  \param freqlist Frequency list of a W-pattern.
+  \return The sum of the frequencies of the labels that appeared in the W-pattern.
 */
-
-unsigned int    /*+ Purpose: Sums the frequencies of w-pattern             +*/
-  freq_sum(
-    freq_node  *freqlist     /*+ In: frequency list of a w-pattern         +*/
-)
-/*+ Return: The sum of the frequencies of the labels that appeared in the
-            w-pattern                                                      +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Thu May  8 1997                                                   */
-
+unsigned int freq_sum(freq_node *freqlist) {
   freq_node *p ;
   unsigned int sum ;
-
 
   p = freqlist ;
   sum = 0 ;
 
   while(p) {
-
     sum += p->freq ;
     p = p->next ;
 

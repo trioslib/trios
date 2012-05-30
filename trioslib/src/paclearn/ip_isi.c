@@ -2,7 +2,6 @@
 #include "paclearn_local.h"
 
 #include <sys/time.h>
-#include <sys/resource.h>
 #include <unistd.h>
 
 
@@ -409,7 +408,7 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
   int       i, k, count ;
 
   unsigned long int tu0, tuf, ts0, tsf ;
-  struct rusage rusage;
+  /*struct rusage rusage;*/
 
 
 #ifdef _DEBUG_
@@ -528,9 +527,9 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
     if(mtm0->nmtm) {
 
 
-      getrusage(RUSAGE_SELF, &rusage);
+      /*getrusage(RUSAGE_SELF, &rusage);
       tu0 = rusage.ru_utime.tv_sec ;
-      ts0 = rusage.ru_stime.tv_sec ;
+      ts0 = rusage.ru_stime.tv_sec ;*/
 
       /* convert negative examples (those with label lb[i])
 	 into (trivial) intervals */ 
@@ -546,12 +545,12 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
 	return pac_error(MSG, "isi_gen: quine_like() failed.") ;
       }
 
-      getrusage(RUSAGE_SELF, &rusage);
+      /*getrusage(RUSAGE_SELF, &rusage);
       tuf = rusage.ru_utime.tv_sec ;
       tsf = rusage.ru_stime.tv_sec ;
   
       *time_usr = *time_usr + (tuf - tu0);
-      *time_sys = *time_sys + (tsf - ts0);
+      *time_sys = *time_sys + (tsf - ts0);*/
 
 #ifdef _DEBUG_
       pac_debug("Grouping label %d done.", lb[i] ) ;
