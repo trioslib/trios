@@ -1,6 +1,7 @@
 SET (PAC_HEADERS pacbasic.h
                  pacio.h
                  pac_apert.h
+                 pacappl.h
                  pac_error.h
                  pac_imgset.h
                  pac_img.h

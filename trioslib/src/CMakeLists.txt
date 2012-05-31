@@ -1,1 +1,1 @@
-SUBDIRS(pacbasic pacio paclearn pacmm) 
+SUBDIRS(pacbasic pacio paclearn pacmm pacappl) 
