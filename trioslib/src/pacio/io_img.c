@@ -20,6 +20,7 @@ void removeComments(FILE *f) {
 }
 
 img_t *img_readPGM(char *filename) {
+    //TODO: ERRORS
     int w, h, val, maxval;
     int i, j, k;
     char magic1, magic2;
