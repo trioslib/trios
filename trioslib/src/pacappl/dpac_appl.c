@@ -23,8 +23,8 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
   }
   width = img_get_width(img_appl) ;
   height = img_get_height(img_appl);
-  if(mm_pixeldatatype(img_appl) != MM_USHORT) {
-    img_tmp = mm_createimage(width, height, 1, MM_USHORT) ;
+  if(img_get_pixel_size(img_appl) != sz16BIT) {
+    img_tmp = img_create(width, height, 1, sz16BIT);
     if(!img_tmp) {
       img_free(img_appl) ;
       return pac_error(MSG, "lpapplic: mm_createimage() failed.") ;
@@ -44,8 +44,8 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
     img_free(img_appl) ;
     return pac_error(MSG, "lpapplic: set_mask() failed.") ;    
   }
-  uspixels = (unsigned short *)mm_pixels(img_appl) ;
-  ucpixels1 = (unsigned char *)mm_pixels(img_mask) ;
+  uspixels = (unsigned short *) img_get_data(img_appl);
+  ucpixels1 = (unsigned char *)img_get_data(img_mask) ;
   /* creates output image : SHORT if type==BG and maximum label > 255 */
   npixels = mm_npixels(img_appl) ;
   type = itv_get_type(itv) ;
@@ -62,7 +62,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
         return pac_error(MSG, "lpapplic: mm_createimage() failed.") ;
       }
       mm_const_image(img_out, (double)0) ;  
-      uspixels2 = (unsigned short *)mm_pixels(img_out) ;
+      uspixels2 = (unsigned short *)img_get_data(img_out) ;
     }
     else {
       img_out = mm_createimage(width, height, 1, MM_UBYTE) ;
@@ -72,7 +72,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
         return pac_error(MSG, "lpapplic: mm_createimage() failed.") ;
       }
       mm_const_image(img_out, (double)0) ;  
-      ucpixels2 = (unsigned char *)mm_pixels(img_out) ;
+      ucpixels2 = (unsigned char *)img_get_data(img_out) ;
     }
   }
   else {
@@ -83,7 +83,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
       return pac_error(MSG, "lpapplic: mm_createimage() failed.") ;
     }
     mm_const_image(img_out, (double)0) ;  
-    ucpixels2 = (unsigned char *)mm_pixels(img_out) ;
+    ucpixels2 = (unsigned char *)img_get_data(img_out) ;
     /* Change label of the intervals in the basis by "on_value" */
     if(!itv_label(itv, 1, on_value)) {
       img_free(img_appl) ;

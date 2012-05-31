@@ -19,6 +19,7 @@ unsigned int img_get_pixel(img_t *, int, int, int);
 int img_get_width(img_t *);
 int img_get_height(img_t *);
 int img_get_nbands(img_t *);
+int img_get_pixel_size(img_t *t);
 unsigned char *img_get_data(img_t *);
 void img_free(img_t *i);
 
