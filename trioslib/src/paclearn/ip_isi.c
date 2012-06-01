@@ -5,11 +5,11 @@
 #include <unistd.h>
 
 
-#define _DEBUG_
-/*
+/*#define _DEBUG_
+
 #define _DEBUG_1_
-#define _DEBUG_2_ 
-*/
+#define _DEBUG_2_ */
+
 
 /* #define _DEBUG_TIME_ */
 
@@ -150,6 +150,8 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
   mtm_BX *q ;
   int    j ;
 #endif
+
+  pac_debug("isi_basic");
 
   GLlog_step = log_step ;
   if(log_step) {
@@ -1330,6 +1332,7 @@ int             /*+ Purpose: ISI-3 (point case)                            +*/
 #ifdef _DEBUG_2_
   int     i_aux ;
   itv_BX  *aux ;
+  pac_debug("isi_3");
 #endif
 
 
@@ -1447,7 +1450,6 @@ int             /*+ Purpose: ISI-3 (point case)                            +*/
        the intervals that will be splitted  */
 
     while(p_list != NULL) {
-
       stop_flag = 0 ;
       tmp = p_list->next ;
       j = 0 ;

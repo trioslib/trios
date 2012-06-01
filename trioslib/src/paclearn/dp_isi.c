@@ -193,7 +193,7 @@ pac_debug("Writing intervals: done.") ;
   win_free(win2) ;
   itv_free(itv) ;
 
-  if(apt) apert_free(apt) ;
+  /*if(apt) apert_free(apt) ;*/
 
 
   return(1) ;

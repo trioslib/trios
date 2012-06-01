@@ -15,6 +15,9 @@ target_link_libraries(trios_collec_test pacio pacbasic trios_collec m)
 add_executable(trios_decision_test trios_decision_test.c)
 target_link_libraries(trios_decision_test pacio pacbasic trios_collec paclearn m)
 
+add_executable(trios_isi_test trios_isi_test.c)
+target_link_libraries(trios_isi_test pacio pacbasic trios_collec paclearn m)
+
 add_executable(trios_group_test trios_group_test.c)
 target_link_libraries(trios_group_test pacio pacbasic trios_collec paclearn m)
 
