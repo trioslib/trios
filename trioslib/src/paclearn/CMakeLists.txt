@@ -2,7 +2,7 @@ PROJECT(PACLEARN)
 SET(PACLEARN_SRCS
 ip_isi.c
 #ip_isigray.c			   
-#ip_mincover.c
+ip_mincover.c
 #ip_newdec.c			   
 #ip_shannon.c
 #ip_switch.c			   
