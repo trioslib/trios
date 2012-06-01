@@ -1,5 +1,6 @@
 SET (PAC_HEADERS pacbasic.h
                  pacio.h
+                 pacapplic.h
                  pac_apert.h
                  pacappl.h
                  pac_error.h
