@@ -5,6 +5,13 @@
 #include <pac_img.h>
 #include <pac_error.h>
 
+
+/*!
+  Remove the comments from a PGM file.
+
+  \param f File pointer.
+  \internal
+  */
 void removeComments(FILE *f) {
     int c;
     do {
@@ -19,6 +26,12 @@ void removeComments(FILE *f) {
     }
 }
 
+/*!
+  Read a PGM image.
+
+  \param filename Path to the image file.
+  \return An img_t with the image.
+  */
 img_t *img_readPGM(char *filename) {
     //TODO: ERRORS
     int w, h, val, maxval;
@@ -48,7 +61,12 @@ img_t *img_readPGM(char *filename) {
     }
 }
 
+/*!
+  Writes an image to a PGM file.
 
+  \param filename Path to save the image to.
+  \param img Image to be saved.
+  */
 void img_writePGM(char *filename, img_t *img) {
         FILE *f = fopen(filename, "w");
         int i, j, w, h;
