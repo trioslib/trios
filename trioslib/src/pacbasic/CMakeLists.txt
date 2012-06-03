@@ -1,7 +1,7 @@
 
-PROJECT(PACBASIC)
+PROJECT(TRIOS_BASIC)
 SET(CMAKE_BUILD_TYPE debug)
-SET(PACBASIC_SRCS 
+SET(TRIOS_BASIC_SRCS
 pac_cmp.c 
 pac_common.c 
 pac_error.c 
@@ -14,9 +14,9 @@ pac_show.c
 pac_win.c 
 pac_xpl.c 
 pac_xplBB.c)
-ADD_LIBRARY(pacbasic ${PACBASIC_SRCS})
+ADD_LIBRARY(triosbasic ${TRIOS_BASIC_SRCS})
 
-INSTALL(TARGETS pacbasic
+INSTALL(TARGETS triosbasic
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib

@@ -1,5 +1,5 @@
-PROJECT(PACLEARN)
-SET(PACLEARN_SRCS
+PROJECT(TRIOS_LEARN)
+SET(TRIOS_LEARN_SRCS
 ip_isi.c
 #ip_isigray.c			   
 ip_mincover.c
@@ -25,9 +25,9 @@ dpac_mtm.c
 #dp_mincover.c
 #dp_rank.c
 )
-ADD_LIBRARY(paclearn ${PACLEARN_SRCS})
+ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})
 
-INSTALL(TARGETS paclearn
+INSTALL(TARGETS trioslearn
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
