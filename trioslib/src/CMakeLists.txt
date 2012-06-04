@@ -1,1 +1,1 @@
-SUBDIRS(pacbasic pacio paclearn pacmm pacappl) 
+SUBDIRS(basic io learn mm appl)
