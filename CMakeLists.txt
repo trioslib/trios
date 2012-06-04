@@ -1,5 +1,5 @@
 PROJECT(TRIOS)
-cmake_minimum_required(VERSION 2.4)
+cmake_minimum_required(VERSION 2.8)
 
 # Path for auxiliary CMake files
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
@@ -18,6 +18,9 @@ OPTION(TRIOS_BUILD_SHARED "Build a shared version of TRIOS libraries" OFF)
 OPTION(WRAP_PYTHON "Build TRIOS wrapper for python." ON)
 OPTION(BUILD_LATEX "Build latex (TRIOS guide) documentation." ON)
 OPTION(BUILD_CXREF "Build cxref (API) documentation." ON)
+
+#Enable tests
+ENABLE_TESTING()
 
 #Doxygen Automatic Documentation
 find_package(Doxygen)

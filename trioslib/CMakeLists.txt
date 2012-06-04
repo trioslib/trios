@@ -4,7 +4,6 @@ INCLUDE_DIRECTORIES(${TRIOSLIB_INCLUDE_DIR} )
 
 SET(CMAKE_BUILD_TYPE debug)
 
-
 SUBDIRS(include src test)
 
 
@@ -47,8 +46,8 @@ ENDIF(APPLE)
 
 
 # Save the compiler settings so another project can import them.
-INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
-CMAKE_EXPORT_BUILD_SETTINGS(${TRIOS_BINARY_DIR}/TRIOSBuildSettings.cmake)
+#INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
+#CMAKE_EXPORT_BUILD_SETTINGS(${TRIOS_BINARY_DIR}/TRIOSBuildSettings.cmake)
 # TODO: update to use the new INSTALL command
 # commented out because it broke the build; probably a directory
 # mismatch
