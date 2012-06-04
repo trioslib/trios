@@ -55,7 +55,6 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
     img_free(img_appl) ;
     return pac_error(MSG, "lpapplic: itv_read() failed.") ;
   }
-  pac_debug("label %d A %x B %x", ((itv_BX *)itv->head)->label, ((itv_BX *)itv->head)->A[0], ((itv_BX *)itv->head)->B[0]);
   /* read or create and set mask image border to Zero */
   if(!(img_mask = set_mask(f_mask, width, height, win))) {
     img_free(img_appl) ;

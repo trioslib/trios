@@ -68,9 +68,9 @@ TEST(test_decision_pair3) {
     imgset_write("IMGSET.s", set);
     imgset_free(set);
 
-    window_t *win = win_create(2, 2, 1);
-    for (i = 0; i < 2; i++) {
-        for (j = 0; j < 2; j++) {
+    window_t *win = win_create(4, 4, 1);
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
             win_set_point(i, j, 1, 1, win);
         }
     }
