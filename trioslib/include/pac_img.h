@@ -1,15 +1,22 @@
 #ifndef PAC_IMG__
 #define PAC_IMG__
 
-#define sz8BIT sizeof(unsigned char)
+/*! Size of an unsigned char.*/
+#define sz8BIT sizeof(unsigned char) 
+/*! Size of an unsigned short. */
 #define sz16BIT sizeof(unsigned short)
+/*! Size of an unsigned int. */
 #define sz32BIT sizeof(unsigned int)
 
-
+/*!
+    Structure to hold an image. Supports images with many pixel size (unsigned char, unsigned short and unsigned int).
+*/
 typedef struct {
-    int width, height, nbands;
-    int pixel_size; /* in bytes */
-    unsigned char *data;
+    int width, /*!< Width of the image. */
+    height, /*!< Height of the image. */
+    nbands; /*!< Number of bands of the image. */ 
+    int pixel_size; /*!< Number of bytes of a pixel. */
+    unsigned char *data; /*!< Pointer to the data of the image. */
 } img_t;
 
 img_t *img_create(int w, int h, int c, int pixel_size);
