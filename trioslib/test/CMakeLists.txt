@@ -18,9 +18,6 @@ target_link_libraries(trios_decision_test triosio triosbasic trios_collec triosl
 add_executable(trios_isi_test trios_isi_test.c)
 target_link_libraries(trios_isi_test triosio triosbasic trios_collec trioslearn m)
 
-add_executable(trios_group_test trios_group_test.c)
-target_link_libraries(trios_group_test triosio triosbasic trios_collec trioslearn m)
-
 add_executable(trios_applic_test trios_applic_test.c)
 target_link_libraries(trios_applic_test triosio triosbasic trios_collec triosappl trioslearn m)
 

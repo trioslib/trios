@@ -535,14 +535,14 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
 
       /* convert negative examples (those with label lb[i])
 	 into (trivial) intervals */ 
-      itv_list1 = build_itv_from_mtm(mtm0, lb[i]) ;
+      //itv_list1 = build_itv_from_mtm(mtm0, lb[i]) ;
       if(!itv_list1) {
 	return pac_error(MSG, "isi_gen: build_itv_from_mtm() failed.") ;
       }
 
       /* Apply the Quine-McCluskey's procedure to group minterms
 	 with label lb[i]                                        */
-      itv_list2 = pquine(itv_list1, wsize1) ;
+      //itv_list2 = pquine(itv_list1, wsize1) ;
       if(!itv_list2) {
 	return pac_error(MSG, "isi_gen: quine_like() failed.") ;
       }
