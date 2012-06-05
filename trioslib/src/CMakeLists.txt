@@ -1,1 +1,1 @@
-SUBDIRS(basic io learn mm appl)
+SUBDIRS(basic io learn collec appl)
