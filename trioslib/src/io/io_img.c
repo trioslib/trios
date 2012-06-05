@@ -10,7 +10,6 @@
   Remove the comments from a PGM file.
 
   \param f File pointer.
-  \internal
   */
 void removeComments(FILE *f) {
     int c;

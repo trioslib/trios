@@ -56,18 +56,13 @@
 /*      to adequate to the structure changing.                             */
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_get_wsize
-     -------------------------------------------
-*/
+/*!
+    Get the window size.
 
-int           /*+ Purpose: get the window size                             +*/
-  win_get_wsize(
-    window_t *win     /*+ In: a pointer to a window                        +*/
-  )
-/*+ Return: the window size                                                +*/
-{
+    \param win Pointer to window.
+    \return The window size.
+*/
+int win_get_wsize(window_t *win) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Fri Nov 29 1996                                                   */
  
@@ -75,19 +70,13 @@ int           /*+ Purpose: get the window size                             +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_set_wsize
-     -------------------------------------------
-*/
+/*!
+    Set the window size. The number of bands must be set.
 
-void      /*+ Purpose: set the window size (number of bands must be set)   +*/
-  win_set_wsize(
-    window_t *win,    /*+ In: a pointer to a window                        +*/
-    int       wsize   /*+ In: wsize                                        +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
+    \param win Pointer to window.
+    \param wsize Window size.
+*/
+void win_set_wsize(window_t *win, int wsize) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Fri Nov 29 1996                                                   */
  
@@ -95,19 +84,14 @@ void      /*+ Purpose: set the window size (number of bands must be set)   +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_get_band_wsize
-     -------------------------------------------
-*/
+/*!
+    Get the window size of a given band.
 
-int           /*+ Purpose: get the window size of a given band             +*/
-  win_get_band_wsize(
-    window_t *win,     /*+ In: a pointer to a window                       +*/
-    int      band      /*+ In: a band number                               +*/
-  )
-/*+ Return: the window size of a given band                                +*/
-{
+    \param win Pointer to window.
+    \param band Band number.
+    \return The window size of the band.
+*/
+int win_get_band_wsize(window_t *win, int band) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Thu Feb 17 2000                                                   */
   
@@ -115,18 +99,13 @@ int           /*+ Purpose: get the window size of a given band             +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_get_width
-     -------------------------------------------
-*/
+/*!
+    Get the window width.
 
-int              /*+ Purpose: get the window matrix width                  +*/   
-  win_get_width(
-    window_t *win     /*+ In: a pointer to a window                        +*/
-  )
-/*+ Return: the window matrix width                                        +*/
-{
+    \param win Pointer to window.
+    \return The window width.
+*/
+int win_get_width(window_t *win) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Fri Nov 29 1996                                                   */
 
@@ -134,18 +113,13 @@ int              /*+ Purpose: get the window matrix width                  +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_get_height
-     -------------------------------------------
-*/
+/*!
+    Get the window height.
 
-int                  /*+ Purpose: get the window matrix height             +*/
-  win_get_height(
-    window_t *win    /*+ In: a pointer to a window                         +*/
-  ) 
-/*+ Return: the window matrix height                                       +*/
-{
+    \param win Pointer to window.
+    \return The window height.
+*/
+int win_get_height(window_t *win) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Fri Nov 29 1996                                                   */
  
@@ -153,37 +127,26 @@ int                  /*+ Purpose: get the window matrix height             +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_get_nbands
-     -------------------------------------------
-*/
+/*!
+    Get the number of bands of a window.
 
-int                  /*+ Purpose: get the number of bands of a window      +*/
-  win_get_nbands(
-    window_t *win    /*+ In: a pointer to a window                         +*/
-  ) 
-/*+ Return: the number of bands of the window                              +*/
-{
+    \param win Pointer to window.
+    \return The number of bands of a window.
+*/
+int win_get_nbands(window_t *win) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Fri Nov 29 1996                                                   */
  
   return(win->nbands) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: win_set_nbands
-     -------------------------------------------
-*/
+/*!
+    Set the number of bands of a window.
 
-void                 /*+ Purpose: set the number of bands of a window      +*/
-  win_set_nbands(
-    window_t *win,   /*+ In: a pointer to a window                         +*/
-    int      nbands
-  ) 
-/*+ Return: nothing                                                        +*/
-{
+    \param win Pointer to window.
+    \param nbands Number of bands.
+*/
+void win_set_nbands(window_t *win, int nbands) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Fri Nov 29 1996                                                   */
  
@@ -191,18 +154,13 @@ void                 /*+ Purpose: set the number of bands of a window      +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_get_data
-     -------------------------------------------
-*/
+/*!
+    Get the window data.
 
-char *       /*+ Purpose: get the window data                              +*/
-  win_get_data(
-    window_t *win      /*+ In: a pointer to a window                       +*/
-  )
-/*+ Return: the window data                                                +*/
-{
+    \param win Pointer to window.
+    \return The window data pointer.
+*/
+char *win_get_data(window_t *win) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Fri Nov 29 1996                                                   */
  
@@ -210,22 +168,17 @@ char *       /*+ Purpose: get the window data                              +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_set_point
-     -------------------------------------------
-*/
+/*!
+    Set a value (0 or 1) on the window. All elements with value 1 are included in the window.
 
-int             /*+ Purpose: set a value (0 or 1) on window matrix         +*/
-  win_set_point(
-    int i,          /*+ In: row number of the point to be set              +*/
-    int j,          /*+ In: column number of the point to be set           +*/
-    int k,          /*+ In: band of the point to be set                    +*/
-    int value,      /*+ In: value to be set                                +*/
-    window_t *win   /*+ In/Out: a pointer to a window                      +*/
-  )
-/*+ Return: 1 on success, 0 on failure                                    +*/
-{
+    \param win Pointer to window.
+    \param i Row number.
+    \param j Column number.
+    \param k Band number.
+    \param value Value of the (i,j,k) element.
+    \return 1 on success. 0 on failure.
+*/
+int win_set_point(int i, int j, int k, int value, window_t *win) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                */
 /*  date: Fri Nov 29 1996                                                  */
 
@@ -263,19 +216,16 @@ pac_debug("nbands=%d k=%d i=%d j=%d pos=%d", nbands, k, i, j, (k-1)*win->width*w
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_get_point
-     -------------------------------------------
-*/
+/*!
+    Get the value of an element in the window.
 
-int            /*+ Purpose: get the value of a point from window data     +*/
-  win_get_point(
-    int i,           /*+ In: Row number of the point                       +*/
-    int j,           /*+ In: column number of the point                    +*/
-    int k,           /*+ In: band of the point                             +*/
-    window_t *win    /*+ In: a pointer to a window                         +*/
-  )
+    \param win Pointer to window.
+    \param i Row number.
+    \param j Column number.
+    \param k Band number.
+    \return The value of the window matrix at win->windata(i,j).
+*/
+int win_get_point(int i, int j, int k, window_t *win)
 /*+ Return: the value of the window matrix at win->windata(i,j)            +*/
 {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
@@ -302,20 +252,15 @@ int            /*+ Purpose: get the value of a point from window data     +*/
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_create
-     -------------------------------------------
-*/
+/*!
+    Create a window.
 
-window_t *     /*+ Purpose: create  a window                               +*/
-  win_create(
-    int height,       /*+ In: height of the window                         +*/
-    int width,        /*+ In: width of the window                          +*/
-    int nbands        /*+ In: number of bands of the window                +*/   
-  )
-/*+ Return: a pointer to the window on success, NULL on failure            +*/ 
-{
+    \param height Window heigth.
+    \param width Window width.
+    \param nbands Number of bands.
+    \return A window with the desired size. NULL on error.
+  */
+window_t *win_create(int height, int width, int nbands) {
 /* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
 /* date: Fri Nov 29 1996                                                    */
 
@@ -376,18 +321,12 @@ window_t *     /*+ Purpose: create  a window                               +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_free
-     -------------------------------------------
-*/
+/*!
+    Free the memory of a window.
 
-void           /*+ Purpose: free the memory area of a window               +*/
-  win_free(
-    window_t *win                /*+ In: a pointer to a window             +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
+    \param win Pointer to window.
+  */
+void win_free(window_t *win) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Fri Nov 29 1996                                                   */
  
@@ -397,6 +336,7 @@ void           /*+ Purpose: free the memory area of a window               +*/
     free(win) ;
   }
 }
+
 
 
 
