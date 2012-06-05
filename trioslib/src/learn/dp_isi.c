@@ -68,15 +68,15 @@ int                   /*+ Purpose: ISI algorithm                           +*/
 
   if(log_step!=0) {
     if(!log_file) {
-      pac_warning("Log will be written to stdout.") ;
+      trios_warning("Log will be written to stdout.") ;
     }
     if(!tmp_bas_file) {
-      pac_warning("To save temporary basis, specify a file name.") ;
+      trios_warning("To save temporary basis, specify a file name.") ;
     }
   }
   else {
     if(tmp_bas_file) {
-      pac_warning("To save temporary basis, specify a log step.") ;
+      trios_warning("To save temporary basis, specify a log step.") ;
     }
   }
 
@@ -84,11 +84,11 @@ int                   /*+ Purpose: ISI algorithm                           +*/
   /* read classified examples */
 
   if(!(mtm=mtm_read(fname_i1, &win1, &apt))) {
-    return pac_error(MSG, "lisi: mtm_read() failed to read %s", fname_i1) ;
+    return trios_error(MSG, "lisi: mtm_read() failed to read %s", fname_i1) ;
   }
 
 #ifdef _DEBUG_
-pac_debug("Reading classified examples file: done.") ;
+trios_debug("Reading classified examples file: done.") ;
 #endif
 
   /* get some info for the summary file */   
@@ -97,8 +97,8 @@ pac_debug("Reading classified examples file: done.") ;
   ones = mtm_count(mtm, 1) ;
 
 #ifdef _DEBUG_
-pac_debug("Examples with label 0 = %d", zeros) ;
-pac_debug("Examples with label 1 = %d", ones) ;
+trios_debug("Examples with label 0 = %d", zeros) ;
+trios_debug("Examples with label 1 = %d", ones) ;
 #endif
 
 
@@ -106,11 +106,11 @@ pac_debug("Examples with label 1 = %d", ones) ;
   if(!(itv=itv_read(fname_i2, &win2, &apt2))) {
     win_free(win1) ;
     mtm_free(mtm) ;
-    return pac_error(MSG, "lisi: itv_read() failed to read %s", fname_i2) ;
+    return trios_error(MSG, "lisi: itv_read() failed to read %s", fname_i2) ;
   }
 
 #ifdef _DEBUG_
-pac_debug("Reading starting intervals: done.") ;
+trios_debug("Reading starting intervals: done.") ;
 #endif
 
 
@@ -125,7 +125,7 @@ pac_debug("Reading starting intervals: done.") ;
       win_free(win2) ;
       itv_free(itv) ;
       mtm_free(mtm) ;
-      return pac_error(MSG, "lisi: isi_basic() failed.") ;
+      return trios_error(MSG, "lisi: isi_basic() failed.") ;
     }
     mtm = NULL ;
   }
@@ -137,7 +137,7 @@ pac_debug("Reading starting intervals: done.") ;
       win_free(win2) ;
       itv_free(itv) ;
       mtm_free(mtm) ;
-      return pac_error(MSG, "lisi: isi_gen() failed.") ;
+      return trios_error(MSG, "lisi: isi_gen() failed.") ;
     }
     mtm = NULL ;
   }
@@ -149,11 +149,11 @@ pac_debug("Reading starting intervals: done.") ;
     win_free(win2) ;
     itv_free(itv) ;
     mtm_free(mtm) ;
-    return pac_error(MSG, "lisi: itv_write() failed to write %s", fname_o) ;
+    return trios_error(MSG, "lisi: itv_write() failed to write %s", fname_o) ;
   }
 
 #ifdef _DEBUG_
-pac_debug("Writing intervals: done.") ;
+trios_debug("Writing intervals: done.") ;
 #endif
 
   /* write summary if needed */

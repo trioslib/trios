@@ -44,7 +44,7 @@ img_t *img_readPGM(char *filename) {
         fscanf(f, "%d %d %d", &w, &h, &maxval);
         fgetc(f);
         if (maxval > 255) {
-            return (img_t *) pac_error(1, "16-bit images no supported");
+            return (img_t *) trios_error(1, "16-bit images no supported");
         }
         img = img_create(w, h, 1, sz8BIT);
         for (i = 0; i < h; i++) {
@@ -56,7 +56,7 @@ img_t *img_readPGM(char *filename) {
         fclose(f);
         return img;
     } else {
-        return (img_t *) pac_error(1, "img_readPNM: File not supported");
+        return (img_t *) trios_error(1, "img_readPNM: File not supported");
     }
 }
 
@@ -70,11 +70,11 @@ void img_writePGM(char *filename, img_t *img) {
         FILE *f = fopen(filename, "w");
         int i, j, w, h;
         if (f == NULL) {
-            pac_error(1, "img_writePGM: Cannot open file");
+            trios_error(1, "img_writePGM: Cannot open file");
             return;
         }
         if (img == NULL) {
-            pac_error(1, "img_writePGM: NULL image");
+            trios_error(1, "img_writePGM: NULL image");
             return;
         }
         w = img_get_width(img);

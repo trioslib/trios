@@ -1,7 +1,7 @@
 #include <pacbasic.h>
 
-/* #define _DEBUG_ */
-/* #define _DEBUG_2_ */
+ /*#define _DEBUG_
+ #define _DEBUG_2_*/
 
 /*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
 /*  Date: Fri Dec 19 1997                                                   */
@@ -63,7 +63,7 @@ mtm_t *          /*+ Purpose: allocate a MTM structure                     +*/
   mtm_t *mtm ;
 
   if((mtm=(mtm_t *)malloc(sizeof(mtm_t))) == NULL) {
-    return (mtm_t *)pac_error(1, "Memory allocation failed.") ;
+    return (mtm_t *)trios_error(1, "Memory allocation failed.") ;
   }
 
   mtm->wsize = wsize ;
@@ -82,7 +82,7 @@ mtm_t *          /*+ Purpose: allocate a MTM structure                     +*/
     if(!(mtm->mtm_data = (int *) malloc( sizeof(mtm_BX) * nmtm))) {
       free ( mtm ) ;
       return 
-	(mtm_t *)pac_error(1, "mtm_create: memory allocation error for mtm") ;
+	(mtm_t *)trios_error(1, "mtm_create: memory allocation error for mtm") ;
     }
     break ;
   }
@@ -100,14 +100,14 @@ mtm_t *          /*+ Purpose: allocate a MTM structure                     +*/
     if(!(mtm->mtm_data = (int *) malloc( sizeof(mtm_GX) * nmtm))) {
       free ( mtm ) ;
       return 
-	(mtm_t *)pac_error(1, "mtm_create: memory allocation error for mtm") ;
+	(mtm_t *)trios_error(1, "mtm_create: memory allocation error for mtm") ;
     }
     break ;
   }
   
   default : {
       return 
-	(mtm_t *)pac_error(1, "mtm_create: Invalid type, not BB or BG or GB or GG or WKGG") ;
+	(mtm_t *)trios_error(1, "mtm_create: Invalid type, not BB or BG or GB or GG or WKGG") ;
       break; }
   }
 
@@ -181,7 +181,7 @@ void                      /*+ Purpose: free memory area used MTM structure  +*/
       }	
 
       default : {
-        pac_error(MSG, "free_mtm failure. Invalid type (not BX or GX).");
+        trios_error(MSG, "free_mtm failure. Invalid type (not BX or GX).");
         break;
               
       }
@@ -473,7 +473,7 @@ int                       /*+ Purpose: inserts a minterm in the table      +*/
 
   p[index1].wpat = (unsigned int *)malloc(sizeof(int)*wzip) ;
   if(!p[index1].wpat) {
-    return pac_error(1, "Memory allocation failed.") ;
+    return trios_error(1, "Memory allocation failed.") ;
   }
 
   for ( j = 0; j < wzip; j++) 
@@ -482,7 +482,7 @@ int                       /*+ Purpose: inserts a minterm in the table      +*/
   p[index1].label = label ; /* Here we removed a cast to char */
 
   if((freqnode = freq_node_create(label, 1))==NULL) {
-    return pac_error(MSG, "mtm_insert: freq_node_create() failed.") ;
+    return trios_error(MSG, "mtm_insert: freq_node_create() failed.") ;
   }
 
   set_freq(freqnode, &freqlist) ; /* Insert the node to the list */
@@ -536,16 +536,16 @@ int                       /*+ Purpose: inserts a minterm in the table      +*/
 
   p[index1].wpat = (char *)malloc(sizeof(char)*wsize) ;
   if(!p[index1].wpat) {
-    return pac_error(1, "Memory allocation failed.") ;
+    return trios_error(1, "Memory allocation failed.") ;
   }
 
 #ifdef _DEBUG_
-pac_debug("index=%d", index1) ;
-pac_debug("mtm_gx_insert ") ;
+trios_debug("index=%d", index1) ;
+trios_debug("mtm_gx_insert ") ;
 for (j=0;j<wsize;j++) {
-  pac_debug("wpat[%d]=%d", j, p[index1].wpat[j]) ;
+  trios_debug("wpat[%d]=%d", j, p[index1].wpat[j]) ;
 }
-pac_debug("with label = %d", label) ;	
+trios_debug("with label = %d", label) ;
 #endif
 
   for ( j = 0; j < wsize; j++) 
@@ -555,7 +555,7 @@ pac_debug("with label = %d", label) ;
   p[index1].fq = fq ;        /* Aug 19, 1999 */
   
   if((freqnode = freq_node_create(label, 1))==NULL) {
-    return pac_error(MSG, "mtm_insert: freq_node_create() failed.") ;
+    return trios_error(MSG, "mtm_insert: freq_node_create() failed.") ;
   }
 
   set_freq(freqnode, &freqlist) ; /* Insert the node to the list */
@@ -658,7 +658,7 @@ int             /*+ Purpose: Separate examples of a given class k          +*/
   *mtm_o2 = mtm_create( wsize, type, nmtm_2 ) ;
 
   if((*mtm_o1==NULL) || (*mtm_o2 == NULL)) {
-    return pac_error(MSG, "mtm_sep: mtm_create() failed.") ;
+    return trios_error(MSG, "mtm_sep: mtm_create() failed.") ;
   }
 
   p = (mtm_BX *)mtm_i->mtm_data ;
@@ -671,7 +671,7 @@ int             /*+ Purpose: Separate examples of a given class k          +*/
       if(!mtm_BX_insert( *mtm_o1, ct1, wzip, p[i].wpat, p[i].label,
                         p[i].fq, p[i].fq1 )) {
         mtm_free(*mtm_o1) ;
-        return pac_error(MSG, "select: mtm_BX_insert() failed.") ;
+        return trios_error(MSG, "select: mtm_BX_insert() failed.") ;
       }
       ct1++ ;
       /* *mtm_o1->mtm_freq[p[i].label]++ ; */
@@ -680,7 +680,7 @@ int             /*+ Purpose: Separate examples of a given class k          +*/
       if(!mtm_BX_insert( *mtm_o2, ct2, wzip, p[i].wpat, p[i].label,
                         p[i].fq, p[i].fq1 )) {
         mtm_free(*mtm_o2) ;
-        return pac_error(MSG, "select: mtm_BX_insert() failed.") ;
+        return trios_error(MSG, "select: mtm_BX_insert() failed.") ;
       }
       ct2++ ;
       /*      *mtm_o2->mtm_freq[p[i].label]++ ; */
@@ -770,12 +770,12 @@ unsigned int    /*+ Purpose: Index mtm by frequencies                      +*/
 
   indexes = (unsigned int *)malloc(sizeof(int)*nmtm) ;
   if(!indexes) {
-    return pac_error(1, "mtm_index_by_freq: Memory allocation failed for indexes.") ;
+    return trios_error(1, "mtm_index_by_freq: Memory allocation failed for indexes.") ;
   }
   
   while(p) {
     if((q = freq_node_create(p->label, p->freq))==NULL) {
-      return pac_error(MSG, "mtm_index_by_freq: freq_node_create() failed.") ;
+      return trios_error(MSG, "mtm_index_by_freq: freq_node_create() failed.") ;
     }    
     set_freq(q, &qlist) ; /* Insert the node to the list */
     nlabels++ ;
@@ -906,7 +906,7 @@ unsigned int    /*+ Purpose: Index mtm by labels                               +
   mtm_GX *gxdata ;
 
 #ifdef _DEBUG_
-pac_debug( "mtm_index_by_label: starting routine");
+trios_debug( "mtm_index_by_label: starting routine");
 #endif
 
   lastlab = 0 ;
@@ -917,7 +917,7 @@ pac_debug( "mtm_index_by_label: starting routine");
 
   labelstmp = (unsigned int *)malloc(sizeof(int)*(2*ko+2)) ;
   if(!labelstmp) {
-    return pac_error(1, "mtm_index_by_label: Memory allocation failed for indexes.") ;
+    return trios_error(1, "mtm_index_by_label: Memory allocation failed for indexes.") ;
   }
  
   for (i=0 ; i < 2*ko+2; i++) {
@@ -926,7 +926,7 @@ pac_debug( "mtm_index_by_label: starting routine");
   }
 
 #ifdef _DEBUG_
-pac_debug( "before setting labindx nmtm = %d",nmtm);
+trios_debug( "before setting labindx nmtm = %d",nmtm);
 #endif
   
   while(p) {
@@ -962,12 +962,12 @@ pac_debug( "before setting labindx nmtm = %d",nmtm);
   /* indexes[indexes for label starts at] = i            */
 
 #ifdef _DEBUG_
-pac_debug( "before setting indexes");
+trios_debug( "before setting indexes");
 #endif
 
 #ifdef _DEBUG_
  for (i=0 ; i < 2*ko+2; i++) { 
-   pac_debug( "labelstmp[%d] = %d",i,labelstmp[i]);
+   trios_debug( "labelstmp[%d] = %d",i,labelstmp[i]);
  }
 #endif
 
@@ -982,16 +982,16 @@ pac_debug( "before setting indexes");
     gxdata = (mtm_GX *)mtm_i->mtm_data ;
     for (i = 0; i < nmtm; i++) {
 #ifdef _DEBUG_
-   pac_debug( "i = %d, label = %d, labelstmp[label] = %d",i,gxdata[i].label,labelstmp[gxdata[i].label+ko]);
+   trios_debug( "i = %d, label = %d, labelstmp[label] = %d",i,gxdata[i].label,labelstmp[gxdata[i].label+ko]);
 #endif
       indexes[labelstmp[gxdata[i].label+ko]++] = i ;
     }
   }
 
 #ifdef _DEBUG_
-pac_debug( "Finished");
+trios_debug( "Finished");
     for (i = 0; i < nmtm; i++) {
-       pac_debug( "index[%d] = %d",i,indexes[i]) ;
+       trios_debug( "index[%d] = %d",i,indexes[i]) ;
     }
 #endif
 
@@ -1067,7 +1067,7 @@ int             /*+ Purpose: given a mtm table, computes the mae           +*/
   /* If frequency of examples are not given, MAE cannot be */
   /* computed.                                             */
   if(!mtm_get_comp_prob(mtm)) {
-    return pac_error(1, "Frequency info needed for MAE computation.") ;
+    return trios_error(1, "Frequency info needed for MAE computation.") ;
   }
   
   q = (mtm_BX *)mtm->mtm_data ;
@@ -1116,7 +1116,7 @@ int             /*+ Purpose: Search examples table for a given wpat        +*/
   int      middle, low, high ;
   
 #ifdef _DEBUG_
-pac_debug("Entering mtm_search_wpat_BX()") ;
+trios_debug("Entering mtm_search_wpat_BX()") ;
 #endif
 
   success = -1 ; low = 0 ; high = nmtm - 1 ;
@@ -1126,7 +1126,7 @@ pac_debug("Entering mtm_search_wpat_BX()") ;
   while(low <= high) {
     middle = (int)((low + high)/2) ;
 #ifdef _DEBUG_
-pac_debug("middle = %d",middle) ;
+trios_debug("middle = %d",middle) ;
 #endif
     result = wpat_compare(wpat, p[middle].wpat, wzip) ;
     if(result==0) {

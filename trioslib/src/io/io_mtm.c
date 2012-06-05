@@ -88,13 +88,13 @@ pac_debug("Entering MTM_READ()") ;
   /* open file -----------------------------------------------------------*/
 
   if((fd=fopen(fname, "r"))==NULL) {
-    return (mtm_t *)pac_error(1, "File (%s) open failed.", fname) ;
+    return (mtm_t *)trios_error(1, "File (%s) open failed.", fname) ;
   }
  
   /* read & check file header ------------------------------------------- */
   if(!header_match(fd, "MINTERM ")) {
     fclose(fd) ;
-    return (mtm_t *)pac_error(1, "File header does not match.") ;
+    return (mtm_t *)trios_error(1, "File header does not match.") ;
   }
 
 
@@ -104,7 +104,7 @@ pac_debug("Entering MTM_READ()") ;
 
     if(dot==(char)EOF) {
       fclose(fd) ;
-      return (mtm_t *)pac_error(1, "Unexpected end of file. No tag found.") ;
+      return (mtm_t *)trios_error(1, "Unexpected end of file. No tag found.") ;
     }
 
     tag = (char)fgetc(fd) ;
@@ -116,7 +116,7 @@ pac_debug("Entering MTM_READ()") ;
     case 't': 
       if(1 != fscanf(fd, "%d", &type)) {
         fclose(fd) ;
-        pac_fatal("Unexpected data or end of file") ;
+        trios_fatal("Unexpected data or end of file") ;
       }
       tags_read++ ;
       break ;
@@ -126,7 +126,7 @@ pac_debug("Entering MTM_READ()") ;
     case 'n':
       if(1 != fscanf(fd, "%d", &nmtm)) {
         fclose(fd) ;
-        pac_fatal("Unexpected data or end of file") ;
+        trios_fatal("Unexpected data or end of file") ;
       }
       tags_read++ ;
       break ;
@@ -137,14 +137,14 @@ pac_debug("Entering MTM_READ()") ;
     case 'W':
       if(NULL==(*win = win_read_data(fd))) {
 	fclose(fd) ;
-	return (mtm_t *)pac_error(MSG, "mtm_read: win_read_data() failed.") ;
+	return (mtm_t *)trios_error(MSG, "mtm_read: win_read_data() failed.") ;
       }
       tags_read++ ;
       break ;
 
     /* read aperture information -------------------------------------- */
     case 'A': {
-        return pac_error(1, "Aperture operators not supported yet.");
+        return trios_error(1, "Aperture operators not supported yet.");
         /*if(NULL==(*apt = apert_read_data(fd))) {
         	fclose(fd) ;
 	        return (mtm_t *)pac_error(MSG, "mtm_read: apert_read_data() failed.") ;
@@ -166,13 +166,13 @@ pac_debug("Entering MTM_READ()") ;
       do{
 	if(1 != fscanf(fd, "%d", &freq)) {
           fclose(fd) ;
-          pac_fatal("Unexpected data or end of file") ;
+          trios_fatal("Unexpected data or end of file") ;
         }
  
         if (freq) {
           if(1 != fscanf(fd, "%d", &label)) {
             fclose(fd) ;
-            pac_fatal("Unexpected data or end of file") ;
+            trios_fatal("Unexpected data or end of file") ;
           }
           /*                  See Remark Above
           if((freqnode=freq_node_create(label, freq))==NULL) {
@@ -203,15 +203,15 @@ pac_debug("Entering MTM_READ()") ;
 
     default : 
       fclose(fd);   
-      (void)pac_error(1,"Unexpected tag %c ",tag) ;
-      return (mtm_t *)pac_error(1, " File format error") ;
+      (void)trios_error(1,"Unexpected tag %c ",tag) ;
+      return (mtm_t *)trios_error(1, " File format error") ;
     }
   }
 
 
   if(tags_read!=4) {
     fclose(fd) ;
-    return (mtm_t *)pac_error(1,
+    return (mtm_t *)trios_error(1,
       "Missing Parameters. Looking for .t, .n, .f or .W") ;
   }
 
@@ -221,7 +221,7 @@ pac_debug("Reading the header: done.") ;
 
   if((comp_prob) && (type != BB)) {
     fclose(fd) ;
-    return (mtm_t *)pac_error(1,
+    return (mtm_t *)trios_error(1,
       "Incompatible tags. Tag .p allowed only when type is BB (.t 0)") ;
   }
 
@@ -239,7 +239,7 @@ pac_debug("Case BB or BG") ;
 
       if(NULL==(mtm = mtm_create(wsize, type, nmtm))) {
 	fclose(fd);
-	return (mtm_t *)pac_error(MSG, "mtm_read: mtm_create() failed.") ;
+	return (mtm_t *)trios_error(MSG, "mtm_read: mtm_create() failed.") ;
       }
 
       mtm_set_comp_prob(mtm, comp_prob) ;
@@ -251,7 +251,7 @@ pac_debug("Case BB or BG") ;
         win_free(*win) ;
         mtm_free(mtm) ;
 	return 
-	  (mtm_t *)pac_error(1,"Memory allocation error.") ;
+	  (mtm_t *)trios_error(1,"Memory allocation error.") ;
       }
 
       /* reading loop -----------------------------------------------------*/
@@ -267,7 +267,7 @@ pac_debug("Case BB or BG") ;
               win_free(*win) ;
               mtm_free(mtm) ;
               fclose(fd) ;
-              pac_fatal("Unexpected data or end of file") ;
+              trios_fatal("Unexpected data or end of file") ;
             }
 	  }
 
@@ -276,7 +276,7 @@ pac_debug("Case BB or BG") ;
             win_free(*win) ;
             mtm_free(mtm) ;
             fclose(fd) ;
-            pac_fatal("Unexpected data or end of file") ;
+            trios_fatal("Unexpected data or end of file") ;
           }
 
 	  if(!mtm_BX_insert(mtm, i, wzip, bwpat, label, fq, 0)) {
@@ -284,7 +284,7 @@ pac_debug("Case BB or BG") ;
             win_free(*win) ;
             mtm_free(mtm) ;
             fclose(fd) ;
-            return (mtm_t *)pac_error(MSG,"mtm_read: mtm_BX_insert() failed.") ;
+            return (mtm_t *)trios_error(MSG,"mtm_read: mtm_BX_insert() failed.") ;
           }
         }
       }
@@ -299,7 +299,7 @@ pac_debug("Case BB or BG") ;
               win_free(*win) ;
               mtm_free(mtm) ;
               fclose(fd) ;
-              pac_fatal("Unexpected data or end of file") ;
+              trios_fatal("Unexpected data or end of file") ;
             }
 	  }
 
@@ -308,7 +308,7 @@ pac_debug("Case BB or BG") ;
             win_free(*win) ;
             mtm_free(mtm) ;
             fclose(fd) ;
-            pac_fatal("Unexpected data or end of file") ;
+            trios_fatal("Unexpected data or end of file") ;
           }
 
 	  if(!mtm_BX_insert(mtm, i, wzip, bwpat, label, fq, fq1)) {
@@ -316,7 +316,7 @@ pac_debug("Case BB or BG") ;
             win_free(*win) ;
             mtm_free(mtm) ;
             fclose(fd) ;
-            return (mtm_t *)pac_error(MSG, "mtm_read: mtm_BX_insert() failed.") ;
+            return (mtm_t *)trios_error(MSG, "mtm_read: mtm_BX_insert() failed.") ;
           }
         }
       }
@@ -340,7 +340,7 @@ pac_debug("Case GG") ;
 
       if(NULL==(mtm = mtm_create(wsize, type, nmtm))) {
 	fclose(fd);
-	return (mtm_t *)pac_error(MSG, "mtm_read: mtm_create() failed.") ;
+	return (mtm_t *)trios_error(MSG, "mtm_read: mtm_create() failed.") ;
       }
 
       mtm_set_comp_prob(mtm, comp_prob) ;
@@ -350,7 +350,7 @@ pac_debug("Case GG") ;
         win_free(*win) ;
         mtm_free(mtm) ;
 	return 
-	  (mtm_t *)pac_error(1, "Memory allocation error.") ;
+	  (mtm_t *)trios_error(1, "Memory allocation error.") ;
       }
 
       /* reading loop --------------------------------- */
@@ -369,7 +369,7 @@ pac_debug("Now it will read the minterms") ;
             win_free(*win) ;
             mtm_free(mtm) ;
             fclose(fd) ;
-            pac_fatal("Unexpected data or end of file") ;
+            trios_fatal("Unexpected data or end of file") ;
           }
 	  wpat[j] = (char) value ;
 	}
@@ -379,7 +379,7 @@ pac_debug("Now it will read the minterms") ;
           win_free(*win) ;
           mtm_free(mtm) ;
           fclose(fd) ;
-          pac_fatal("Unexpected data or end of file") ;
+          trios_fatal("Unexpected data or end of file") ;
         }
  
 	if(!mtm_GX_insert(mtm, i, wsize, wpat, label, fq)) {
@@ -387,7 +387,7 @@ pac_debug("Now it will read the minterms") ;
           win_free(*win) ;
           mtm_free(mtm) ;
           fclose(fd) ;
-          return (mtm_t *)pac_error(MSG, "mtm_read: mtm_GX_insert() failed.") ;
+          return (mtm_t *)trios_error(MSG, "mtm_read: mtm_GX_insert() failed.") ;
         }
       }
       free(wpat) ;
@@ -396,7 +396,7 @@ pac_debug("Now it will read the minterms") ;
     default:
       win_free(*win) ;
       fclose(fd) ;
-      return (mtm_t *)pac_error(1, "Invalid mapping type.") ;
+      return (mtm_t *)trios_error(1, "Invalid mapping type.") ;
 
   }
 
@@ -478,7 +478,7 @@ pac_debug("Entrou no MTM_WRITE") ;
 
   fd = fopen(fname, "w") ;
   if(fd == NULL) 
-    return pac_error(1, "File (%s) open failed.", fname) ;
+    return trios_error(1, "File (%s) open failed.", fname) ;
   
 #ifdef _DEBUG_
 pac_debug("abriu arquivo\n") ;
@@ -506,7 +506,7 @@ pac_debug("type=%d", type) ;
   win_write_data(fd, win);
 
   if((type > 3) && (type < 10)) {
-    return pac_error(1, "Aperture operators not supported yet.");
+    return trios_error(1, "Aperture operators not supported yet.");
     /*fprintf(fd, "%s\n", ".A") ;
     apert_write_data(fd, apt);*/
   }
@@ -624,7 +624,7 @@ pac_debug("Header data writing: done") ;
 
     default:
       fclose(fd) ;
-      return pac_error(1, "Invalid mapping type.");
+      return trios_error(1, "Invalid mapping type.");
       break;
   }
 

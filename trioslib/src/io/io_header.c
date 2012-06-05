@@ -29,10 +29,10 @@ header_t         /*+ Purpose: read a header from a file                 +*/
   while ( (buffer[index1-1] != EOF) && (index1 < 64) );
 
   if(index1 != 64)
-    return (header_t *)pac_error(1, "header_read: file is too short.") ;
+    return (header_t *)trios_error(1, "header_read: file is too short.") ;
 
   if( !(aHeader= (header_t *)malloc(sizeof(header_t))) ) {
-    return (header_t *)pac_error(1, "header_read: memory alocation error.");
+    return (header_t *)trios_error(1, "header_read: memory alocation error.");
   }
   strncpy(aHeader->fileType, buffer, 8);
   aHeader->fileType[8]= 0;
@@ -126,7 +126,7 @@ int     /*+ Purpose: checks if the header keyword matches a given keyword +*/
   /* read file header */
   aHeader= header_read(fd);  
   if(!aHeader) {
-    return /*(apert_t *)*/pac_error(1, "header_match: header_head() failed.") ;
+    return /*(apert_t *)*/trios_error(1, "header_match: header_head() failed.") ;
   }
   
 #ifdef _DEBUG_ 

@@ -54,12 +54,12 @@ int            /*+ Purpose: compute the minimun cover of a set of minterms.+*/
   /* remove from itv all intervals that do not contain any example 
      with label 1 */
   if(!itv_filter(mtm, itv)) {
-    return pac_error(MSG, "pmincover: itv_filter() failed.") ;
+    return trios_error(MSG, "pmincover: itv_filter() failed.") ;
   }
 
   /* compute a minimum cover */
   if(!p_cover(mtm, itv)) {
-    return pac_error(MSG, "pmincover: p_cover() failed.") ;
+    return trios_error(MSG, "pmincover: p_cover() failed.") ;
   }
 
   return(1) ;
@@ -93,12 +93,12 @@ int            /*+ Purpose: compute the minimun cover of a set of minterms.
 
   /* create a list of indexes that point to positive minterms */
   if(!(ll_head = mtm_tbl2ll(mtm))) {
-    return pac_error(MSG, "p_cover: mtm_tbl2ll() failed.") ;
+    return trios_error(MSG, "p_cover: mtm_tbl2ll() failed.") ;
   }
 
   /* create an auxiliar structure to manage intervals */
   if(!itv2mp(itv, &mx_head)) {
-    return pac_error(MSG, "p_cover: itv2mp() failed.") ;
+    return trios_error(MSG, "p_cover: itv2mp() failed.") ;
   }
 
   stop = 0 ;
@@ -110,7 +110,7 @@ int            /*+ Purpose: compute the minimun cover of a set of minterms.
 
     if(p_essen) {
       if(!itv_add(itv, &p_essen)) {
-        return pac_error(MSG, "p_cover: itv_add() failed.") ;
+        return trios_error(MSG, "p_cover: itv_add() failed.") ;
       }
     }
 
@@ -124,7 +124,7 @@ int            /*+ Purpose: compute the minimun cover of a set of minterms.
 
       /* eliminate dominated rows */
       if(!(st=del_dominated(&mx_head, mtm, ll_head))) {
-        return pac_error(MSG, "p_cover: del_dominated() failed.") ;
+        return trios_error(MSG, "p_cover: del_dominated() failed.") ;
       }
 
 #ifdef _DEBUG_
@@ -144,7 +144,7 @@ int            /*+ Purpose: compute the minimun cover of a set of minterms.
     /* find a cover of the resulting examples by a greedy criteria */
     p_essen = greedy_sel(&mx_head, mtm, ll_head) ;
     if(!p_essen) {
-      return pac_error(MSG, "p_cover: greedy_sel() failed.") ;
+      return trios_error(MSG, "p_cover: greedy_sel() failed.") ;
     }
     (void)itv_add(itv, &p_essen);
 
@@ -205,7 +205,7 @@ idx_ll *          /*+ Purpose: create a list of indices pointing to the
   for(i=mtm->nmtm-1; i>=0; i--) {
     p = (idx_ll *)malloc(sizeof(idx_ll)) ;
     if(!p) {
-      return (idx_ll *)pac_error(1,
+      return (idx_ll *)trios_error(1,
              "mtm_tbl2ll: memory allocation failed.") ;
     }
     p->idx = i ;
@@ -249,7 +249,7 @@ int             /*+ Purpose: create auxiliar structure to hold intervals   +*/
   wsize = itv_get_wsize(itv) ;
 
   if(!(p_vector=(itv_BX **)malloc((wsize+1)*sizeof(itv_BX *)))){
-    return pac_error(1, "itv2mp: memory allocation failed.") ;
+    return trios_error(1, "itv2mp: memory allocation failed.") ;
   }
   for(i=0; i<=wsize; i++) {
     p_vector[i] = NULL ;
@@ -283,7 +283,7 @@ int             /*+ Purpose: create auxiliar structure to hold intervals   +*/
       p_next = p->next ;
 
       if(!(mp = (mtx_t *)malloc(sizeof(mtx_t)))) {
-        return pac_error(1, "itv2mp: memory allocation failed.") ;
+        return trios_error(1, "itv2mp: memory allocation failed.") ;
       }
       p->next = NULL ;
       mp->I = p ;
@@ -403,7 +403,7 @@ pac_debug("essen: interval selected A=%x B=%x", xp->I->A[0], xp->I->B[0]) ;
       mtx_free(xp) ;
     }
     else if(counter==0) {
-      pac_fatal(
+      trios_fatal(
         "\nessential_sel: \n*******\nUNEXPECTED ERROR!! error code 120\n ******") ;
     }
 
@@ -551,7 +551,7 @@ int             /*+ Purpose: delete dominated rows of the prime implicant
 
    m = *mx_head ;
    if(!set_matrix(m, mtm, ll_head)) {
-     return pac_error(MSG, "del_dominated: set_matrix() failed.") ;
+     return trios_error(MSG, "del_dominated: set_matrix() failed.") ;
    }
 
    rowsize = (mtm->nmtm+31)/NB ;
@@ -718,7 +718,7 @@ int             /*+ Purpose: given pointers for intervals and examples,
     }
     m->M = (int *)malloc(sizeof(int)*rowsize) ;
     if(m->M == NULL) {
-      return pac_error(1, "set_matrix: memory allocation error.") ;
+      return trios_error(1, "set_matrix: memory allocation error.") ;
     }
     for(i=0; i<rowsize; i++) {
       m->M[i] = 0 ;
@@ -826,7 +826,7 @@ itv_BX *        /*+ Purpose: select a cover by the greedy method           +*/
     free(x) ;
 
     if(mp == NULL) {
-      pac_fatal("greedy_sel\n *******\nUNEXPECTED ERROR\n********") ;
+      trios_fatal("greedy_sel\n *******\nUNEXPECTED ERROR\n********") ;
     }
 
 #ifdef _DEBUG_
@@ -846,7 +846,7 @@ pac_debug("greedy_sel: interval selected A=%x B=%x", mp->I->A[0],mp->I->B[0]) ;
     mtx_free(mp) ;
 
     if(!del_covered(mtm, &cur, essen)) {
-      return (itv_BX *)pac_error(MSG, "greedy_sel: del_covered() failed.") ;
+      return (itv_BX *)trios_error(MSG, "greedy_sel: del_covered() failed.") ;
     }
 
   }

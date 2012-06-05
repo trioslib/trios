@@ -36,13 +36,13 @@ window_t *    /*+ Purpose: Read a file with a description of the window  +*/
   /* open file */
   fd = fopen(fname, "r") ;
   if(fd == NULL) {
-    return (window_t *)pac_error(1, "File (%s) open failed.", fname) ;
+    return (window_t *)trios_error(1, "File (%s) open failed.", fname) ;
   }
   
   /* read & check file header ------------------------------------------- */
   if(!header_match(fd, "WINSPEC ")) {
     fclose(fd) ;
-    return (window_t *)pac_error(1, "File header does not match.") ;
+    return (window_t *)trios_error(1, "File header does not match.") ;
   }
   
 #ifdef _DEBUG_ 
@@ -55,7 +55,7 @@ window_t *    /*+ Purpose: Read a file with a description of the window  +*/
 
   if(NULL==(win = win_read_data(fd))) {
     fclose(fd) ;
-    return (window_t *)pac_error(MSG, "win_read: win_read_data() failed.") ;
+    return (window_t *)trios_error(MSG, "win_read: win_read_data() failed.") ;
   }
 
   fclose(fd) ;
@@ -115,7 +115,7 @@ window_t *        /*+ Purpose: Read a description of the window   +*/
 
     if(dot==(char)EOF) {
       fclose(fd) ;
-      return (window_t *)pac_error(1, "Unexpected end of file. No tag found.") ;
+      return (window_t *)trios_error(1, "Unexpected end of file. No tag found.") ;
     }
 
     tag = (char)fgetc(fd) ;
@@ -125,7 +125,7 @@ window_t *        /*+ Purpose: Read a description of the window   +*/
     case 'h': 
       if(1 != fscanf(fd, "%d", &height)) {
         fclose(fd) ;
-        pac_fatal("Unexpected data or end of file") ;
+        trios_fatal("Unexpected data or end of file") ;
       }  
       tags_read++ ;
       break ;
@@ -133,7 +133,7 @@ window_t *        /*+ Purpose: Read a description of the window   +*/
     case 'w':
       if(1 != fscanf(fd, "%d", &width )) {
         fclose(fd) ;
-        pac_fatal("Unexpected data or end of file") ;
+        trios_fatal("Unexpected data or end of file") ;
       }
       tags_read++ ;
       break ;
@@ -141,7 +141,7 @@ window_t *        /*+ Purpose: Read a description of the window   +*/
     case 'b':
       if(1 != fscanf(fd, "%d", &nbands )) {
         fclose(fd) ;
-        pac_fatal("Unexpected data or end of file") ;
+        trios_fatal("Unexpected data or end of file") ;
       }
       break ;
 
@@ -150,18 +150,18 @@ window_t *        /*+ Purpose: Read a description of the window   +*/
       break ;
 
     default : 
-      (void)pac_error(1,"Unexpected tag %c ", tag) ;
-      return (window_t *)pac_error(1, " File format error") ;
+      (void)trios_error(1,"Unexpected tag %c ", tag) ;
+      return (window_t *)trios_error(1, " File format error") ;
     }
   }
 
   if(tags_read != 2) {
-    return (window_t *)pac_error(1, "Window width or height is missing.") ;
+    return (window_t *)trios_error(1, "Window width or height is missing.") ;
   }
 
 
   if(NULL == (win = win_create(height, width, nbands))) {
-    return (window_t *)pac_error(MSG, "win_read_data: win_create() failed.") ;
+    return (window_t *)trios_error(MSG, "win_read_data: win_create() failed.") ;
   }
 
   
@@ -173,17 +173,17 @@ window_t *        /*+ Purpose: Read a description of the window   +*/
 	if(fscanf(fd, "%d ", &pt) != 1) {
 	  win_free(win) ;
 	  return
-	    (window_t *)pac_error(1,"Unexpected data or end of file.") ;
+	    (window_t *)trios_error(1,"Unexpected data or end of file.") ;
 	}
 
 	if((pt != 0) && (pt != 1)) {
 	  win_free(win) ;
-	  return (window_t *)pac_error(1, "Data must be 0 or 1.") ;
+	  return (window_t *)trios_error(1, "Data must be 0 or 1.") ;
 	}
 	
 	if(!win_set_point( i , j , k, pt , win )) {
 	  win_free(win) ;
-	  return (window_t *)pac_error(MSG, "win_read_data: win_set() failed.") ;
+	  return (window_t *)trios_error(MSG, "win_read_data: win_set() failed.") ;
 	}
       }
     }
@@ -220,7 +220,7 @@ pac_debug("Entrei no win_write.");
   /* open file */
   fd = fopen(fname, "w") ;
   if(fd == NULL) {
-    return pac_error(1, "File (%s) open failed.", fname) ;
+    return trios_error(1, "File (%s) open failed.", fname) ;
   }
   
 #ifdef _DEBUG_

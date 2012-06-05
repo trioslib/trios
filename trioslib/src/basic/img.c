@@ -20,7 +20,7 @@ img_t *img_create(int w, int h, int n, int sz) {
     t->pixel_size = sz;
     t->data = malloc(sz * w * h * n);
     if (t->data == NULL) {
-        return (img_t *) pac_error(1, "Failed malloc for img->data");
+        return (img_t *) trios_error(1, "Failed malloc for img->data");
     }
     for (i = 0; i < h; i++) {
         for (j = 0; j < w; j++) {

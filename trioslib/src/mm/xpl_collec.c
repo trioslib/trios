@@ -78,7 +78,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
     #endif
     /* read image set file */
     if ((imgset = imgset_read(fname_i1))==NULL) {
-        return pac_error(MSG, "lcollec: imgset_read() failed.") ;
+        return trios_error(MSG, "lcollec: imgset_read() failed.") ;
     }
     /* check if image group size is greater than or equal to 2 */
     /* Only the first three images of each set will be used    */
@@ -90,12 +90,12 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
     /* will be scanned.                                        */
     if(imgset_get_grpsize(imgset)<2) {
         imgset_free(imgset) ;
-        return pac_error(1, "Each image group must contain at least two image files.") ;
+        return trios_error(1, "Each image group must contain at least two image files.") ;
     }
     /* read WINSPEC file */
     if ((win = win_read(fname_i2))==NULL) {
         imgset_free(imgset) ;
-        return pac_error(MSG, "lcollec: win_read() failed.") ;
+        return trios_error(MSG, "lcollec: win_read() failed.") ;
     }
     #ifdef _DEBUG_
         pac_debug("Window reading : done.") ;
@@ -104,8 +104,8 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
     /* If window has multiple bands, force it to ONE band only */
     /* Users will be warned about this fact                    */
     if(win_get_nbands(win) > 1) {
-        pac_warning("Window has %d bands.", win_get_nbands(win)) ;
-        pac_warning("Only the first one will be used.") ;
+        trios_warning("Window has %d bands.", win_get_nbands(win)) ;
+        trios_warning("Only the first one will be used.") ;
         win_set_nbands(win, 1) ;
         win_set_wsize(win, wsize) ;
     }
@@ -126,20 +126,20 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         if(!(xpl=xpl_read(fname_i3, &win, &apt))) {
             imgset_free(imgset) ;
             win_free(win) ;
-            return pac_error(MSG, "lcollec: xpl_read() failed.") ;
+            return trios_error(MSG, "lcollec: xpl_read() failed.") ;
         }
     } else {
         if(!(xpl = xpl_create(wsize, map_type))) {
             imgset_free(imgset) ;
             win_free(win) ;
-            return pac_error(MSG, "lcollec: xpl_create() failed.") ;
+            return trios_error(MSG, "lcollec: xpl_create() failed.") ;
         }
     }
     /* MAIN part of this routine: collection of examples */
     if(!lcollec_main(imgset, win, xpl, map_type, cv_flag, fname_o2)) {
         imgset_free(imgset) ;
         win_free(win) ;
-        return pac_error(MSG, "lcollec: lcollec_main() failed.") ;    
+        return trios_error(MSG, "lcollec: lcollec_main() failed.") ;    
     }
     #ifdef _DEBUG_
         pac_debug("lcollec_main: done.") ;
@@ -149,7 +149,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         imgset_free(imgset) ;
         win_free(win) ;
         xpl_free(xpl) ;
-        return pac_error(MSG, "lcollec : xpl_write() failed.") ;
+        return trios_error(MSG, "lcollec : xpl_write() failed.") ;
     }
     #ifdef _DEBUG_
         pac_debug("Writing XPL: done") ;
@@ -187,7 +187,7 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
     if(log_file) {
         fd = fopen(log_file, "w") ;
         if(!fd) {
-            return pac_error(1, "File (%s) open failed.", log_file) ;
+            return trios_error(1, "File (%s) open failed.", log_file) ;
         }
         fprintf(fd, "Initial (distinct) examples=%d\n", xpl->n_nodes) ;
         fprintf(fd, "Initial (total) examples=%d\n\n", xpl->sum) ;
@@ -196,7 +196,7 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
     wsize = win_get_band_wsize(win, 1) ;
     offset = (int *)malloc(sizeof(int)*wsize) ;
     if(offset==NULL) {
-        return pac_error(MSG, "lcollec_main: offset_create() failed.") ;
+        return trios_error(MSG, "lcollec_main: offset_create() failed.") ;
     }
     /* ---------------------------------------------------------------- */
     /* Begin : Process each group of images */
@@ -209,7 +209,7 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
             /* read images and convert them to the appropriate format */
             /* i.e, input is short, output is byte and mask is byte */
             if(!get_setofimages(imgset, BB, win, k, &img1, &img2, &img3)) {
-                pac_error(MSG, "lcollec_main: get_images() failed.") ;
+                trios_error(MSG, "lcollec_main: get_images() failed.") ;
                 goto END_lcollec_main ;
             }
             width = img_get_width(img1);
@@ -221,15 +221,15 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
             c3 = (unsigned char *)img_get_data(img3) ;
             xpl_new = collec_BB(s1, c2, c3, offset, wsize, npixels, cv_flag) ;
             if(xpl_new==NULL) {
-                pac_error(MSG, "lcollec_main: collec_BB() failed.") ;
+                trios_error(MSG, "lcollec_main: collec_BB() failed.") ;
                 goto END_lcollec_main ;
             }
         } else if(map_type==BG) {
-            return pac_error(1, "BG Mapping not supported yet.");
+            return trios_error(1, "BG Mapping not supported yet.");
         } else if(map_type==GG) {
-            return pac_error(1, "BG Mapping not supported yet.");
+            return trios_error(1, "BG Mapping not supported yet.");
         } else {
-            return pac_error(1, "Case GB not yet implemented.") ;
+            return trios_error(1, "Case GB not yet implemented.") ;
         }
 
         /* Release memory used by the images */
@@ -239,7 +239,7 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
 
         /* merge xpl_new into xpl */
         if(!xpl_merge(xpl, xpl_new)) {
-            pac_error(MSG, "lcollec_main: xpl_merge() failed.") ;
+            trios_error(MSG, "lcollec_main: xpl_merge() failed.") ;
             goto END_lcollec_main ;
         }
         xpl_free(xpl_new) ;
@@ -298,11 +298,11 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
     #endif
     wpat = (unsigned int *)malloc(sizeof(int)*size_of_zpat(wsize)) ;
     if(wpat == NULL) {
-        return (xpl_t *)pac_error(1,"Memory allocation failed.") ;
+        return (xpl_t *)trios_error(1,"Memory allocation failed.") ;
     }
     if((xpl=xpl_create(wsize, BB))==NULL) {
         free(wpat) ;
-        return (xpl_t *)pac_error(MSG, "collec_BB: xpl_create() failed.") ;
+        return (xpl_t *)trios_error(MSG, "collec_BB: xpl_create() failed.") ;
     }
     /* Begin case A : cv=0 (All pixels with value different from
     0 are considered in the w-pattern) */
@@ -345,7 +345,7 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
                 if(st == -1) {
                     xpl_free(xpl) ;
                     free(wpat) ;
-                    return (xpl_t *)pac_error(MSG, "collec_BB: xpl_BB_insert() failed.") ;
+                    return (xpl_t *)trios_error(MSG, "collec_BB: xpl_BB_insert() failed.") ;
                 }
             }
         }
@@ -384,7 +384,7 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
                 if(st == -1) {
                     free(wpat) ;
                     xpl_free(xpl) ;
-                    return (xpl_t *)pac_error(MSG, "collec_BB: xpl_BB_insert() failed.") ;
+                    return (xpl_t *)trios_error(MSG, "collec_BB: xpl_BB_insert() failed.") ;
                 }
             }
         }

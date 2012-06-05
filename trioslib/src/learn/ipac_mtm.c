@@ -67,7 +67,7 @@ mtm_t               /*+ Purpose: Builds the mtm table from the examples    +*/
   type  = xpl_get_type( xpl ) ;
 
   if((type!=BB) && (comp_prob)) {
-    return (mtm_t *)pac_error(1,
+    return (mtm_t *)trios_error(1,
       "Probabilities can be computed only for binary to binay operators.\
        Other cases not implemented yet.") ;
   }
@@ -91,7 +91,7 @@ mtm_t               /*+ Purpose: Builds the mtm table from the examples    +*/
 #endif
 
   if (NULL == (mtm = (mtm_t *)mtm_create( wsize, type, nmtm ))) {
-    return(mtm_t *)pac_error(MSG, "mtm_decide: mtm_create failure") ;
+    return(mtm_t *)trios_error(MSG, "mtm_decide: mtm_create failure") ;
   } 
 
 #ifdef _DEBUG_
@@ -110,7 +110,7 @@ mtm_t               /*+ Purpose: Builds the mtm table from the examples    +*/
 
       if (undflabel > 1) {
         undflabel = 1 ; /* Nonsense to put a label > 1 for BB */
-        pac_warning("Label for the undecidable examples will be 1.") ;
+        trios_warning("Label for the undecidable examples will be 1.") ;
       }
 
       /* For binary cases, the estimators media, moda and median will be set
@@ -135,7 +135,7 @@ mtm_t               /*+ Purpose: Builds the mtm table from the examples    +*/
 
       if(!decide_ll_bb( xpl, mtm, freqmin, estimator, undflabel, comp_prob )) {
 	mtm_free( mtm ) ;
-	return(mtm_t *)pac_error(MSG, "mtm_decide: decide examples failure") ;
+	return(mtm_t *)trios_error(MSG, "mtm_decide: decide examples failure") ;
       } 
 
       mtm_set_comp_prob( mtm, comp_prob ) ;
@@ -144,7 +144,7 @@ mtm_t               /*+ Purpose: Builds the mtm table from the examples    +*/
     }   
     
     case BG: {
-        return (mtm_t *) pac_error(1, "BG operators not supported yet");
+        return (mtm_t *) trios_error(1, "BG operators not supported yet");
         break ;
     }   
 
@@ -157,13 +157,13 @@ mtm_t               /*+ Purpose: Builds the mtm table from the examples    +*/
     case WKGG2C:
     case GG3: {
         mtm_free( mtm ) ;
-        return (mtm_t *) pac_error(1, "Gray-level operators not supported yet");
+        return (mtm_t *) trios_error(1, "Gray-level operators not supported yet");
         break ;
     }   
     
     default: {  
         mtm_free( mtm ) ;
-        return (mtm_t *)pac_error(1,
+        return (mtm_t *)trios_error(1,
 			       "mtm_decide: type GB not implemented yet.") ;
         break ; 
     } 
@@ -201,7 +201,7 @@ int                  /*+ Purpose: Makes the decision  for BB and BG         +*/
   if(p) {
     
     if(!decide_tree_bb(p->left, mtm, sum, wzip, freqmin, estimator, undflabel)) 
-       return pac_error(MSG, "decide_tree_bb failure") ;
+       return trios_error(MSG, "decide_tree_bb failure") ;
         
     wpat_freq = p->fq0 + p->fq1 ;
        
@@ -227,7 +227,7 @@ pac_debug("mtmbbtree Vai inserir wpat[0]=%d label=%d", p->wpat[0], wpat_label) ;
 #endif
 	
 	if(!mtm_BX_insert( mtm, (int)mtm->nmtm , wzip, p->wpat, wpat_label, 0, 0)) {
-          return pac_error(MSG, "decide_tree_bb failure") ;
+          return trios_error(MSG, "decide_tree_bb failure") ;
         }
 
         mtm->nmtm++ ; 
@@ -248,7 +248,7 @@ pac_debug("mtmbbtree Vai inserir wpat[0]=%d label=%d", p->wpat[0], wpat_label) ;
 #endif
 
 	if(!mtm_BX_insert( mtm, (int)mtm->nmtm , wzip, p->wpat, wpat_label, 0, 0 )) {
-          return pac_error(MSG, "decide_tree_bb failure") ;
+          return trios_error(MSG, "decide_tree_bb failure") ;
         }
 
 	/*	
@@ -274,12 +274,12 @@ pac_debug("mtmbbtree Vai inserir wpat[0]=%d label=%d", p->wpat[0], wpat_label) ;
 	
 	if( ((float)wpat_max / wpat_freq) >= estimator ) {
 	  if(!mtm_BX_insert( mtm, (int)mtm->nmtm , wzip, p->wpat, wpat_label, 0, 0)) {
-	    return pac_error(MSG, "decide_tree_bb failure") ;
+	    return trios_error(MSG, "decide_tree_bb failure") ;
 	  }
 	}
 	else {
 	  if(!mtm_BX_insert( mtm, (int)mtm->nmtm , wzip, p->wpat, undflabel, 0, 0)) {
-	    return pac_error(MSG, "decide_tree_bb failure") ;
+	    return trios_error(MSG, "decide_tree_bb failure") ;
 	  }
 	}
 	mtm->nmtm++ ;
@@ -288,7 +288,7 @@ pac_debug("mtmbbtree Vai inserir wpat[0]=%d label=%d", p->wpat[0], wpat_label) ;
     }
     
     if(!decide_tree_bb(p->right, mtm, sum, wzip, freqmin, estimator, undflabel)) 
-      return pac_error(MSG, "decide_tree_bb failure") ;
+      return trios_error(MSG, "decide_tree_bb failure") ;
 
   } 
   
@@ -373,13 +373,13 @@ int                  /*+ Purpose: Makes the decision for BB case            +*/
         if(!comp_prob) {
 	  if(!mtm_BX_insert( mtm, (int)mtm->nmtm, wzip, head->wpat,
                              wpat_label, wpat_freq, 0 )) {
-            return pac_error(MSG, "mtm_BX_insert() failed.") ;
+            return trios_error(MSG, "mtm_BX_insert() failed.") ;
           }
         }
         else {
 	  if(!mtm_BX_insert(mtm, (int)mtm->nmtm, wzip, head->wpat,
                             wpat_label, wpat_freq, head->fq1)) {
-            return pac_error(MSG, "mtm_BX_insert() failed.") ;
+            return trios_error(MSG, "mtm_BX_insert() failed.") ;
           }
         }
         mtm->nmtm++ ; 
@@ -407,13 +407,13 @@ int                  /*+ Purpose: Makes the decision for BB case            +*/
         if(!comp_prob) {
 	  if(!mtm_BX_insert( mtm, (int)mtm->nmtm, wzip, head->wpat,
                              wpat_label, wpat_freq, 0 )) {
-            return pac_error(MSG, "mtm_BX_insert() failed.") ;
+            return trios_error(MSG, "mtm_BX_insert() failed.") ;
           }
         }
         else {
 	  if(!mtm_BX_insert(mtm, (int)mtm->nmtm, wzip, head->wpat,
                             wpat_label, wpat_freq, head->fq1 )) {
-            return pac_error(MSG, "mtm_BX_insert() failed.") ;
+            return trios_error(MSG, "mtm_BX_insert() failed.") ;
           }
         }
 
@@ -445,13 +445,13 @@ int                  /*+ Purpose: Makes the decision for BB case            +*/
         if(!comp_prob) {
 	  if(!mtm_BX_insert( mtm, (int)mtm->nmtm, wzip, head->wpat,
                              wpat_label, wpat_freq, 0 )) {
-            return pac_error(MSG, "mtm_BX_insert() failed.") ;
+            return trios_error(MSG, "mtm_BX_insert() failed.") ;
           }
         }
         else {
 	  if(!mtm_BX_insert(mtm, (int)mtm->nmtm, wzip, head->wpat,
                             wpat_label, wpat_freq, head->fq1)) {
-            return pac_error(MSG, "mtm_BX_insert() failed") ;
+            return trios_error(MSG, "mtm_BX_insert() failed") ;
           }
         }
 

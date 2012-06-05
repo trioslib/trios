@@ -5,7 +5,7 @@
 #include <pacbasic.h>
 #include <pac_itv.h>
 
-/* #define _DEBUG_ */
+ /*#define _DEBUG_*/
 
 /*
      -------------------------------------------
@@ -26,7 +26,7 @@ int       /*+ Purpose: give the number of intervals in a set of intervals  +*/
     return(itv->nitv) ;
   }
   else {
-    return pac_error(1, "Internal error.") ;
+    return trios_error(1, "Internal error.") ;
   }
 }
 
@@ -328,7 +328,7 @@ itv_t *       /*+ Purpose: create a ITV structure                          +*/
 
   itv = (itv_t *)malloc(sizeof(itv_t)) ;
   if(itv==NULL) {
-    return (itv_t *)pac_error(1, "Memory allocation failed.") ;
+    return (itv_t *)trios_error(1, "Memory allocation failed.") ;
   }
 
   itv_set_wsize(itv, wsize) ;
@@ -478,20 +478,20 @@ itv_BX *           /*+ Purpose: create an interval of BX type              +*/
 
   p = (itv_BX *)malloc(sizeof(itv_BX)) ;
   if(p == NULL) {
-    return (itv_BX *)pac_error(1, "Memory allocation failed.") ;
+    return (itv_BX *)trios_error(1, "Memory allocation failed.") ;
   }
 
   p->A = (unsigned int *)malloc(sizeof(int)*wzip) ;
   if(p->A == NULL) {
     free(p) ;
-    return (itv_BX *)pac_error(1, "Memory allocation failed.") ;
+    return (itv_BX *)trios_error(1, "Memory allocation failed.") ;
   }
 
   p->B = (unsigned int *)malloc(sizeof(int)*wzip) ;
   if(p->B == NULL) {
     free(p->A) ;
     free(p) ;
-    return (itv_BX *)pac_error(1, "Memory allocation failed.") ;
+    return (itv_BX *)trios_error(1, "Memory allocation failed.") ;
   }
 
   p->label = 0 ;
@@ -523,20 +523,20 @@ itv_GX *           /*+ Purpose: create an interval of GX type              +*/
 
   p = (itv_GX *)malloc(sizeof(itv_GX)) ;
   if(p == NULL) {
-    return (itv_GX *)pac_error(1, "Memory allocation failed.") ;
+    return (itv_GX *)trios_error(1, "Memory allocation failed.") ;
   }
 
   p->A = (char *)malloc(sizeof(char)*wsize) ;
   if(p->A == NULL) {
     free(p) ;
-    return (itv_GX *)pac_error(1, "Memory allocation failed.") ;
+    return (itv_GX *)trios_error(1, "Memory allocation failed.") ;
   }
 
   p->B = (char *)malloc(sizeof(char)*wsize) ;
   if(p->B == NULL) {
     free(p->A) ;
     free(p) ;
-    return (itv_GX *)pac_error(1, "Memory allocation failed.") ;
+    return (itv_GX *)trios_error(1, "Memory allocation failed.") ;
   }
 
   p->plabels = NULL ;
@@ -810,7 +810,7 @@ itv_BX *        /*+ Purpose: compute  the intersection of two intervals    +*/
 
   itv = itv_nodebx_create(wzip) ;
   if(!itv) {
-    (void)pac_error(MSG, "itv_and: itv_nodebx_create() failed.") ;
+    (void)trios_error(MSG, "itv_and: itv_nodebx_create() failed.") ;
     return( (itv_BX *)(-1) ) ;
   }
 
@@ -850,7 +850,7 @@ itv_BX *        /*+ Purpose: group two adjacent intervals                  +*/
 
   itv = itv_nodebx_create(wzip) ;
   if(!itv) {
-    return (itv_BX *)pac_error(MSG, "itv_group: itv_nodebx_create() failed.") ;
+    return (itv_BX *)trios_error(MSG, "itv_group: itv_nodebx_create() failed.") ;
   }
 
   for(j=0; j<wzip; j++) {
@@ -897,7 +897,7 @@ itv_t *         /*+ Purpose: separate all intervals, with a given label, from
 
   /* create a structure to hold the subset to be separated */
   if(!(itv_new=itv_create(itv->wsize, itv->type, 0))) {
-    return (itv_t *)pac_error(MSG, "itv_select: itv_create() failed.") ;
+    return (itv_t *)trios_error(MSG, "itv_select: itv_create() failed.") ;
   }
 
   if ((type == BB) || (type == BG)) {
@@ -979,7 +979,7 @@ int             /*+ Purpose: sort intervals according to its dimension +*/
 
   /* create an auxiliar structure */
   if( !(p_vector=(itv_BX **)malloc( (wsize+1)*sizeof(itv_BX *))) ) {
-    return pac_error(1, "Memory allocation failed.") ;
+    return trios_error(1, "Memory allocation failed.") ;
   }
 
   for(i=0; i<=wsize; i++) {
@@ -1042,12 +1042,12 @@ int       /*+ Purpose: sort gray-scale intervals according to its size +*/
   double ii ;
 
 #ifdef _DEBUG_
-  pac_debug("itvgx_sort: entered") ;
+  trios_debug("itvgx_sort: entered") ;
 #endif
 
   /* create an auxiliar structure */
   if( !(p_vector=(itv_GX **)malloc( (1000)*sizeof(itv_GX *))) ) {
-    return pac_error(1, "Memory allocation failed.") ;
+    return trios_error(1, "Memory allocation failed.") ;
   }
 
   for(i=0; i<1000; i++) {
@@ -1064,7 +1064,7 @@ int       /*+ Purpose: sort gray-scale intervals according to its size +*/
     ii = (p->size-1)/10 ;
     /*
     i = p->size-1 ;
-    if (i<0) pac_debug("psize=%d", p->size);
+    if (i<0) trios_debug("psize=%d", p->size);
     */
     i = (int)ii ;
     p_tmp = p->next ;
@@ -1086,7 +1086,7 @@ int       /*+ Purpose: sort gray-scale intervals according to its size +*/
   /* create another auxiliar structure */
   /*
   if( !(p_vector2=(itv_GX **)malloc( 100*sizeof(itv_GX *))) ) {
-    return pac_error(1, "Memory allocation failed.") ;
+    return trios_error(1, "Memory allocation failed.") ;
   }
 
   for(i=0; i<999; i++) {
@@ -1120,7 +1120,7 @@ int       /*+ Purpose: sort gray-scale intervals according to its size +*/
 
   p = p_vector[999] ;
   if(p) {
-    pac_debug("P IS NOt NULL *****************") ;
+    trios_debug("P IS NOt NULL *****************") ;
     while(p->next != NULL) {
       p = p->next ;
     }
@@ -1149,7 +1149,7 @@ int       /*+ Purpose: sort gray-scale intervals according to its size +*/
 
 
 #ifdef _DEBUG_
-	pac_debug("itvgx_sort: leaving") ;
+    trios_debug("itvgx_sort: leaving") ;
 #endif
 
   return(1) ;
@@ -1567,7 +1567,7 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
   itv_GX    *pg ;
 
 #ifdef _DEBUG_
-	pac_debug("itv_gen_itv: entered") ;
+    trios_debug("itv_gen_itv: entered") ;
 #endif
 
   wsize = win_get_band_wsize(win, 1) ;
@@ -1578,10 +1578,10 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
     case BG:
       /* allocates space for the patterns of the interval [A,B] */
       if((A = (unsigned int *)malloc(sizeof(int)*wzip)) == NULL) {
-	return (itv_t *)pac_error(1, "itv_gen_itv: memory allocation error.") ;
+	return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
       }
       if((B = (unsigned int *)malloc(sizeof(int)*wzip)) == NULL) {
-	return (itv_t *)pac_error(1, "itv_gen_itv: memory allocation error.") ;
+	return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
       }
 
       for(i=0; i<wzip; i++) {
@@ -1601,7 +1601,7 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
 	cx = (win_get_width(win)) / 2 ;
 
 #ifdef _DEBUG_
-	pac_debug("Central points (%d,%d)", cx,cy) ;
+    trios_debug("Central points (%d,%d)", cx,cy) ;
 #endif
 
 	if(win->windata[cy*win_get_width(win)+cx]!=0) {
@@ -1621,15 +1621,15 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
 	}
 
 	else { /* window does not contain origin */
-	  pac_warning("Window does not contain origin.") ;
-	  pac_warning("Type 1 (constant 1 operator) base will be generated") ;
+	  trios_warning("Window does not contain origin.") ;
+	  trios_warning("Type 1 (constant 1 operator) base will be generated") ;
 	}
       }
 
       /* create structure to hold the interval */
       if(NULL==(itv = itv_create(wsize, map_type, def_label))) {
 	win_free(win) ;
-	return (itv_t *)pac_error(MSG, "itv_gen_itv: itv_create() failed.") ;
+	return (itv_t *)trios_error(MSG, "itv_gen_itv: itv_create() failed.") ;
       }
 
       /* the itv_t structure will contain, actually, just one interval */
@@ -1645,10 +1645,10 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
     case GG:
       /* allocates space for the patterns of the interval [A,B] */
       if((Ag = (char *)malloc(sizeof(char)*wsize)) == NULL) {
-	return (itv_t *)pac_error(1, "itv_gen_itv: memory allocation error.") ;
+	return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
       }
       if((Bg = (char *)malloc(sizeof(char)*wsize)) == NULL) {
-	return (itv_t *)pac_error(1, "itv_gen_itv: memory allocation error.") ;
+	return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
       }
 
       for(i=0; i<wsize; i++) {
@@ -1659,7 +1659,7 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
       /* create structure to hold the interval */
       if(NULL==(itv = itv_create(wsize, map_type, def_label))) {
 	win_free(win) ;
-	return (itv_t *)pac_error(MSG, "itv_gen_itv: itv_create() failed.") ;
+	return (itv_t *)trios_error(MSG, "itv_gen_itv: itv_create() failed.") ;
       }
 
       /* the itv_t structure will contain, actually, just one interval */
@@ -1675,14 +1675,14 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
     case WKC:
     case WKF:
 #ifdef _DEBUG_
-	pac_debug("itv_gen_itv: WKC or WKF entered") ;
+    trios_debug("itv_gen_itv: WKC or WKF entered") ;
 #endif
       /* allocates space for the patterns of the interval [A,B] */
       if((Ag = (char *)malloc(sizeof(char)*wsize)) == NULL) {
-	return (itv_t *)pac_error(1, "itv_gen_itv: memory allocation error.") ;
+	return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
       }
       if((Bg = (char *)malloc(sizeof(char)*wsize)) == NULL) {
-	return (itv_t *)pac_error(1, "itv_gen_itv: memory allocation error.") ;
+	return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
       }
 
       for(i=0; i<wsize; i++) {
@@ -1692,14 +1692,14 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
 
 #ifdef _DEBUG_
       for(i=0; i<wsize; i++) {
-	pac_debug("Ag[%d] = %d, Bg[%d] = %d", i, Ag[i], i, Bg[i]) ;
+    trios_debug("Ag[%d] = %d, Bg[%d] = %d", i, Ag[i], i, Bg[i]) ;
       }
 #endif
 
       /* create structure to hold the interval */
       if(NULL==(itv = itv_create(wsize, map_type, def_label))) {
 	win_free(win) ;
-	return (itv_t *)pac_error(MSG, "itv_gen_itv: itv_create() failed.") ;
+	return (itv_t *)trios_error(MSG, "itv_gen_itv: itv_create() failed.") ;
       }
 
       /* the itv_t structure will contain, actually, just one interval */
@@ -1713,13 +1713,13 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
       free(Ag); free(Bg) ;
 
 #ifdef _DEBUG_
-	pac_debug("itv_gen_itv: WKC or WKF out") ;
+    trios_debug("itv_gen_itv: WKC or WKF out") ;
 #endif
 
       break ;
 
     default:
-      return (itv_t *) pac_error(MSG, "itv_gen_itv: type not implemented yet.") ;
+      return (itv_t *) trios_error(MSG, "itv_gen_itv: type not implemented yet.") ;
   }
 
   return(itv) ;

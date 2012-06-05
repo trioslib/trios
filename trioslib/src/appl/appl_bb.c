@@ -34,7 +34,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
   /* read input image file */
   img_appl = img_readPGM(f_appl);
   if(!img_appl) {
-    return pac_error(MSG, "lpapplic: img_readPGM() failed.") ;
+    return trios_error(MSG, "lpapplic: img_readPGM() failed.") ;
   }
   width = img_get_width(img_appl) ;
   height = img_get_height(img_appl);
@@ -46,19 +46,19 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
     }*/
     img_tmp = img_convert_type(img_appl, sz16BIT);
     if(!img_tmp) {
-      return pac_error(MSG, "lpapplic: type conversion failed failed.") ;
+      return trios_error(MSG, "lpapplic: type conversion failed failed.") ;
     }
     img_free(img_appl);
     img_appl = img_tmp;
   }
   if ((itv = itv_read(f_basis, &win, &apt))==NULL) {
     img_free(img_appl) ;
-    return pac_error(MSG, "lpapplic: itv_read() failed.") ;
+    return trios_error(MSG, "lpapplic: itv_read() failed.") ;
   }
   /* read or create and set mask image border to Zero */
   if(!(img_mask = set_mask(f_mask, width, height, win))) {
     img_free(img_appl) ;
-    return pac_error(MSG, "lpapplic: set_mask() failed.") ;
+    return trios_error(MSG, "lpapplic: set_mask() failed.") ;
   }
   uspixels = (unsigned short *) img_get_data(img_appl);
   ucpixels1 = (unsigned char *)img_get_data(img_mask) ;
@@ -75,7 +75,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
       if(!(img_out)) {
         img_free(img_appl) ;
         img_free(img_mask) ;
-        return pac_error(MSG, "lpapplic: image creation failed.") ;
+        return trios_error(MSG, "lpapplic: image creation failed.") ;
       }
       /*mm_const_image(img_out, (double)0) ;  */
       uspixels2 = (unsigned short *)img_get_data(img_out) ;
@@ -85,7 +85,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
       if(!(img_out)) {
         img_free(img_appl) ;
         img_free(img_mask) ;
-        return pac_error(MSG, "lpapplic: mm_createimage() failed.") ;
+        return trios_error(MSG, "lpapplic: mm_createimage() failed.") ;
       }
       /*mm_const_image(img_out, (double)0) ;  */
       ucpixels2 = (unsigned char *)img_get_data(img_out) ;
@@ -96,7 +96,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
     if(!(img_out)) {
       img_free(img_appl) ;
       img_free(img_mask) ;
-      return pac_error(MSG, "lpapplic: mm_createimage() failed.") ;
+      return trios_error(MSG, "lpapplic: mm_createimage() failed.") ;
     }
     /*mm_const_image(img_out, (double)0) ;  */
     ucpixels2 = (unsigned char *)img_get_data(img_out) ;
@@ -104,7 +104,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
     if(!itv_label(itv, 1, on_value)) {
       img_free(img_appl) ;
       img_free(img_mask) ;
-      return pac_error(MSG, "lpapplic: itv_label() failed.") ;
+      return trios_error(MSG, "lpapplic: itv_label() failed.") ;
     }
 
   }
@@ -120,7 +120,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
         img_free(img_appl) ;
         img_free(img_mask) ;
             img_free(img_out) ;
-        pac_error(MSG, "lpapplic : pacapplic_bx() failed.") ;
+        trios_error(MSG, "lpapplic : pacapplic_bx() failed.") ;
       }
         }
         else {
@@ -140,7 +140,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
         img_free(img_appl) ;
         img_free(img_mask) ;
             img_free(img_out) ;
-        pac_error(MSG, "lpapplic : pacapplic_short() failed.") ;
+        trios_error(MSG, "lpapplic : pacapplic_short() failed.") ;
       }
         }
         else {
@@ -154,7 +154,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
         }
       }
       break ;
-    default: pac_error(1, "Types GG or WK. See routine lapplicDT().") ;
+    default: trios_error(1, "Types GG or WK. See routine lapplicDT().") ;
   }
   img_writePGM(f_out, img_out);
   /*if(0) {
@@ -221,13 +221,13 @@ pac_debug("Entering papplic_bx()") ;
   /* set vector of offsets */
   offset = (int *)malloc(sizeof(int)*wsize) ;
   if(offset==NULL) {
-    return pac_error(MSG, "papplic_bx: offset_create() failed.") ;
+    return trios_error(MSG, "papplic_bx: offset_create() failed.") ;
   }
 
 #ifdef _DEBUG_
 pac_debug("It will set vector of offsets") ;
 #endif
-pac_debug("%d", width);
+trios_debug("%d", width);
   offset_set(offset, win, width, 1) ;
 
 #ifdef _DEBUG_
@@ -240,7 +240,7 @@ for(i=0; i<wsize; i++) {
 
   wpat = (unsigned int *)malloc(sizeof(int)*size_of_zpat(wsize)) ;
   if(wpat == NULL) {
-    return pac_error(1, "papplic_bx: Memory allocation failed.") ;
+    return trios_error(1, "papplic_bx: Memory allocation failed.") ;
   }
 
 
@@ -372,7 +372,7 @@ pac_debug("Entering papplic_short()") ;
   /* set vector of offsets */
   offset = (int *)malloc(sizeof(int)*wsize) ;
   if(offset==NULL) {
-    return pac_error(MSG, "papplic_short: offset_create() failed.") ;
+    return trios_error(MSG, "papplic_short: offset_create() failed.") ;
   }
 
   offset_set(offset, win, width, 1) ;
@@ -387,7 +387,7 @@ for(i=0; i<wsize; i++) {
 
   wpat = (unsigned int *)malloc(sizeof(int)*size_of_zpat(wsize)) ;
   if(wpat == NULL) {
-    return pac_error(1,"papplic_short: Memory allocation failed.") ;
+    return trios_error(1,"papplic_short: Memory allocation failed.") ;
   }
 
 

@@ -7,7 +7,7 @@
 
 
 int        /*+ Purpose: Prints the error messages of the pac routines      +*/
-  pac_error( 
+  trios_error( 
     int type,              /*+ In: A flag
                                    1 : print message
                                    0 : do not print message                +*/
@@ -17,21 +17,21 @@ int        /*+ Purpose: Prints the error messages of the pac routines      +*/
 
 
 void       /*+ Purpose: Prints the error messages of the pac routines     +*/
-  pac_fatal( 
+  trios_fatal( 
     const char* format,       /*+ In: The error message and the arguments       +*/
     ... ) ;
 
 
 
 void            /*+ Purpose: print message for debigging purposes         +*/
-  pac_debug(                                                                  
+  trios_debug(                                                                  
     const char* format,       /*+ In: The error message and the arguments       +*/
   ... ) ;
 
 
 
 void            /*+ Purpose: print message for warning purposes           +*/
-  pac_warning(                                                                  
+  trios_warning(                                                                  
     const char* format,       /*+ In: The warning message and the arguments     +*/
     ... ) ;
 

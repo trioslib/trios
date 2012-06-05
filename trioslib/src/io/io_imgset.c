@@ -43,14 +43,14 @@ pac_debug("It will read %s", fname) ;
   stop = 0 ;
 
   if(!(fd = fopen(fname, "r"))) {
-    return (imgset_t *)pac_error(1, "File (%s) open failed.", fname) ;
+    return (imgset_t *)trios_error(1, "File (%s) open failed.", fname) ;
   }
   
 
   /* read & check file header ------------------------------------------- */
   if(!header_match(fd, "IMGSET  ")) {
     fclose(fd) ;
-    return (imgset_t *)pac_error(1, "File header does not match.") ;
+    return (imgset_t *)trios_error(1, "File header does not match.") ;
   }
 
 
@@ -60,7 +60,7 @@ pac_debug("It will read %s", fname) ;
 
     if(dot==(char)EOF) {
       fclose(fd) ;
-      return (imgset_t *)pac_error(1, "Unexpected end of file. No tag found.") ;
+      return (imgset_t *)trios_error(1, "Unexpected end of file. No tag found.") ;
     }
 
     tag = (char)fgetc(fd) ;
@@ -70,7 +70,7 @@ pac_debug("It will read %s", fname) ;
     case 'n': 
       if(1 != fscanf(fd, "%d", &ngroups)) {
        fclose(fd) ;
-       pac_fatal("Unexpected data or end of file") ;
+       trios_fatal("Unexpected data or end of file") ;
       } 
       tags_read++ ;
       break ;
@@ -78,7 +78,7 @@ pac_debug("It will read %s", fname) ;
     case 'f':
       if(1 != fscanf(fd, "%d", &grpsize)) {
         fclose(fd) ;
-        pac_fatal("Unexpected data or end of file") ;
+        trios_fatal("Unexpected data or end of file") ;
       } 
       tags_read++ ;
       break ;
@@ -89,14 +89,14 @@ pac_debug("It will read %s", fname) ;
 
     default : 
       fclose(fd) ;
-      (void)pac_error(1,"Unexpected tag %c ",tag) ;
-      return (imgset_t *)pac_error(1, " File format error") ;
+      (void)trios_error(1,"Unexpected tag %c ",tag) ;
+      return (imgset_t *)trios_error(1, " File format error") ;
     }
   }
 
   if(tags_read!=2) {
     fclose(fd) ;
-    return (imgset_t *)pac_error(1,
+    return (imgset_t *)trios_error(1,
       "Number of groups or files in the group is missing.") ;
   }
 
@@ -106,18 +106,18 @@ pac_debug("ngroups=%d  grpsize=%d", ngroups, grpsize);
 
   if(!(imgset = imgset_create(ngroups, grpsize))) {
     fclose(fd) ;
-    return (imgset_t *)pac_error(MSG, "imgset_read: imgset_create() failed.") ;
+    return (imgset_t *)trios_error(MSG, "imgset_read: imgset_create() failed.") ;
   }
 
   for(i=1; i<=grpsize; i++) {
     if(fscanf(fd, "%s", name) != 1) {
       fclose(fd) ;
-      pac_fatal("Unexpected data or end of file") ;
+      trios_fatal("Unexpected data or end of file") ;
     } 
     if(strcmp(name, "\"\"") == 0) name[0]='\0';
     if(!imgset_set_dname(imgset, i, name)) {
       return
-      (imgset_t *)pac_error(MSG, "imgset_read: imgset_set_dname() failed.") ;
+      (imgset_t *)trios_error(MSG, "imgset_read: imgset_set_dname() failed.") ;
     }     
   }
   
@@ -125,12 +125,12 @@ pac_debug("ngroups=%d  grpsize=%d", ngroups, grpsize);
     for(i=1; i<=grpsize; i++) {
       if(fscanf(fd, "%s", name) != 1) {
 	fclose(fd) ;
-        pac_fatal("Unexpected data or end of file") ;
+        trios_fatal("Unexpected data or end of file") ;
       } 
       if(strcmp(name, "\"\"") == 0) name[0]='\0';
       if(!imgset_set_fname(imgset, i, k, name)) {
 	return
-        (imgset_t *)pac_error(MSG,"imgset_read: imgset_set_fname() failed.") ;
+        (imgset_t *)trios_error(MSG,"imgset_read: imgset_set_fname() failed.") ;
       }  
     }
   }
@@ -169,7 +169,7 @@ int            /*+ Purpose: write an image set file               +*/
 
 
   if(!(fd = fopen(fname, "w"))) {
-    return pac_error(1, "File (%s) open failed.", fname) ;
+    return trios_error(1, "File (%s) open failed.", fname) ;
   }
 
   header_write(fd, &header) ;
@@ -246,7 +246,7 @@ pac_debug("ide= %s", fname_ide) ;
 
 
   if(!(imgset = (imgset_t *)imgset_create(ngroups, groupsize))) {
-    return pac_error(MSG, "imgset_create_write: imgset_create() failed") ;
+    return trios_error(MSG, "imgset_create_write: imgset_create() failed") ;
   }
 
   /* set observed image */
@@ -263,11 +263,11 @@ pac_debug("ide= %s", fname_ide) ;
 
   if(!imgset_set_dname(imgset, 1, dir)) {
     imgset_free(imgset) ;
-    return pac_error(MSG, "imgset_create_write: imgset_create() failed") ;
+    return trios_error(MSG, "imgset_create_write: imgset_create() failed") ;
   }
   if(!imgset_set_fname(imgset, 1, 1, fil)) {
     imgset_free(imgset) ;
-    return pac_error(MSG, "imgset_create_write: imgset_create() failed") ;
+    return trios_error(MSG, "imgset_create_write: imgset_create() failed") ;
   }
 
   /* set ideal image */
@@ -284,11 +284,11 @@ pac_debug("ide= %s", fname_ide) ;
 
   if(!imgset_set_dname(imgset, 2, dir)) {
     imgset_free(imgset) ;
-    return pac_error(MSG, "imgset_create_write: imgset_create() failed") ;
+    return trios_error(MSG, "imgset_create_write: imgset_create() failed") ;
   }
   if(!imgset_set_fname(imgset, 2, 1, fil)) {
     imgset_free(imgset) ;
-    return pac_error(MSG, "imgset_create_write: imgset_create() failed") ;
+    return trios_error(MSG, "imgset_create_write: imgset_create() failed") ;
   }
 
   if(groupsize == 3) {
@@ -306,11 +306,11 @@ pac_debug("ide= %s", fname_ide) ;
 
     if(!imgset_set_dname(imgset, 3, dir)) {
       imgset_free(imgset) ;
-      return pac_error(MSG, "imgset_create_write: imgset_create() failed") ;
+      return trios_error(MSG, "imgset_create_write: imgset_create() failed") ;
     }
     if(!imgset_set_fname(imgset, 3, 1, fil)) {
       imgset_free(imgset) ;
-      return pac_error(MSG, "imgset_create_write: imgset_create() failed") ;
+      return trios_error(MSG, "imgset_create_write: imgset_create() failed") ;
     }
   }
 
@@ -318,7 +318,7 @@ pac_debug("ide= %s", fname_ide) ;
   /* write imgset */
   if(!imgset_write(fname, imgset)) {
     imgset_free(imgset) ;
-    return pac_error(MSG, "imgset_create_write: imgset_write() failed") ;
+    return trios_error(MSG, "imgset_create_write: imgset_write() failed") ;
   }
 
   imgset_free(imgset) ;

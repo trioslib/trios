@@ -73,13 +73,13 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
 
   /* Open the file */
   if((fd=fopen(fname, "r"))==NULL) {
-    return (itv_t *)pac_error(1, "File (%s) open failed.", fname) ;
+    return (itv_t *)trios_error(1, "File (%s) open failed.", fname) ;
   }
  
   /* read & check file header ------------------------------------------- */
   if(!header_match(fd, "ITVSPEC ")) {
     fclose(fd) ;
-    return (itv_t *)pac_error(1, "File header does not match.") ;
+    return (itv_t *)trios_error(1, "File header does not match.") ;
   }
 
 
@@ -89,7 +89,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
 
     if(dot==(char)EOF) {
       fclose(fd) ;
-      return (itv_t *)pac_error(MSG, "Unexpected end of file. No tag found.") ;
+      return (itv_t *)trios_error(MSG, "Unexpected end of file. No tag found.") ;
     }
 
     tag = (char)fgetc(fd) ;
@@ -102,7 +102,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
     case 't': 
       if(1 != fscanf(fd, "%d", &type)) {
         fclose(fd) ;
-        pac_fatal("itv(1) Unexpected data or end of file") ;
+        trios_fatal("itv(1) Unexpected data or end of file") ;
       }
       tags_read++ ;
       break ;
@@ -112,7 +112,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
     case 'n':
       if (1 != fscanf(fd, "%d", &nitv)) {
         fclose(fd) ;
-        pac_fatal("itv(2) Unexpected data or end of file") ;
+        trios_fatal("itv(2) Unexpected data or end of file") ;
       }
       tags_read++ ;
       break ;
@@ -122,7 +122,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
     case 'l':
       if(1 != fscanf(fd, "%d", &deflabel)) {
         fclose(fd) ;
-        pac_fatal("itv(3) Unexpected data or end of file") ;
+        trios_fatal("itv(3) Unexpected data or end of file") ;
       }
       tags_read++ ;
       break ;
@@ -131,14 +131,14 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
     case 'W':
       if(NULL==(*win = win_read_data(fd))) {
 	fclose(fd) ;
-	return (itv_t *)pac_error(MSG, "itv_read: win_read_data() failed.") ;
+	return (itv_t *)trios_error(MSG, "itv_read: win_read_data() failed.") ;
       }
       tags_read++ ;
       break ;
 
     /* read aperture information -------------------------------------- */
     case 'A':
-        return (itv_t *)pac_error(MSG, "mtm_read: Aperture operators are not supported yet.") ;
+        return (itv_t *)trios_error(MSG, "mtm_read: Aperture operators are not supported yet.") ;
       /* Aperture: this is an optional information */
       /*if(NULL==(*apt = apert_read_data(fd))) {
 	fclose(fd) ;
@@ -152,14 +152,14 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
 
     default : 
       fclose(fd);   
-      (void)pac_error(1,"Unexpected tag %c ", tag) ;
-      return (itv_t *)pac_error(1, " File format error") ;
+      (void)trios_error(1,"Unexpected tag %c ", tag) ;
+      return (itv_t *)trios_error(1, " File format error") ;
     }
   }
 
   if(tags_read != 4) {
     fclose(fd) ;
-    return (itv_t *)pac_error(1,"Missing Parameters. Looking for .t, .n, .l or .W") ;
+    return (itv_t *)trios_error(1,"Missing Parameters. Looking for .t, .n, .l or .W") ;
   }
 
 
@@ -182,7 +182,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
       if(NULL==(itv = itv_create(wsize, type, deflabel))) {
 	fclose(fd);
         win_free(*win) ;
-	return (itv_t *)pac_error(MSG, "itv_read: itv_create() failed.") ;
+	return (itv_t *)trios_error(MSG, "itv_read: itv_create() failed.") ;
       }
 
       if((A = (unsigned int *)malloc(sizeof(int)*wzip)) == NULL) {
@@ -190,7 +190,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
         itv_free(itv) ;
 	fclose(fd) ;
 	return 
-          (itv_t *)pac_error(1, "Memory allocation error.") ;
+          (itv_t *)trios_error(1, "Memory allocation error.") ;
       }
 
       if((B = (unsigned int *)malloc(sizeof(int)*wzip)) == NULL) {
@@ -199,7 +199,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
 	fclose(fd) ;
         free(A) ;
 	return 
-          (itv_t *)pac_error(1, "Memory allocation error.") ;
+          (itv_t *)trios_error(1, "Memory allocation error.") ;
       }
 
       /* reading loop --------------------------------- */
@@ -210,7 +210,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
             win_free(*win) ;
             itv_free(itv) ;
             fclose(fd) ;
-            pac_fatal("itv(5) Unexpected data or end of file") ;
+            trios_fatal("itv(5) Unexpected data or end of file") ;
           }
 	}
 
@@ -219,7 +219,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
             win_free(*win) ;
             itv_free(itv) ;
             fclose(fd) ;
-            pac_fatal("itv(6) Unexpected data or end of file") ;
+            trios_fatal("itv(6) Unexpected data or end of file") ;
           }
 	}
 
@@ -227,7 +227,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
           win_free(*win) ;
           itv_free(itv) ;
           fclose(fd) ;
-          pac_fatal("itv(6) Unexpected data or end of file") ;
+          trios_fatal("itv(6) Unexpected data or end of file") ;
         }
 
         if(label > maxlabel) {
@@ -259,7 +259,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
 
     case GG:
     case GB:
-	return (itv_t *)pac_error(MSG, "itv_read: type GG not implemented yet") ;
+	return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
     case WKC:
     case WKF: {
       char *A, *B ;
@@ -268,7 +268,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
       if(NULL==(itv = itv_create(wsize, type, deflabel))) {
 	fclose(fd);
         win_free(*win) ;
-	return (itv_t *)pac_error(MSG, "itv_read: itv_create() failed.") ;
+	return (itv_t *)trios_error(MSG, "itv_read: itv_create() failed.") ;
       }
 
       if((A = (char *)malloc(sizeof(char)*wsize)) == NULL) {
@@ -276,7 +276,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
         itv_free(itv) ;
 	fclose(fd) ;
 	return 
-          (itv_t *)pac_error(1, "Memory allocation error.") ;
+          (itv_t *)trios_error(1, "Memory allocation error.") ;
       }
 
       if((B = (char *)malloc(sizeof(char)*wsize)) == NULL) {
@@ -285,7 +285,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
 	fclose(fd) ;
         free(A) ;
 	return 
-          (itv_t *)pac_error(1, "Memory allocation error.") ;
+          (itv_t *)trios_error(1, "Memory allocation error.") ;
       }
 
       /* reading loop --------------------------------- */
@@ -296,7 +296,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
             win_free(*win) ;
             itv_free(itv) ;
             fclose(fd) ;
-            pac_fatal("itv(5) Unexpected data or end of file") ;
+            trios_fatal("itv(5) Unexpected data or end of file") ;
           }
 	}
 
@@ -305,7 +305,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
             win_free(*win) ;
             itv_free(itv) ;
             fclose(fd) ;
-            pac_fatal("itv(6) Unexpected data or end of file") ;
+            trios_fatal("itv(6) Unexpected data or end of file") ;
           }
 	}
 
@@ -313,7 +313,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
           win_free(*win) ;
           itv_free(itv) ;
           fclose(fd) ;
-          pac_fatal("itv(6) Unexpected data or end of file") ;
+          trios_fatal("itv(6) Unexpected data or end of file") ;
         }
 
         if(label > maxlabel) {
@@ -340,7 +340,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
  
     default:
       fclose(fd) ;
-      return (itv_t *)pac_error(1, "Read ITV works only for BB, BG, GG, GB, WKC, WKF") ;
+      return (itv_t *)trios_error(1, "Read ITV works only for BB, BG, GG, GB, WKC, WKF") ;
   }
 
   fclose(fd) ;
@@ -390,7 +390,7 @@ pac_debug("Entering ITV_WRITE()") ;
   /* Open file */
   fd = fopen(fname, "w") ;
   if(fd == NULL) 
-    return pac_error(1, "File (%s) open error.", fname) ;
+    return trios_error(1, "File (%s) open error.", fname) ;
   
   /* write header */
   header_write(fd, &itvHeader);
@@ -412,7 +412,7 @@ pac_debug("Entering ITV_WRITE()") ;
 
   if((type > 3) && (type < 10)) {
     fprintf(fd, "%s\n", ".A") ;
-    return (itv_t *)pac_error(MSG, "itv_write: Aperture operators are not supported yet.") ;
+    return (itv_t *)trios_error(MSG, "itv_write: Aperture operators are not supported yet.") ;
     /*apert_write_data(fd, apt);*/
   }
 
@@ -478,7 +478,7 @@ pac_debug("Entering WKC or WKF") ;
 
     default:
       fclose(fd) ;
-      return pac_error(1, "Write ITV works only for BB, BG, GG, GB, WKC, WKF") ;
+      return trios_error(1, "Write ITV works only for BB, BG, GG, GB, WKC, WKF") ;
       break;
   }
 

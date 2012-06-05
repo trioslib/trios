@@ -1,7 +1,7 @@
 #include <pacbasic.h>
 
-/* #define _DEBUG_ */
-/* #define _DEBUG_2_ */
+/* #define _DEBUG_
+ #define _DEBUG_2_*/
 
 
 /* --------------------------------------------------------------- *
@@ -190,19 +190,19 @@ int win_set_point(int i, int j, int k, int value, window_t *win) {
   int nbands ;
 
   if(i >= win->height) {
-    return pac_error(1, "Window point is out of its dimension.") ;
+    return trios_error(1, "Window point is out of its dimension.") ;
   }
   if(j >= win->width) {
-    return pac_error(1, "Window point is out of its dimension.") ;
+    return trios_error(1, "Window point is out of its dimension.") ;
   }
 
   nbands = win->nbands ;
   if(k > nbands) {
-    return pac_error(1, "Window point is out of its dimension.") ;
+    return trios_error(1, "Window point is out of its dimension.") ;
   }
 
 #ifdef _DEBUG_2_
-pac_debug("nbands=%d k=%d i=%d j=%d pos=%d", nbands, k, i, j, (k-1)*win->width*win->height + i*win->width + j) ;
+trios_debug("nbands=%d k=%d i=%d j=%d pos=%d", nbands, k, i, j, (k-1)*win->width*win->height + i*win->width + j) ;
 #endif
 
   win->windata[ (k-1)*win->width*win->height + i*win->width + j ] = (char)value ;
@@ -237,13 +237,13 @@ int win_get_point(int i, int j, int k, window_t *win)
 
 
   if(i >= win->height) {
-    return pac_error(1,"Window point is out of its dimension.") ;
+    return trios_error(1,"Window point is out of its dimension.") ;
   }
   if(j >= win->width) {
-    return pac_error(1,"Window point is out of its dimension.") ;
+    return trios_error(1,"Window point is out of its dimension.") ;
   }
   if(k > win->nbands) {
-    return pac_error(1, "Window point is out of its dimension.") ;
+    return trios_error(1, "Window point is out of its dimension.") ;
   }
 
   return((int)win->windata[ (k-1)*win->width*win->height + i*win->width + j ]) ;
@@ -285,23 +285,23 @@ window_t *win_create(int height, int width, int nbands) {
 
   if((width > MAXWINWIDTH) || (height > MAXWINHEIGHT) ||
      (nbands > MAXWINBANDS)) {
-    return (window_t *)pac_error(1, "Window dimension must be less than %dx%dx%d.",
+    return (window_t *)trios_error(1, "Window dimension must be less than %dx%dx%d.",
                     MAXWINHEIGHT, MAXWINWIDTH, MAXWINBANDS) ;
   }
 
   win = (window_t *)malloc(sizeof(window_t)) ;
   if(win==NULL) {
-    return (window_t *)pac_error(1, "Memory allocation failed.") ;
+    return (window_t *)trios_error(1, "Memory allocation failed.") ;
   }
 
   win->wsize = (int *)malloc(sizeof(int)*(nbands+1)) ;
   if(win->wsize==NULL) {
-    return (window_t *)pac_error(1, "Memory allocation failed.") ;
+    return (window_t *)trios_error(1, "Memory allocation failed.") ;
   }
 
   win->windata = (char *)malloc(sizeof(char)*width*height*nbands) ;
   if(win->windata==NULL) {
-    return (window_t *)pac_error(1, "Memory allocation failed.") ;
+    return (window_t *)trios_error(1, "Memory allocation failed.") ;
   }
 
   win->height = height ;

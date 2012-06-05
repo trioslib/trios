@@ -151,7 +151,7 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
   int    j ;
 #endif
 
-  pac_debug("isi_basic");
+  trios_debug("isi_basic");
 
   GLlog_step = log_step ;
   if(log_step) {
@@ -174,11 +174,11 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
   map_type2 = mtm_get_type(mtm) ;
 
   if((map_type2 != BB) && (map_type2 != BG)) {
-    return pac_error(1, "ISI not implemented for non-binary patterns") ;
+    return trios_error(1, "ISI not implemented for non-binary patterns") ;
   }
 
   if(map_type1 != map_type2) {
-    pac_warning("Classified examples and starting intervals have different type.") ;
+    trios_warning("Classified examples and starting intervals have different type.") ;
   }
   if(multi) {
     map_type2 = BG ;
@@ -198,7 +198,7 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
 #endif
 
   if(wsize1 != wsize2) {
-    return pac_error(1, "Incompatible size. ISI can't be applied.") ;
+    return trios_error(1, "Incompatible size. ISI can't be applied.") ;
   }
 
 
@@ -212,7 +212,7 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
 
   if(multi) {
     if((k = isi_sort_labels(mtm, lb))==-1) {
-      return pac_error(MSG, "isi_basic: isi_sort_labels() failed.") ;
+      return trios_error(MSG, "isi_basic: isi_sort_labels() failed.") ;
    }
   }
   /* if output is binary, then examples with label 0 will be */
@@ -232,7 +232,7 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
   /* allocate output itv_t structure */
   itv_o = itv_create(wsize2, map_type2, lb[0]) ;
   if(!itv_o) {
-    return pac_error(1, "Memory allocation error.") ;
+    return trios_error(1, "Memory allocation error.") ;
   }
 
 
@@ -252,7 +252,7 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
     /* put in mtm0 all minterms of mtm with label lb[i], and
        in mtm1 all other minterms of mtm                 */            
     if(!mtm_sep(mtm, lb[i], &mtm0, &mtm1) ) {
-      return pac_error(1, "isi_basic: mtm_sep() failed.") ;
+      return trios_error(1, "isi_basic: mtm_sep() failed.") ;
     }
     mtm_free(mtm) ;
 
@@ -286,16 +286,16 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
         /* REMEMBER: isi_0() will free "mtm0", and modify "itv_i" */
 
         if(!(isi_0(&itv, mtm0))) {
-          return pac_error(MSG, "isi_basic: isi_0() failed.") ;
+          return trios_error(MSG, "isi_basic: isi_0() failed.") ;
         }
         mtm_free(mtm0) ;
 
 	if(!itv_filter(mtm1, itv)) {
-	  return pac_error(MSG, "isi_basic: itv_filter() failed.") ;
+	  return trios_error(MSG, "isi_basic: itv_filter() failed.") ;
 	}
   
 	if(!p_cover(mtm1, itv)) {
-	  return pac_error(MSG, "isi_basic: p_cover() failed.") ;
+	  return trios_error(MSG, "isi_basic: p_cover() failed.") ;
 	}
         break ;
 
@@ -303,7 +303,7 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
         /* REMEMBER: isi_1() will free "mtm0" and modify "itv_i" */ 
 
         if(!(isi_1(&itv, mtm0, mtm1))) {
-          return pac_error(MSG, "isi_basic: isi_1() failed.") ;
+          return trios_error(MSG, "isi_basic: isi_1() failed.") ;
         }
         mtm_free(mtm0) ;
 
@@ -312,26 +312,26 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
 
       case ISI_2 :
         if(!(isi_2(&itv, mtm0, mtm1))) {
-          return pac_error(MSG, "isi_basic: isi_2() failed.") ;
+          return trios_error(MSG, "isi_basic: isi_2() failed.") ;
         }
         mtm_free(mtm0) ;
         break ;
 
       case ISI_3 :
         if(isi3_step==0) {
-          pac_warning("0 is not a valid step. 1 will be used\n") ;
+          trios_warning("0 is not a valid step. 1 will be used\n") ;
           isi3_step = 1 ; 
         }
         /* REMEMBER: isi_3() will free "mtm0"  and modify "itv_i" */ 
 
         if(!(isi_3(&itv, mtm0, mtm1, isi3_step))) {
-          return pac_error(MSG, "isi_basic: isi_3() failed.") ;
+          return trios_error(MSG, "isi_basic: isi_3() failed.") ;
         }
         mtm_free(mtm0) ;
         break ;
 
       default :
-        return pac_error(1, "Invalid ISI type.") ;
+        return trios_error(1, "Invalid ISI type.") ;
       }
 
       /* For now, the intervals will be copied (added) to
@@ -438,11 +438,11 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
   map_type2 = mtm_get_type(mtm) ;
 
   if((map_type2 != BB) && (map_type2 != BG)) {
-    return pac_error(1, "ISI not implemented for non-binary patterns") ;
+    return trios_error(1, "ISI not implemented for non-binary patterns") ;
   }
 
   if(map_type1 != map_type2) {
-    pac_warning("Classified examples and starting intervals have different type.") ;
+    trios_warning("Classified examples and starting intervals have different type.") ;
   }
   if(multi) {
     map_type2 = BG ;
@@ -457,7 +457,7 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
   wsize2 = mtm_get_wsize(mtm) ;
 
   if(wsize1 != wsize2) {
-    return pac_error(1, "Incompatible size. ISI can't be applied.") ;
+    return trios_error(1, "Incompatible size. ISI can't be applied.") ;
   }
 
 
@@ -472,7 +472,7 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
 
   if(multi) {
     if((k = isi_sort_labels(mtm, lb))==-1) {
-      return pac_error(MSG, "isi_gen: isi_sort_labels() failed.") ;
+      return trios_error(MSG, "isi_gen: isi_sort_labels() failed.") ;
     }
   }
   /* if output is binary, then examples with label 0 will be */
@@ -492,7 +492,7 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
   /* allocate output itv_t structure */
   itv_o = itv_create(wsize2, map_type2, lb[0]) ;
   if(!itv_o) {
-    return pac_error(1, "Memory allocation error.") ;
+    return trios_error(1, "Memory allocation error.") ;
   }
 
 
@@ -518,7 +518,7 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
     /* put in mtm0 all minterms of mtm with label lb[i], and
        in mtm1 all other minterms of mtm                 */            
     if(!mtm_sep(mtm, lb[i], &mtm0, &mtm1) ) {
-      return pac_error(MSG, "isi_basic: mtm_sep() failed.") ;
+      return trios_error(MSG, "isi_basic: mtm_sep() failed.") ;
     }
     mtm_free(mtm) ;
 
@@ -537,14 +537,14 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
 	 into (trivial) intervals */ 
       //itv_list1 = build_itv_from_mtm(mtm0, lb[i]) ;
       if(!itv_list1) {
-	return pac_error(MSG, "isi_gen: build_itv_from_mtm() failed.") ;
+	return trios_error(MSG, "isi_gen: build_itv_from_mtm() failed.") ;
       }
 
       /* Apply the Quine-McCluskey's procedure to group minterms
 	 with label lb[i]                                        */
       //itv_list2 = pquine(itv_list1, wsize1) ;
       if(!itv_list2) {
-	return pac_error(MSG, "isi_gen: quine_like() failed.") ;
+	return trios_error(MSG, "isi_gen: quine_like() failed.") ;
       }
 
       /*getrusage(RUSAGE_SELF, &rusage);
@@ -568,17 +568,17 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
 	case ISI_0 :
 
           if(!(count = gisi_0(itv, itv_list2))) {
-	      return pac_error(MSG, "isi_gen: gisi_0() failed.") ;
+	      return trios_error(MSG, "isi_gen: gisi_0() failed.") ;
           }
 
 	  mtm_free(mtm0) ;
 
 	  if(!itv_filter(mtm1, itv)) {
-	    return pac_error(MSG, "isi_gen: itv_filter() failed.") ;
+	    return trios_error(MSG, "isi_gen: itv_filter() failed.") ;
 	  }
 	  
 	  if(!p_cover(mtm1, itv)) {
-	    return pac_error(MSG, "isi_gen: p_cover() failed.") ;
+	    return trios_error(MSG, "isi_gen: p_cover() failed.") ;
 	  }
 	  break;
 
@@ -586,33 +586,33 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
 	case ISI_1 :
 	
 	  if(!(count = gisi_1(itv, itv_list2, mtm1))) {
-	    return  pac_error(MSG, "isi_gen: gisi_1() failed.") ;
+	    return  trios_error(MSG, "isi_gen: gisi_1() failed.") ;
 	  }
 	  mtm_free(mtm0) ;
 
 	  if(!itv_filter(mtm1, itv)) {
-	    return pac_error(MSG, "isi_gen: itv_filter() failed.") ;
+	    return trios_error(MSG, "isi_gen: itv_filter() failed.") ;
 	  }
 	  
 	  if(!p_cover(mtm1, itv)) {
-	    return pac_error(MSG, "isi_gen: p_cover() failed.") ;
+	    return trios_error(MSG, "isi_gen: p_cover() failed.") ;
 	  }
 	  break ;
 
 
 	case ISI_3 :
 	  if(isi3_step==0) {
-	    pac_warning("0 is not a valid step. 1 will be used\n") ;
+	    trios_warning("0 is not a valid step. 1 will be used\n") ;
 	  }
 
 	  if(!(count = gisi_3(itv, itv_list2, mtm1, isi3_step))) {
-	    return pac_error(MSG, "isi_gen: gisi_3() failed.") ;
+	    return trios_error(MSG, "isi_gen: gisi_3() failed.") ;
 	  }
 	  mtm_free(mtm0) ;
 	  break ;
 
 	default:
-	  return pac_error(1, "ISI-2: Not implemented yet") ;
+	  return trios_error(1, "ISI-2: Not implemented yet") ;
 	  break;
 	}
 
@@ -692,7 +692,7 @@ int             /*+ Purpose: sort labels of a classified examples set
   while(p) {
     if(p->label != 0) {
       if(k > 255) {
-	pac_fatal("Buffer overflow. Notify the support team (!)") ;
+	trios_fatal("Buffer overflow. Notify the support team (!)") ;
       } 
       lb[k] = p->label ;
       fq[k] = p->freq ;
@@ -1078,11 +1078,11 @@ int             /*+ Purpose: ISI-1 (point case)                            +*/
   }
 
   if(!itv_filter(mtm_i2, itv)) {
-    return pac_error(MSG, "isi_1: itv_filter() failed.") ;
+    return trios_error(MSG, "isi_1: itv_filter() failed.") ;
   }
   
   if(!p_cover(mtm_i2, itv)) {
-    return pac_error(MSG, "isi_1: p_cover() failed.") ;
+    return trios_error(MSG, "isi_1: p_cover() failed.") ;
   }
 
   return(1) ;    
@@ -1147,7 +1147,7 @@ int             /*+ Purpose: ISI-2 (point case)                            +*/
 
   /* create a list of indexes that point to positive minterms */
   if(!(ll_head = mtm_tbl2ll(mtm_i1))) {
-    return pac_error(MSG, "isi_2: mtm_tbl2ll() failed.") ;
+    return trios_error(MSG, "isi_2: mtm_tbl2ll() failed.") ;
   }
   ll_yes = ll_no = 0 ;
 
@@ -1558,7 +1558,7 @@ int             /*+ Purpose: ISI-3 (point case)                            +*/
 #endif
 
       if(!p_cover(mtm_i2, itv)) {
-	return pac_error(MSG, "isi_3: p_cover() failed.") ;
+	return trios_error(MSG, "isi_3: p_cover() failed.") ;
       }
     }
 
@@ -2055,7 +2055,7 @@ int     /*+ Purpose: split all intervals of a list (of intervals)
       */
       
       if(!p_cover(mtm, itv)) {
-	return pac_error(MSG, "gisi_3: p_cover() failed.") ;
+	return trios_error(MSG, "gisi_3: p_cover() failed.") ;
       }
     }
 
@@ -2072,7 +2072,7 @@ int     /*+ Purpose: split all intervals of a list (of intervals)
     */
 
     if(!p_cover(mtm, itv)) {
-      return pac_error(MSG, "gisi_3: p_cover() failed.") ;
+      return trios_error(MSG, "gisi_3: p_cover() failed.") ;
     }
   }
 
@@ -2121,7 +2121,7 @@ itv_BX *        /*+ Purpose: Given an interval I, and a point X, computes
       if((bitmsk[nsh] & ((wpat[i_wzip]) & (~I->A[i_wzip])))) {
 
 	if(!(p=itv_nodebx_create(wzip))) {
-	  return (itv_BX *)pac_error(MSG,
+	  return (itv_BX *)trios_error(MSG,
 				     "itv_split_bywpat: itv_nodebx_create() failed.") ;
 
 	}
@@ -2143,7 +2143,7 @@ itv_BX *        /*+ Purpose: Given an interval I, and a point X, computes
 
 
 	if(!(p=itv_nodebx_create(wzip))) {
-	  return (itv_BX *)pac_error(MSG,
+	  return (itv_BX *)trios_error(MSG,
 				     "itv_split_bywpat: itv_nodebx_create() failed.") ;
 
 
@@ -2211,7 +2211,7 @@ itv_BX *        /*+ Purpose: Given two intervals, I1 and I2, computes a
       if((bitmsk[nsh] & ((I2->A[i_wzip]) & (~I1->A[i_wzip])))) {
 
 	if(!(p1=itv_nodebx_create(wzip))) {
-	  return (itv_BX *)pac_error(MSG,"itv_split_byitv: itv_nodebx_create() failed.") ;
+	  return (itv_BX *)trios_error(MSG,"itv_split_byitv: itv_nodebx_create() failed.") ;
 	}
 
 	for(j=0; j<wzip; j++) {
@@ -2230,7 +2230,7 @@ itv_BX *        /*+ Purpose: Given two intervals, I1 and I2, computes a
       else if((bitmsk[nsh] & (~I2->B[i_wzip] & I1->B[i_wzip]))){
 
 	if(!(p1=itv_nodebx_create(wzip))) {
-	  return (itv_BX *)pac_error(MSG,"itv_split_byitv: itv_nodebx_create() failed.") ;
+	  return (itv_BX *)trios_error(MSG,"itv_split_byitv: itv_nodebx_create() failed.") ;
 	}
 
 	for(j=0; j<wzip; j++) {
@@ -2282,7 +2282,7 @@ int            /*+ Purpose: copy a set of intervals to the end of a list   +*/
 
   while(p1) {
     if(!(p=itv_nodebx_create(wzip))) {
-      return pac_error(MSG,"add...: itv_nodebx_create() failed.") ;
+      return trios_error(MSG,"add...: itv_nodebx_create() failed.") ;
     }
 
     for(j=0; j<wzip; j++) {

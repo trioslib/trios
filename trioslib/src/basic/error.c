@@ -9,7 +9,7 @@
   \param va_list Arguments to the error message (like printf).
   \return Always return 0.
 */
-int pac_error(int type, const char* format, ...) {
+int trios_error(int type, const char* format, ...) {
    va_list     args;
 
   if (type == 1) {
@@ -36,7 +36,7 @@ int pac_error(int type, const char* format, ...) {
   \param format The error message and the arguments.
   \param va_list Arguments to the error message (like printf).
 */
-void pac_fatal(const char* format, ...) {
+void trios_fatal(const char* format, ...) {
   va_list     args;
 
   fprintf(stderr, "\n *** FATAL ERROR: ") ;
@@ -56,7 +56,7 @@ void pac_fatal(const char* format, ...) {
   \param format The error message and the arguments.
   \param va_list Arguments to the error message (like printf).
 */
-void pac_debug(const char* format, ...) {
+void trios_debug(const char* format, ...) {
   va_list     args;
 
   fprintf(stderr, "(debug) ") ;
@@ -73,7 +73,7 @@ void pac_debug(const char* format, ...) {
   \param format The error message and the arguments.
   \param va_list Arguments to the error message (like printf).
 */
-void pac_warning(const char* format, ...) {
+void trios_warning(const char* format, ...) {
   va_list     args;
 
   fprintf(stderr, "\n *** WARNING: ") ;

@@ -20,17 +20,17 @@ int lpaccmp(char *i1, char *i2) {
 
 
 #ifdef _DEBUG_
-pac_debug("Entering lpaccmp()\n");
+trios_debug("Entering lpaccmp()\n");
 #endif
 
   if ((f1=fopen(i1,"r"))==NULL) {
-    (void) pac_error(1, "The program was unable to open the first input file.");
+    (void) trios_error(1, "The program was unable to open the first input file.");
     return(-1);    
   }
 
 
   if ((f2=fopen(i2,"r"))==NULL) {
-    (void) pac_error(1, "The program was unable to open the second input file.");
+    (void) trios_error(1, "The program was unable to open the second input file.");
     return(-1);    
   }
 
@@ -55,7 +55,7 @@ pac_debug("Entering lpaccmp()\n");
       *(palavra1+a)='\0';
 
 #ifdef _DEBUG_
-pac_debug("%s\n",palavra1);
+trios_debug("%s\n",palavra1);
 #endif
 
       ungetc(ch1, f1);
@@ -72,7 +72,7 @@ pac_debug("%s\n",palavra1);
       *(palavra2+a)='\0';
 
 #ifdef _DEBUG_
-pac_debug("%s\n",palavra2);
+trios_debug("%s\n",palavra2);
 #endif
 
       ungetc(ch2, f2);
@@ -90,7 +90,7 @@ pac_debug("%s\n",palavra2);
   }
   
 #ifdef _DEBUG_
-pac_debug("Leaving lpaccmp()\n");
+trios_debug("Leaving lpaccmp()\n");
 #endif
   
   if ( (igual) && feof(f1) && feof(f2) ) {

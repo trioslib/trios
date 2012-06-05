@@ -62,12 +62,12 @@ xpl_t *             /*+ Purpose: Read an examples file   +*/
 
 
   if((fd=fopen(fname, "r"))==NULL) {
-    return (xpl_t *)pac_error(1, "File (%s) open failed.", fname) ;
+    return (xpl_t *)trios_error(1, "File (%s) open failed.", fname) ;
   }
  
   if(!header_match(fd, "EXAMPLE ")) {
     fclose(fd) ;
-    return (xpl_t *)pac_error(1, "File header does not match.") ;
+    return (xpl_t *)trios_error(1, "File header does not match.") ;
   }
 
 
@@ -78,7 +78,7 @@ xpl_t *             /*+ Purpose: Read an examples file   +*/
 
     if(dot==(char)EOF) {
       fclose(fd) ;
-      return (xpl_t *)pac_error(1, "Unexpected end of file. No tag found.") ;
+      return (xpl_t *)trios_error(1, "Unexpected end of file. No tag found.") ;
     }
 
     tag = (char)fgetc(fd) ;
@@ -91,7 +91,7 @@ xpl_t *             /*+ Purpose: Read an examples file   +*/
     case 't': 
       if(1 != fscanf(fd, "%d", &type)) {
         fclose(fd) ;
-        pac_fatal("Unexpected data or end of file") ;
+        trios_fatal("Unexpected data or end of file") ;
       }
       tags_read++ ;
       break ;
@@ -101,7 +101,7 @@ xpl_t *             /*+ Purpose: Read an examples file   +*/
     case 'n':
       if(1 != fscanf(fd, "%d", &n_nodes)) {
         fclose(fd) ;
-        pac_fatal("Unexpected data or end of file") ;
+        trios_fatal("Unexpected data or end of file") ;
       }
       tags_read++ ;
       break ;
@@ -111,7 +111,7 @@ xpl_t *             /*+ Purpose: Read an examples file   +*/
     case 's':
       if(1 != fscanf(fd, "%d", &sum)) {
         fclose(fd) ;
-        pac_fatal("Unexpected data or end of file") ;
+        trios_fatal("Unexpected data or end of file") ;
       }
       tags_read++ ;
       break ;
@@ -120,14 +120,14 @@ xpl_t *             /*+ Purpose: Read an examples file   +*/
     case 'W':
       if(NULL==(*win = win_read_data(fd))) {
 	fclose(fd) ;
-	return (xpl_t *)pac_error(MSG, "xpl_read: win_read_data() failed.") ;
+	return (xpl_t *)trios_error(MSG, "xpl_read: win_read_data() failed.") ;
       }
       tags_read++ ;
       break ;
 
     /* read aperture information -------------------------------------- */
     case 'A':
-        pac_error(MSG, "Aperture operators are not supported at this moment");
+        trios_error(MSG, "Aperture operators are not supported at this moment");
       /*if(NULL==(*apt = apert_read_data(fd))) {
 	      fclose(fd) ;
     	  return (xpl_t *)pac_error(MSG, "xpl_read: apert_read_data() failed.") ;
@@ -140,14 +140,14 @@ xpl_t *             /*+ Purpose: Read an examples file   +*/
 
     default : 
       fclose(fd) ;
-      (void)pac_error(1,"Unexpected tag %c ",tag) ;
-      return (xpl_t *)pac_error(1, " File format error") ;
+      (void)trios_error(1,"Unexpected tag %c ",tag) ;
+      return (xpl_t *)trios_error(1, " File format error") ;
     }
   }
 
 
   if(tags_read!=4) 
-    return (xpl_t *)pac_error(1, "Missing Parameters. Looking for .t, .n, .s or .W") ;
+    return (xpl_t *)trios_error(1, "Missing Parameters. Looking for .t, .n, .s or .W") ;
 
 #ifdef _DEBUG_1_
 pac_debug("type=%d nodes=%d sum=%d", type, n_nodes, sum) ;
@@ -162,7 +162,7 @@ pac_debug("type=%d nodes=%d sum=%d", type, n_nodes, sum) ;
 
       if(NULL==(xpl = xpl_create(wsize,BB))) {
 	fclose(fd);
-	return (xpl_t *)pac_error(MSG, "xpl_read: xpl_create() failed.") ;
+	return (xpl_t *)trios_error(MSG, "xpl_read: xpl_create() failed.") ;
       }
 
       wzip = xpl_get_wzip(xpl) ;
@@ -170,7 +170,7 @@ pac_debug("type=%d nodes=%d sum=%d", type, n_nodes, sum) ;
       if((bwpat = (unsigned int *)malloc(sizeof(int)*wzip)) == NULL) {
 	fclose(fd) ;
 	return 
-          (xpl_t *)pac_error(1, "Mmemory allocation error.") ;
+          (xpl_t *)trios_error(1, "Mmemory allocation error.") ;
       }
 
       /* reading loop --------------------------------- */
@@ -184,7 +184,7 @@ pac_debug("wzip=%d", wzip) ;
 	  if(1 != fscanf(fd, "%x ", &bwpat[j])) {
             free(bwpat) ;
             fclose(fd) ;
-            pac_fatal("Unexpected data or end of file") ;
+            trios_fatal("Unexpected data or end of file") ;
           }
 	}
 
@@ -194,14 +194,14 @@ pac_debug("wzip=%d", wzip) ;
 	  if(1 != fscanf(fd, "%d", &freq)) {
             free(bwpat) ;
             fclose(fd) ;
-            pac_fatal("Unexpected data or end of file") ;
+            trios_fatal("Unexpected data or end of file") ;
           }
   
 	  if (freq) {
 	    if(1 != fscanf(fd, "%d", &label)) {
               free(bwpat) ;
               fclose(fd) ;
-              pac_fatal("Unexpected data or end of file") ;
+              trios_fatal("Unexpected data or end of file") ;
             }
 
 	    if(label)  /* The first freq must be different of zero */
@@ -222,14 +222,14 @@ pac_debug("bwpat=%x fq0=%d fq1=%d", bwpat[0], fq0, fq1) ;
 	if(xpl_BB_insert(xpl, (xpl_BB **)(&xpl->root), bwpat, fq0, fq1) == -1) {
           free(bwpat) ;
 	  fclose(fd) ;
-	  return (xpl_t *)pac_error(MSG,"read_xpl : xpl_BB_insert() failed.") ;
+	  return (xpl_t *)trios_error(MSG,"read_xpl : xpl_BB_insert() failed.") ;
 	}
       }
       free(bwpat) ;
       break;
 
     case BG:
-        pac_error(MSG, "This operator is not supported yet");
+        trios_error(MSG, "This operator is not supported yet");
         /*
         wsize = win_get_wsize(*win);
     
@@ -318,7 +318,7 @@ pac_debug("label=%d , freq=%d\n", freqnode->label, freqnode->freq) ;
     case WKGG2F:
     case WKGG2C:
     case GG3:
-        pac_error(MSG, "This operator is not supported yet"); /*
+        trios_error(MSG, "This operator is not supported yet"); /*
       wsize = win_get_wsize(*win);
 
       if(NULL==(xpl = xpl_create(wsize,type))) {
@@ -393,7 +393,7 @@ pac_debug("label=%d , freq=%d\n", freqnode->label, freqnode->freq) ;
 
     default:
       fclose(fd) ;
-      return (xpl_t *)pac_error(1, "Mapping %d not implemented yet.", type) ;
+      return (xpl_t *)trios_error(1, "Mapping %d not implemented yet.", type) ;
   }
 
 #ifdef _DEBUG_
@@ -444,7 +444,7 @@ pac_debug("Entrou no XPL_WRITE") ;
 
   fd = fopen(fname, "w") ;
   if(fd == NULL) 
-    return pac_error(1, "write_xpl : file open error.") ;
+    return trios_error(1, "write_xpl : file open error.") ;
   
 #ifdef _DEBUG_
 pac_debug("abriu arquivo\n") ;
@@ -472,7 +472,7 @@ pac_debug("type=%d", type) ;
   if((type>3)&&(type<10)) {
     fprintf(fd, "%s\n", ".A") ;
     //apert_write_data(fd, apt);
-    pac_error(MSG, "Aperture operatos are not supported at this moment");
+    trios_error(MSG, "Aperture operatos are not supported at this moment");
   }
 
  
@@ -489,13 +489,13 @@ pac_debug("type=%d", type) ;
       break ;
 
     case BG:
-        pac_error(MSG, "This operator is not supported at this moment");
+        trios_error(MSG, "This operator is not supported at this moment");
       //xpl_BG_write_tree(fd, (xpl_BG *)(xpl->root), wzip) ;
       break ;
 
     case GG:
     case GG3:
-        pac_error(MSG, "This operator is not supported at this moment");
+        trios_error(MSG, "This operator is not supported at this moment");
       //xpl_GG_write_tree(fd, (xpl_GG *)(xpl->root), wsize) ;
       break ;
 
@@ -503,20 +503,20 @@ pac_debug("type=%d", type) ;
     case WKC:
     case WK3F:
     case WK3C:
-        pac_error(MSG, "This operator is not supported at this moment");
+        trios_error(MSG, "This operator is not supported at this moment");
       //xpl_WK_write_tree(fd, (xpl_GG *)(xpl->root), wsize) ;
       break ;
 
     case WKGG2F:
     case WKGG2C:
-        pac_error(MSG, "This operator is not supported at this moment");
+        trios_error(MSG, "This operator is not supported at this moment");
       //xpl_WKGG_write_tree(fd, (xpl_GG *)(xpl->root),
       //                    win_get_band_wsize(win,1), wsize) ;
       break ;
 
     default:
       fclose(fd) ;
-      return pac_error(1,"xpl_write: mapping %d not yet implemented.", type);
+      return trios_error(1,"xpl_write: mapping %d not yet implemented.", type);
       break;
   }
 

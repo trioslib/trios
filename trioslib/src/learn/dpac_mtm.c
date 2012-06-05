@@ -53,14 +53,14 @@ pac_debug("Entered ldecision with if=%s e of=%s", fname_i, fname_o) ;
 
     /* read observed examples file */
     if(NULL == (xpl = (xpl_t *)xpl_read(fname_i, &win, &apt))) 
-      return pac_error(MSG, "xpl_read failed.") ;
+      return trios_error(MSG, "xpl_read failed.") ;
 
 
     if(NULL == (mtm = (mtm_t *)mtm_decide(xpl, comp_prob,
                 freqmin, estim, comptype, undflabel ))) {
       win_free(win) ;
       xpl_free(xpl) ;
-      return pac_error(MSG, "mtm_decide failed.") ;
+      return trios_error(MSG, "mtm_decide failed.") ;
     }
 
     /* write the classified examples table to the output file */
@@ -68,7 +68,7 @@ pac_debug("Entered ldecision with if=%s e of=%s", fname_i, fname_o) ;
       win_free(win) ;
       xpl_free(xpl) ;
       mtm_free(mtm) ;
-      return pac_error(MSG, "mtm_write failed.") ;
+      return trios_error(MSG, "mtm_write failed.") ;
     }
  
 #ifdef _DEBUG_

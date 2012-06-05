@@ -478,7 +478,7 @@ freq_node *freq_node_create(int label, unsigned int freq) {
 
   p = (freq_node *)malloc(sizeof(freq_node)) ;
   if(p == NULL) {
-    return (freq_node *)pac_error(1, "Memory allocation failed.") ;
+    return (freq_node *)trios_error(1, "Memory allocation failed.") ;
   }
 
   p->freq = freq ;
@@ -530,8 +530,8 @@ int set_freq(freq_node *freqlstin, freq_node **freqlist) {
     *freqlist = freqlstin ;
 
 #ifdef _DEBUG_
-pac_debug("Entrou no xpl_set_freq com freqlist = null");
-pac_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
+trios_debug("Entrou no xpl_set_freq com freqlist = null");
+trios_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
 #endif // _DEBUG_
 
   }
@@ -539,8 +539,8 @@ pac_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
   else {
 
 #ifdef _DEBUG_
-pac_debug("Entrou no xpl_set_freq");
-pac_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
+trios_debug("Entrou no xpl_set_freq");
+trios_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
 #endif // _DEBUG_
 
     qfreq = freqlstin ;

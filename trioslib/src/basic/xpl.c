@@ -14,7 +14,7 @@ xpl_t * xpl_create(int wsize, int type) {
   xpl_t *xpl ;
 
   if((xpl=(xpl_t *)malloc(sizeof(xpl_t))) == NULL) {
-    return (xpl_t *)pac_error(1, "xpl_create: Memory allocation failed.") ;
+    return (xpl_t *)trios_error(1, "xpl_create: Memory allocation failed.") ;
   }
 
   xpl->wsize = wsize ;
@@ -42,7 +42,7 @@ void xpl_free(xpl_t *xpl) {
       break ;
 
     case BG:
-      pac_error(MSG, "This operator is not supported yet");
+      trios_error(MSG, "This operator is not supported yet");
       /*xpl_BG_free_tree((xpl_BG *)xpl->root) ;*/
       break ;
 
@@ -54,12 +54,12 @@ void xpl_free(xpl_t *xpl) {
     case WKGG2F:
     case WKGG2C:
     case GG3:
-      pac_error(MSG, "This operator is not supported yet");
+      trios_error(MSG, "This operator is not supported yet");
       /*xpl_GG_free((xpl_GG *)xpl->root) ;*/
       break;
 
     default:
-      pac_error(1, "xpl_free: Mapping %d not implemented yet.", xpl->type) ;
+      trios_error(1, "xpl_free: Mapping %d not implemented yet.", xpl->type) ;
     }
   }
 
@@ -200,7 +200,7 @@ int xpl_merge(xpl_t *xpl1, xpl_t *xpl2) {
 
 
   if((type=xpl_get_type(xpl1)) != xpl_get_type(xpl2)) {
-    return pac_error(1, "xpl_merge: different mapping types!") ;
+    return trios_error(1, "xpl_merge: different mapping types!") ;
   }
 
 
@@ -216,19 +216,19 @@ int xpl_merge(xpl_t *xpl1, xpl_t *xpl2) {
 
     if(type==BB) {
       if(!xpl_BB_merge(xpl1, (xpl_BB *)xpl2->root)) {
-        return pac_error(MSG, "xpl_merge : xpl_BB_merge() failed.") ;
+        return trios_error(MSG, "xpl_merge : xpl_BB_merge() failed.") ;
       }   
     }
     else { 
       if(type==BG) {
-        pac_error(MSG, "This operator is not supported yet");
+        trios_error(MSG, "This operator is not supported yet");
         /*     
     	if(!xpl_BG_merge(xpl1, (xpl_BG *)xpl2->root)) {
 	      return pac_error(MSG, "xpl_merge : xpl_BG_merge() failed.") ;
     	}   */ 
       }
       else {
-        pac_error(MSG, "This operator is not supported yet");
+        trios_error(MSG, "This operator is not supported yet");
     	/*if(!xpl_GG_merge(xpl1, (xpl_GG *)xpl2->root)) {
 	      return pac_error(MSG, "xpl_merge : xpl_GG_merge() failed.") ;
 	    } */  
@@ -264,12 +264,12 @@ int xpl_tree2ll(xpl_t *xpl, int order_type) {
 
       if(order_type == 1) {
         if(!tree2ll_BB_asc((xpl_BB *)xpl->root, &head)) {
-          return pac_error(MSG, "tree2ll : tree2ll_BB() failed.") ;
+          return trios_error(MSG, "tree2ll : tree2ll_BB() failed.") ;
         }
       }
       else {
         if(!tree2ll_BB_desc((xpl_BB *)xpl->root, &head)) {
-          return pac_error(MSG, "tree2ll : tree2ll_BB() failed.") ;
+          return trios_error(MSG, "tree2ll : tree2ll_BB() failed.") ;
         }
         for(p=head; p!=NULL; ) {
           p->right = p->left ;
@@ -282,7 +282,7 @@ int xpl_tree2ll(xpl_t *xpl, int order_type) {
     break ;
   case BG :
     {
-      pac_error(MSG, "This operator is not supported yet");
+      trios_error(MSG, "This operator is not supported yet");
       /*
       xpl_BG *head = NULL, *p ;
 
@@ -310,7 +310,7 @@ int xpl_tree2ll(xpl_t *xpl, int order_type) {
   case WK3F :
   case GG3 :
     {
-      pac_error(MSG, "This operator is not supported yet");
+      trios_error(MSG, "This operator is not supported yet");
       /*xpl_GG *head = NULL, *p ;
 
       if(order_type == 1) {
@@ -334,7 +334,7 @@ int xpl_tree2ll(xpl_t *xpl, int order_type) {
 
   case GB :
   default : 
-    return pac_error(MSG, "tree2ll: Mappings %d is not implemented yet.", type) ;
+    return trios_error(MSG, "tree2ll: Mappings %d is not implemented yet.", type) ;
   }
 
   return(1) ;
@@ -386,7 +386,7 @@ int xpl_conflicts(xpl_t *xpl) {
   case WKC :
   case WK3F:
   case GG3 : {
-    pac_error(MSG, "This operator is not supported yet");
+    trios_error(MSG, "This operator is not supported yet");
     /*xpl_GG *p ;
     freq_node *q ;
     
@@ -403,7 +403,7 @@ int xpl_conflicts(xpl_t *xpl) {
   
   case GB :
   default :
-    (void)pac_error(1, "xpl_conflicts: Mapping %d is not implemented yet.", type) ;
+    (void)trios_error(1, "xpl_conflicts: Mapping %d is not implemented yet.", type) ;
     return(-1) ;
     break ;
   
@@ -430,14 +430,14 @@ int xpl_sort(xpl_t *xpl) {
 
       p = NULL ;
       if(!xpl_sort_BB((xpl_BB *)xpl->root, &p)) {
-        return pac_error(MSG, "xpl_sort : xpl_sort_BB() failed.") ;
+        return trios_error(MSG, "xpl_sort : xpl_sort_BB() failed.") ;
       }
       xpl->root = (int *)p ;
     }
     break ;
 
     case BG : {
-      pac_error(MSG, "This operator is not supported yet");
+      trios_error(MSG, "This operator is not supported yet");
       /*xpl_BG *p ;
       p = NULL ;
       if(!xpl_sort_BG((xpl_BG *)xpl->root, &p)) {
@@ -455,7 +455,7 @@ int xpl_sort(xpl_t *xpl) {
     case WK3C:
     case WK3F:
     case GG3: {
-      pac_error(MSG, "This operator is not supported yet");
+      trios_error(MSG, "This operator is not supported yet");
       /*xpl_GG *p ;
 
       p = NULL ;
@@ -468,7 +468,7 @@ int xpl_sort(xpl_t *xpl) {
 
     case GB :
     default : {
-      (void)pac_error(1, "xpl_sort: Mapping %d is not implemented yet.", type) ;
+      (void)trios_error(1, "xpl_sort: Mapping %d is not implemented yet.", type) ;
       return(-1) ;
     }
     break ;

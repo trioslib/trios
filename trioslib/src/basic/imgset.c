@@ -1,6 +1,6 @@
 #include <pacbasic.h>
 
-/* #define _DEBUG_ */
+ /*#define _DEBUG_*/
 
 
 /*!
@@ -22,20 +22,20 @@ imgset_t *imgset_create(int ngroups, int grpsize) {
 
   imgset = (imgset_t *)malloc(sizeof(imgset_t)) ;
   if(imgset==NULL) {
-    return (imgset_t *)pac_error(1, "Memory allocation failed.") ;
+    return (imgset_t *)trios_error(1, "Memory allocation failed.") ;
   }
 
   imgset->dir = (char **)malloc(sizeof(char *)*grpsize) ;
   if(imgset->dir==NULL) {
     free(imgset) ;
-    return (imgset_t *)pac_error(1, "Memory allocation failed.") ;
+    return (imgset_t *)trios_error(1, "Memory allocation failed.") ;
   }
 
   imgset->file = (char ***)malloc(sizeof(char **)*ngroups) ;
   if(imgset->file==NULL) {
     free(imgset->dir) ;
     free(imgset) ;
-    return (imgset_t *)pac_error(1, "Memory allocation failed.") ;
+    return (imgset_t *)trios_error(1, "Memory allocation failed.") ;
   }
 
   for(k=0; k<ngroups; k++) {
@@ -44,7 +44,7 @@ imgset_t *imgset_create(int ngroups, int grpsize) {
       free(imgset->dir) ;
       free(imgset->file) ;
       free(imgset) ;
-      return (imgset_t *)pac_error(1, "Memory allocation failed.") ;
+      return (imgset_t *)trios_error(1, "Memory allocation failed.") ;
     }
   }
 
@@ -84,7 +84,7 @@ void        /*+ Purpose: free image set memory area                        +*/
   int  i, k ;
   char **f ;
   if (imgset == NULL) {
-    pac_warning("Trying to free NULL imgset_t pointer.") ;
+    trios_warning("Trying to free NULL imgset_t pointer.") ;
     return;
   }
   if(imgset->dir) {
@@ -169,7 +169,7 @@ char *imgset_get_fname(imgset_t *imgset, int i, int k) {
   if(fname==NULL) return(NULL) ;
 
 #ifdef _DEBUG_
-pac_debug("File name : %s.", fname) ;
+trios_debug("File name : %s.", fname) ;
 #endif
 
   if(strlen(fname)==0) return(NULL) ;
@@ -195,21 +195,21 @@ int imgset_set_fname(imgset_t *imgset, int i, int k, char *fname) {
 
 
 #ifdef _DEBUG_
-pac_debug("%d-th group, %d-th file %s", k, i, fname) ;
+trios_debug("%d-th group, %d-th file %s", k, i, fname) ;
 #endif
 
   if(k > imgset_get_ngroups(imgset)) {
-    return pac_error(1, "Images set do not contain %d-th group.", k) ;
+    return trios_error(1, "Images set do not contain %d-th group.", k) ;
   }
   if(i > imgset_get_grpsize(imgset)) {
-    return pac_error(1, "Image group doesn't contain %d-th element", i) ;
+    return trios_error(1, "Image group doesn't contain %d-th element", i) ;
   }
 
   if(fname != NULL) {
     f = imgset->file[k-1] ;
     f[i-1] = (char *)malloc(sizeof(char)*(strlen(fname)+1)) ;
     if(!f[i-1]) {
-      return pac_error(1, "Memory allocation failed.") ;
+      return trios_error(1, "Memory allocation failed.") ;
     }
     strcpy(f[i-1], fname) ;
   }
@@ -248,7 +248,7 @@ char *             /*+ Purpose: get the i-th pathname                      +*/
   if(dir==NULL) return(NULL) ;
 
 #ifdef _DEBUG_
-pac_debug("Directory name : %s.", dir) ;
+trios_debug("Directory name : %s.", dir) ;
 #endif
 
   if(strlen(dir)==0) return(NULL) ;
@@ -269,12 +269,12 @@ int imgset_set_dname(imgset_t *imgset, int i, char *dir) {
 /* date: Fri Nov 29 1996                                                    */
  
 #ifdef _DEBUG_
-pac_debug("%d-th diretorio %s", i, dir) ;
+trios_debug("%d-th diretorio %s", i, dir) ;
 #endif
 
 
   if(i>imgset_get_grpsize(imgset)) {
-    (void)pac_error(1, "Image group doesn't contain %d-th element\n", i) ;
+    (void)trios_error(1, "Image group doesn't contain %d-th element\n", i) ;
     return(0) ;
   }
 
@@ -282,7 +282,7 @@ pac_debug("%d-th diretorio %s", i, dir) ;
 
     imgset->dir[i-1] = (char *)malloc(sizeof(char)*(strlen(dir)+1)) ;
     if(!imgset->dir[i-1]) {
-      return pac_error(1, "Memory allocation failed.") ;
+      return trios_error(1, "Memory allocation failed.") ;
     }
     strcpy(imgset->dir[i-1], dir) ;
   }
@@ -314,14 +314,14 @@ char *imgset_get_ffullname(imgset_t *imgset, int i, int k) {
     return(NULL) ;
   }
 #ifdef _DEBUG_
-pac_debug("dirname=%s", dirname) ;
+trios_debug("dirname=%s", dirname) ;
 #endif
   
   if(!(fname = imgset_get_fname(imgset, i, k))) {
     return(NULL) ;
   }
 #ifdef _DEBUG_
-pac_debug("fname=%s", fname) ;
+trios_debug("fname=%s", fname) ;
 #endif
 
   fullname = (char *)malloc(strlen(dirname)+strlen(fname)+1) ;

@@ -21,7 +21,7 @@ int            /*+ Purpose: set a pointer to a XPL tree                    +*/
 /* date: Fri Nov 29 1996                                                    */
 
   if(xpl->type != BB) {
-    return pac_error(1, "Incompatible types of data.") ;
+    return trios_error(1, "Incompatible types of data.") ;
   }
   xpl->root = (int *)root ;
   return(1) ;
@@ -101,7 +101,7 @@ xpl_BB *                /*+ Purpose: allocate a BB node                    +*/
 
   p = (xpl_BB *)malloc(sizeof(xpl_BB)) ;
   if(p == NULL) {
-    return (xpl_BB *)pac_error(1, "Memory allocation failed.") ;
+    return (xpl_BB *)trios_error(1, "Memory allocation failed.") ;
   }
   p->fq0 = 0 ;
   p->fq1 = 0 ;
@@ -110,7 +110,7 @@ xpl_BB *                /*+ Purpose: allocate a BB node                    +*/
   p->wpat = (unsigned int *)malloc(sizeof(int)*wzip) ;
   if(p->wpat == NULL) {
     free(p) ;
-    return (xpl_BB *)pac_error(1, "Memory allocation failed.") ;
+    return (xpl_BB *)trios_error(1, "Memory allocation failed.") ;
   }
   return(p) ;
 }
@@ -167,7 +167,7 @@ int              /*+ Purpose: insert a node in a BB tree (recursively)     +*/
 
 #ifdef _DEBUG_2_
   if(wpat[0]==0) {
-    pac_debug("A zero will be inserted") ;
+    trios_debug("A zero will be inserted") ;
   }
 #endif
 
@@ -175,7 +175,7 @@ int              /*+ Purpose: insert a node in a BB tree (recursively)     +*/
   if(p == NULL) {
     *pp = p = xpl_BB_create(xpl->wzip) ;
     if(p == NULL) {
-      (void)pac_error(MSG, "xpl_BB_insert: xpl_BB_create() failed.") ;
+      (void)trios_error(MSG, "xpl_BB_insert: xpl_BB_create() failed.") ;
       return(-1) ;
     }
     xpl_BB_set_node(p, wpat, xpl->wzip, fq0, fq1) ;
@@ -278,15 +278,15 @@ int             /*+ Purpose: merge two BB tree, recursively                +*/
     right = p->right ;
  
     if(!xpl_BB_merge(xpl, p->left)) {
-      return pac_error(MSG, "xpl_BB_merge: xpl_BB_merge() failed") ;
+      return trios_error(MSG, "xpl_BB_merge: xpl_BB_merge() failed") ;
     }
 
     if(!xpl_BB_merge(xpl, right)) {
-      return pac_error(MSG, "xpl_BB_merge: xpl_BB_merge() failed") ;
+      return trios_error(MSG, "xpl_BB_merge: xpl_BB_merge() failed") ;
     }
 
     if(xpl_BB_add(xpl, (xpl_BB **)(&xpl->root), p)==-1) {
-      return pac_error(MSG, "xpl_BB_merge: xpl_BB_add() failed");
+      return trios_error(MSG, "xpl_BB_merge: xpl_BB_add() failed");
     }
 
 
@@ -296,7 +296,7 @@ int             /*+ Purpose: merge two BB tree, recursively                +*/
  
     /*
       if(xpl_BB_insert(xpl, (xpl_BB **)(&xpl->root), p->wpat, p->fq0, p->fq1)==-1) {
-      return pac_error(MSG, "xpl_BB_merge: xpl_BB_insert() failed");
+      return trios_error(MSG, "xpl_BB_merge: xpl_BB_insert() failed");
       }
     */
     
@@ -395,12 +395,12 @@ int           /*+ Purpose: change BB tree structure to the linked list
 
   if(p!=NULL) {
     if(!tree2ll_BB_asc(p->right, pp)) {
-      return pac_error(MSG, "tree2xpl_BB() failed.") ;
+      return trios_error(MSG, "tree2xpl_BB() failed.") ;
     }
     p->right = *pp ;
     *pp = p ;
     if(!tree2ll_BB_asc(p->left, pp)) {
-      return pac_error(MSG, "tree2xpl_BB() failed.") ;
+      return trios_error(MSG, "tree2xpl_BB() failed.") ;
     }
     p->left = NULL ;
   }
@@ -426,12 +426,12 @@ int           /*+ Purpose: change BB tree structure to the linked list
 
   if(p!=NULL) {
     if(!tree2ll_BB_desc(p->left, pp)) {
-      return pac_error(MSG, "tree2xpl_BB() failed.") ;
+      return trios_error(MSG, "tree2xpl_BB() failed.") ;
     }
     p->left = *pp ;
     *pp = p ;
     if(!tree2ll_BB_desc(p->right, pp)) {
-      return pac_error(MSG, "tree2xpl_BB() failed.") ;
+      return trios_error(MSG, "tree2xpl_BB() failed.") ;
     }
     p->right = NULL ;
   }
@@ -457,10 +457,10 @@ int                /*+ Purpose: sort BB XPL set                            +*/
 
   if(p != NULL) {
     if(!xpl_sort_BB(p->left, pp)) {
-      return pac_error(MSG,"xpl_sort_BB: recursive call to xpl_sort_BB() failed.");
+      return trios_error(MSG,"xpl_sort_BB: recursive call to xpl_sort_BB() failed.");
     }
     if(!xpl_sort_BB(p->right, pp)) {
-      return pac_error(MSG,"xpl_sort_BB: recursive call to xpl_sort_BB() failed.");
+      return trios_error(MSG,"xpl_sort_BB: recursive call to xpl_sort_BB() failed.");
     }
     (void)xpl_sort_insert(p, pp) ;
   }
