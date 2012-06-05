@@ -26,6 +26,7 @@ dpac_mtm.c
 #dp_rank.c
 )
 ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})
+target_link_libraries(trioslearn triosbasic triosio m)
 
 INSTALL(TARGETS trioslearn
   RUNTIME DESTINATION bin

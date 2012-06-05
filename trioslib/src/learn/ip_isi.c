@@ -1,4 +1,5 @@
 #include <paclib_kernel.h>
+
 #include "paclearn_local.h"
 
 #include <sys/time.h>
@@ -62,7 +63,7 @@ FILE     *GLfd ;
       /* and write current set of intervals if required */       \
       if(GLtmp_bas_file) {                                       \
         if(!itv_write(GLtmp_bas_file, itv, GLwin, GLapt)) {             \
-          pac_warning("Warning : could not write int. basis file %s.",  \
+          trios_warning("Warning : could not write int. basis file %s.",  \
                   GLtmp_bas_file) ;                              \
         }                                                        \
       }                                                          \
@@ -194,7 +195,7 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
   wsize2 = mtm_get_wsize(mtm) ;
 
 #ifdef _DEBUG_1_
-  pac_debug( "itv:wsize=%d  mtm:wsize=%d",wsize1, wsize2);
+  trios_debug( "itv:wsize=%d  mtm:wsize=%d",wsize1, wsize2);
 #endif
 
   if(wsize1 != wsize2) {
@@ -224,7 +225,7 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
   }
 
 #ifdef _DEBUG_
-  pac_debug( "Examples ordering: done. (k=%d)", k) ;
+  trios_debug( "Examples ordering: done. (k=%d)", k) ;
 #endif
 
 
@@ -257,19 +258,19 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
     mtm_free(mtm) ;
 
 #ifdef _DEBUG_
-    pac_debug("Examples with label %d = %d", lb[i], mtm0->nmtm) ;
+    trios_debug("Examples with label %d = %d", lb[i], mtm0->nmtm) ;
 #endif
 
 #ifdef _DEBUG_2_
-    pac_debug("To be extracted :") ;
+    trios_debug("To be extracted :") ;
     q= (mtm_BX *)mtm0->mtm_data ;
     for(j=0; j<mtm0->nmtm; j++) {
-      pac_debug("%d", q[j].wpat[0]) ;
+      trios_debug("%d", q[j].wpat[0]) ;
     }
-    pac_debug("To be covered :") ;
+    trios_debug("To be covered :") ;
     q= (mtm_BX *)mtm1->mtm_data ;
     for(j=0; j<mtm1->nmtm; j++) {
-      pac_debug("%d", q[j].wpat[0]) ;
+      trios_debug("%d", q[j].wpat[0]) ;
     }
 #endif
 
@@ -414,7 +415,7 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
 
 
 #ifdef _DEBUG_
-  pac_debug("Starting isi_gen()") ;
+  trios_debug("Starting isi_gen()") ;
 #endif
 
   GLlog_step = log_step ;
@@ -484,7 +485,7 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
   }
 
 #ifdef _DEBUG_
-  pac_debug( "Examples ordering: done. (k=%d)", k) ;
+  trios_debug( "Examples ordering: done. (k=%d)", k) ;
 #endif
 
 
@@ -523,7 +524,7 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
     mtm_free(mtm) ;
 
 #ifdef _DEBUG_1_
-    pac_debug("Examples %d before groupment = %d", lb[i], mtm0->nmtm) ;
+    trios_debug("Examples %d before groupment = %d", lb[i], mtm0->nmtm) ;
 #endif
 
     if(mtm0->nmtm) {
@@ -555,7 +556,7 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
       *time_sys = *time_sys + (tsf - ts0);*/
 
 #ifdef _DEBUG_
-      pac_debug("Grouping label %d done.", lb[i] ) ;
+      trios_debug("Grouping label %d done.", lb[i] ) ;
 #endif
     }
 
@@ -624,7 +625,7 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
 	itv_o->nitv += itv->nitv ;
 
 #ifdef _DEBUG_1_
-	pac_debug("Intervals with label %d = %d", lb[i], count) ;
+    trios_debug("Intervals with label %d = %d", lb[i], count) ;
 #endif
         *ngrouped = *ngrouped + count ;
 	/* Attention : do not release itv at this point because
@@ -725,7 +726,7 @@ int             /*+ Purpose: sort labels of a classified examples set
     if(p->label) {
       k++ ;
       if(k>255) {
-	pac_fatal("Buffer overflow. Notify the support team") ;
+    trios_fatal("Buffer overflow. Notify the support team") ;
       } 
       lb[k] = p->label ;
     }
@@ -737,7 +738,7 @@ int             /*+ Purpose: sort labels of a classified examples set
     j=0 ;
     while((lb[j]!=q[i].label) && (j<=k)) j++ ;
     if(j > k) {
-      (void)pac_error(1, "Inconsistent data. Check input data.") ;
+      (void)trios_error(1, "Inconsistent data. Check input data.") ;
       return(-1) ;
     }   
     fq[j] = fq[j] + q[i].fq ;
@@ -1332,7 +1333,7 @@ int             /*+ Purpose: ISI-3 (point case)                            +*/
 #ifdef _DEBUG_2_
   int     i_aux ;
   itv_BX  *aux ;
-  pac_debug("isi_3");
+  trios_debug("isi_3");
 #endif
 
 
@@ -1530,11 +1531,11 @@ int             /*+ Purpose: ISI-3 (point case)                            +*/
     itv_set_nitv(itv, itv->nitv+nitv_new) ;
 
 #ifdef _DEBUG_2_
-    pac_debug( "\nAFTER SPLITTING by example %x", q[i].wpat[0]) ; 
+    trios_debug( "\nAFTER SPLITTING by example %x", q[i].wpat[0]) ;
     i_aux=0 ;
     for(aux=(itv_BX *)itv->head; aux; aux=aux->next) {
       i_aux++ ;
-      pac_debug("%d A=%x B=%x label=%d",i_aux,aux->A[0], aux->B[0], aux->label );
+      trios_debug("%d A=%x B=%x label=%d",i_aux,aux->A[0], aux->B[0], aux->label );
     }
 #endif
 
@@ -1547,7 +1548,7 @@ int             /*+ Purpose: ISI-3 (point case)                            +*/
          1-labeled examples, since that is already done before 
 
       if(!itv_filter(mtm_i2, itv)) {
-	return pac_error(MSG, "isi_3: itv_filter() failed.") ;
+    return trios_error(MSG, "isi_3: itv_filter() failed.") ;
       }
       */
 
@@ -1564,13 +1565,13 @@ int             /*+ Purpose: ISI-3 (point case)                            +*/
 
 
 #ifdef _DEBUG_2_
-    pac_debug( "AFTER MINIMUN COVER SELECTION");
+    trios_debug( "AFTER MINIMUN COVER SELECTION");
     i_aux=0 ;
     for(aux=(itv_BX *)itv->head; aux; aux=aux->next) {
       i_aux++ ;
-      pac_debug("%d A=%x B=%x",i_aux,aux->A[0], aux->B[0] );
+      trios_debug("%d A=%x B=%x",i_aux,aux->A[0], aux->B[0] );
     }
-    pac_debug("\n\n");
+    trios_debug("\n\n");
 #endif
 
   }
@@ -1700,13 +1701,13 @@ int              /*+ Purpose: split all intervals of a list (of intervals)
 
 
 #ifdef _DEBUG_2_
-    pac_debug("os que NAO interceptam I=[%x,%x]",I->A[0], I->B[0]) ;
+    trios_debug("os que NAO interceptam I=[%x,%x]",I->A[0], I->B[0]) ;
     for(tmp=p; tmp; tmp=tmp->next) {
-      pac_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
+      trios_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
     }
-    pac_debug("os que interceptam I") ;
+    trios_debug("os que interceptam I") ;
     for(tmp=p_kill; tmp; tmp=tmp->next) {
-      pac_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
+      trios_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
     }
 #endif
 
@@ -1730,7 +1731,7 @@ int              /*+ Purpose: split all intervals of a list (of intervals)
 	  nitv_new++ ;
 
 #ifdef _DEBUG_2_
-	  pac_debug("Criou new node A=%x B=%x",p_new->A[0], p_new->B[0]) ;
+      trios_debug("Criou new node A=%x B=%x",p_new->A[0], p_new->B[0]) ;
 #endif
 
 	}
@@ -1835,13 +1836,13 @@ int              /*+ Purpose: split all intervals of a list (of intervals)
 
 
 #ifdef _DEBUG_2_
-    pac_debug("os que NAO interceptam I=[%x,%x]",I->A[0], I->B[0]) ;
+    trios_debug("os que NAO interceptam I=[%x,%x]",I->A[0], I->B[0]) ;
     for(tmp=p; tmp; tmp=tmp->next) {
-      pac_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
+      trios_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
     }
-    pac_debug("os que interceptam I") ;
+    trios_debug("os que interceptam I") ;
     for(tmp=p_kill; tmp; tmp=tmp->next) {
-      pac_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
+      trios_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
     }
 #endif
 
@@ -1876,7 +1877,7 @@ int              /*+ Purpose: split all intervals of a list (of intervals)
 	  nitv_new++ ;
 	  
 #ifdef _DEBUG_2_
-	  pac_debug("Criou new node A=%x B=%x",p_new->A[0], p_new->B[0]) ;
+      trios_debug("Criou new node A=%x B=%x",p_new->A[0], p_new->B[0]) ;
 #endif
 	  
 	}
@@ -1981,13 +1982,13 @@ int     /*+ Purpose: split all intervals of a list (of intervals)
     
     
 #ifdef _DEBUG_2_
-    pac_debug("os que NAO interceptam I=[%x,%x]",I->A[0], I->B[0]) ;
+    trios_debug("os que NAO interceptam I=[%x,%x]",I->A[0], I->B[0]) ;
     for(tmp=p; tmp; tmp=tmp->next) {
-      pac_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
+      trios_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
     }
-    pac_debug("os que interceptam I") ;
+    trios_debug("os que interceptam I") ;
     for(tmp=p_kill; tmp; tmp=tmp->next) {
-      pac_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
+      trios_debug("A=%x B=%x", tmp->A[0], tmp->B[0]) ;
     }
 #endif
     
@@ -2021,7 +2022,7 @@ int     /*+ Purpose: split all intervals of a list (of intervals)
 	  nitv_new++ ;
 	  
 #ifdef _DEBUG_2_
-	  pac_debug("Criou new node A=%x B=%x",p_new->A[0], p_new->B[0]) ;
+      trios_debug("Criou new node A=%x B=%x",p_new->A[0], p_new->B[0]) ;
 #endif
 	  
 	}
@@ -2050,7 +2051,7 @@ int     /*+ Purpose: split all intervals of a list (of intervals)
          1-labeled examples, since that is already done before 
 
       if(!itv_filter(mtm, itv)) {
-	return pac_error(MSG, "gisi_3: itv_filter() failed.") ;
+    return trios_error(MSG, "gisi_3: itv_filter() failed.") ;
       }
       */
       
@@ -2067,7 +2068,7 @@ int     /*+ Purpose: split all intervals of a list (of intervals)
        1-labeled examples, since that is already done before 
 
     if(!itv_filter(mtm, itv)) {
-      return pac_error(MSG, "gisi_3: itv_filter() failed.") ;
+      return trios_error(MSG, "gisi_3: itv_filter() failed.") ;
     }
     */
 
