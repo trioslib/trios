@@ -9,7 +9,6 @@ SET (PAC_HEADERS pacbasic.h
                  pac_itv.h
                  pac_kernel.h
                  pac_mtm.h
-                 pac_show.h
                  pac_win.h
                  pac_xpl.h
                  xpl_collec.h
