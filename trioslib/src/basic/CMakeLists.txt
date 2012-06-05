@@ -8,9 +8,7 @@ pac_error.c
 pac_imgset.c 
 pac_img.c
 pac_itv.c
-pac_math.c 
 pac_mtm.c
-pac_show.c 
 pac_win.c 
 pac_xpl.c 
 pac_xplBB.c)

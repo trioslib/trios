@@ -3,19 +3,15 @@
 /* #define _DEBUG_ */
 
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_create
-     -------------------------------------------
+/*!
+    Create an image set structure.
+
+    \param ngroups Number of image groups.
+    \param grpsize Size of image groups.
+    \return A new image set.
 */
 
-imgset_t *     /*+ Purpose: create an image set structure                  +*/
-  imgset_create(
-    int ngroups,   /*+ In: number of image groups                          +*/
-    int grpsize    /*+ In: size of image groups                            +*/
-  )
-/*+ Return: a pointer to the image set structure                           +*/
-{
+imgset_t *imgset_create(int ngroups, int grpsize) {
 /* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
 /* date: Fri Nov 29 1996                                                    */
 
@@ -70,10 +66,10 @@ imgset_t *     /*+ Purpose: create an image set structure                  +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_free
-     -------------------------------------------
+/*!
+    Free IMGSET memory.
+
+    \param imgset Pointer to the image set.
 */
 
 void        /*+ Purpose: free image set memory area                        +*/
@@ -120,56 +116,41 @@ void        /*+ Purpose: free image set memory area                        +*/
   free(imgset) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_get_ngroups
-     -------------------------------------------
+/*!
+   Get the number of groups in the image set.
+
+   \param imgset Pointer to the image set.
+   \return Number of groups in imgset.
 */
 
-int            /*+ Purpose: get the number of groups in the image set      +*/
-  imgset_get_ngroups(
-    imgset_t *imgset    /*+ In: pointer to the image set                   +*/
-  )
-/*+ Return: an integer (number of image groups)                            +*/
-{
+int imgset_get_ngroups(imgset_t *imgset) {
 /* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
 /* date: Fri Nov 29 1996                                                    */
- 
   return(imgset->ngroups) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_get_grpsize
-     -------------------------------------------
+/*!
+    Get the size (number of images) of the groups.
+
+   \param imgset Pointer to the image set.
+   \return Number of images of groups.
 */
 
-int         /*+ Purpose: get the size (number of images) of the groups     +*/
-  imgset_get_grpsize(
-    imgset_t *imgset           /*+ In: pointer to the image set            +*/
-  )
-/*+ Return: an integer (the size of the image groups)                      +*/
-{
+int imgset_get_grpsize(imgset_t *imgset) {
 /* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
 /* date: Fri Nov 29 1996                                                    */
 
   return(imgset->grpsize) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_get_fname
-     -------------------------------------------
-*/
+/*!
+    Get the i-th image file name from the k-th group.
 
-char *      /*+ Purpose: get the i-th image file name from the k-th group  +*/
-  imgset_get_fname(
-    imgset_t *imgset, /*+ In: pointer to a image set                       +*/
-    int       i,      /*+ In: the image identifier                         +*/
-    int       k       /*+ In: the image group identifier                   +*/
-  )
-/*+ Return: the i-th image file name from the k-th group                   +*/
-{
+    \param imgset Pointer to image set.
+    \param i Image identifier.
+    \param k Group identifier.
+*/
+char *imgset_get_fname(imgset_t *imgset, int i, int k) {
 /* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
 /* date: Fri Nov 29 1996                                                    */
  
@@ -196,22 +177,17 @@ pac_debug("File name : %s.", fname) ;
   return(fname) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_set_fname
-     -------------------------------------------
+/*!
+   Put image file name into i-th place of k-th group.
+
+   \param imgset Pointer to image set.
+   \param i Image identifier.
+   \param k Group identifier.
+   \param fname File name.
+   \return 1 on success. 0 on failure.
 */
 
-int              /*+ Purpose: put image file name into i-th place of k-th
-                              image group                                  +*/
-  imgset_set_fname(
-    imgset_t *imgset,   /*+ In/Out: pointer to the image set               +*/
-    int       i,        /*+ In: the image identifier                       +*/
-    int       k,        /*+ In: the identifier for the image group         +*/
-    char      *fname    /*+ In: image file name                            +*/
-  )
-/*+ Return: 1 on success, 0 on failure +*/
-{
+int imgset_set_fname(imgset_t *imgset, int i, int k, char *fname) {
 /* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
 /* date: Fri Nov 29 1996                                                    */
  
@@ -242,10 +218,12 @@ pac_debug("%d-th group, %d-th file %s", k, i, fname) ;
 
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_get_dname
-     -------------------------------------------
+/*!
+    Get the i-th pathname.
+
+    \param imgset Pointer to image set.
+    \param i Group identifier.
+    \return The directory of the i-th group.
 */
 
 char *             /*+ Purpose: get the i-th pathname                      +*/
@@ -277,20 +255,16 @@ pac_debug("Directory name : %s.", dir) ;
   return(dir) ;
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_set_dname
-     -------------------------------------------
+/*!
+    Set the i-th group directory path.
+
+    \param imgset Point to image set.
+    \param i Group identifier.
+    \param dir Path name.
+    \return 1 on success. 0 on failure.
 */
 
-int               /*+ Purpose: put a path name into a image set            +*/
-  imgset_set_dname(
-    imgset_t *imgset,    /*+ In/Out: pointer to the image set              +*/
-    int      i,          /*+ In: indication for the path name to be set    +*/
-    char     *dir        /*+ In: the path name                             +*/
-  )
-/*+ Return: 1 on success, 0 on failure                                     +*/
-{
+int imgset_set_dname(imgset_t *imgset, int i, char *dir) {
 /* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
 /* date: Fri Nov 29 1996                                                    */
  
@@ -317,22 +291,16 @@ pac_debug("%d-th diretorio %s", i, dir) ;
 
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_get_ffullname
-     -------------------------------------------
+/*!
+    Get the full file name of the i-th image in the k-th group.
+
+    \param imgset Point to image set.
+    \param i Image identifier.
+    \param k Group identifier.
+    \return The full file name if it exists. NULL on error.
 */
  
-char *          /*+ Purpose: gets the full file name of the i-th image
-                             in the k-th image group                       +*/
-  imgset_get_ffullname(                                                       
-    imgset_t *imgset,  /*+ In: IMGSET structure                            +*/
-    int      i,        /*+ In: i-th image                                  +*/
-    int      k         /*+ In: k-th image group                            +*/
-)
-/*+ Return: the full file name of the i-th image in the k-th image group
-    if such image exists, or NULL otherwise                                +*/
-{
+char *imgset_get_ffullname(imgset_t *imgset, int i, int k) {
  
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Fri Mar 20 1998                                                   */

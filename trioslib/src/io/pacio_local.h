@@ -122,34 +122,6 @@ void             /*+ Purpose: Write WKGG examples                            +*/
 
 /* --------- io_showitv.c ---------------------------------- */
 
-/*
-     -------------------------------------------
-     FUNCTION: itv_show_basicinfo
-     -------------------------------------------
-*/
-
-int               /*+ Purpose: write out some basic information about an
-                               intervals set                             +*/
-  itv_show_basicinfo(
-    FILE *fd,          /*+ In: output file descriptor                    +*/
-    itv_t *itv,        /*+ In: intervals set                             +*/
-    char *fname_i,     /*+ In: intervals set file name                  +*/
-    int  from,         /*+ In: range start                               +*/
-    int  to            /*+ In: range end                                 +*/
-    ) ;
-
-
-int           /*+ Purpose: write the examples in a BX ITV set to a file +*/
-  itv_show_BX(
-    itv_t  *itv,      /*+ In: intervals set (BX type)                   +*/
-    show_t *showA,    /*+ In: structure for the left extremity          +*/
-    show_t *showB,    /*+ In: structure for the right extremity         +*/
-    FILE *fd,         /*+ In: output file descriptor                    +*/
-    int  from,        /*+ In: range start                               +*/
-    int  to           /*+ In: range end                                 +*/
-  ) ;
-/*+ Return: 1 on success, 0 on failure                                  +*/
-
 
 
 /* --------- io_showxpl.c ---------------------------------- */
@@ -250,38 +222,6 @@ int mtm_show_basicinfo /*+ Purpose: write out some basic
 ) ;
 /*+ Returns: 1 on success, 0 on failure +*/
 
-/*
-     -------------------------------------------
-     FUNCTION: mtm_show_BX
-     -------------------------------------------
-*/
-
-int           /*+ Purpose: Write the mtms from a BB MTM set to a file +*/
-  mtm_show_BX(
-    mtm_t  *mtm,      /*+ In: MTM set                                   +*/
-    show_t *show,    /*+ In: window                                    +*/
-    FILE *fd,         /*+ In: output file descriptor                    +*/
-    int  from,        /*+ In: range start                               +*/
-    int  to           /*+ In: range end                                 +*/
-  ) ;
-/*+ Return: 1 on success, 0 on failure                                  +*/
-
-
-/*
-     -------------------------------------------
-     FUNCTION: mtm_show_WK
-     -------------------------------------------
-*/
-
-int           /*+ Purpose: Write the mtms from a BB MTM set to a file +*/
-  mtm_show_WK(
-    mtm_t  *mtm,      /*+ In: MTM set                                   +*/
-    show_t *show,    /*+ In: window                                    +*/
-    FILE *fd,         /*+ In: output file descriptor                    +*/
-    int  from,        /*+ In: range start                               +*/
-    int  to           /*+ In: range end                                 +*/
-  ) ;
-/*+ Return: 1 on success, 0 on failure                                  +*/
 
 
 

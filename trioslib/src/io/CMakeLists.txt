@@ -5,7 +5,7 @@ io_imgset.c
 io_img.c
 io_itv.c
 io_mtm.c
-io_showxpl.c			  
+
 io_win.c
 io_xpl.c
 )

@@ -1,7 +1,8 @@
 #include <pacbasic.h>
 
-/* #define _DEBUG_ */
+/* Macro that computes the bit mask for the POSITION-th bit. */
 #define BITMSK(POSITION) ( 1 << (POSITION) )
+
 
 unsigned int bitmsk[NB] =
            { 1, 2, 4, 8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x200, 0x400,
@@ -10,10 +11,10 @@ unsigned int bitmsk[NB] =
              0x1000000, 0x2000000, 0x4000000, 0x8000000, 0x10000000,
              0x20000000, 0x40000000, 0x80000000  } ;
 
-/* The vector DIM is used to compute the number of bits ON  */
-/* in a sequence of bytes (typically a vector of int)       */
-/* DIM[i] gives the number of bits ON the number i contains */
-/* (0 <= i <= 255)                                          */
+/* The vector DIM is used to compute the number of bits ON
+ in a sequence of bytes (typically a vector of int)
+ DIM[i] gives the number of bits ON the number i contains
+ (0 <= i <= 255)                                          */
 int DIM[256] = {
      /*   0 */  0,
      /*   1 */  1,
