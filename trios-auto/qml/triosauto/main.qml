@@ -48,7 +48,9 @@ Item {
             width: app_root.width - side_menu.width
             height: app_root.height
 
-            color: "blue"
+            WelcomeView {
+
+            }
         }
     }
 }
