@@ -5,6 +5,7 @@ Item {
     id: app_root
     width: 640
     height: 480
+    state: "welcome"
 
     Row {
         id: row1
@@ -16,12 +17,32 @@ Item {
             anchors.left: parent.left
             anchors.bottom: parent.bottom
             anchors.top: parent.top
+
+            Image {
+                id: bg
+                anchors.fill: parent
+
+                source: "img/menu_bg.svg"
+            }
+
             Column {
                 id: items
+                anchors.topMargin: 10
+                spacing: 10
                 anchors.fill: parent
 
                 MenuItem {
+                    id: menuitem1
+                    image: "img/welcome.svg"
                     text: "Welcome"
+                    onClicked: {
+                        app_root.state = "welcome";
+                    }
+                }
+
+                MenuItem {
+                    image: "img/project.svg"
+                    text: "Project"
                 }
 
                 MenuItem {
@@ -37,6 +58,12 @@ Item {
                 }
 
                 MenuItem {
+                    image: "img/build.svg"
+                    text: "Build"
+                }
+
+                MenuItem {
+                    image: "img/play.svg"
                     text: "Apply"
                     enabled: false
                 }
@@ -49,8 +76,19 @@ Item {
             height: app_root.height
 
             WelcomeView {
+                color: "#b9b9c0"
 
             }
         }
     }
+    states: [
+        State {
+            name: "welcome"
+
+            PropertyChanges {
+                target: menuitem1
+                state: "selected"
+            }
+        }
+    ]
 }
