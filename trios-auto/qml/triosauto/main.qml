@@ -3,8 +3,8 @@ import QtQuick 1.1
 
 Item {
     id: app_root
-    width: 360
-    height: 360
+    width: 640
+    height: 480
 
     Row {
         id: row1
