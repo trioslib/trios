@@ -32,39 +32,44 @@ Item {
                 anchors.fill: parent
 
                 MenuItem {
-                    id: menuitem1
+                    id: menu_welcome
                     image: "img/welcome.svg"
                     text: "Welcome"
-                    onClicked: {
-                        app_root.state = "welcome";
-                    }
+                    root_state: "welcome"
                 }
 
                 MenuItem {
                     image: "img/project.svg"
                     text: "Project"
+                    root_state: "project"
                 }
 
                 MenuItem {
+                    id: menu_window
                     text: "Window"
+                    root_state: "window"
                 }
 
                 MenuItem {
                     text: "Samples"
+                    root_state: "samples"
                 }
 
                 MenuItem {
                     text: "Decision"
+                    root_state: "decision"
                 }
 
                 MenuItem {
                     image: "img/build.svg"
                     text: "Build"
+                    root_state: "build"
                 }
 
                 MenuItem {
                     image: "img/play.svg"
                     text: "Apply"
+                    root_state: "apply"
                     enabled: false
                 }
             }
@@ -76,8 +81,12 @@ Item {
             height: app_root.height
 
             WelcomeView {
-                color: "#b9b9c0"
+                id: welcome_view
 
+            }
+
+            WindowView {
+                id: window_view
             }
         }
     }
@@ -86,8 +95,43 @@ Item {
             name: "welcome"
 
             PropertyChanges {
-                target: menuitem1
+                target: menu_welcome
                 state: "selected"
+            }
+            PropertyChanges {
+                target: menu_window
+                state: ""
+            }
+
+            PropertyChanges {
+                target: welcome_view
+                visible: true
+            }
+
+            PropertyChanges {
+                target: window_view
+                visible: false
+            }
+        },
+        State {
+            name: "window"
+            PropertyChanges {
+                target: menu_window
+                state: "selected"
+            }
+            PropertyChanges {
+                target: menu_welcome
+                state: ""
+            }
+
+            PropertyChanges {
+                target: window_view
+                visible: true
+            }
+
+            PropertyChanges {
+                target: welcome_view
+                visible: false
             }
         }
     ]

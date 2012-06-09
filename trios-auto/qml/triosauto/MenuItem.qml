@@ -7,6 +7,7 @@ Rectangle {
     property alias text: label.text;
     property alias image_height: btn_image.height
     property bool enabled: true
+    property string root_state
     signal clicked;
 
     color: "#00000000"
@@ -34,6 +35,7 @@ Rectangle {
         onClicked: {
             if (root.enabled) {
                 root.clicked();
+                app_root.state = root_state;
             }
         }
     }
