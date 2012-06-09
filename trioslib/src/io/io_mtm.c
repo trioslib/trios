@@ -25,20 +25,15 @@
 /*      Modifications were made to adequate to the structure changing.     */
 
 
-/*
-     -------------------------------------------
-     FUNCTION: mtm_read
-     -------------------------------------------
+/*!
+    Reads a classified examples set from a file.
+
+    \param fname File name.
+    \param win Window used.
+    \return A mtm_t structure or NULL on failure.
 */
 
-mtm_t *           /*+ Purpose: Reads a miniterm collection file             +*/
-  mtm_read(
-    char *fname,    /*+ In:  name of the file of miniterms                  +*/
-    window_t **win, /*+ Out: pointer to window structure                    +*/
-    apert_t  **apt  /*+ Out: pointer to an aperture structure +*/
-  )
-/*+ Return: Pointer to miniterm                                             +*/
-{
+mtm_t *mtm_read(char *fname, window_t **win, apert_t  **apt) {
 /*  author: Nina S. Tomita, R. Hirata Jr.   (nina@ime.usp.br)                */
 /*  date: Thu Oct 24 1996                                                    */
 
@@ -411,21 +406,16 @@ pac_debug("Now it will get out") ;
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: mtm_write
-     -------------------------------------------
+/*!
+    Writes a classified examples set to a file.
+
+    \param fname File name.
+    \param mtm Classified examples structure.
+    \param win Window used.
+    \return 1 on success. 0 on failure.
 */
 
-int                /*+ Purpose: Writes the miniterms collection to a file  +*/
-  mtm_write(
-    char *fname,     /*+ In: name of the file                              +*/
-    mtm_t *mtm,      /*+ In: pointer to  miniterm structure                +*/ 
-    window_t *win,   /*+ In: pointer to window structure                   +*/ 
-    apert_t  *apt    /*+ In: Pointer to an aperture structure +*/
- )
-/*+ Return: 1 on success, 0 on failure                                     +*/ 
-{
+int mtm_write(char *fname, mtm_t *mtm, window_t *win, apert_t *apt) {
 /*  author: Nina S. Tomita, R. Hirata Jr.  (nina@ime.usp.br)                */
 /*  date: Thu Oct 24 1996                                                   */
 

@@ -18,20 +18,15 @@
 /*      Modifications were made to adequate to the structure changing.     */
 
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_read
-     -------------------------------------------
+/*!
+    Read an examples file.
+
+    \param fname File name.
+    \param win Window structure.
+    \return Pointer to the examples and window structure.
 */
 
-xpl_t *             /*+ Purpose: Read an examples file   +*/
-  xpl_read(
-    char *fname,    /*+ In: name of the file of examples      +*/
-    window_t **win, /*+ Out: pointer to window structure      +*/
-    apert_t  **apt  /*+ Out: pointer to an aperture structure +*/
-  )
-/*+ Return: Pointer to example, window structure and aperture structure    +*/
-{
+xpl_t *xpl_read(char *fname, window_t **win, apert_t **apt) {
 /*  author:  Nina S. Tomita, Roberto Hirata Jr. (nina@ime.usp.br)           */
 /*  date: Thu Oct 17 1996                                                   */
 
@@ -406,10 +401,13 @@ pac_debug("xpl type=%d", xpl->type) ;
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_write
-     -------------------------------------------
+/*!
+    Write the examples file.
+
+    \param fname File name.
+    \param xpl Examples structure.
+    \param win Window structure.
+    \return 1 on success. 0 on failure.
 */
 
 int               /*+ Purpose: Write the examples file     +*/  
@@ -529,20 +527,15 @@ pac_debug("type=%d", type) ;
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: xpl_BB_write_tree
-     -------------------------------------------
+/*!
+    Write BB examples.
+
+    \param fd File descriptor.
+    \param p Pointer to the BB examples tree.
+    \param wzip Compacted w-pattern size.
 */
 
-void             /*+ Purpose: Write BB examples                              +*/
-  xpl_BB_write_tree(
-    FILE *fd,    /*+ In: file descriptor where the examples will be written  +*/
-    xpl_BB *p,   /*+ In: Pointer to the examples tree                        +*/
-    int wzip     /*+ In: compacted w-pattern size                            +*/
-  )
-/*+ Return: Nothing                                                          +*/
-{
+void xpl_BB_write_tree(FILE *fd, xpl_BB *p, int wzip) {
 /*  author:  Nina S. Tomita, Roberto Hirata Jr. (nina@ime.usp.br)             */
 /*  date: Thu Oct 17 1996                                                     */
 

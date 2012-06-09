@@ -4,20 +4,16 @@
 
 /* #define _DEBUG_ */
 
-/*
-     -------------------------------------------
-     FUNCTION: itv_read
-     -------------------------------------------
-*/
+/*!
+    Read an interval set from a file.
 
-itv_t *               /*+ Purpose: read an interval set from a file   +*/   
-  itv_read(
-    char     *fname,   /*+ In: file name                              +*/
-    window_t **win,    /*+ Out: WINDOW structure                      +*/
-    apert_t  **apt     /*+ Out: pointer to an aperture structure      +*/
-  )
-/*+ Return: a pointer to a ITV structure on success, NULL on failure  +*/
-{
+    \param fname File name.
+    \param win Window structure.
+    \return A pointer to a itv_t structure, NULL on failure.
+    \sa itv_t
+ */
+
+itv_t *itv_read(char *fname, window_t **win, apert_t **apt) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)            */
 /*  date: Thu Oct 31 13:25:36 EDT 1996                                 */
 
@@ -348,10 +344,13 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
 
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: itv_write
-     -------------------------------------------
+/*!
+    Write an interval set to a file.
+
+    \param fname File name.
+    \param itv Interval set.
+    \param win Window.
+    \return 1 on success. 0 on failure.
 */
 
 int               /*+ Purpose: write an intervals set to a file +*/

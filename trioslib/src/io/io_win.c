@@ -12,18 +12,14 @@
 /*      to adequate to the structure changing.                             */
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_read
-     -------------------------------------------
+/*!
+    Read a window structure from a file.
+
+    \param fname File name.
+    \return Window read from file. NULL on failure.
 */
 
-window_t *    /*+ Purpose: Read a file with a description of the window  +*/
-  win_read(
-    char *fname  /*+ In: String with the name of the file                +*/ 
-  )
-/*+ Return: structure window_t on success, NULL on failure               +*/
-{
+window_t *win_read(char *fname) {
 /* author:  Nina S. Tomita & Roberto Hirata Jr. (nina@ime.usp.br)         */
 /* date: Thu Oct 17 1996                                                  */
 
@@ -63,18 +59,14 @@ window_t *    /*+ Purpose: Read a file with a description of the window  +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_read_data
-     -------------------------------------------
+/*!
+    Read a description of the window.
+
+    \param fd File descriptor.
+    \return Window with the read data. NULL on failure.
 */
 
-window_t *        /*+ Purpose: Read a description of the window   +*/
-  win_read_data(
-     FILE *fd     /*+ In: file descriptor                         +*/ 
-  )
-/*+ Return: structure window_t on success, NULL on failure        +*/
-{
+window_t *win_read_data(FILE *fd) {
 /* author:  Nina S. Tomita & Roberto Hirata Jr. (nina@ime.usp.br)  */
 /*  date: Thu Oct 17 1996                                          */
 
@@ -193,19 +185,15 @@ window_t *        /*+ Purpose: Read a description of the window   +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_write
-     -------------------------------------------
+/*!
+    Write a file with the window data.
+
+    \param fname File name.
+    \param win Window to write.
+    \return 1 on success. 0 on failure.
 */
 
-int         /*+ Purpose: Write a file with a description of the window +*/  
-  win_write(
-    char *fname,  /*+ In: String with the name of the file              +*/ 
-    window_t *win /*+ In: Window data structure                         +*/
-  )
-/*+ Return: 1 on success, NULL on failure                               +*/
-{
+int win_write(char *fname, window_t *win) {
 /* author:  Nina S. Tomita & Roberto Hirata Jr. (nina@ime.usp.br)        */
 /*  date: Thu Oct 17 1996                                                */
 
@@ -240,19 +228,14 @@ pac_debug("Passei pelo fopen().");
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: win_write_data
-     -------------------------------------------
+/*!
+    Write the window data to a file.
+
+    \param fd File descriptor.
+    \param win Window to write.
 */
 
-void          /*+ Purpose: Write a data description of the window   +*/
-  win_write_data(
-    FILE *fd,     /*+ In: String with the name of the file          +*/
-    window_t *win /*+ In: Window data structure                     +*/
-  )
-/*+ Return: nothing                                                 +*/
-{
+void win_write_data(FILE *fd, window_t *win) {
 /* author  Nina S. Tomita & Roberto Hirata Jr. (nina@ime.usp.br)     */
 /* date: Thu Oct 17 1996                                             */
 

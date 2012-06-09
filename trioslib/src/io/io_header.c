@@ -5,19 +5,14 @@
 /* #define _DEBUG_ */
 
 
-/*
-     -------------------------------------------
-     FUNCTION: header_read
-     -------------------------------------------
+/*!
+    Read a header from a file.
+
+    \param fd File descriptor.
+    \return A pointer to a Header structure on success, NULL on failure.
 */
 
-header_t         /*+ Purpose: read a header from a file                 +*/
-  *header_read(
-    FILE *fd     /*+ In: file descriptor                                +*/
-  )
-/*+ Return: a pointer to a Header structure on success, NULL on failure +*/
-{
-
+header_t *header_read(FILE *fd) {
 /* author Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br)             */
 /* date: Mon Oct 21 1996                                                 */
 
@@ -42,19 +37,14 @@ header_t         /*+ Purpose: read a header from a file                 +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: header_write
-     -------------------------------------------
+/*!
+    Write a header to a file.
+
+    \param fd File descriptor.
+    \param aHeader Pointer to a Header.
 */
 
-void                /*+ Purpose: write a header into a file   +*/ 
-  header_write(
-    FILE *fd,         /*+ In: file descriptor                 +*/
-    header_t *aHeader /*+ In: pointer to a Header structure   +*/
-  )
-/*+ Return nothing                                            +*/
-{
+void header_write(FILE *fd, header_t *aHeader) {
 
 /* author: Nina S. Tomita and R. Hirata Jr.(nina@ime.usp.br)   */
 /* date: Mon Oct 21 1996                                       */
@@ -80,19 +70,15 @@ void                /*+ Purpose: write a header into a file   +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: header_compare
-     -------------------------------------------
+/*!
+    Compare two headers.
+
+    \param aHeader First header.
+    \param otherHeader Second header.
+    \return 1 if they are equal, 0 otherwise.
 */
 
-int                /*+ Purpose: compare two headers                       +*/
-  header_compare(
-    header_t *aHeader,    /*+ In: pointer to the first header             +*/
-    header_t *otherHeader /*+ In: pointer to the second header            +*/
-  )
-/*+ Return: 1 if they are equal, 0 if they are different                  +*/
-{
+int header_compare(header_t *aHeader, header_t *otherHeader) {
 
 /* author: Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br)              */
 /* date: Mon Oct 21 1996                                                   */
@@ -103,19 +89,15 @@ int                /*+ Purpose: compare two headers                       +*/
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: header_match
-     -------------------------------------------
+/*!
+    Checks if the header keyword matches a given keyword.
+
+    \param fd File descriptor.
+    \param keyword Keyword (up to 8 chars).
+    \return 1 if they are match, 0 otherwise.
 */
 
-int     /*+ Purpose: checks if the header keyword matches a given keyword +*/
-  header_match(
-    FILE     *fd,         /*+ In: File descriptor                         +*/
-    const char     *keyword     /*+ In: a keyword (up to 8 characters)          +*/
-  )
-/*+ Return: 1 if they match, 0 if they don't match                        +*/
-{
+int header_match(FILE *fd, const char *keyword) {
 
 /* author: Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br)              */
 /* date: Thu Feb 17 2000                                                   */
