@@ -47,7 +47,7 @@ Rectangle {
             border.color: "#000000"
             onTextChanged: {
                 var i = parseInt(text);
-                if (i != NaN && i >= 0) {
+                if (i != NaN && i >= 0 && windowconfiguration != null) {
                     windowconfiguration.window_width = i;
                 }
             }
@@ -67,7 +67,7 @@ Rectangle {
             border.color: "#000000"
             onTextChanged: {
                 var i = parseInt(text);
-                if (i != NaN && i >= 0) {
+                if (i != NaN && i >= 0 && windowconfiguration != null) {
                     windowconfiguration.window_height = i;
                 }
             }

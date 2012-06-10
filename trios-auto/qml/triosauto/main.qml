@@ -47,6 +47,7 @@ Item {
                 MenuItem {
                     id: menu_window
                     text: "Window"
+                    image: "img/window.svg"
                     root_state: "window"
                 }
 
