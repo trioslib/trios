@@ -1,5 +1,6 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.1
+import "components"
 
 Rectangle {
     id: root
@@ -23,48 +24,72 @@ Rectangle {
 
     Row {
         id: row1
+        x: 170
         y: 44
-        width: 640
+        width: 300
         height: 59
-        anchors.left: parent.left
+        spacing: 9
+        anchors.horizontalCenterOffset: 0
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: text1.bottom
+        anchors.topMargin: 21
+
+        Text {
+            text: "Width"
+        }
+
+        TextInput {
+            id: win_width
+            width: 50
+            height: 20
+            color: "#00000000"
+            text: "3"
+            border.color: "#000000"
+            onTextChanged: {
+                var i = parseInt(text);
+                if (i != NaN && i >= 0) {
+                    windowconfiguration.window_width = i;
+                }
+            }
+
+        }
+
+        Text {
+            text: "Height"
+        }
+
+        TextInput {
+            id: win_height
+            width: 50
+            height: 20
+            color: "#00000000"
+            text: "3"
+            border.color: "#000000"
+            onTextChanged: {
+                var i = parseInt(text);
+                if (i != NaN && i >= 0) {
+                    windowconfiguration.window_height = i;
+                }
+            }
+        }
+    }
+
+    WindowConfiguration {
+        id: windowconfiguration
+        x: 156
+        y: 123
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    Text {
+        id: text4
+        x: 170
+        y: 19
+        text: qsTr("Window Size")
+        anchors.left: row1.left
         anchors.leftMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-
-        Text {
-            id: text2
-            x: 140
-            y: 22
-            text: qsTr("text")
-            font.pixelSize: 12
-        }
-
-        TextEdit {
-            id: text_edit1
-            x: 112
-            y: 17
-            width: 80
-            height: 20
-            text: qsTr("text edit")
-            font.pixelSize: 12
-        }
-
-        Text {
-            id: text3
-            x: 229
-            y: 17
-            text: qsTr("text")
-            font.pixelSize: 12
-        }
-
-        TextEdit {
-            id: text_edit2
-            x: 233
-            y: 17
-            width: 80
-            height: 20
-            text: qsTr("text edit")
-            font.pixelSize: 12
-        }
+        anchors.top: row1.top
+        anchors.topMargin: -25
+        font.pixelSize: 12
     }
 }
