@@ -27,7 +27,7 @@ TEST(test_decision_pair1) {
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
     mu_assert("ldecision failed", 1 == ldecision("XPL_RESULT.xpl", 1, 0, AVERAGE, 0, 0, "DECISION_RESULT.mtm"));
-    mu_assert("lisi failed", 1 == lisi("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 0, "ITV_MIN.itv", 0, NULL, NULL ));
+    mu_assert("lisi failed", 1 == lisi("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 1, "ITV_MIN.itv", 0, NULL, NULL ));
 } TEST_END
 
 

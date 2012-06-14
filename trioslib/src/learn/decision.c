@@ -14,7 +14,7 @@
     \param freqmin Minimum frequency. If the example has frequency below this value it is ignored.
     \param estim Decision estimator.
     \param comptype Type of computation for undecidable cases.
-    \param undflabel Label to use in the undecidable cases.
+    \param undflabel Label to use in the undecidable cases, if comptype == 1.
     \return 1 on success. 0 on failure.
 */
 
@@ -93,7 +93,7 @@ pac_debug("DEpois dos frees finais") ;
     \param freqmin Minimum frequency. If the example has frequency below this value it is ignored.
     \param estimator Decision estimator.
     \param comptype Type of computation for undecidable cases.
-    \param undflabel Label to use in the undecidable cases.
+    \param undflabel Label to use in the undecidable cases, if comptype == 1.
     \return The created classified examples set.
   */
 mtm_t *mtm_decide(xpl_t *xpl, int   comp_prob, double freqmin, double estimator, int comptype,int undflabel) {
