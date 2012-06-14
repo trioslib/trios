@@ -49,7 +49,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
   unsigned char  *ucpixels2 ; /*  resulting output image (byte)       */
   unsigned short *uspixels2 ; /*  resulting output image (short)      */
   window_t *win ;
-  apert_t  *apt ;
+  /*apert_t  *apt ;*/
   itv_t    *itv ;
   /* read input image file */
   img_appl = img_readPGM(f_appl);
@@ -71,7 +71,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
     img_free(img_appl);
     img_appl = img_tmp;
   }
-  if ((itv = itv_read(f_basis, &win, &apt))==NULL) {
+  if ((itv = itv_read(f_basis, &win/*, &apt*/))==NULL) {
     img_free(img_appl) ;
     return trios_error(MSG, "lpapplic: itv_read() failed.") ;
   }

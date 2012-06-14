@@ -13,7 +13,7 @@
     \sa itv_t
  */
 
-itv_t *itv_read(char *fname, window_t **win, apert_t **apt) {
+itv_t *itv_read(char *fname, window_t **win/*, apert_t **apt*/) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)            */
 /*  date: Thu Oct 31 13:25:36 EDT 1996                                 */
 
@@ -64,7 +64,7 @@ itv_t *itv_read(char *fname, window_t **win, apert_t **apt) {
 
   tags_read = 0 ;
   stop = 0 ;
-  *apt = NULL ;
+  /**apt = NULL ;*/
 
 
   /* Open the file */
@@ -353,15 +353,7 @@ itv_t *itv_read(char *fname, window_t **win, apert_t **apt) {
     \return 1 on success. 0 on failure.
 */
 
-int               /*+ Purpose: write an intervals set to a file +*/
-  itv_write(
-    char  *fname,  /*+ In: file name                            +*/
-    itv_t *itv,    /*+ In: intervals set                        +*/
-    window_t *win, /*+ In: window                               +*/
-    apert_t *apt   /*+ In: aperture                             +*/
-  )
-/*+ Return: 1 on success, 0 on failure                          +*/
-{
+int itv_write(char *fname, itv_t *itv, window_t *win /*apert_t *apt*/) {
 /*  author: Nina S. Tomita & R. Hirata Jr. (nina@ime.usp.br)     */
 /*  date: Thu Oct 31 17:10:14 EDT 1996                           */
 

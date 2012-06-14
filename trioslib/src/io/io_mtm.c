@@ -33,7 +33,7 @@
     \return A mtm_t structure or NULL on failure.
 */
 
-mtm_t *mtm_read(char *fname, window_t **win, apert_t  **apt) {
+mtm_t *mtm_read(char *fname, window_t **win/*, apert_t  **apt*/) {
 /*  author: Nina S. Tomita, R. Hirata Jr.   (nina@ime.usp.br)                */
 /*  date: Thu Oct 24 1996                                                    */
 
@@ -75,7 +75,7 @@ mtm_t *mtm_read(char *fname, window_t **win, apert_t  **apt) {
 pac_debug("Entering MTM_READ()") ;
 #endif
 
-  *apt = NULL ;
+  /**apt = NULL ;*/
   tags_read = 0 ;
   stop = 0 ;
   comp_prob = 0 ;
@@ -415,7 +415,7 @@ pac_debug("Now it will get out") ;
     \return 1 on success. 0 on failure.
 */
 
-int mtm_write(char *fname, mtm_t *mtm, window_t *win, apert_t *apt) {
+int mtm_write(char *fname, mtm_t *mtm, window_t *win/*, apert_t *apt*/) {
 /*  author: Nina S. Tomita, R. Hirata Jr.  (nina@ime.usp.br)                */
 /*  date: Thu Oct 24 1996                                                   */
 

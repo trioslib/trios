@@ -44,7 +44,7 @@
 char     *GLtmp_bas_file, *GLlog_file ;
 int       GLlog_step ;
 window_t *GLwin ;
-apert_t  *GLapt ;
+/*apert_t  *GLapt ;*/
 FILE     *GLfd ;
 
 #define Print_Log(i) {                                           \
@@ -62,7 +62,7 @@ FILE     *GLfd ;
                                                                  \
       /* and write current set of intervals if required */       \
       if(GLtmp_bas_file) {                                       \
-        if(!itv_write(GLtmp_bas_file, itv, GLwin, GLapt)) {             \
+        if(!itv_write(GLtmp_bas_file, itv, GLwin/*, GLapt*/)) {             \
           trios_warning("Warning : could not write int. basis file %s.",  \
                   GLtmp_bas_file) ;                              \
         }                                                        \

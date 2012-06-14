@@ -70,7 +70,7 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
 int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int  output_type, int  cv_flag, char *fname_o1, char *fname_o2) {
     imgset_t *imgset = NULL ;
     window_t *win  = NULL ;
-    apert_t  *apt ;
+    /*apert_t  *apt ;*/
     xpl_t    *xpl  = NULL ;
     int      wsize=0, map_type ;
     #ifdef _DEBUG_
@@ -123,7 +123,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
     /* if an input XPL file is given, then read it;
     otherwise create an empty XPL structure */ 
     if(fname_i3 != NULL) {
-        if(!(xpl=xpl_read(fname_i3, &win, &apt))) {
+        if(!(xpl=xpl_read(fname_i3, &win/*, &apt*/))) {
             imgset_free(imgset) ;
             win_free(win) ;
             return trios_error(MSG, "lcollec: xpl_read() failed.") ;
@@ -145,7 +145,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         pac_debug("lcollec_main: done.") ;
     #endif
     /* write contents of XPL to output file */
-    if(!xpl_write(fname_o1, xpl, win, apt)) {
+    if(!xpl_write(fname_o1, xpl, win/*, apt*/)) {
         imgset_free(imgset) ;
         win_free(win) ;
         xpl_free(xpl) ;

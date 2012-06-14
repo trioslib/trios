@@ -34,7 +34,7 @@ int ldecision(char *fname_i, int comp_prob, double freqmin, double estim, int co
     xpl_t    *xpl ;
     mtm_t    *mtm ;
     window_t *win ;
-    apert_t  *apt = NULL ;
+    /*apert_t  *apt = NULL ;*/
 
 
 #ifdef _DEBUG_
@@ -42,7 +42,7 @@ pac_debug("Entered ldecision with if=%s e of=%s", fname_i, fname_o) ;
 #endif
 
     /* read observed examples file */
-    if(NULL == (xpl = (xpl_t *)xpl_read(fname_i, &win, &apt))) 
+    if(NULL == (xpl = (xpl_t *)xpl_read(fname_i, &win/*, &apt*/)))
       return trios_error(MSG, "xpl_read failed.") ;
 
 
@@ -54,7 +54,7 @@ pac_debug("Entered ldecision with if=%s e of=%s", fname_i, fname_o) ;
     }
 
     /* write the classified examples table to the output file */
-    if(!mtm_write(fname_o, mtm, win, apt)) {
+    if(!mtm_write(fname_o, mtm, win/*, apt*/)) {
       win_free(win) ;
       xpl_free(xpl) ;
       mtm_free(mtm) ;

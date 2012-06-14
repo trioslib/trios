@@ -26,7 +26,7 @@
     \return Pointer to the examples and window structure.
 */
 
-xpl_t *xpl_read(char *fname, window_t **win, apert_t **apt) {
+xpl_t *xpl_read(char *fname, window_t **win/*, apert_t **apt*/) {
 /*  author:  Nina S. Tomita, Roberto Hirata Jr. (nina@ime.usp.br)           */
 /*  date: Thu Oct 17 1996                                                   */
 
@@ -53,7 +53,7 @@ xpl_t *xpl_read(char *fname, window_t **win, apert_t **apt) {
 
   tags_read = 0 ;
   stop = 0 ;
-  *apt = NULL ;
+  /**apt = NULL ;*/
 
 
   if((fd=fopen(fname, "r"))==NULL) {
@@ -410,15 +410,7 @@ pac_debug("xpl type=%d", xpl->type) ;
     \return 1 on success. 0 on failure.
 */
 
-int               /*+ Purpose: Write the examples file     +*/  
-  xpl_write(
-    char *fname,  /*+ In: Name of the file to be written   +*/
-    xpl_t *xpl,   /*+ In: Pointer to example structure     +*/
-    window_t *win,/*+ In: Pointer to window structure      +*/
-    apert_t  *apt /*+ In: Pointer to an aperture structure +*/
-  )
-/*+ Return: 1 if success, 0 if failure                     +*/
-{
+int xpl_write(char *fname, xpl_t *xpl, window_t *win/*, apert_t  *apt*/) {
 /*  author:  Nina S. Tomita, Roberto Hirata Jr. (nina@ime.usp.br)           */
 /*  date: Thu Oct 17 1996                                                   */
 

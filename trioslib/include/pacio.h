@@ -114,29 +114,6 @@ void          /*+ Purpose: Writes a data description of the window  +*/
   )
 /*+ Return: nothing                                                 +*/ ;
 
-/* ------- io_apert.c ---------------------------- */
-
-apert_t *    /*+ Purpose: Read a file with a description of an aperture  +*/
-  apert_read(
-    char *fname  /*+ In: String with the name of the file                +*/ 
-    ) ;
-
-apert_t *        /*+ Purpose: Read a description of an aperture   +*/
-  apert_read_data(
-     FILE *fd     /*+ In: file descriptor                         +*/ 
-     ) ;
-
-int         /*+ Purpose: Write to a file a description of an aperture   +*/  
-  apert_write(
-    char *fname,  /*+ In: file name                                     +*/ 
-    apert_t *apt  /*+ In: aperture structure                            +*/
-    ) ;
-
-void          /*+ Purpose: Write a data description of an aperture  +*/
-  apert_write_data(
-    FILE *fd,     /*+ In: file descriptor                           +*/
-    apert_t *apt  /*+ In: aperture structure                        +*/
-    ) ;
 
 
 /* ------ io_imgset.c --------------------------- */
@@ -186,16 +163,16 @@ void img_writePGM(char *filename, img_t *i);
 xpl_t *             /*+ Purpose: Read an examples file   +*/
   xpl_read(
     char *fname,    /*+ In: name of the file of examples      +*/
-    window_t **win, /*+ Out: pointer to window structure      +*/
-    apert_t  **apt  /*+ Out: pointer to an aperture structure +*/
+    window_t **win /*+ Out: pointer to window structure      +*/
+    //apert_t  **apt  /*+ Out: pointer to an aperture structure +*/
     ) ;
 
 int               /*+ Purpose: Write the examples file     +*/  
   xpl_write(
     char *fname,  /*+ In: Name of the file to be written   +*/
     xpl_t *xpl,   /*+ In: Pointer to example structure     +*/
-    window_t *win,/*+ In: Pointer to window structure      +*/
-    apert_t  *apt /*+ In: Pointer to an aperture structure +*/
+    window_t *win/*+ In: Pointer to window structure      +*/
+    //apert_t  *apt /*+ In: Pointer to an aperture structure +*/
     ) ;
 
 
@@ -247,16 +224,16 @@ int lshowmtm         /*+ Purpose: shows the elements of an mtm set +*/
 mtm_t *           /*+ Purpose: Reads a miniterm collection file             +*/
   mtm_read(
     char *fname,    /*+ In:  name of the file of miniterms                  +*/
-    window_t **win, /*+ Out: pointer to window structure                    +*/
-    apert_t  **apt  /*+ Out: pointer to an aperture structure +*/
+    window_t **win /*+ Out: pointer to window structure                    +*/
+    //apert_t  **apt  /*+ Out: pointer to an aperture structure +*/
     ) ;
 
 int                /*+ Purpose: Writes the miniterms collection to a file  +*/
   mtm_write(
     char *fname,     /*+ In: name of the file                              +*/
     mtm_t *mtm,      /*+ In: pointer to  miniterm structure                +*/ 
-    window_t *win,   /*+ In: pointer to window structure                   +*/ 
-    apert_t  *apt    /*+ In: Pointer to an aperture structure +*/
+    window_t *win   /*+ In: pointer to window structure                   +*/
+    //apert_t  *apt    /*+ In: Pointer to an aperture structure +*/
     ) ;
 
 
@@ -270,8 +247,8 @@ int                /*+ Purpose: Writes the miniterms collection to a file  +*/
 itv_t *               /*+ Purpose: read an interval set from a file   +*/   
   itv_read(
     char     *fname,   /*+ In: file name                              +*/
-    window_t **win,    /*+ Out: WINDOW structure                      +*/
-    apert_t  **apt     /*+ Out: Pointer to an aperture structure      +*/
+    window_t **win    /*+ Out: WINDOW structure                      +*/
+    //apert_t  **apt     /*+ Out: Pointer to an aperture structure      +*/
   )
 /*+ Return: a pointer to a ITV structure on success, NULL on failure  +*/ ;
 
@@ -285,8 +262,8 @@ int               /*+ Purpose: write an intervals set to a file +*/
   itv_write(
     char  *fname,  /*+ In: file name                            +*/
     itv_t *itv,    /*+ In: intervals set                        +*/
-    window_t *win, /*+ In: window                               +*/
-    apert_t  *apt  /*+ In: Pointer to an aperture structure +*/
+    window_t *win /*+ In: window                               +*/
+    //apert_t  *apt  /*+ In: Pointer to an aperture structure +*/
   )
 /*+ Return: 1 on success, 0 on failure                          +*/ ;
 
