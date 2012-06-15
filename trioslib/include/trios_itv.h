@@ -1,5 +1,5 @@
-#ifndef _pac_itv_h_
-#define _pac_itv_h_
+#ifndef _trios_itv_h_
+#define _trios_itv_h_
 
 #define ISI_0 0
 #define ISI_1 1
@@ -15,20 +15,6 @@ typedef struct itv_bx { /*!< Structure of the interval                      +*/
   int label ;           /*!< value associated to the points of the interval +*/
   struct itv_bx *next ; /*!< pointer to the next interval                   +*/
 } itv_BX ;
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue 31 Oct 2000                                                   */
-/*  Mod: new fiel "dim" was added to the itv_gx structure                   */
-
-typedef struct itv_gx { /*+ Structure of the interval                      +*/
-  char    *A ;          /*+ lower extremity of the interval                +*/
-  char    *B ;          /*+ upper extremity of the interval                +*/
-  int     label ;       /*+ value associated to the points of the interval +*/
-  double  size ;        /*+ size of the interval                           +*/
-  int     nindexes ;    /*+ number of indexes                              +*/
-  int    *plabels ;     /*+ list of labeled examples in the interval       +*/
-  struct itv_gx *next ; /*+ pointer to the next interval                   +*/
-} itv_GX ;
 
 /*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
 /*  Date: Tue Aug 17 1999                                                   */
@@ -199,26 +185,12 @@ void      /*+ Purpose: free memory area used by an interval of BX type     +*/
 /*+ Return: nothing                                                        +*/
 
 
-void      /*+ Purpose: free memory area used by an interval of GX type     +*/
-  itv_nodegx_free(
-    itv_GX  *p               /*+ In: pointer to the interval               +*/
-    ) ;
-/*+ Return: nothing                                                        +*/
-
 
 itv_BX *           /*+ Purpose: create an interval of BX type              +*/
   itv_nodebx_create(
     int  wzip                /*+ In: compacted size of w-pattern           +*/
   ) ;
 /*+ Return: pointer to an interval of BX type                              +*/
-
-
-itv_GX *           /*+ Purpose: create an interval of GX type              +*/
-  itv_nodegx_create(
-    int  wsize               /*+ In: size of a w-pattern                   +*/
-    ) ;
-/*+ Return: pointer to an interval of GX type                              +*/
-
 
 
 void     /*+ Purpose: set some data  of an interval                        +*/
@@ -235,47 +207,12 @@ void     /*+ Purpose: set some data  of an interval                        +*/
 /*+ Return: nothing                                                        +*/
 
 
-
-void     /*+ Purpose: set some data  of an interval                        +*/
-  itvgx_set(
-    itv_GX *p,         /*+ In/Out: pointer to the interval                 +*/
-    char *A,           /*+ In: left extremity of the interval              +*/
-    char *B,           /*+ In: right extremity of the interval             +*/
-    int    wsize,      /*+ In: compacted size of w-pattern                 +*/
-    int    label,      /*+ In: label assigned to the interval              +*/
-    double size,       /*+ In: size of the interval                        +*/
-    int    nindexes,   /*+ In: number of indexes                           +*/
-    int   *plabels,    /*+ In: pointer to indexes                          +*/ 
-    itv_GX *next       /*+ In: if the interval is linked in a list of
-                               intervals, this must be the pointer to the
-                               next interval                               +*/
-    ) ;
-/*+ Return: nothing                                                        +*/
-
-
-
-void      /*+ Purpose: set the number of intervals in a ITV_GX structure   +*/
-  itv_set_nindexes(
-    itv_GX *itvgx,  /*+ In/Out: pointer to the ITV_GX structure            +*/
-    int   nindexes  /*+ In: number of indexes                              +*/
-    ) ;
-/*+ Return: nothing                                                        +*/
-
-
-
 int             /*+ Purpose: compute  the dimension of an interval         +*/
   itv_dimension(                                                              
     itv_BX *p,         /*+ In: the interval                                +*/
     int    wzip        /*+ In: compacted w-pattern's size                  +*/
   ) ;
 /*+ Return: an integer between 0 and n (where n stands for wsize)          +*/
-
-double               /*+ Purpose: compute the size of a gray-scale interval +*/
-  itvgx_size(                                                              
-    itv_GX *p,         /*+ In: the interval                                +*/
-    int    wsize       /*+ In: w-pattern's size                            +*/
-    ) ;
-
 
 
 int             /*+ Purpose: check if two intervals are identical          +*/
@@ -286,14 +223,6 @@ int             /*+ Purpose: check if two intervals are identical          +*/
 ) ;
 /*+ Return: 1 if they are equal, 0 otherwise                               +*/
 
-
-int             /*+ Purpose: check if two intervals are identical          +*/
-  itv_equal_GX(                                                                  
-    itv_GX *itv1,      /*+ In: first interval                              +*/
-    itv_GX *itv2,      /*+ In: second interval                             +*/
-    int     wsize      /*+ In: w-pattern's size                            +*/
-    ) ;
-/*+ Return: 1 if they are equal, 0 otherwise                               +*/
 
 
 itv_BX *        /*+ Purpose: compute  the intersection of two intervals    +*/
@@ -333,11 +262,6 @@ int             /*+ Purpose: sort intervals according to its dimension +*/
   ) ;
 /*+ Return: 1 on success, 0 on failure                                 +*/
 
-int       /*+ Purpose: sort gray-scale intervals according to its size +*/
-  itvgx_sort(
-    itv_GX **p_list,  /*+ In/Out: list of intervals                    +*/
-    int    wsize      /*+ In: size of w-patterns                       +*/
-    ) ;
 
 int             /*+ Purpose: check if an interval contains a w-pattern     +*/
   itv_contain(                                                                
@@ -346,36 +270,6 @@ int             /*+ Purpose: check if an interval contains a w-pattern     +*/
     int    wzip        /*+ In: compacted w-pattern's size                  +*/
 ) ;
 /*+ Return: 1 if the w-pattern is contained in the interval, 0 otherwise   +*/
-
-
-
-int             /*+ Purpose: check if an interval contains a w-pattern     +*/
-  itv_contain_gx(                                                                
-    itv_GX *p_itv,       /*+ In: the pointer to the interval               +*/
-    unsigned char *wpat, /*+ In: the w-pattern                             +*/
-    int    wsize         /*+ In: w-pattern's size                          +*/
-) ;
-/*+ Return: 1 if the w-pattern is contained in the interval, 0 otherwise   +*/
-
-
-
-int             /*+ Purpose: check if an interval contains a w-pattern     +*/
-  itv_contain_wk(                                                                
-    itv_GX *p_itv,     /*+ In: the pointer to the interval               +*/
-    char   *wpat,      /*+ In: the w-pattern                             +*/
-    int     wsize      /*+ In: w-pattern's size                          +*/
-) ;
-/*+ Return: 1 if the w-pattern is contained in the interval, 0 otherwise   +*/
-
-
-
-int             /*+ Purpose: check if an interval contains a wk interval +*/
-  itv_contain_nodewk(                                                                
-    itv_GX *p,         /*+ In: the pointer to the interval               +*/
-    itv_GX *p_test,    /*+ In: the pointer to the interval to be tested  +*/
-    int     wsize      /*+ In: w-pattern's size                          +*/
-    ) ;
-/*+ Return: 1 if the wk-interval is contained in the interval, 0 otherwise +*/
 
 
 int             /*+ Purpose: given an interval set and a label "old_label",
@@ -439,7 +333,7 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
 ) ;
      /*+ Return: Pointer to ITV structure on success, NULL on failure           +*/ 
 
-#endif /* _pac_itv_h_ */
+#endif /* _trios_itv_h_ */
 
 
 
