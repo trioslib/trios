@@ -48,7 +48,7 @@
 #include <pac_kernel.h>
 #include <trios_error.h>
 #include <trios_win.h>
-#include <pac_imgset.h>
+#include "trios_imgset.h"
 
 #include <pac_xpl.h>
 #include <pac_mtm.h>

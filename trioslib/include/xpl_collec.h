@@ -1,6 +1,6 @@
 #include <trios_img.h>
 #include "trios_win.h"
-#include "pac_imgset.h"
+#include "trios_imgset.h"
 
 
 int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t **img1, img_t **img2, img_t **img3);

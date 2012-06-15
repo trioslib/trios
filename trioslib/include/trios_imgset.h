@@ -1,17 +1,19 @@
-#ifndef _pac_imgset_h_
-#define _pac_imgset_h_
+#ifndef _trios_imgset_h_
+#define _trios_imgset_h_
 
+/*!
+    Structure that holds a collection of images.
+
+    The images are organized in groups, each group contains
+    one or more images. Normally a group is used as a sample in the operator
+    design and contains two or three images (input, ideal and, optionally, a mask).
+ */
 typedef struct {
-  int  ngroups ;       /* number of image groups         */
-  int  grpsize ;       /* number of images in each group */
-  char **dir ;         /* directory name (path)          */
-  char ***file ;       /* file names                     */
+  int  ngroups ;       /*!< Number of image groups         */
+  int  grpsize ;       /*!< Number of images in each group */
+  char **dir ;         /*!< Directory name (path)          */
+  char ***file ;       /*!< File names                     */
 } imgset_t ;
-
-
-/*===========================================================================\
-   pac_imgset.c
-\========================================================================== */
 
 /*
      -------------------------------------------
@@ -144,4 +146,4 @@ char *          /*+ Purpose: gets the full file name of the i-th image
     if such image exists, or NULL otherwise                                +*/
 
 
-#endif /* _pac_imgset_h_ */
+#endif /* _trios_imgset_h_ */
