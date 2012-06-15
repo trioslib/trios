@@ -10,18 +10,6 @@
 */
 
 
-/*!
-    Builds a classified examples table from a set of observed examples.
-
-    \param fname_i File name of the observed examples.
-    \param comp_prob A flag indicating if the probabiities should be computed (0=NO, 1=YES).
-    \param freqmin Minimum frequency. If the example has frequency below this value it is ignored.
-    \param estim Decision estimator.
-    \param comptype Type of computation for undecidable cases.
-    \param undflabel Label to use in the undecidable cases, if comptype == 1.
-    \return 1 on success. 0 on failure.
-*/
-
 int ldecision(char *fname_i, int comp_prob, double freqmin, double estim, int comptype, int undflabel, char *fname_o) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                */
 /*  date: Tue Oct 29 1996                                                  */

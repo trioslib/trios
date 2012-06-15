@@ -32,7 +32,7 @@
 
 #include <pacbasic.h>
 #include "trios_io.h"
-#include <paclearn.h>
+#include "trios_learn.h"
 #include <trios_img.h>
 #include <xpl_collec.h>
 /*
