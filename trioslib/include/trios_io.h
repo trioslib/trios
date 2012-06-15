@@ -3,7 +3,7 @@
 
 #include <io_header.h>
 #include <trios_img.h>
-#include <pac_mtm.h>
+#include "trios_mtm.h"
 #include <pac_itv.h>
 
 /* ---- io_win.c ---------------------------------------------- */

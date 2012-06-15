@@ -51,7 +51,7 @@
 #include "trios_imgset.h"
 
 #include <pac_xpl.h>
-#include <pac_mtm.h>
+#include "trios_mtm.h"
 
 
 	/*-------------------------------------*

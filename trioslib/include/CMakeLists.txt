@@ -2,7 +2,7 @@ SET(TRIOS_HEADERS pacbasic.h
 
 
                  pac_itv.h
-                 pac_mtm.h
+
                  pac_kernel.h
                  pac_xpl.h
                  xpl_collec.h
@@ -14,6 +14,7 @@ SET(TRIOS_HEADERS pacbasic.h
                  trios_error.h
                  trios_io.h
                  trios_imgset.h
+                 trios_mtm.h
                  )
 
 INSTALL(FILES ${TRIOS_HEADERS}  DESTINATION ${TRIOS_BINARY_DIR}/include)
