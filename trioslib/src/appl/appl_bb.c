@@ -1,6 +1,6 @@
 #include <paclib.h>
 
-#include <pac_img.h>
+#include <trios_img.h>
 
 /*!
   Reads a mask from a file or creates a new image with all pixels set to 1 if there is no mask.

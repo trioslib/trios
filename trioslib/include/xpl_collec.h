@@ -1,5 +1,5 @@
-#include "pac_img.h"
-#include "pac_win.h"
+#include <trios_img.h>
+#include "trios_win.h"
 #include "pac_imgset.h"
 
 

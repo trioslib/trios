@@ -1,5 +1,5 @@
 #include <paclib.h>
-#include <pacappl.h>
+#include "trios_appl.h"
 #include "minunit.h"
 
 TEST(test_decision_pair1) {

@@ -1,5 +1,9 @@
-#include <paclib_kernel.h>
+#include "trios_win.h"
+#include "pac_itv.h"
+#include "pac_mtm.h"
+#include "pac_xpl.h"
 #include "paclearn_local.h"
+#include <stdio.h>
 
 /*
 #define _DEBUG_

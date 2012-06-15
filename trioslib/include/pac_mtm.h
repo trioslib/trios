@@ -1,6 +1,8 @@
 #ifndef _pac_mtm_h_
 #define _pac_mtm_h_
 
+#include "pac_kernel.h"
+
 #define MODA               5 
 #define AVERAGE           10 
 #define MEDIAN            15

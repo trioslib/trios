@@ -5,6 +5,8 @@
 #define  LESS    -1
 #define  GREAT   1
 
+#include "pac_kernel.h"
+
 typedef struct xpl_bb {
   unsigned int *wpat ;        /* pointer to w-pattern          */
   unsigned int  fq0 ;         /* frequency of zeros            */

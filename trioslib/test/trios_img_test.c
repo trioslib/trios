@@ -1,5 +1,5 @@
 #include <paclib.h>
-#include <pac_img.h>
+#include <trios_img.h>
 #include <pacio.h>
 
 #include "minunit.h"

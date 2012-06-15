@@ -1,5 +1,5 @@
-#ifndef _pac_error_h_
-#define _pac_error_h_
+#ifndef _trios_error_h_
+#define _trios_error_h_
 
 /*===========================================================================\
    pac_error.c

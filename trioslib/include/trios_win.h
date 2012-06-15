@@ -1,7 +1,7 @@
 /* Window definition */
 
-#ifndef _pac_win_h_
-#define _pac_win_h_
+#ifndef _trios_win_h_
+#define _trios_win_h_
 
 #define MAXWINWIDTH  256
 #define MAXWINHEIGHT 256
@@ -15,11 +15,6 @@ typedef struct {
   int  *wsize ;          /* window size                          */
   char *windata ;        /* window description array             */
 } window_t ;
-
-
-/*===========================================================================\
-   pac_win.c
-\========================================================================== */
 
 
 int           /*+ Purpose: get the window size of a given band             +*/
@@ -96,7 +91,7 @@ void           /*+ Purpose: free the memory area of a window               +*/
     ) ;
 
 
-#endif /* _pac_win_h_ */
+#endif /* _trios_win_h_ */
 
 
 

@@ -36,7 +36,7 @@
 	---------------------------------------*/
 
 #include <io_header.h>
-#include <pac_img.h>
+#include <trios_img.h>
 #include <pac_mtm.h>
 #include <pac_itv.h>
 

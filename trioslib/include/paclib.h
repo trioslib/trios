@@ -30,12 +30,10 @@
 
 /* other toolbox includes go here */
 
-#include <paclib_kernel.h>
-
 #include <pacbasic.h>
 #include <pacio.h>
 #include <paclearn.h>
-#include <pac_img.h>
+#include <trios_img.h>
 #include <xpl_collec.h>
 /*
 
