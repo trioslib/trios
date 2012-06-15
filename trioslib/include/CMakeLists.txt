@@ -1,4 +1,4 @@
-SET (PAC_HEADERS pacbasic.h
+SET(TRIOS_HEADERS pacbasic.h
 
 
                  pac_itv.h
@@ -16,4 +16,5 @@ SET (PAC_HEADERS pacbasic.h
                  trios_imgset.h
                  )
 
-INSTALL(FILES ${PAC_HEADERS}  DESTINATION include)
+INSTALL(FILES ${TRIOS_HEADERS}  DESTINATION ${TRIOS_BINARY_DIR}/include)
+file(COPY ${TRIOS_HEADERS} DESTINATION  ${CMAKE_BINARY_DIR}/include)
