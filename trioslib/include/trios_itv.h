@@ -6,11 +6,14 @@
 #define ISI_2 2
 #define ISI_3 3
 
-typedef struct itv_bx { /*+ Structure of the interval                      +*/
-  unsigned int *A ;     /*+ left extremity of the interval                 +*/
-  unsigned int *B ;     /*+ right extremity of the interval                +*/
-  int label ;           /*+ value associated to the points of the interval +*/
-  struct itv_bx *next ; /*+ pointer to the next interval                   +*/
+/*!
+    Structure that holds an interval of a binary W-operator.
+*/
+typedef struct itv_bx { /*!< Structure of the interval                      +*/
+  unsigned int *A ;     /*!< left extremity of the interval                 +*/
+  unsigned int *B ;     /*!< right extremity of the interval                +*/
+  int label ;           /*!< value associated to the points of the interval +*/
+  struct itv_bx *next ; /*!< pointer to the next interval                   +*/
 } itv_BX ;
 
 /*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
@@ -39,15 +42,18 @@ typedef struct itv_gx { /*+ Structure of the interval                      +*/
 /*       save disk space, we established a convention that, if maxlabel>255 */
 /*       then image produced will be SHORT, otherwise it will be BYTE       */
 
-typedef struct {  /*+ Structure of the intervals set +*/
-  int  wsize ;          /*+ w-pattern size +*/
-  int  wzip ;           /*+ compacted w-pattern size +*/
-  int  type ;           /*+ type (BB, BG, GB, GG) +*/
-  int  nitv ;           /*+ number of intervals +*/
-  int  maxlabel ;       /*+ maximum label assigned to the intervals in the set +*/
-  int  deflabel ;       /*+ default value to be associated to the
+/*!
+    Structure that holds an image operator.
+*/
+typedef struct {
+  int  wsize ;          /*!< w-pattern size +*/
+  int  wzip ;           /*!< compacted w-pattern size +*/
+  int  type ;           /*!< type (BB, BG, GB, GG) +*/
+  int  nitv ;           /*!< number of intervals +*/
+  int  maxlabel ;       /*!< maximum label assigned to the intervals in the set +*/
+  int  deflabel ;       /*!< default value to be associated to the
                             points out of the intervals union +*/
-  int  *head ;          /*+ pointer to the intervals list head +*/
+  int  *head ;          /*!< pointer to the intervals list head +*/
 } itv_t ;
 
 

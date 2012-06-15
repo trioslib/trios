@@ -3,7 +3,7 @@
 /*  Mod: label type changed from char to int                                */
 
 #include <pacbasic.h>
-#include <pac_itv.h>
+#include "trios_itv.h"
 
  /*#define _DEBUG_*/
 
