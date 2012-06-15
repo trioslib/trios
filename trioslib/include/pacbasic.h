@@ -50,7 +50,7 @@
 #include <trios_win.h>
 #include "trios_imgset.h"
 
-#include <pac_xpl.h>
+#include <trios_xpl.h>
 #include "trios_mtm.h"
 
 
