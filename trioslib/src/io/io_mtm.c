@@ -142,7 +142,7 @@ pac_debug("Entering MTM_READ()") ;
         return trios_error(1, "Aperture operators not supported yet.");
         /*if(NULL==(*apt = apert_read_data(fd))) {
         	fclose(fd) ;
-	        return (mtm_t *)pac_error(MSG, "mtm_read: apert_read_data() failed.") ;
+            return (mtm_t *)trios_error(MSG, "mtm_read: apert_read_data() failed.") ;
         }
         break ;*/
     }
@@ -172,13 +172,13 @@ pac_debug("Entering MTM_READ()") ;
           /*                  See Remark Above
           if((freqnode=freq_node_create(label, freq))==NULL) {
             free(wpat) ;
-            return (mtm_t *)pac_error(MSG,
+            return (mtm_t *)trios_error(MSG,
                    "mtm_read: freq_node_create() failed.") ;
           }
 	    
           if (!set_freq(freqnode, &freqlist)) {
             free(wpat) ;
-            return (mtm_t *)pac_error(MSG, "mtm_read: xpl_set_freq() failed.") ;
+            return (mtm_t *)trios_error(MSG, "mtm_read: xpl_set_freq() failed.") ;
           }
           */
         }
@@ -326,7 +326,8 @@ pac_debug("Case BB or BG") ;
     case WKGG2F:
     case WKGG2C:
     case GG3:
-
+        return trios_error(MSG, "Operator not supported");
+        /*
 #ifdef _DEBUG_
 pac_debug("Case GG") ;
 #endif
@@ -349,7 +350,7 @@ pac_debug("Case GG") ;
       }
 
       /* reading loop --------------------------------- */
-
+        /*
 #ifdef _DEBUG_
 pac_debug("Now it will read the minterms") ;
 #endif
@@ -357,7 +358,7 @@ pac_debug("Now it will read the minterms") ;
       for(i= 0; i<nmtm ; i++) {
   
 	/* read minterms --------------------------------------------------*/
-
+    /*
 	for(j=0; j < wsize; j++) {
 	  if(1 != fscanf(fd, "%d ", &value)) {
             free(wpat) ;
@@ -385,7 +386,7 @@ pac_debug("Now it will read the minterms") ;
           return (mtm_t *)trios_error(MSG, "mtm_read: mtm_GX_insert() failed.") ;
         }
       }
-      free(wpat) ;
+      free(wpat) ;*/
       break ;
       
     default:
@@ -452,7 +453,7 @@ int mtm_write(char *fname, mtm_t *mtm, window_t *win/*, apert_t *apt*/) {
   header_t mtmHeader = { "MINTERM ", ""};
   FILE     *fd ;
   mtm_BX   *table_BX ;
-  mtm_GX   *table_GX ; 
+  /*mtm_GX   *table_GX ; */
   freq_node *freqlist ;
   unsigned int nmtm ;
   int      type, wzip, wsize, wsize1, freqsize ;
@@ -561,7 +562,7 @@ pac_debug("Header data writing: done") ;
 
     case GG:
     case GG3:
-
+        /*
       table_GX = (mtm_GX *)mtm->mtm_data ; 
 
       for (i = 0; i < nmtm; i++) {
@@ -570,14 +571,16 @@ pac_debug("Header data writing: done") ;
           fprintf(fd, "%d ", value);
         } 
 	fprintf(fd, "%d %d\n", table_GX[i].label, table_GX[i].fq);
-      }
+      }*/
+      trios_error(MSG, "Operator not supported");
       break ;
 
     case WKC:
     case WKF:
     case WK3F:
     case WK3C:
-
+        trios_error(MSG, "Operator not supported");
+        /*
       table_GX = (mtm_GX *)mtm->mtm_data ; 
 
       for (i = 0; i < nmtm; i++) {
@@ -585,31 +588,33 @@ pac_debug("Header data writing: done") ;
           fprintf(fd, "%d ", table_GX[i].wpat[j]);
         } 
 	fprintf(fd, "%d %d\n", table_GX[i].label, table_GX[i].fq);
-      }
+      }*/
       break ;
 
     case WKGG2F:
     case WKGG2C:
-
+        trios_error(MSG, "Operator not supported");
+        /*
       table_GX = (mtm_GX *)mtm->mtm_data ;
 
       wsize1 = win_get_band_wsize(win, 1) ;
 
       for (i = 0; i < nmtm; i++) {
-        /* print band R */
+        /* print band R
 	for (j = 0; j < wsize1; j++) {
           fprintf(fd, "%d ", table_GX[i].wpat[j]);
         } 
 
-        /* print band G */
+        /* print band G
         for(j=wsize1; j<wsize; j++) {
           value = (unsigned char)table_GX[i].wpat[j] ;
           fprintf(fd, "%d ", value);
         }
 
-        /* print label info */
+        /* print label info
 	fprintf(fd, "%d %d\n", table_GX[i].label, table_GX[i].fq);
       }
+      */
       break ;
 
     default:

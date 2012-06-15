@@ -3,7 +3,7 @@ SET(TRIOS_HEADERS pacbasic.h
 
                  pac_itv.h
                  pac_mtm.h
-
+                 pac_kernel.h
                  pac_xpl.h
                  xpl_collec.h
 

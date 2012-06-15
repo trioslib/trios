@@ -1420,21 +1420,6 @@ xpl_t *            /*+ Purpose: Threshold gray-level image and collects
 /*+ Returns: an example's set on success, NULL on failure +*/ ;
 
 
-/*===========================================================================\
-   ip_isigray.c
-\========================================================================== */
-
-itv_GX *        /*+ Purpose: Given an interval I, and a point X, computes
-                             the set of intervals equivalent to I-{X}      +*/
-  itv_splitwk_bywkpat(
-    itv_GX *I,         /*+ In: interval to be splitted                      +*/
-    mtm_GX *mtm,       /*+ In: list of wpatterns                            +*/
-    char   *wpat,      /*+ In: point which will split the interval          +*/
-    int     label,     /*+ In: wpattern label                               +*/
-    unsigned int wsize /*+ In: w-pattern's size                             +*/
-    ) ;
-/*+ Return: a pointer to a set of intervals on success, NULL on failure    +*/
-
 
 #endif /* _paclearn_internals_h_ */
 /* Don't add after this point */
