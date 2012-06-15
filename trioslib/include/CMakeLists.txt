@@ -1,5 +1,4 @@
-SET(TRIOS_HEADERS pacbasic.h
-
+SET(TRIOS_HEADERS
                  trios.h
                  trios_appl.h
                  trios_win.h

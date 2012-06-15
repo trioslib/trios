@@ -3,7 +3,7 @@
 #define _paclib_h_
 
 
-#include <pacbasic.h>
+#include <trios.h>
 #include "trios_io.h"
 #include "trios_learn.h"
 #include <trios_img.h>

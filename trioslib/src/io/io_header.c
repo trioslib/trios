@@ -1,4 +1,4 @@
-#include <pacbasic.h>
+#include <trios.h>
 #include <trios_io.h>
 #include "pacio_local.h"
 
