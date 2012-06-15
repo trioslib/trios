@@ -1,5 +1,5 @@
-#ifndef _pacbasic_h_
-#define _pacbasic_h_
+#ifndef _trios_common_h_
+#define _trios_common_h_
 
 #include <trios_error.h>
 #include <trios_win.h>
@@ -15,11 +15,6 @@ int
     char *i2
   ) ;
 
-
-
-/*===========================================================================\
-   pac_common.c
-\========================================================================== */
 
 /*
      -------------------------------------------
@@ -191,7 +186,7 @@ unsigned int    /*+ Purpose: Sums the frequencies of w-pattern             +*/
 
 
 
-#endif /* _pacbasic_h_ */
+#endif /* _trios_common_h_ */
 
 /* Don't add after this point */
 

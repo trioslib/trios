@@ -14,6 +14,7 @@ SET(TRIOS_HEADERS pacbasic.h
                  trios_learn.h
                  trios_collec.h
                  trios_xpl.h
+                 trios_common.h
                  )
 
 INSTALL(FILES ${TRIOS_HEADERS}  DESTINATION ${TRIOS_BINARY_DIR}/include)
