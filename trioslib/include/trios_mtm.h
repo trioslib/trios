@@ -1,7 +1,7 @@
 #ifndef _pac_mtm_h_
 #define _pac_mtm_h_
 
-#include "pac_kernel.h"
+#include "trios_misc.h"
 
 #define MODA               5 
 #define AVERAGE           10 

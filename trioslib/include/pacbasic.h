@@ -45,7 +45,7 @@
 /* #include </usr/lib/gcc-lib/i386-linux/2.95.4/include/varargs.h> */
 /* #include <varargs.h> */
 
-#include <pac_kernel.h>
+
 #include <trios_error.h>
 #include <trios_win.h>
 #include "trios_imgset.h"

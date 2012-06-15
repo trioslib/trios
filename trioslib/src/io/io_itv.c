@@ -255,11 +255,12 @@ itv_t *itv_read(char *fname, window_t **win/*, apert_t **apt*/) {
 
     case GG:
     case GB:
-	return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
+        return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
     case WKC:
     case WKF: {
+      return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
       char *A, *B ;
-      itv_GX  *p, *last=NULL ;
+      /*itv_GX  *p, *last=NULL ;
 
       if(NULL==(itv = itv_create(wsize, type, deflabel))) {
 	fclose(fd);
@@ -284,7 +285,7 @@ itv_t *itv_read(char *fname, window_t **win/*, apert_t **apt*/) {
           (itv_t *)trios_error(1, "Memory allocation error.") ;
       }
 
-      /* reading loop --------------------------------- */
+      /* reading loop --------------------------------- *//*
       for(i=0; i<nitv ; i++) {
 
 	for(j=0; j<wsize; j++) {
@@ -320,7 +321,7 @@ itv_t *itv_read(char *fname, window_t **win/*, apert_t **apt*/) {
 	
 	itvgx_set(p, A, B, wsize, label, 0, 0, NULL, NULL) ;
         p->size = itvgx_size(p, wsize) ; /* added on Oct 31, 2000 - Nina */
-
+    /*
 	p->next = (itv_GX *)itv->head ;
         itv->head = (int *)p ;
       }
@@ -330,7 +331,7 @@ itv_t *itv_read(char *fname, window_t **win/*, apert_t **apt*/) {
       itv->nitv = nitv ;
       itv->type = type ;
       itv->wsize = wsize ;
-      itv->maxlabel = maxlabel ;
+      itv->maxlabel = maxlabel ;*/
     }
     break;
  
@@ -431,6 +432,8 @@ pac_debug("Entering ITV_WRITE()") ;
 
     case GB:
     case GG: {
+      return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
+      /*
       itv_GX *p ;
 
       for(p = (itv_GX *)itv_get_head(itv); p; p=p->next) {
@@ -442,13 +445,14 @@ pac_debug("Entering ITV_WRITE()") ;
           fprintf(fd, "%d ", (unsigned char)p->B[j]) ;
         }
         fprintf(fd, "%d\n", (unsigned char)p->label) ;
-      }
+      }*/
     }
     break;
 
     case WKC:
     case WKF: {
-      itv_GX *p ;
+        return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
+      /*itv_GX *p ;
 
 #ifdef _DEBUG_
 pac_debug("Entering WKC or WKF") ;
@@ -463,7 +467,7 @@ pac_debug("Entering WKC or WKF") ;
           fprintf(fd, "%d ", p->B[j]) ;
         }
         fprintf(fd, "%d\n", p->label) ;
-      }
+      }*/
     }
     break;
 

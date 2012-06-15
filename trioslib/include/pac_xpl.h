@@ -5,7 +5,7 @@
 #define  LESS    -1
 #define  GREAT   1
 
-#include "pac_kernel.h"
+#include "trios_misc.h"
 
 typedef struct xpl_bb {
   unsigned int *wpat ;        /* pointer to w-pattern          */
