@@ -295,30 +295,6 @@ int             /*+ Purpose: check if some interval of a list contains a
             default label value otherwise                                  +*/
 
 
-int             /*+ Purpose: check if some interval of a list contains a
-                             w-pattern, and returns the respective label   +*/
-  itv_list_contain_wk(                                                                
-    itv_t  *itv,        /*+ In: the pointer to the list of intervals       +*/
-    char   *wpat,       /*+ In: the w-pattern                              +*/
-    int     wsize       /*+ In: w-pattern's size                           +*/
-    ) ;
-/*+ Return: the label of the interval that contains the w-pattern, or the
-            default label value otherwise                                  +*/
-
-
-
-int             /*+ Purpose: check if some interval of a list contains a
-                             w-pattern, and returns the respective label   +*/
-  itv_list_contain_gg(                                                                
-    itv_t  *itv,        /*+ In: the pointer to the list of intervals       +*/
-    unsigned char *wpat,/*+ In: the w-pattern                              +*/
-    int    wsize        /*+ In: w-pattern's size                           +*/
-    ) ;
-/*+ Return: the label of the interval that contains the w-pattern, or the
-            default label value otherwise                                  +*/
-
-
-
 itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
                              3:[empty,W-o])                                +*/
   itv_gen_itv(
