@@ -1,7 +1,8 @@
 #ifndef _io_header_h_
 #define _io_header_h_
 
- 
+#include <stdio.h>
+
 #define SIZECHAR 256
 
 typedef struct Header_type {

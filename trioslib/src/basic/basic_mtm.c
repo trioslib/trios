@@ -1,4 +1,4 @@
-#include <pacbasic.h>
+#include <trios.h>
 #include "trios_error.h"
 
  /*#define _DEBUG_

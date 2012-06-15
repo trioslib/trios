@@ -2,7 +2,7 @@
 /*  Date: Tue Aug  3 1999                                                   */
 /*  Mod: label type changed from char to int                                */
 
-#include <pacbasic.h>
+#include <trios.h>
 #include "trios_itv.h"
 
  /*#define _DEBUG_*/

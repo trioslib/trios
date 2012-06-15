@@ -1,5 +1,5 @@
-#include <pacbasic.h>
-/* 003 120 950 828 718 */
+#include <stdarg.h>
+#include <stdio.h>
 
 /*!
   Prints error messages. Works like printf.
