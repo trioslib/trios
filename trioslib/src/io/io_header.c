@@ -1,5 +1,5 @@
 #include <pacbasic.h>
-#include <pacio.h>
+#include <trios_io.h>
 #include "pacio_local.h"
 
 /* #define _DEBUG_ */

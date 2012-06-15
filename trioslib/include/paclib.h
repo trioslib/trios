@@ -31,7 +31,7 @@
 /* other toolbox includes go here */
 
 #include <pacbasic.h>
-#include <pacio.h>
+#include "trios_io.h"
 #include <paclearn.h>
 #include <trios_img.h>
 #include <xpl_collec.h>

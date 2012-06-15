@@ -1,63 +1,10 @@
-/*
- * Khoros: $Id: pacio.h,v 1.7 2001/04/10 21:01:38 nina Exp $
- */
- 
-/*
- * Copyright (C) 1993 - 1996, Khoral Research, Inc., ("KRI").
- * All rights reserved.  See $BOOTSTRAP/repos/license/License or run klicense.
- */
-
-
-/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> <<<<<<<<<<<<<<<<<<<<<<<<<<
-   >>>>
-   >>>>       Purpose: Definitions and prototypes for library pac_io
-   >>>>
-   >>>>       Toolbox: $PACLIB
-   >>>>
-   >>>>    Written By: Your name goes here!
-   >>>>
-   >>>>          Date: 
-   >>>>
-   >>>> Modifications:
-   >>>>
-   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> <<<<<<<<<<<<<<<<<<<<<<<<<< */
-
-#ifndef _pacio_h_
-#define _pacio_h_
-
-
-	/*-------------------------------------*
-	|       #defines
-	---------------------------------------*/
-
-
-	/*-------------------------------------*
-	|       #include
-	---------------------------------------*/
+#ifndef _trios_io_h_
+#define _trios_io_h_
 
 #include <io_header.h>
 #include <trios_img.h>
 #include <pac_mtm.h>
 #include <pac_itv.h>
-
-	/*-------------------------------------*
-	|       typedefs
-	---------------------------------------*/
-
-
-	/*-------------------------------------*
-	|       global variable declarations
-	---------------------------------------*/
-
-
-	/*-------------------------------------*
-	|       macros
-	---------------------------------------*/
-
-
-	/*-------------------------------------*
-	|       routine definitions
-	---------------------------------------*/
 
 /* ---- io_win.c ---------------------------------------------- */
 
@@ -268,29 +215,7 @@ int               /*+ Purpose: write an intervals set to a file +*/
 /*+ Return: 1 on success, 0 on failure                          +*/ ;
 
 
-/* --------- io_showitv.c ---------------------------------- */
-
-/*
-     -------------------------------------------
-     FUNCTION: lshowitv
-     -------------------------------------------
-*/
- 
-int             /*+ Purpose: show intervals (matrix patterns)         +*/
-  lshowitv(                                                                   
-    char *fname_i,    /*+ In: intervals' file name                    +*/
-    int  from,        /*+ In: range start                             +*/
-    int  to,          /*+ In: range end                               +*/
-    char *fname_o     /*+ In: output file                             +*/
-  ) ;
-/*+ Return: 1 on success, 0 on failure                                +*/
-
-
-	/* Ghostwriter Prototypes:  Do Not Erase This Comment */
-
-
-#endif /* _pacio_h_ */
-/* Don't add after this point */
+#endif
 
 
 
