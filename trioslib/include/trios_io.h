@@ -6,214 +6,120 @@
 #include "trios_mtm.h"
 #include "trios_itv.h"
 
-/* ---- io_win.c ---------------------------------------------- */
+/*!
+  Read a PGM image.
 
-/*
-     -------------------------------------------
-     FUNCTION: win_read
-     -------------------------------------------
-*/
-
-window_t *   /*+ Purpose: Reads a file with a description of the window  +*/
-  win_read(
-    char *fname  /*+ In: String with the name of the file                +*/ 
-  )
-/*+ Return: structure window_t on success, NULL on failure               +*/ ;
-
-
-/*
-     -------------------------------------------
-     FUNCTION: win_read_data
-     -------------------------------------------
-*/
-
-window_t *        /*+ Purpose: Reads a description of the window  +*/
-  win_read_data(
-     FILE *fd     /*+ In: file descriptor                         +*/ 
-  )
-/*+ Return: structure window_t on success, NULL on failure        +*/ ;
-
-
-/*
-     -------------------------------------------
-     FUNCTION: win_write
-     -------------------------------------------
-*/
-
-int         /*+ Purpose: Writes a file with a description of the window +*/  
-  win_write(
-    char *fname,  /*+ In: String with the name of the file              +*/ 
-    window_t *win /*+ In: Window data structure                         +*/
-  )
-/*+ Return: 1 on success, NULL on failure                               +*/ ;
-
-
-/*
-     -------------------------------------------
-     FUNCTION: win_write_data
-     -------------------------------------------
-*/
-
-void          /*+ Purpose: Writes a data description of the window  +*/
-  win_write_data(
-    FILE *fd,     /*+ In: String with the name of the file          +*/
-    window_t *win /*+ In: Window data structure                     +*/
-  )
-/*+ Return: nothing                                                 +*/ ;
-
-
-
-/* ------ io_imgset.c --------------------------- */
-
-/*
-     -------------------------------------------
-     FUNCTION: imgset_read
-     -------------------------------------------
-*/
-
-imgset_t *     /*+ Purpose: read an image collection file                  +*/ 
- imgset_read(
-   char *fname   /*+ In: Image collection's file name                      +*/
- ) ;
-/*+ Return: a pointer to a image set structure on success, NULL on failure +*/
-
-
-/*
-     -------------------------------------------
-     FUNCTION: imgset_write
-     -------------------------------------------
-*/
-
-int            /*+ Purpose: write an image set file               +*/ 
-  imgset_write(
-    char *fname,       /*+ In: file name                          +*/
-    imgset_t *imgset   /*+ In: imgset to be written               +*/
-  ) ;
-/*+ Return: 1 on success, 0 on failure                            +*/
-
-int            /*+ Purpose: Cretaes and writes an image set file  +*/ 
-  imgset_create_write(
-    char *fname,       /*+ In: IMGSET file name                   +*/
-    char *fname_obs,   /*+ In: observed image file name           +*/
-    char *fname_ide,   /*+ In: ideal image file name              +*/
-    char *fname_mask   /*+ In: (optional) mask image file name    +*/
-  ) ;
-
-/* ------ io_img.c ------------------------------- */
-
+  \param filename Path to the image file.
+  \return An img_t with the image.
+  */
 img_t *img_readPGM(char *filename);
-void img_writePGM(char *filename, img_t *i);
 
+/*!
+  Writes an image to a PGM file.
 
-/* ------ io_xpl.c ------------------------------- */
+  \param filename Path to save the image to.
+  \param img Image to be saved.
+  */
+void img_writePGM(char *filename, img_t *img);
 
-xpl_t *             /*+ Purpose: Read an examples file   +*/
-  xpl_read(
-    char *fname,    /*+ In: name of the file of examples      +*/
-    window_t **win /*+ Out: pointer to window structure      +*/
-    //apert_t  **apt  /*+ Out: pointer to an aperture structure +*/
-    ) ;
+/*!
+    Read an image collection from a file.
 
-int               /*+ Purpose: Write the examples file     +*/  
-  xpl_write(
-    char *fname,  /*+ In: Name of the file to be written   +*/
-    xpl_t *xpl,   /*+ In: Pointer to example structure     +*/
-    window_t *win/*+ In: Pointer to window structure      +*/
-    //apert_t  *apt /*+ In: Pointer to an aperture structure +*/
-    ) ;
-
-
-/* --------- io_showxpl.c ---------------------------------- */
-
-/*
-     -------------------------------------------
-     FUNCTION: lshowxpl
-     -------------------------------------------
+    \param fname Path to the file.
+    \return A pointer to the created image set, NULL on failure.
 */
-int                 /*+ Purpose: shows the elements of an example set +*/  
-  lshowxpl(
-    char *fname_i,    /*+ In: XPL file name                           +*/
-    int  select_type, /*+ In: type of examples to be showed
-                              1 : All
-                              2 : only conflicting ones
-                              3 : only non-conflicting ones           +*/
-    int  from,        /*+ In: range start                             +*/
-    int  to,          /*+ In: range end                               +*/
-    int  sort_type,   /*+ In: key to sorting :
-                              1 : regular (by w-pattern)
-                              2 : by frequency                        +*/
-    int  order_type,  /*+ In: ordering type :
-                              1 : ascendent
-                              2 : descendent                          +*/
-    char *fname_o     /*+ In: output XPL show file                    +*/
-  )
-/*+ Return: 1 on success, 0 on failure                                +*/ ;
 
-/* --------- io_showmtm.c ---------------------------------- */
+imgset_t *imgset_read(char *fname);
 
-/*
-     -------------------------------------------
-     FUNCTION: lshowmtm
-     -------------------------------------------
+/*!
+    Wrtie an image set to a file.
+
+    \param fname Filename.
+    \param imgset Image set.
+    \return 1 on success. 0 on failure.
 */
-int lshowmtm         /*+ Purpose: shows the elements of an mtm set +*/
-  (                                                                    
-    char *fname_i,         /*+ In: The input mtm file +*/
-    char *fname_o,         /*+ Out: Name of the outout file +*/
-    int from,        /*+ In: Range start +*/
-    int to           /*+ In: Range end +*/
-)
-/*+ Returns: 1 on success, 0 on failure +*/ ;
 
+int imgset_write(char *fname, imgset_t *imgset);
 
-/* ------ io_mtm.c ------------------------------- */
+/*!
+    Read an interval set from a file.
 
-mtm_t *           /*+ Purpose: Reads a miniterm collection file             +*/
-  mtm_read(
-    char *fname,    /*+ In:  name of the file of miniterms                  +*/
-    window_t **win /*+ Out: pointer to window structure                    +*/
-    //apert_t  **apt  /*+ Out: pointer to an aperture structure +*/
-    ) ;
+    \param fname File name.
+    \param win Window structure.
+    \return A pointer to a itv_t structure, NULL on failure.
+    \sa itv_t
+ */
 
-int                /*+ Purpose: Writes the miniterms collection to a file  +*/
-  mtm_write(
-    char *fname,     /*+ In: name of the file                              +*/
-    mtm_t *mtm,      /*+ In: pointer to  miniterm structure                +*/ 
-    window_t *win   /*+ In: pointer to window structure                   +*/
-    //apert_t  *apt    /*+ In: Pointer to an aperture structure +*/
-    ) ;
+itv_t *itv_read(char *fname, window_t **win/*, apert_t **apt*/);
 
+/*!
+    Write an interval set to a file.
 
-/* --------- io_itv.c -------------------*/
-
-/*
-     -------------------------------------------
-     FUNCTION: itv_read
-     -------------------------------------------
+    \param fname File name.
+    \param itv Interval set.
+    \param win Window.
+    \return 1 on success. 0 on failure.
 */
-itv_t *               /*+ Purpose: read an interval set from a file   +*/   
-  itv_read(
-    char     *fname,   /*+ In: file name                              +*/
-    window_t **win    /*+ Out: WINDOW structure                      +*/
-    //apert_t  **apt     /*+ Out: Pointer to an aperture structure      +*/
-  )
-/*+ Return: a pointer to a ITV structure on success, NULL on failure  +*/ ;
+int itv_write(char *fname, itv_t *itv, window_t *win /*apert_t *apt*/);
 
+/*!
+    Reads a classified examples set from a file.
 
-/*
-     -------------------------------------------
-     FUNCTION: itv_write
-     -------------------------------------------
+    \param fname File name.
+    \param win Window used.
+    \return A mtm_t structure or NULL on failure.
 */
-int               /*+ Purpose: write an intervals set to a file +*/
-  itv_write(
-    char  *fname,  /*+ In: file name                            +*/
-    itv_t *itv,    /*+ In: intervals set                        +*/
-    window_t *win /*+ In: window                               +*/
-    //apert_t  *apt  /*+ In: Pointer to an aperture structure +*/
-  )
-/*+ Return: 1 on success, 0 on failure                          +*/ ;
 
+mtm_t *mtm_read(char *fname, window_t **win/*, apert_t  **apt*/);
+
+/*!
+    Writes a classified examples set to a file.
+
+    \param fname File name.
+    \param mtm Classified examples structure.
+    \param win Window used.
+    \return 1 on success. 0 on failure.
+*/
+int mtm_write(char *fname, mtm_t *mtm, window_t *win/*, apert_t *apt*/);
+
+/*!
+    Read a window structure from a file.
+
+    \param fname File name.
+    \return Window read from file. NULL on failure.
+*/
+window_t *win_read(char *fname);
+
+/*!
+    Write a file with the window data.
+
+    \param fname File name.
+    \param win Window to write.
+    \return 1 on success. 0 on failure.
+*/
+int win_write(char *fname, window_t *win);
+
+
+/*!
+    Read an examples file.
+
+    \param fname File name.
+    \param win Window structure.
+    \return Pointer to the examples and window structure.
+*/
+
+xpl_t *xpl_read(char *fname, window_t **win/*, apert_t **apt*/);
+
+/*!
+    Write the examples file.
+
+    \param fname File name.
+    \param xpl Examples structure.
+    \param win Window structure.
+    \return 1 on success. 0 on failure.
+*/
+
+int xpl_write(char *fname, xpl_t *xpl, window_t *win/*, apert_t  *apt*/);
 
 #endif
 

@@ -12,6 +12,9 @@
 /*      to adequate to the structure changing.                             */
 
 
+window_t *win_read_data(FILE *fd);
+void win_write_data(FILE *fd, window_t *win);
+
 /*!
     Read a window structure from a file.
 
