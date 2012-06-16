@@ -15,135 +15,90 @@ typedef struct {
   char ***file ;       /*!< File names                     */
 } imgset_t ;
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_create
-     -------------------------------------------
+/*!
+    Create an image set structure.
+
+    \param ngroups Number of image groups.
+    \param grpsize Size of image groups.
+    \return A new image set.
 */
 
-imgset_t *     /*+ Purpose: create an image set structure                  +*/
-  imgset_create(
-    int ngroups,   /*+ In: number of image groups                          +*/
-    int grpsize    /*+ In: size of image groups                            +*/
-  ) ;
-/*+ Return: a pointer to the image set structure                           +*/
+imgset_t *imgset_create(int ngroups, int grpsize);
 
+/*!
+    Free IMGSET memory.
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_free
-     -------------------------------------------
+    \param imgset Pointer to the image set.
+*/
+void imgset_free(imgset_t *imgset);
+
+/*!
+   Get the number of groups in the image set.
+
+   \param imgset Pointer to the image set.
+   \return Number of groups in imgset.
 */
 
-void        /*+ Purpose: free image set memory area                        +*/
-  imgset_free(
-    imgset_t *imgset  /*+ In/Out: pointer to the image set                 +*/
-  ) ;
-/*+ Return: nothing                                                        +*/
+int imgset_get_ngroups(imgset_t *imgset);
 
+/*!
+    Get the size (number of images) of the groups.
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_get_ngroups
-     -------------------------------------------
+   \param imgset Pointer to the image set.
+   \return Number of images of groups.
+*/
+int imgset_get_grpsize(imgset_t *imgset);
+
+/*!
+    Get the i-th image file name from the k-th group.
+
+    \param imgset Pointer to image set.
+    \param i Image identifier.
+    \param k Group identifier.
+*/
+char *imgset_get_fname(imgset_t *imgset, int i, int k);
+
+/*!
+   Put image file name into i-th place of k-th group.
+
+   \param imgset Pointer to image set.
+   \param i Image identifier.
+   \param k Group identifier.
+   \param fname File name.
+   \return 1 on success. 0 on failure.
 */
 
-int            /*+ Purpose: get the number of groups in the image set      +*/
-  imgset_get_ngroups(
-    imgset_t *imgset    /*+ In: pointer to the image set                   +*/
-  ) ;
-/*+ Return: an integer (number of image groups)                            +*/
+int imgset_set_fname(imgset_t *imgset, int i, int k, char *fname);
 
+/*!
+    Get the i-th pathname.
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_get_grpsize
-     -------------------------------------------
+    \param imgset Pointer to image set.
+    \param i Group identifier.
+    \return The directory of the i-th group.
 */
 
-int         /*+ Purpose: get the size (number of images) of the groups     +*/
-  imgset_get_grpsize(
-    imgset_t *imgset           /*+ In: pointer to the image set            +*/
-  ) ;
-/*+ Return: an integer (the size of the image groups)                      +*/
+char *imgset_get_dname(imgset_t *imgset, int i);
 
+/*!
+    Set the i-th group directory path.
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_get_fname
-     -------------------------------------------
+    \param imgset Point to image set.
+    \param i Group identifier.
+    \param dir Path name.
+    \return 1 on success. 0 on failure.
 */
 
-char *      /*+ Purpose: get the i-th image file name from the k-th group  +*/
-  imgset_get_fname(
-    imgset_t *imgset, /*+ In: pointer to a image set                       +*/
-    int       i,      /*+ In: the image identifier                         +*/
-    int       k       /*+ In: the image group identifier                   +*/
-  ) ;
-/*+ Return: the i-th image file name from the k-th group                   +*/
+int imgset_set_dname(imgset_t *imgset, int i, char *dir);
+/*!
+    Get the full file name of the i-th image in the k-th group.
 
-
-/*
-     -------------------------------------------
-     FUNCTION: imgset_set_fname
-     -------------------------------------------
+    \param imgset Point to image set.
+    \param i Image identifier.
+    \param k Group identifier.
+    \return The full file name if it exists. NULL on error.
 */
 
-int              /*+ Purpose: put image file name into i-th place of k-th
-                              image group                                  +*/
-  imgset_set_fname(
-    imgset_t *imgset,   /*+ In/Out: pointer to the image set               +*/
-    int       i,        /*+ In: the image identifier                       +*/
-    int       k,        /*+ In: the identifier for the image group         +*/
-    char      *fname    /*+ In: image file name                            +*/
-  ) ;
-/*+ Return: 1 on success, 0 on failure +*/
-
-
-/*
-     -------------------------------------------
-     FUNCTION: imgset_get_dname
-     -------------------------------------------
-*/
-
-char *             /*+ Purpose: get the i-th pathname                      +*/
-  imgset_get_dname(
-    imgset_t *imgset,     /*+ In: pointer to the image set                 +*/
-    int      i            /*+ In: indication for the desired path name     +*/
-  ) ;
-/*+ Return: the i-th pathname on succes, NULL on failure                   +*/ 
-
-
-/*
-     -------------------------------------------
-     FUNCTION: imgset_set_dname
-     -------------------------------------------
-*/
-
-int               /*+ Purpose: put a path name into a image set            +*/
-  imgset_set_dname(
-    imgset_t *imgset,    /*+ In/Out: pointer to the image set              +*/
-    int      i,          /*+ In: indication for the path name to be set    +*/
-    char     *dir        /*+ In: the path name                             +*/
-  ) ;
-/*+ Return: 1 on success, 0 on failure                                     +*/
-
-
-/*
-     -------------------------------------------
-     FUNCTION: imgset_get_ffullname
-     -------------------------------------------
-*/
- 
-char *          /*+ Purpose: gets the full file name of the i-th image
-                             in the k-th image group                       +*/
-  imgset_get_ffullname(                                                       
-    imgset_t *imgset,  /*+ In: IMGSET structure                            +*/
-    int      i,        /*+ In: i-th image                                  +*/
-    int      k         /*+ In: k-th image group                            +*/
-) ;
-/*+ Return: the full file name of the i-th image in the k-th image group
-    if such image exists, or NULL otherwise                                +*/
-
+char *imgset_get_ffullname(imgset_t *imgset, int i, int k);
 
 #endif /* _trios_imgset_h_ */

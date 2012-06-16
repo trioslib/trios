@@ -1,39 +1,33 @@
 #ifndef _trios_error_h_
 #define _trios_error_h_
 
-/*===========================================================================\
-   pac_error.c
-\========================================================================== */
 
+/*!
+  Prints error messages. Works like printf.
 
-int        /*+ Purpose: Prints the error messages of the pac routines      +*/
-  trios_error( 
-    int type,              /*+ In: A flag
-                                   1 : print message
-                                   0 : do not print message                +*/
-    const char* format,          /*+ In: The error message and the arguments     +*/
-  ... ) ;
+  \param type A flag 1 : print message; 0 : do not print message.
+  \param format The error message and the arguments.
+  \param va_list Arguments to the error message (like printf).
+  \return Always return 0.
+*/
+int trios_error(int type, const char* format, ...);
 
+/*!
+  Prints fatal error messsages and exit. Works like printf.
 
+  \param type A flag 1 : print message; 0 : do not print message.
+  \param format The error message and the arguments.
+  \param va_list Arguments to the error message (like printf).
+*/
+void trios_fatal(const char* format, ...);
 
-void       /*+ Purpose: Prints the error messages of the pac routines     +*/
-  trios_fatal( 
-    const char* format,       /*+ In: The error message and the arguments       +*/
-    ... ) ;
+/*!
+  Prints debug messages. Works like printf.
 
-
-
-void            /*+ Purpose: print message for debigging purposes         +*/
-  trios_debug(                                                                  
-    const char* format,       /*+ In: The error message and the arguments       +*/
-  ... ) ;
-
-
-
-void            /*+ Purpose: print message for warning purposes           +*/
-  trios_warning(                                                                  
-    const char* format,       /*+ In: The warning message and the arguments     +*/
-    ... ) ;
-
+  \param type A flag 1 : print message; 0 : do not print message.
+  \param format The error message and the arguments.
+  \param va_list Arguments to the error message (like printf).
+*/
+void trios_debug(const char* format, ...);
 
 #endif
