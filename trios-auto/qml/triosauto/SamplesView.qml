@@ -9,6 +9,14 @@ Rectangle {
     anchors.fill: parent
     color: "#d5d5d5"
 
+    ListModel {
+        id: images
+
+        function add_sample(input, ideal) {
+            images.append({"input": input, "ideal": ideal});
+        }
+    }
+
     Rectangle {
         id: rectangle1
         width: 640
@@ -34,22 +42,49 @@ Rectangle {
                 var ideal = fileUtils.fileDialog("Choose the ideal image");
                 var mask = fileUtils.fileDialog("Choose the mask image (optional)");
                 if (input != "" && ideal != "") {
-                    console.log("Sample!");
+                    images.add_sample(input, ideal);
                 }
             }
         }
     }
 
-    Column {
-        id: column1
-        y: 281
-        height: 400
+    ListView {
+        clip: true
+        id: samples_quick_view
+        y: 320
+        height: 160
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+        anchors.left: parent.left
+        anchors.leftMargin: 20
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: parent.left
-        anchors.leftMargin: 0
+        orientation: ListView.Horizontal
+        delegate: Item {
+            x: 5
+            height: 40
+            width: 150
+            Column {
+                id: row1
+                spacing: 10
+                Image {
+                    width: 50
+                    height: 50
+                    source: input
+                }
+
+                Image {
+                    width: 50
+                    height: 50
+                    source: ideal
+                }
+
+                Text {
+                    text: index
+                }
+            }
+        }
+        model: images
     }
 
 }
