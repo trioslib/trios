@@ -12,8 +12,14 @@ Rectangle {
     ListModel {
         id: images
 
+        ListElement {
+            input: "/home/igor/sources/trioslib-code/bin/bin/test_img/input1.pgm"
+            ideal: "/home/igor/sources/trioslib-code/bin/bin/test_img/ideal1.pgm"
+        }
+
         function add_sample(input, ideal) {
             images.append({"input": input, "ideal": ideal});
+            console.log("APPEND");
         }
     }
 
@@ -60,10 +66,11 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 0
         orientation: ListView.Horizontal
+        model: images
         delegate: Item {
             x: 5
-            height: 40
-            width: 150
+            width: 70
+            height: parent.height
             Column {
                 id: row1
                 spacing: 10
@@ -83,8 +90,102 @@ Rectangle {
                     text: index
                 }
             }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    input_image.source = input;
+                    ideal_image.source = ideal;
+                }
+            }
         }
-        model: images
     }
+
+    Item {
+        id: flick_props
+        property int flickX: 0
+        property int flickY: 0
+    }
+
+    Flickable {
+        id: input_view_flick
+        x: 0
+        width: parent.width/2
+        boundsBehavior: Flickable.StopAtBounds
+        anchors.bottom: samples_quick_view.top
+        anchors.bottomMargin: 0
+        anchors.top: input_label.bottom
+        anchors.topMargin: 0
+        clip: true
+        contentWidth: input_image.width
+        contentHeight: input_image.height
+        contentX: flick_props.flickX
+        contentY: flick_props.flickY
+
+        onContentXChanged: {
+            flick_props.flickX = contentX;
+            input_view_flick.returnToBounds();
+        }
+
+        onContentYChanged: {
+            flick_props.flickY = contentY;
+            input_view_flick.returnToBounds();
+        }
+
+        Image {
+            id: input_image
+        }
+    }
+
+    Flickable {
+        id: ideal_view_flick
+        y: 0
+        anchors.right: parent.right
+        anchors.rightMargin: 0
+        anchors.left: input_view_flick.right
+        anchors.leftMargin: 0
+        anchors.top: ideal_label.bottom
+        anchors.topMargin: 0
+        anchors.bottom: samples_quick_view.top
+        anchors.bottomMargin: 0
+        clip: true
+        contentWidth: ideal_image.width
+        contentHeight: ideal_image.height
+        contentX: flick_props.flickX
+        contentY: flick_props.flickY
+
+        Image {
+            id: ideal_image
+        }
+
+        onContentXChanged: {
+            flick_props.flickX = contentX;
+            ideal_view_flick.returnToBounds();
+        }
+
+        onContentYChanged: {
+            flick_props.flickY = contentY;
+            ideal_view_flick.returnToBounds();
+        }
+    }
+
+    Text {
+        id: input_label
+        x: 20
+        y: 62
+        text: qsTr("Input Image")
+        font.pixelSize: 12
+    }
+
+    Text {
+        id: ideal_label
+        x: 381
+        text: qsTr("Ideal Image")
+        anchors.top: rectangle1.bottom
+        anchors.topMargin: 0
+        font.pixelSize: 12
+    }
+
+
 
 }
