@@ -1,7 +1,4 @@
-#include <paclib.h>
-#include <trios_win.h>
-#include "trios_io.h"
-
+#include <trios.h>
 
 #include "minunit.h"
 

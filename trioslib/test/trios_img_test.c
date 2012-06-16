@@ -1,5 +1,5 @@
-#include <paclib.h>
-#include <trios_img.h>
+#include <trios.h>
+
 #include "trios_io.h"
 
 #include "minunit.h"

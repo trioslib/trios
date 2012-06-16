@@ -22,7 +22,6 @@ int ldecision(char *fname_i, int comp_prob, double freqmin, double estim, int co
 /*  Date: Sun Feb 20 2000                                                   */
 /*  Mod: treatment of the undecidable cases (tie condition) fixed and       */
 /*       improved. New parameter comptype introduced                        */
-
     xpl_t    *xpl ;
     mtm_t    *mtm ;
     window_t *win ;

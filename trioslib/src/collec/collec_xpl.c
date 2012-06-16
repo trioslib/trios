@@ -1,4 +1,4 @@
-#include <paclib.h>
+#include <trios.h>
 #include <stdlib.h>
 
 xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int cv);

@@ -13,8 +13,11 @@
 #include <trios_appl.h>
 #include <trios_xpl.h>
 #include <trios_mtm.h>
+#include <trios_win.h>
+#include <trios_itv.h>
 #include <trios_collec.h>
 #include <trios_misc.h>
+#include <trios_learn.h>
 
 
 
