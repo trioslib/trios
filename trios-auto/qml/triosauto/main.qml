@@ -52,7 +52,9 @@ Item {
                 }
 
                 MenuItem {
+                    id: menu_samples
                     text: "Samples"
+                    image: "img/project.svg"
                     root_state: "samples"
                 }
 
@@ -89,6 +91,10 @@ Item {
             WindowView {
                 id: window_view
             }
+
+            SamplesView {
+                id: samples_view
+            }
         }
     }
     states: [
@@ -113,6 +119,11 @@ Item {
                 target: window_view
                 visible: false
             }
+
+            PropertyChanges {
+                target: samples_view
+                visible: false
+            }
         },
         State {
             name: "window"
@@ -133,6 +144,34 @@ Item {
             PropertyChanges {
                 target: welcome_view
                 visible: false
+            }
+
+            PropertyChanges {
+                target: samples_view
+                visible: false
+            }
+        },
+        State {
+            name: "samples"
+
+            PropertyChanges {
+                target: welcome_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: window_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: samples_view
+                visible: true
+            }
+
+            PropertyChanges {
+                target: menu_samples
+                state: "selected"
             }
         }
     ]
