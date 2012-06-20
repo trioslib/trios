@@ -42,7 +42,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
  * \param fname_i1 Image set file.
  * \param fname_i2 Window file.
  * \param maxgrey Maximum gray value.
- * \param output_format Format of the output. 0=XPL_OUTPUT, 1=SWT_OUTPUT.
+ * \param output_format Format of the output. Use XPL_OUTPUT or SWT_OUTPUT or (XPL_OUTPUT | SWT_OUTPUT) if both files are needed.
  * \param o1_fname Output file.
  * \return 1 on success. 0 on failure.
  */

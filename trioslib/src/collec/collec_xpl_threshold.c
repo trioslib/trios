@@ -178,17 +178,6 @@ colthresh_BB(unsigned short *s1,	/* + In: input image data + */
 }
 
 
-
-/*!
- Collect binary samples from a set of grayscale images.
-
- * \param fname_i1 Image set file.
- * \param fname_i2 Window file.
- * \param maxgrey Maximum gray value.
- * \param output_format Format of the output. 0=XPL_OUTPUT, 1=SWT_OUTPUT.
- * \param o1_fname Output file.
- * \return 1 on success. 0 on failure.
- */
 int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_format, char *o1_fname) {
 	/*
 	 * author: Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br) 
