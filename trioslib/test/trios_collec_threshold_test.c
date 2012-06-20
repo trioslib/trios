@@ -1,17 +1,6 @@
 #include <trios.h>
 #include "minunit.h"
 
-
-
-int                  /*+ Purpose: collect binary examples from a set of
-                          gray scale images.                        +*/
-  lcolthresh(
-    char *fname_i1,  /*+ In: IMGSET file                                    +*/
-    char *fname_i2,  /*+ In: WINSPEC file                                   +*/
-    int  maxgrey,    /*+ In: maximun gray level value                       +*/
-    char *o1_fname   /*+ Out: output XPL file                               +*/
-);
-
 TEST(test_pair1) {
     imgset_t *set = imgset_create(1, 2);
     imgset_set_fname(set, 1, 1, "./test_img/input1.pgm");
@@ -27,7 +16,7 @@ TEST(test_pair1) {
     win_write("WIN.w", win);
     win_free(win);
 
-    mu_assert("lcollec failed.", 1 == lcolthresh("IMGSET.s", "WIN.w", 255, "THRESH.xpl"));
+    mu_assert("lcollec failed.", 1 == lcollec_threshold("IMGSET.s", "WIN.w", 255, SWT_OUTPUT, "XPL.swt"));
 } TEST_END
 
 

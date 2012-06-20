@@ -2,6 +2,9 @@
 #include "trios_win.h"
 #include "trios_imgset.h"
 
+#define SWT_OUTPUT 1
+#define XPL_OUTPUT 0
+
 /**
     Reads three images from an IMGSET: the input image, the ideal image and the mask. If no mask is present,
     an img_t with all pixels set to 1 is returned.
@@ -32,6 +35,18 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
 
 */
 int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int  output_type, int  cv_flag, char *fname_o1, char *fname_o2);
+
+/*!
+ Collect binary samples from a set of grayscale images.
+
+ * \param fname_i1 Image set file.
+ * \param fname_i2 Window file.
+ * \param maxgrey Maximum gray value.
+ * \param output_format Format of the output. 0=XPL_OUTPUT, 1=SWT_OUTPUT.
+ * \param o1_fname Output file.
+ * \return 1 on success. 0 on failure.
+ */
+int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_format, char *o1_fname);
 
 /* Internal functions. */
 int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int cv_flag, char *log_file);
