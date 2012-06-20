@@ -3,7 +3,7 @@
 #include "trios_imgset.h"
 
 #define SWT_OUTPUT 1
-#define XPL_OUTPUT 0
+#define XPL_OUTPUT 2
 
 /**
     Reads three images from an IMGSET: the input image, the ideal image and the mask. If no mask is present,

@@ -342,16 +342,26 @@ int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_fo
 	trios_debug("End of image scanning");
 #endif
 
-    if (output_format == XPL_OUTPUT) {
-        if (!xpl_write(o1_fname, xpl, win)) {
+    if (output_format & XPL_OUTPUT == XPL_OUTPUT) {
+        char *ext = malloc(sizeof(char) * (strlen(o1_fname) + 4 + 1));
+        strcpy(ext, o1_fname);
+        strcat(ext, ".xpl");
+        if (!xpl_write(ext, xpl, win)) {
             imgset_free(imgset);
             win_free(win);
             free(offset);
             xpl_free(xpl);
+            free(ext);
             return trios_error(MSG, "lcollec : xpl_write() failed.");
         }
-    } else {
-        swt_write(o1_fname, xpl, win);
+        free(ext);
+    }
+    if (output_format & SWT_OUTPUT == SWT_OUTPUT) {
+        char *ext = malloc(sizeof(char) * (strlen(o1_fname) + 4 + 1));
+        strcpy(ext, o1_fname);
+        strcat(ext, ".swt");
+        swt_write(ext, xpl, win);
+        free(ext);
     }
 
 	/*

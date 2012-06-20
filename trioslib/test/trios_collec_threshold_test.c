@@ -16,7 +16,7 @@ TEST(test_pair1) {
     win_write("WIN.w", win);
     win_free(win);
 
-    mu_assert("lcollec failed.", 1 == lcollec_threshold("IMGSET.s", "WIN.w", 255, SWT_OUTPUT, "XPL.swt"));
+    mu_assert("lcollec failed.", 1 == lcollec_threshold("IMGSET.s", "WIN.w", 255, SWT_OUTPUT | XPL_OUTPUT, "XPL"));
 } TEST_END
 
 
