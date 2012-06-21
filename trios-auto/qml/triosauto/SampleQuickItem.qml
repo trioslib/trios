@@ -34,6 +34,7 @@ Item {
             ideal_image.source = ideal;
         }
     }
+
     Image {
         x: 47
         y: 0

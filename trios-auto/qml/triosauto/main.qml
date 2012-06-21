@@ -60,11 +60,6 @@ Item {
                 }
 
                 MenuItem {
-                    text: "Decision"
-                    root_state: "decision"
-                }
-
-                MenuItem {
                     image: "img/build.svg"
                     text: "Build"
                     root_state: "build"
@@ -135,6 +130,11 @@ Item {
                 target: project_view
                 visible: false
             }
+
+            PropertyChanges {
+                target: decision_view
+                visible: false
+            }
         },
         State {
             name: "window"
@@ -166,6 +166,11 @@ Item {
                 target: project_view
                 visible: false
             }
+
+            PropertyChanges {
+                target: decision_view
+                visible: false
+            }
         },
         State {
             name: "samples"
@@ -192,6 +197,11 @@ Item {
 
             PropertyChanges {
                 target: project_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: decision_view
                 visible: false
             }
         },
@@ -221,6 +231,11 @@ Item {
             PropertyChanges {
                 target: menu_project
                 state: "selected"
+            }
+
+            PropertyChanges {
+                target: decision_view
+                visible: false
             }
 
         }
