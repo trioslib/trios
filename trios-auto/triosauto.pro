@@ -37,21 +37,18 @@ symbian:TARGET.CAPABILITY += NetworkServices
 
 INCLUDEPATH += "../trioslib/include/"
 LIBPATH += "../bin/lib/"
-LIBS += ../bin/lib/libtriosbasic.a
-LIBS += -ltriosbasic
-LIBS += -ltriosappl
-LIBS += -ltriosio
-LIBS += -ltrioslearn
-LIBS += -ltrios_collec
+LIBS += -ltrios
 
 
 
 SOURCES += main.cpp \
-    fileutils.cpp
+    fileutils.cpp \
+    trios_to_qml.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
 qtcAddDeployment()
 
 HEADERS += \
-    fileutils.h
+    fileutils.h \
+    trios_to_qml.h

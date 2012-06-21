@@ -2,7 +2,7 @@
 PROJECT(TRIOS_APPL)
 SET(CMAKE_BUILD_TYPE debug)
 SET(TRIOS_APPL_SRCS
-appl_bb.c
+appl/appl_bb.c
 )
 ADD_LIBRARY(triosappl ${TRIOS_APPL_SRCS})
 
