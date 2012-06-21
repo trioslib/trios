@@ -60,16 +60,17 @@ Item {
                 }
 
                 MenuItem {
+                    id: menu_build
                     image: "img/build.svg"
                     text: "Build"
                     root_state: "build"
                 }
 
                 MenuItem {
+                    id: menu_apply
                     image: "img/play.svg"
                     text: "Apply"
                     root_state: "apply"
-                    enabled: false
                 }
             }
         }
@@ -94,6 +95,14 @@ Item {
 
             SamplesView {
                 id: samples_view
+            }
+
+            BuildView {
+                id: build_view
+            }
+
+            ApplyView {
+                id: apply_view
             }
 
         }
@@ -132,9 +141,15 @@ Item {
             }
 
             PropertyChanges {
-                target: decision_view
+                target: build_view
                 visible: false
             }
+
+            PropertyChanges {
+                target: apply_view
+                visible: false
+            }
+
         },
         State {
             name: "window"
@@ -168,9 +183,15 @@ Item {
             }
 
             PropertyChanges {
-                target: decision_view
+                target: build_view
                 visible: false
             }
+
+            PropertyChanges {
+                target: apply_view
+                visible: false
+            }
+
         },
         State {
             name: "samples"
@@ -201,9 +222,15 @@ Item {
             }
 
             PropertyChanges {
-                target: decision_view
+                target: build_view
                 visible: false
             }
+
+            PropertyChanges {
+                target: apply_view
+                visible: false
+            }
+
         },
         State {
             name: "project"
@@ -234,10 +261,90 @@ Item {
             }
 
             PropertyChanges {
-                target: decision_view
+                target: build_view
                 visible: false
             }
 
+            PropertyChanges {
+                target: apply_view
+                visible: false
+            }
+
+        },
+        State {
+            name: "build"
+
+            PropertyChanges {
+                target: build_view
+                visible: true
+            }
+
+            PropertyChanges {
+                target: menu_build
+                state: "selected"
+            }
+
+            PropertyChanges {
+                target: welcome_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: project_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: window_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: samples_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: apply_view
+                visible: false
+            }
+        },
+        State {
+            name: "apply"
+            PropertyChanges {
+                target: build_view
+                visible: true
+            }
+
+            PropertyChanges {
+                target: welcome_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: project_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: window_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: samples_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: apply_view
+                visible: true
+            }
+
+            PropertyChanges {
+                target: menu_apply
+                state: "selected"
+            }
         }
     ]
 }
