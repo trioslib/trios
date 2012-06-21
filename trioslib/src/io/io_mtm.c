@@ -1,5 +1,5 @@
-#include <pacbasic.h>
-#include <pacio.h>
+#include <trios.h>
+#include "trios_io.h"
 #include "pacio_local.h"
 
 /* #define _DEBUG_ */
@@ -25,20 +25,15 @@
 /*      Modifications were made to adequate to the structure changing.     */
 
 
-/*
-     -------------------------------------------
-     FUNCTION: mtm_read
-     -------------------------------------------
+/*!
+    Reads a classified examples set from a file.
+
+    \param fname File name.
+    \param win Window used.
+    \return A mtm_t structure or NULL on failure.
 */
 
-mtm_t *           /*+ Purpose: Reads a miniterm collection file             +*/
-  mtm_read(
-    char *fname,    /*+ In:  name of the file of miniterms                  +*/
-    window_t **win, /*+ Out: pointer to window structure                    +*/
-    apert_t  **apt  /*+ Out: pointer to an aperture structure +*/
-  )
-/*+ Return: Pointer to miniterm                                             +*/
-{
+mtm_t *mtm_read(char *fname, window_t **win/*, apert_t  **apt*/) {
 /*  author: Nina S. Tomita, R. Hirata Jr.   (nina@ime.usp.br)                */
 /*  date: Thu Oct 24 1996                                                    */
 
@@ -80,7 +75,7 @@ mtm_t *           /*+ Purpose: Reads a miniterm collection file             +*/
 pac_debug("Entering MTM_READ()") ;
 #endif
 
-  *apt = NULL ;
+  /**apt = NULL ;*/
   tags_read = 0 ;
   stop = 0 ;
   comp_prob = 0 ;
@@ -147,7 +142,7 @@ pac_debug("Entering MTM_READ()") ;
         return trios_error(1, "Aperture operators not supported yet.");
         /*if(NULL==(*apt = apert_read_data(fd))) {
         	fclose(fd) ;
-	        return (mtm_t *)pac_error(MSG, "mtm_read: apert_read_data() failed.") ;
+            return (mtm_t *)trios_error(MSG, "mtm_read: apert_read_data() failed.") ;
         }
         break ;*/
     }
@@ -177,13 +172,13 @@ pac_debug("Entering MTM_READ()") ;
           /*                  See Remark Above
           if((freqnode=freq_node_create(label, freq))==NULL) {
             free(wpat) ;
-            return (mtm_t *)pac_error(MSG,
+            return (mtm_t *)trios_error(MSG,
                    "mtm_read: freq_node_create() failed.") ;
           }
 	    
           if (!set_freq(freqnode, &freqlist)) {
             free(wpat) ;
-            return (mtm_t *)pac_error(MSG, "mtm_read: xpl_set_freq() failed.") ;
+            return (mtm_t *)trios_error(MSG, "mtm_read: xpl_set_freq() failed.") ;
           }
           */
         }
@@ -331,7 +326,8 @@ pac_debug("Case BB or BG") ;
     case WKGG2F:
     case WKGG2C:
     case GG3:
-
+        return trios_error(MSG, "Operator not supported");
+        /*
 #ifdef _DEBUG_
 pac_debug("Case GG") ;
 #endif
@@ -354,7 +350,7 @@ pac_debug("Case GG") ;
       }
 
       /* reading loop --------------------------------- */
-
+        /*
 #ifdef _DEBUG_
 pac_debug("Now it will read the minterms") ;
 #endif
@@ -362,7 +358,7 @@ pac_debug("Now it will read the minterms") ;
       for(i= 0; i<nmtm ; i++) {
   
 	/* read minterms --------------------------------------------------*/
-
+    /*
 	for(j=0; j < wsize; j++) {
 	  if(1 != fscanf(fd, "%d ", &value)) {
             free(wpat) ;
@@ -390,7 +386,7 @@ pac_debug("Now it will read the minterms") ;
           return (mtm_t *)trios_error(MSG, "mtm_read: mtm_GX_insert() failed.") ;
         }
       }
-      free(wpat) ;
+      free(wpat) ;*/
       break ;
       
     default:
@@ -411,21 +407,16 @@ pac_debug("Now it will get out") ;
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: mtm_write
-     -------------------------------------------
+/*!
+    Writes a classified examples set to a file.
+
+    \param fname File name.
+    \param mtm Classified examples structure.
+    \param win Window used.
+    \return 1 on success. 0 on failure.
 */
 
-int                /*+ Purpose: Writes the miniterms collection to a file  +*/
-  mtm_write(
-    char *fname,     /*+ In: name of the file                              +*/
-    mtm_t *mtm,      /*+ In: pointer to  miniterm structure                +*/ 
-    window_t *win,   /*+ In: pointer to window structure                   +*/ 
-    apert_t  *apt    /*+ In: Pointer to an aperture structure +*/
- )
-/*+ Return: 1 on success, 0 on failure                                     +*/ 
-{
+int mtm_write(char *fname, mtm_t *mtm, window_t *win/*, apert_t *apt*/) {
 /*  author: Nina S. Tomita, R. Hirata Jr.  (nina@ime.usp.br)                */
 /*  date: Thu Oct 24 1996                                                   */
 
@@ -462,7 +453,7 @@ int                /*+ Purpose: Writes the miniterms collection to a file  +*/
   header_t mtmHeader = { "MINTERM ", ""};
   FILE     *fd ;
   mtm_BX   *table_BX ;
-  mtm_GX   *table_GX ; 
+  /*mtm_GX   *table_GX ; */
   freq_node *freqlist ;
   unsigned int nmtm ;
   int      type, wzip, wsize, wsize1, freqsize ;
@@ -571,7 +562,7 @@ pac_debug("Header data writing: done") ;
 
     case GG:
     case GG3:
-
+        /*
       table_GX = (mtm_GX *)mtm->mtm_data ; 
 
       for (i = 0; i < nmtm; i++) {
@@ -580,14 +571,16 @@ pac_debug("Header data writing: done") ;
           fprintf(fd, "%d ", value);
         } 
 	fprintf(fd, "%d %d\n", table_GX[i].label, table_GX[i].fq);
-      }
+      }*/
+      trios_error(MSG, "Operator not supported");
       break ;
 
     case WKC:
     case WKF:
     case WK3F:
     case WK3C:
-
+        trios_error(MSG, "Operator not supported");
+        /*
       table_GX = (mtm_GX *)mtm->mtm_data ; 
 
       for (i = 0; i < nmtm; i++) {
@@ -595,31 +588,33 @@ pac_debug("Header data writing: done") ;
           fprintf(fd, "%d ", table_GX[i].wpat[j]);
         } 
 	fprintf(fd, "%d %d\n", table_GX[i].label, table_GX[i].fq);
-      }
+      }*/
       break ;
 
     case WKGG2F:
     case WKGG2C:
-
+        trios_error(MSG, "Operator not supported");
+        /*
       table_GX = (mtm_GX *)mtm->mtm_data ;
 
       wsize1 = win_get_band_wsize(win, 1) ;
 
       for (i = 0; i < nmtm; i++) {
-        /* print band R */
+        /* print band R
 	for (j = 0; j < wsize1; j++) {
           fprintf(fd, "%d ", table_GX[i].wpat[j]);
         } 
 
-        /* print band G */
+        /* print band G
         for(j=wsize1; j<wsize; j++) {
           value = (unsigned char)table_GX[i].wpat[j] ;
           fprintf(fd, "%d ", value);
         }
 
-        /* print label info */
+        /* print label info
 	fprintf(fd, "%d %d\n", table_GX[i].label, table_GX[i].fq);
       }
+      */
       break ;
 
     default:

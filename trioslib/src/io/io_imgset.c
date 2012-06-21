@@ -1,22 +1,18 @@
-#include <pacbasic.h>
-#include <pacio.h>
+#include <trios.h>
+#include "trios_io.h"
 #include "pacio_local.h"
 
 /* #define _DEBUG_ */
 
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_read
-     -------------------------------------------
+/*!
+    Read an image collection from a file.
+
+    \param fname Path to the file.
+    \return A pointer to the created image set, NULL on failure.
 */
 
-imgset_t *     /*+ Purpose: read an image collection file                  +*/ 
- imgset_read(
-   char *fname   /*+ In: Image collection's file name                      +*/
- )
-/*+ Return: a pointer to a image set structure on success, NULL on failure +*/
-{
+imgset_t *imgset_read(char *fname) {
 /*  author: Nina S. Tomita (nina@ime.usp.br)                                */
 /*  date: Mon Nov 25 1996                                                   */
 
@@ -141,19 +137,15 @@ pac_debug("ngroups=%d  grpsize=%d", ngroups, grpsize);
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_write
-     -------------------------------------------
+/*!
+    Wrtie an image set to a file.
+
+    \param fname Filename.
+    \param imgset Image set.
+    \return 1 on success. 0 on failure.
 */
 
-int            /*+ Purpose: write an image set file               +*/ 
-  imgset_write(
-    char *fname,       /*+ In: file name                          +*/
-    imgset_t *imgset   /*+ In: imgset to be written               +*/
-  )
-/*+ Return: 1 on success, 0 on failure                            +*/
-{
+int imgset_write(char *fname, imgset_t *imgset) {
 /*  author: Nina S. Tomita  (nina@ime.usp.br)                      */
 /*  date: Mon Nov 25 1996                                          */
 
@@ -210,21 +202,17 @@ int            /*+ Purpose: write an image set file               +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: imgset_create_write
-     -------------------------------------------
+/*!
+    Creates and writes an image set file.
+
+    \param fname Image set file name.
+    \param fname_obs Observed image file name
+    \param fname_ide Ideal image file name.
+    \param fname_mask Mask image file name.
+    \return 1 on success. 0 on failure.
 */
 
-int            /*+ Purpose: Cretaes and writes an image set file  +*/ 
-  imgset_create_write(
-    char *fname,       /*+ In: IMGSET file name                   +*/
-    char *fname_obs,   /*+ In: observed image file name           +*/
-    char *fname_ide,   /*+ In: ideal image file name              +*/
-    char *fname_mask   /*+ In: (optional) mask image file name    +*/
-  )
-/*+ Return: 1 on success, 0 on failure                            +*/
-{
+int imgset_create_write(char *fname, char *fname_obs, char *fname_ide, char *fname_mask) {
 /* author: Nina S. Tomita  (nina@ime.usp.br)                       */
 /* date: Tue Feb 22 2000                                           */
 

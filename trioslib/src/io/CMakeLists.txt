@@ -5,9 +5,9 @@ io_imgset.c
 io_img.c
 io_itv.c
 io_mtm.c
-
 io_win.c
 io_xpl.c
+io_xpl_swt.c
 )
 ADD_LIBRARY(triosio ${TRIOS_IO_SRCS})
 

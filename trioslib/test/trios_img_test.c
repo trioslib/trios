@@ -1,6 +1,6 @@
-#include <paclib.h>
-#include <pac_img.h>
-#include <pacio.h>
+#include <trios.h>
+
+#include "trios_io.h"
 
 #include "minunit.h"
 

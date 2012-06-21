@@ -1,6 +1,8 @@
 #ifndef _pac_mtm_h_
 #define _pac_mtm_h_
 
+#include "trios_misc.h"
+
 #define MODA               5 
 #define AVERAGE           10 
 #define MEDIAN            15
@@ -37,35 +39,31 @@
 /*       has been observed during sampling. fq1 keeps how many times        */
 /*       the label 1 was observed assigned to the w-pattern                 */
 
-
+/*!
+    Structure that holds a classified example for operators with binary input.
+ */
 typedef struct mtm_bx {
-  unsigned int   *wpat ;    /* pointer to w-pattern                       */
-  int            label ;    /* label attributed to the pattern            */
-  unsigned int   fq ;       /* frequency of w-pattern                     */
-  unsigned int   fq1 ;      /* frequency of w-pattern assigned to label 1 */
+  unsigned int   *wpat ;    /*!< pointer to w-pattern                       */
+  int            label ;    /*!< label attributed to the pattern            */
+  unsigned int   fq ;       /*!< frequency of w-pattern                     */
+  unsigned int   fq1 ;      /*!< frequency of w-pattern assigned to label 1 */
 } mtm_BX ;
 
-typedef struct mtm_gx {
-  char  *wpat ;             /* pointer to w-pattern             */
-  int   label ;             /* label attributed to the pattern  */
-  unsigned int fq ;         /* frequency of the w-pattern       */     
-} mtm_GX ;
 
+/*!
+    Structure that holds the classified examples table.
+  */
 typedef struct {
-  int    wsize ;       /* size of w-pattern                      */
-  char   type ;        /* type of examples: BB, BG, GB or GG     */
-  unsigned int nmtm ;  /* number of miniterms                    */
-  unsigned int nsum ;  /* total number of examples (sum of fq's) */
-  int    comp_prob ;   /* if 1, indicates that probabilities were computed */
-  freq_node *mtm_freq; /* pointer to list of frequencies */
-  int   *mtm_data ;    /* pointer to the table                   */
+  int    wsize ;       /*!< size of w-pattern                      */
+  char   type ;        /*!< type of examples: BB, BG, GB or GG     */
+  unsigned int nmtm ;  /*!< number of miniterms                    */
+  unsigned int nsum ;  /*!< total number of examples (sum of fq's) */
+  int    comp_prob ;   /*!< if 1, indicates that probabilities were computed */
+  freq_node *mtm_freq; /*!< pointer to list of frequencies */
+  int   *mtm_data ;    /*!< pointer to the table                   */
 } mtm_t ;
 
 
-
-/*===========================================================================\
-   pac_mtm.c
-\========================================================================== */
 
 /*
      -------------------------------------------
@@ -258,53 +256,6 @@ int                       /*+ Purpose: inserts a minterm in the table      +*/
 
 /*
      -------------------------------------------
-     FUNCTION: MTM_GX_insert 
-     -------------------------------------------
-*/
-int                       /*+ Purpose: inserts a minterm in the table      +*/
-  mtm_GX_insert(
-    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/ 
-    int index1,            /*+ In: insert position                          +*/
-    int wsize,            /*+ In: wpat size in bytes                       +*/
-    char *wpat,           /*+ In: w-pattern                                +*/
-    int label,            /*+ In: label of the inserted minterm            +*/
-    unsigned int fq       /*+ In: frequency of wpat                        +*/  
-) ;
-/*+ Return: 1 on success 0 on failure                                      +*/
-
-
-/*
-     -------------------------------------------
-     FUNCTION: mtm_GX_get_pattern
-     -------------------------------------------
-*/
- 
-char *          /*+ Purpose: Get a pattern from the table                  +*/
-  mtm_GX_get_pattern(                   
-    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/ 
-    int index1             /*+ In: pattern position                         +*/
-)
-/*+ Return: A char pointer to a pattern                                    +*/ ;
-
-
-
-
-/*
-     -------------------------------------------
-     FUNCTION: mtm_GX_get_label
-     -------------------------------------------
-*/
- 
-int            /*+ Purpose: Get the label of a  pattern from the table    +*/
-  mtm_GX_get_label(                   
-    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/ 
-    int index1             /*+ In: pattern position                         +*/
-)
-/*+ Return: the label of the pattern of the given position                 +*/ ;
-
-
-/*
-     -------------------------------------------
      FUNCTION: mtm_sep
      -------------------------------------------
 */
@@ -350,16 +301,6 @@ int             /*+ Purpose: Search examples table for a given wpat        +*/
     ) ;
 
 
-
-int             /*+ Purpose: Search examples table for a given wpat         +*/
-  mtm_search_wpat_GX(
-    unsigned int nmtm,  /*+ In: size of the table                           +*/ 
-    mtm_t       *mtm,   /*+ In: classified examples table                   +*/
-    char        *wpat,  /*+ In: wpattern                                    +*/
-    int          wsize  /*+ In: size of wpattern                            +*/
-    ) ;
-
-
 unsigned int    /*+ Purpose: Index mtm by frequencies                      +*/
   mtm_index_by_freq_count(                                                                  
     mtm_t *mtm_i,      /*+ In: classified examples set                     +*/
@@ -368,15 +309,6 @@ unsigned int    /*+ Purpose: Index mtm by frequencies                      +*/
 /*+ Return: 1 on success or 0 on failure                                   +*/
 
 
-unsigned int    /*+ Purpose: Index mtm by labels                               +*/
-  mtm_index_by_wklabel(                                                                  
-    int    ko,             /*+ In: output aperture                             +*/
-    mtm_t *mtm_i,          /*+ In: classified examples set                     +*/
-    unsigned int *labindx, /*+ Out: indexes to labels                          +*/
-    unsigned int *indexes, /*+ Out: vector of indexes                          +*/
-    unsigned int *lastlbl  /*+ Out: pointer to the last label                  +*/
-    ) ;
-/*+ Return: Number of labels on success or 0 on failure                        +*/
 
 #endif
 

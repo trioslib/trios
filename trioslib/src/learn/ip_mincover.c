@@ -1,5 +1,11 @@
-#include <paclib_kernel.h>
+#include "trios_win.h"
+#include "trios_itv.h"
+#include "trios_mtm.h"
+#include <trios_xpl.h>
 #include "paclearn_local.h"
+#include <stdio.h>
+
+
 
 /* #define _DEBUG_ */
 /* #define _DEBUG_2_ */

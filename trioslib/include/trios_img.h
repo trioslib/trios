@@ -1,5 +1,5 @@
-#ifndef PAC_IMG__
-#define PAC_IMG__
+#ifndef TRIOS_IMG__
+#define TRIOS_IMG__
 
 /*! Size of an unsigned char.*/
 #define sz8BIT sizeof(unsigned char) 

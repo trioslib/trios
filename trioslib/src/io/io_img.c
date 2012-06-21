@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include <pac_img.h>
-#include <pac_error.h>
+#include <trios_img.h>
+#include <trios_error.h>
 
 
 /*!

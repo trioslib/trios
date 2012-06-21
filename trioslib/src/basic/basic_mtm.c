@@ -1,4 +1,5 @@
-#include <pacbasic.h>
+#include <trios.h>
+#include "trios_error.h"
 
  /*#define _DEBUG_
  #define _DEBUG_2_*/
@@ -96,12 +97,13 @@ mtm_t *          /*+ Purpose: allocate a MTM structure                     +*/
   case WKGG2F:
   case WKGG2C:
   case GG3: {
-
+    trios_error(MSG, "Operator not supported");
+    /*
     if(!(mtm->mtm_data = (int *) malloc( sizeof(mtm_GX) * nmtm))) {
       free ( mtm ) ;
       return 
 	(mtm_t *)trios_error(1, "mtm_create: memory allocation error for mtm") ;
-    }
+    }*/
     break ;
   }
   
@@ -146,7 +148,7 @@ void                      /*+ Purpose: free memory area used MTM structure  +*/
 
   int i ;
   mtm_BX *table_BX ; 
-  mtm_GX *table_GX ;
+  /*mtm_GX *table_GX ;*/
 
   if (mtm==NULL) return ;
 
@@ -174,9 +176,11 @@ void                      /*+ Purpose: free memory area used MTM structure  +*/
       case WKGG2F:
       case WKGG2C:
       case GG3: {
+        trios_error(MSG, "Operator not supported");
+        /*
  	table_GX = (mtm_GX *)mtm->mtm_data ; 
         for (i = 0; i < mtm->nmtm; i++) 
-	  free( table_GX[i].wpat ) ;
+      free( table_GX[i].wpat ) ;*/
 	break;
       }	
 
@@ -499,125 +503,6 @@ int                       /*+ Purpose: inserts a minterm in the table      +*/
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: MTM_GX_insert 
-     -------------------------------------------
-*/
-int                       /*+ Purpose: inserts a minterm in the table      +*/
-  mtm_GX_insert(
-    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/ 
-    int index1,            /*+ In: insert position                          +*/
-    int wsize,            /*+ In: wpat size in bytes                       +*/
-    char *wpat,           /*+ In: w-pattern                                +*/
-    int label,            /*+ In: label of the inserted minterm            +*/
-    unsigned int fq       /*+ In: frequency of wpat                        +*/  
-)
-/*+ Return: 1 on success 0 on failure                                      +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 13 1997                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Aug 10 1999                                                   */
-/*  Mod: Inserted code to treat the list of frequencies                     */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Aug 19 1999                                                   */
-/*  Mod: changes regarding frequency information                            */
-
-  mtm_GX *p ;
-  freq_node *freqlist, *freqnode ;
-  int j ;
-
-  p = (mtm_GX *)mtm->mtm_data ;
-
-  freqlist = (freq_node *) mtm->mtm_freq ;
-
-  p[index1].wpat = (char *)malloc(sizeof(char)*wsize) ;
-  if(!p[index1].wpat) {
-    return trios_error(1, "Memory allocation failed.") ;
-  }
-
-#ifdef _DEBUG_
-trios_debug("index=%d", index1) ;
-trios_debug("mtm_gx_insert ") ;
-for (j=0;j<wsize;j++) {
-  trios_debug("wpat[%d]=%d", j, p[index1].wpat[j]) ;
-}
-trios_debug("with label = %d", label) ;
-#endif
-
-  for ( j = 0; j < wsize; j++) 
-    p[index1].wpat[j] = (char)wpat[j] ;
-
-  p[index1].label = label ;  /* Here we removed a cast to char */
-  p[index1].fq = fq ;        /* Aug 19, 1999 */
-  
-  if((freqnode = freq_node_create(label, 1))==NULL) {
-    return trios_error(MSG, "mtm_insert: freq_node_create() failed.") ;
-  }
-
-  set_freq(freqnode, &freqlist) ; /* Insert the node to the list */
-  mtm->mtm_freq = freqlist ;
-  mtm->nsum = mtm->nsum + fq ;
-
-  return(1) ;
-}
-
-
-/*
-     -------------------------------------------
-     FUNCTION: mtm_GX_get_pattern
-     -------------------------------------------
-*/
- 
-char *          /*+ Purpose: Get a pattern from the table                  +*/
-  mtm_GX_get_pattern(                   
-    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/ 
-    int index1             /*+ In: pattern position                         +*/
-)
-/*+ Return: A char pointer to a pattern                                    +*/
-{
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Thu Jan  8 1998                                                   */
-
-  mtm_GX *p ;
-
-  p = (mtm_GX *)mtm->mtm_data ;
-
-  return(p[index1].wpat) ;
-
-}
-
-
-
-
-/*
-     -------------------------------------------
-     FUNCTION: mtm_GX_get_label
-     -------------------------------------------
-*/
- 
-int             /*+ Purpose: Get the label of a  pattern from the table    +*/
-  mtm_GX_get_label(                   
-    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/ 
-    int index1             /*+ In: pattern position                         +*/
-)
-/*+ Return: the label of the pattern at the given position                 +*/
-{
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Thu Jan  8 1998                                                   */
-
-  mtm_GX *p ;
-
-  p = (mtm_GX *)mtm->mtm_data ;
-
-  return(p[index1].label) ;
-
-}
 
 
 /*
@@ -759,7 +644,7 @@ unsigned int    /*+ Purpose: Index mtm by frequencies                      +*/
   freq_node    *p, *q, *p_last, *qlist, *qmax, *q_last, *p_zero ;
 
   mtm_BX *bxdata ;
-  mtm_GX *gxdata ;
+  /*mtm_GX *gxdata ;*/
 
   nlabels = 0 ;
   p_zero = NULL ;
@@ -857,8 +742,8 @@ unsigned int    /*+ Purpose: Index mtm by frequencies                      +*/
 
   }
   else {
-
-    gxdata = (mtm_GX *)mtm_i->mtm_data ;
+    return trios_error(MSG, "Operator not supported");
+    /*gxdata = (mtm_GX *)mtm_i->mtm_data ;
       
     for (i = 0; i < nmtm; i++) {
       p = q ;
@@ -869,7 +754,7 @@ unsigned int    /*+ Purpose: Index mtm by frequencies                      +*/
 	  break ;
 	}
       }
-    }
+    }*/
   }
 
   return(1) ;
@@ -877,129 +762,6 @@ unsigned int    /*+ Purpose: Index mtm by frequencies                      +*/
 
 
 
-
-
-/*
-     -------------------------------------------
-     FUNCTION: mtm_index_by_wklabel
-     -------------------------------------------
-*/
- 
-unsigned int    /*+ Purpose: Index mtm by labels                               +*/
-  mtm_index_by_wklabel(                                                                  
-    int    ko,             /*+ In: output aperture                             +*/
-    mtm_t *mtm_i,          /*+ In: classified examples set                     +*/
-    unsigned int *labindx, /*+ Out: indexes to labels                          +*/
-    unsigned int *indexes, /*+ Out: vector of indexes                          +*/
-    unsigned int *lastlbl  /*+ Out: pointer to the last label                  +*/
-)
-/*+ Return: Number of labels on success or 0 on failure                        +*/
-{
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Sept 29 2000                                                  */
-
-  unsigned int i, nmtm, lastlab ;
-  unsigned int *labelstmp ;
-  freq_node    *p ;
-
-  mtm_BX *bxdata ;
-  mtm_GX *gxdata ;
-
-#ifdef _DEBUG_
-trios_debug( "mtm_index_by_label: starting routine");
-#endif
-
-  lastlab = 0 ;
- 
-  /* Get the freqlist and copy it */
-  p = mtm_get_freqlist(mtm_i) ;
-  nmtm = mtm_get_nmtm(mtm_i) ;
-
-  labelstmp = (unsigned int *)malloc(sizeof(int)*(2*ko+2)) ;
-  if(!labelstmp) {
-    return trios_error(1, "mtm_index_by_label: Memory allocation failed for indexes.") ;
-  }
- 
-  for (i=0 ; i < 2*ko+2; i++) {
-    labindx[i] = 0 ;
-    labelstmp[i] = 0 ;
-  }
-
-#ifdef _DEBUG_
-trios_debug( "before setting labindx nmtm = %d",nmtm);
-#endif
-  
-  while(p) {
-    labindx[p->label+ko] = p->freq ;
-    p = p->next ;
-  }
-
-  for (i= 2*ko+1; i > 0; i--) {
-    if (labindx[i] != 0) {
-      lastlab = i ;
-      break ;
-    }
-  }
-
-  labelstmp[1] = labindx[0] ;
-  /*  for (i=2 ; i <= lastlab; i++) {
-    labelstmp[i] = labelstmp[i-1] + labindx[i-1] ;
-  }
-  for (i=lastlab+1 ; i < 2*ko+2; i++) {
-    labelstmp[i] = labelstmp[lastlab] ;
-    } */
-
-  for (i=2 ; i < 2*ko+2; i++) {
-    labelstmp[i] = labelstmp[i-1] + labindx[i-1] ;
-  }
-
-  labindx[0] = 0 ;
-  for (i=1 ; i < 2*ko+2; i++) {
-    labindx[i] = labelstmp[i]  ;
-  }
-
-  /* build the indexes table of mtm                      */
-  /* indexes[indexes for label starts at] = i            */
-
-#ifdef _DEBUG_
-trios_debug( "before setting indexes");
-#endif
-
-#ifdef _DEBUG_
- for (i=0 ; i < 2*ko+2; i++) { 
-   trios_debug( "labelstmp[%d] = %d",i,labelstmp[i]);
- }
-#endif
-
-
-  if (mtm_get_type(mtm_i) == BG) {
-    bxdata = (mtm_BX *)mtm_i->mtm_data ;
-    for (i = 0; i < nmtm; i++) {
-      indexes[labelstmp[bxdata[i].label+ko]++] = i ;
-    }
-  }
-  else {
-    gxdata = (mtm_GX *)mtm_i->mtm_data ;
-    for (i = 0; i < nmtm; i++) {
-#ifdef _DEBUG_
-   trios_debug( "i = %d, label = %d, labelstmp[label] = %d",i,gxdata[i].label,labelstmp[gxdata[i].label+ko]);
-#endif
-      indexes[labelstmp[gxdata[i].label+ko]++] = i ;
-    }
-  }
-
-#ifdef _DEBUG_
-trios_debug( "Finished");
-    for (i = 0; i < nmtm; i++) {
-       trios_debug( "index[%d] = %d",i,indexes[i]) ;
-    }
-#endif
-
-  *lastlbl = lastlab ;
-
-  free(labelstmp) ;
-  return(1) ;
-}
 
 
 

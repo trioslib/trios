@@ -2,8 +2,8 @@
 /*  Date: Tue Aug  3 1999                                                   */
 /*  Mod: label type changed from char to int                                */
 
-#include <pacbasic.h>
-#include <pac_itv.h>
+#include <trios.h>
+#include "trios_itv.h"
 
  /*#define _DEBUG_*/
 
@@ -389,7 +389,7 @@ void            /*+ Purpose: free a intervals list                         +*/
 /* date: Fri Nov 29 1996                                                    */
 
   itv_BX *local_head, *p ;
-  itv_GX *local_head_gx, *q ;
+  /*itv_GX *local_head_gx, *q ;*/
 
   if((type==BB) || (type==BG)) {
     local_head = (itv_BX *)head ;
@@ -401,12 +401,13 @@ void            /*+ Purpose: free a intervals list                         +*/
   }
 
   if(type==GG) {
-    local_head_gx = (itv_GX *)head ;
+      return (itv_t *)trios_error(MSG, "Operator not supported") ;
+    /*local_head_gx = (itv_GX *)head ;
     while(local_head_gx) {
       q = local_head_gx->next ;
       itv_nodegx_free(local_head_gx) ;
       local_head_gx = q ;
-    }
+    }*/
   }
 
 }
@@ -431,31 +432,6 @@ void      /*+ Purpose: free memory area used by an interval of BX type     +*/
   free(p) ;
 }
 
-
-
-
-/*
-     -------------------------------------------
-     FUNCTION: itv_nodegx_free
-     -------------------------------------------
-*/
-
-void      /*+ Purpose: free memory area used by an interval of GX type     +*/
-  itv_nodegx_free(
-    itv_GX  *p               /*+ In: pointer to the interval               +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Jul 14 2000                                                    */
-
-  free(p->A) ;
-  free(p->B) ;
-  if (p->plabels) {
-    free(p->plabels) ;
-  }
-  free(p) ;
-}
 
 
 
@@ -506,53 +482,6 @@ itv_BX *           /*+ Purpose: create an interval of BX type              +*/
 
 /*
      -------------------------------------------
-     FUNCTION: itv_nodegx_create
-     -------------------------------------------
-*/
-
-itv_GX *           /*+ Purpose: create an interval of GX type              +*/
-  itv_nodegx_create(
-    int  wsize               /*+ In: size of a w-pattern                   +*/
-  )
-/*+ Return: pointer to an interval of GX type                              +*/
-{
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Jul 14 2000                                                    */
-
-  itv_GX *p ;
-
-  p = (itv_GX *)malloc(sizeof(itv_GX)) ;
-  if(p == NULL) {
-    return (itv_GX *)trios_error(1, "Memory allocation failed.") ;
-  }
-
-  p->A = (char *)malloc(sizeof(char)*wsize) ;
-  if(p->A == NULL) {
-    free(p) ;
-    return (itv_GX *)trios_error(1, "Memory allocation failed.") ;
-  }
-
-  p->B = (char *)malloc(sizeof(char)*wsize) ;
-  if(p->B == NULL) {
-    free(p->A) ;
-    free(p) ;
-    return (itv_GX *)trios_error(1, "Memory allocation failed.") ;
-  }
-
-  p->plabels = NULL ;
-  p->label = 0 ;
-  p->size = 0 ;   /* added on Oct 31, 2000 - Nina */
-  p->next = NULL ;
-  p->nindexes = 0 ;
-  return(p) ;
-
-}
-
-
-
-
-/*
-     -------------------------------------------
      FUNCTION: itvbx_set
      -------------------------------------------
 */
@@ -585,69 +514,6 @@ void     /*+ Purpose: set some data  of an interval                        +*/
 
 }
 
-
-
-/*
-     -------------------------------------------
-     FUNCTION: itvgx_set
-     -------------------------------------------
-*/
-
-void     /*+ Purpose: set some data  of an interval                        +*/
-  itvgx_set(
-    itv_GX *p,         /*+ In/Out: pointer to the interval                 +*/
-    char *A,           /*+ In: left extremity of the interval              +*/
-    char *B,           /*+ In: right extremity of the interval             +*/
-    int    wsize,      /*+ In: compacted size of w-pattern                 +*/
-    int    label,      /*+ In: label assigned to the interval              +*/
-    double size,       /*+ In: size of the interval                        +*/
-    int    nindexes,   /*+ In: number of indexes                           +*/
-    int   *plabels,    /*+ In: pointer to indexes                          +*/
-    itv_GX *next       /*+ In: if the interval is linked in a list of
-                               intervals, this must be the pointer to the
-                               next interval                               +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Jul 14 2000                                                    */
-
-  int i ;
-
-  for(i=0; i<wsize; i++) {
-    p->A[i] = A[i] ;
-    p->B[i] = B[i] ;
-  }
-
-  p->label = label ;
-  p->size = size ;         /* added on Oct 31, 2000 - Nina */
-  p->next = next ;
-  p->nindexes = nindexes ;
-  p->plabels = plabels ;
-
-}
-
-
-
-/*
-     -------------------------------------------
-     FUNCTION: itv_set_indexes
-     -------------------------------------------
-*/
-
-void      /*+ Purpose: set the number of intervals in a ITV_GX structure   +*/
-  itv_set_nindexes(
-    itv_GX *itvgx,  /*+ In/Out: pointer to the ITV_GX structure            +*/
-    int   nindexes  /*+ In: number of indexes                              +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/*  date: Sun Oct  1 2000                                                   */
-
-  itvgx->nindexes = nindexes ;
-
-}
 
 
 
@@ -689,35 +555,6 @@ int             /*+ Purpose: compute the dimension of an interval          +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: itvgx_size
-     -------------------------------------------
-*/
-
-double              /*+ Purpose: compute the size of a gray-scale interval +*/
-  itvgx_size(
-    itv_GX *p,         /*+ In: the interval                                +*/
-    int    wsize       /*+ In: w-pattern's size                            +*/
-  )
-/*+ Return: an integer between 0 and maximum size. It assumes that input
-            interval is a valid one.                                       +*/
-{
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Oct 31 2000                                                    */
-
-  double size ;
-  int    i ;
-
-  size = 1 ;
-  for(i=0; i<wsize; i++) {
-    size = size * ((double)p->B[i] - (double)p->A[i] + 1.0) ;
-  }
-
-  return(size) ;
-}
-
-
 
 /*
      -------------------------------------------
@@ -751,36 +588,6 @@ int             /*+ Purpose: check if two intervals are identical          +*/
 
 
 
-
-/*
-     -------------------------------------------
-     FUNCTION: itv_equal_GX
-     -------------------------------------------
-*/
-
-int             /*+ Purpose: check if two intervals are identical          +*/
-  itv_equal_GX(
-    itv_GX *itv1,      /*+ In: first interval                              +*/
-    itv_GX *itv2,      /*+ In: second interval                             +*/
-    int     wsize      /*+ In: w-pattern's size                            +*/
-)
-/*+ Return: 1 if they are equal, 0 otherwise                               +*/
-{
-/* date: Fri Jul 14 2000                                                    */
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-
-
-  int i ;
-
-  for(i=0; i<wsize; i++) {
-    if((itv1->A[i] != itv2->A[i]) || (itv1->B[i] != itv2->B[i])) {
-      return(0) ;
-    }
-  }
-
-  return(1) ;
-
-}
 
 
 
@@ -890,7 +697,7 @@ itv_t *         /*+ Purpose: separate all intervals, with a given label, from
 
   itv_t *itv_new ;
   itv_BX *p1, *tmp ;
-  itv_GX *pgx, *tmp_gx ;
+  /*itv_GX *pgx, *tmp_gx ;*/
   int type ;
 
   type = itv_get_type(itv) ;
@@ -923,8 +730,8 @@ itv_t *         /*+ Purpose: separate all intervals, with a given label, from
   }
 
   if ((type == GG)||(type == WKC)||(type == WKF)) {
-
-    pgx = (itv_GX *)itv->head ;
+    return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
+    /*pgx = (itv_GX *)itv->head ;
     itv->head = (int *)NULL ;
 
     while(pgx) {
@@ -942,7 +749,7 @@ itv_t *         /*+ Purpose: separate all intervals, with a given label, from
       }
       // TODO: maybe it should be 'tmp_gx' instead pf 'tmp'
       pgx = tmp ;
-    }
+    }*/
 
   }
 
@@ -1020,141 +827,6 @@ int             /*+ Purpose: sort intervals according to its dimension +*/
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: itvgx_sort
-     -------------------------------------------
-*/
-
-int       /*+ Purpose: sort gray-scale intervals according to its size +*/
-  itvgx_sort(
-    itv_GX **p_list,  /*+ In/Out: list of intervals                    +*/
-    int    wsize      /*+ In: size of w-patterns                       +*/
-  )
-/*+ Return: 1 on success, 0 on failure                                 +*/
-{
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)              */
-/* date: Tue Oct 31 2000                                                */
-
-  itv_GX **p_vector, **p_vector2 ;
-  itv_GX *p, *p_tmp ;
-  int    i, j ;
-  double ii ;
-
-#ifdef _DEBUG_
-  trios_debug("itvgx_sort: entered") ;
-#endif
-
-  /* create an auxiliar structure */
-  if( !(p_vector=(itv_GX **)malloc( (1000)*sizeof(itv_GX *))) ) {
-    return trios_error(1, "Memory allocation failed.") ;
-  }
-
-  for(i=0; i<1000; i++) {
-    p_vector[i] = NULL ;
-  }
-
-  p = *p_list ;
-  *p_list = NULL ;
-
-  /* p_vector[i] will contain intervals with size between (i+1) and (i+1)*10 */
-  while(p != NULL) {
-
-
-    ii = (p->size-1)/10 ;
-    /*
-    i = p->size-1 ;
-    if (i<0) trios_debug("psize=%d", p->size);
-    */
-    i = (int)ii ;
-    p_tmp = p->next ;
-    if(i<999) {
-      p->next = p_vector[i] ;
-      p_vector[i] = p ;
-    }
-    else {
-      p->next = p_vector[999] ;
-      p_vector[999] = p ;
-    }
-    p = p_tmp ;
-  }
-
-
- /* reorganize the intervals list putting that have lower dimension
-     at the end of the list and so on.                               */
-
-  /* create another auxiliar structure */
-  /*
-  if( !(p_vector2=(itv_GX **)malloc( 100*sizeof(itv_GX *))) ) {
-    return trios_error(1, "Memory allocation failed.") ;
-  }
-
-  for(i=0; i<999; i++) {
-    for(j=0; j<100; j++) {
-      p_vector2[j] = NULL ;
-    }
-
-    p = p_vector[i] ;
-    if(p) {
-      while(p != NULL) {
-	ii = (p->size-1)%100 ;
-        j = (int)ii ;
-	p_tmp = p->next ;
-	p->next = p_vector2[j] ;
-	p_vector2[j] = p ;
-	p = p_tmp ;
-      }
-
-      for(j=0; j<100; j++) {
-	p = p_vector2[j] ;
-	if(p) {
-	  while(p->next != NULL) {
-	    p = p->next ;
-	  }
-	  p->next = *p_list ;
-	  *p_list = p_vector2[j] ;
-	}
-      }
-    }
-  }
-
-  p = p_vector[999] ;
-  if(p) {
-    trios_debug("P IS NOt NULL *****************") ;
-    while(p->next != NULL) {
-      p = p->next ;
-    }
-    p->next = *p_list ;
-    *p_list = p_vector[999] ;
-  }
-  */
-
-
-  for(i=0; i<1000; i++) {
-    p = p_vector[i] ;
-    j = 1 ;
-    if(p) {
-      while(p->next != NULL) {
-	p = p->next ;
-	j++ ;
-      }
-      p->next = *p_list ;
-      *p_list = p_vector[i] ;
-      p_vector[i]=NULL ;
-    }
-  }
-
-  free(p_vector) ;
-  /*  free(p_vector2) ;*/
-
-
-#ifdef _DEBUG_
-    trios_debug("itvgx_sort: leaving") ;
-#endif
-
-  return(1) ;
-}
-
 
 /*
      -------------------------------------------
@@ -1190,109 +862,6 @@ int             /*+ Purpose: check if an interval contains a w-pattern     +*/
   return(1) ;
 }
 
-
-
-
-
-/*
-     -------------------------------------------
-     FUNCTION: itv_contain_gx
-     -------------------------------------------
-*/
-
-int             /*+ Purpose: check if an interval contains a w-pattern     +*/
-  itv_contain_gx(
-    itv_GX *p,           /*+ In: the pointer to the interval               +*/
-    unsigned char *wpat, /*+ In: the w-pattern                             +*/
-    int    wsize         /*+ In: w-pattern's size                          +*/
-)
-/*+ Return: 1 if the w-pattern is contained in the interval, 0 otherwise   +*/
-{
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/*  date: Sat Sep 30 2000                                                   */
-
-  int  i ;
-
-  for(i=0; i<wsize; i++) {
-    if(wpat[i] < (unsigned char) p->A[i]) {
-      return(0) ;
-    }
-    if(wpat[i] > (unsigned char) p->B[i]) {
-      return(0) ;
-    }
-  }
-  return(1) ;
-}
-
-
-
-
-
-/*
-     -------------------------------------------
-     FUNCTION: itv_contain_wk
-     -------------------------------------------
-*/
-
-int             /*+ Purpose: check if an interval contains a w-pattern     +*/
-  itv_contain_wk(
-    itv_GX *p,         /*+ In: the pointer to the interval               +*/
-    char   *wpat,      /*+ In: the w-pattern                             +*/
-    int     wsize      /*+ In: w-pattern's size                          +*/
-)
-/*+ Return: 1 if the w-pattern is contained in the interval, 0 otherwise   +*/
-{
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/*  date: Sat Sep 30 2000                                                   */
-
-  int  i ;
-
-  for(i=0; i<wsize; i++) {
-    if(wpat[i] < (char) p->A[i]) {
-      return(0) ;
-    }
-    if(wpat[i] > (char) p->B[i]) {
-      return(0) ;
-    }
-  }
-  return(1) ;
-}
-
-
-
-
-/*
-     -------------------------------------------
-     FUNCTION: itv_contain_nodewk
-     -------------------------------------------
-*/
-
-int             /*+ Purpose: check if an interval contains a wk interval +*/
-  itv_contain_nodewk(
-    itv_GX *p,         /*+ In: the pointer to the interval               +*/
-    itv_GX *p_test,    /*+ In: the pointer to the interval to be tested  +*/
-    int     wsize      /*+ In: w-pattern's size                          +*/
-)
-/*+ Return: 1 if the wk-interval is contained in the interval, 0 otherwise +*/
-{
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                */
-/*  date: Tue Oct  3 2000                                                 */
-
-  int  i ;
-
-  for(i=0; i<wsize; i++) {
-    if((char) p_test->A[i] < (char) p->A[i]) {
-      return(0) ;
-    }
-    if((char) p_test->B[i] > (char) p->B[i]) {
-      return(0) ;
-    }
-  }
-  return(1) ;
-}
 
 
 
@@ -1342,7 +911,8 @@ int             /*+ Purpose: given an interval set and a label "old_label",
     case GG :
     case WKC :
     case WKF : {
-      itv_GX *p ;
+      return trios_error(MSG, "Operator not supported") ;
+      /*itv_GX *p ;
 
       p = (itv_GX *)itv->head ;
 
@@ -1351,7 +921,7 @@ int             /*+ Purpose: given an interval set and a label "old_label",
           p->label = new_label ;
         }
         p = p->next ;
-      }
+      }*/
     }
     break ;
   }
@@ -1415,106 +985,6 @@ int             /*+ Purpose: check if some interval of a list contains a
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: itv_list_contain_gg
-     -------------------------------------------
-*/
-
-int             /*+ Purpose: check if some interval of a list contains a
-                             w-pattern, and returns the respective label   +*/
-  itv_list_contain_gg(
-    itv_t  *itv,        /*+ In: the pointer to the list of intervals       +*/
-    unsigned char *wpat,/*+ In: the w-pattern                              +*/
-    int    wsize        /*+ In: w-pattern's size                           +*/
-)
-/*+ Return: the label of the interval that contains the w-pattern, or the
-            default label value otherwise                                  +*/
-{
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri 14 Jul 2000                                                    */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Sep 21 2000                                                   */
-/*  Mod: Changed wpat char to unsigned char                                 */
-
-  int    label ;
-  int    i ;
-  itv_GX *p ;
-
-  p = (itv_GX *)itv->head ;
-  label = NOT_A_LABEL ;
-
-  while(p && (label==NOT_A_LABEL)) {
-
-    label = p->label ;
-
-    for(i=0; i<wsize; i++) {
-      if(wpat[i] < (unsigned char) p->A[i]) {
-        label = NOT_A_LABEL ;
-        break ;
-      }
-      if(wpat[i] > (unsigned char) p->B[i]) {
-        label = NOT_A_LABEL ;
-        break ;
-      }
-    }
-    p = p->next ;
-  }
-
-  if(label == NOT_A_LABEL) {
-    return(itv->deflabel) ;
-  }
-  else {
-    return(label) ;
-  }
-}
-
-
-
-
-
-
-/*
-     -------------------------------------------
-     FUNCTION: itv_list_contain_wk
-     -------------------------------------------
-*/
-
-int             /*+ Purpose: check if some interval of a list contains a
-                             w-pattern, and returns the respective label   +*/
-  itv_list_contain_wk(
-    itv_t  *itv,        /*+ In: the pointer to the list of intervals       +*/
-    char   *wpat,       /*+ In: the w-pattern                              +*/
-    int    wsize        /*+ In: w-pattern's size                           +*/
-)
-/*+ Return: the label of the interval that contains the w-pattern, or the
-            default label value otherwise                                  +*/
-{
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri 14 Jul 2000                                                    */
-
-  int    label ;
-  int    i ;
-  itv_GX *p ;
-
-  p = (itv_GX *)itv->head ;
-
-  while(p) {
-    if (itv_contain_wk(p,wpat,wsize)) {
-      label = p->label ;
-      break ;
-    }
-    p = p->next ;
-  }
-  return(label) ;
-}
-
-
-
-
 
 /*
      -------------------------------------------
@@ -1564,7 +1034,7 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
   unsigned  int *A, *B ;
   itv_t     *itv ;
   itv_BX    *p ;
-  itv_GX    *pg ;
+  /*itv_GX    *pg ;*/
 
 #ifdef _DEBUG_
     trios_debug("itv_gen_itv: entered") ;
@@ -1643,7 +1113,8 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
       break ;
 
     case GG:
-      /* allocates space for the patterns of the interval [A,B] */
+      return trios_error(MSG, "Operator not supported") ;
+      /* allocates space for the patterns of the interval [A,B]
       if((Ag = (char *)malloc(sizeof(char)*wsize)) == NULL) {
 	return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
       }
@@ -1656,28 +1127,30 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
 	Bg[i] = 255 ;
       }
 
-      /* create structure to hold the interval */
+      /* create structure to hold the interval *//*
       if(NULL==(itv = itv_create(wsize, map_type, def_label))) {
 	win_free(win) ;
 	return (itv_t *)trios_error(MSG, "itv_gen_itv: itv_create() failed.") ;
       }
 
-      /* the itv_t structure will contain, actually, just one interval */
+      /* the itv_t structure will contain, actually, just one interval *//*
       pg = itv_nodegx_create(wsize) ;
       itvgx_set(pg, Ag, Bg, wsize, label, 0, 0, NULL, (itv_GX *)(itv->head)) ;
-      pg->size = itvgx_size(pg, wsize) ; /* added on Oct 31, 2000 - Nina */
+      pg->size = itvgx_size(pg, wsize) ; /* added on Oct 31, 2000 - Nina
       itv->head = (int *)pg ;
       itv->nitv = 1 ;
 
-      free(Ag); free(Bg) ;
+      free(Ag); free(Bg) ;*/
       break ;
 
     case WKC:
     case WKF:
+      return trios_error(MSG, "Operator not supported") ;
+      /*
 #ifdef _DEBUG_
     trios_debug("itv_gen_itv: WKC or WKF entered") ;
 #endif
-      /* allocates space for the patterns of the interval [A,B] */
+      /* allocates space for the patterns of the interval [A,B] *//*
       if((Ag = (char *)malloc(sizeof(char)*wsize)) == NULL) {
 	return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
       }
@@ -1696,17 +1169,17 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
       }
 #endif
 
-      /* create structure to hold the interval */
+      /* create structure to hold the interval *//*
       if(NULL==(itv = itv_create(wsize, map_type, def_label))) {
 	win_free(win) ;
 	return (itv_t *)trios_error(MSG, "itv_gen_itv: itv_create() failed.") ;
       }
 
-      /* the itv_t structure will contain, actually, just one interval */
+      /* the itv_t structure will contain, actually, just one interval *//*
 
       pg = itv_nodegx_create(wsize) ;
       itvgx_set(pg, Ag, Bg, wsize, label, 0, 0, NULL, (itv_GX *)(itv->head)) ;
-      pg->size = itvgx_size(pg, wsize) ; /* added on Oct 31, 2000 - Nina */
+      pg->size = itvgx_size(pg, wsize) ; /* added on Oct 31, 2000 - Nina *//*
       itv->head = (int *)pg ;
       itv->nitv = 1 ;
 
@@ -1715,7 +1188,7 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
 #ifdef _DEBUG_
     trios_debug("itv_gen_itv: WKC or WKF out") ;
 #endif
-
+        */
       break ;
 
     default:

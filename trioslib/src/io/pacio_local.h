@@ -86,37 +86,6 @@ void             /*+ Purpose: Write a BB examples file                       +*/
     ) ;
 
 
-void             /*+ Purpose: Write a BG examples file                       +*/
-  xpl_BG_write_tree(
-    FILE *fd,    /*+ In: file descriptor where the examples will be written  +*/
-    xpl_BG *p,   /*+ In: Pointer to the examples tree                        +*/
-    int wzip     /*+ In: Number of bytes used by the compacted window        +*/
-    ) ;
-
-
-void             /*+ Purpose: Write a GG examples file                       +*/
-  xpl_GG_write_tree(
-    FILE *fd,    /*+ In: file descriptor where the examples will be written  +*/
-    xpl_GG *p,   /*+ In: Pointer to the examples tree                        +*/
-    int wsize    /*+ In: Number of bytes used by the compacted window        +*/
-    ) ;
-
-
-void             /*+ Purpose: Write a GG examples file                       +*/
-  xpl_WK_write_tree(
-    FILE *fd,    /*+ In: file descriptor where the examples will be written  +*/
-    xpl_GG *p,   /*+ In: Pointer to the examples tree                        +*/
-    int wsize    /*+ In: Number of bytes used by the compacted window        +*/
-    ) ;
-
-
-void             /*+ Purpose: Write WKGG examples                            +*/
-  xpl_WKGG_write_tree(
-    FILE   *fd,   /*+ In: file descriptor where the examples will be written +*/
-    xpl_GG *p,    /*+ In: Pointer to the examples tree                       +*/
-    int    wsize1,/*+ In: w-pattern size of band 1                           +*/
-    int    wsize  /*+ In: w-pattern size                                     +*/
-    ) ;
 
 
 
@@ -173,35 +142,7 @@ int
     int   to           /*+ In: range end                                +*/
   ) ;
 
-int      /*+ Purpose: show nicely the examples obtained from a three-band 
-                         image assigned to a label obtained from a
-                         one-band image                                 +*/ 
-  xpl_show_3Bto1B(
-    FILE  *fd,         /*+ In: output file descriptor                   +*/ 
-    xpl_t *xpl,        /*+ In: XPL set                                  +*/
-    window_t *win,     /*+ In: Window                                   +*/
-    apert_t *apt,      /*+ In: Aperture                                 +*/ 
-    int   select_type, /*+ In: type of examples to be showed
-                              1 : All
-                              2 : only conflicting ones
-                              3 : only non-conflicting ones             +*/
-    int   from,        /*+ In: range start                              +*/
-    int   to           /*+ In: range end                                +*/
-    ) ;
 
-int
-  xpl_show_3Bto3B(
-    FILE  *fd,         /*+ In: output file descriptor                   +*/ 
-    xpl_t *xpl,        /*+ In: XPL set                                  +*/
-    window_t *win,     /*+ In: Window                                   +*/
-    apert_t *apt,      /*+ In: Aperture                                 +*/ 
-    int   select_type, /*+ In: type of examples to be showed
-                              1 : All
-                              2 : only conflicting ones
-                              3 : only non-conflicting ones             +*/
-    int   from,        /*+ In: range start                              +*/
-    int   to           /*+ In: range end                                +*/
-    ) ;
 
 /* --------- io_showmtm.c ---------------------------------- */
 

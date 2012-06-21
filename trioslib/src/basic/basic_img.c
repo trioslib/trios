@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include <pac_img.h>
+#include <trios_img.h>
 
 /*!
   Creates a img_t structure.

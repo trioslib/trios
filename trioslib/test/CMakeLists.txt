@@ -16,6 +16,11 @@ add_executable(trios_collec_test trios_collec_test.c)
 target_link_libraries(trios_collec_test triosio triosbasic trios_collec m)
 add_test(NAME CollecTest WORKING_DIRECTORY ${TRIOS_BINARY_DIR}/bin/ COMMAND ${TRIOS_BINARY_DIR}/bin/trios_collec_test )
 
+add_executable(trios_collec_threshold_test trios_collec_threshold_test.c)
+target_link_libraries(trios_collec_threshold_test triosio triosbasic trios_collec m)
+add_test(NAME CollecThresholdTest WORKING_DIRECTORY ${TRIOS_BINARY_DIR}/bin/ COMMAND ${TRIOS_BINARY_DIR}/bin/trios_collec_threshold_test )
+
+
 add_executable(trios_decision_test trios_decision_test.c)
 target_link_libraries(trios_decision_test triosio triosbasic trios_collec trioslearn m)
 add_test(NAME DecisionTest WORKING_DIRECTORY ${TRIOS_BINARY_DIR}/bin/ COMMAND ${TRIOS_BINARY_DIR}/bin/trios_decision_test )

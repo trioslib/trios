@@ -1,23 +1,19 @@
-#include <pacbasic.h>
-#include <pacio.h>
+#include <trios.h>
+#include "trios_io.h"
 #include "pacio_local.h"
 
 /* #define _DEBUG_ */
 
-/*
-     -------------------------------------------
-     FUNCTION: itv_read
-     -------------------------------------------
-*/
+/*!
+    Read an interval set from a file.
 
-itv_t *               /*+ Purpose: read an interval set from a file   +*/   
-  itv_read(
-    char     *fname,   /*+ In: file name                              +*/
-    window_t **win,    /*+ Out: WINDOW structure                      +*/
-    apert_t  **apt     /*+ Out: pointer to an aperture structure      +*/
-  )
-/*+ Return: a pointer to a ITV structure on success, NULL on failure  +*/
-{
+    \param fname File name.
+    \param win Window structure.
+    \return A pointer to a itv_t structure, NULL on failure.
+    \sa itv_t
+ */
+
+itv_t *itv_read(char *fname, window_t **win/*, apert_t **apt*/) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)            */
 /*  date: Thu Oct 31 13:25:36 EDT 1996                                 */
 
@@ -68,7 +64,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
 
   tags_read = 0 ;
   stop = 0 ;
-  *apt = NULL ;
+  /**apt = NULL ;*/
 
 
   /* Open the file */
@@ -259,11 +255,12 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
 
     case GG:
     case GB:
-	return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
+        return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
     case WKC:
     case WKF: {
+      return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
       char *A, *B ;
-      itv_GX  *p, *last=NULL ;
+      /*itv_GX  *p, *last=NULL ;
 
       if(NULL==(itv = itv_create(wsize, type, deflabel))) {
 	fclose(fd);
@@ -288,7 +285,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
           (itv_t *)trios_error(1, "Memory allocation error.") ;
       }
 
-      /* reading loop --------------------------------- */
+      /* reading loop --------------------------------- *//*
       for(i=0; i<nitv ; i++) {
 
 	for(j=0; j<wsize; j++) {
@@ -324,7 +321,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
 	
 	itvgx_set(p, A, B, wsize, label, 0, 0, NULL, NULL) ;
         p->size = itvgx_size(p, wsize) ; /* added on Oct 31, 2000 - Nina */
-
+    /*
 	p->next = (itv_GX *)itv->head ;
         itv->head = (int *)p ;
       }
@@ -334,7 +331,7 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
       itv->nitv = nitv ;
       itv->type = type ;
       itv->wsize = wsize ;
-      itv->maxlabel = maxlabel ;
+      itv->maxlabel = maxlabel ;*/
     }
     break;
  
@@ -348,21 +345,16 @@ itv_t *               /*+ Purpose: read an interval set from a file   +*/
 
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: itv_write
-     -------------------------------------------
+/*!
+    Write an interval set to a file.
+
+    \param fname File name.
+    \param itv Interval set.
+    \param win Window.
+    \return 1 on success. 0 on failure.
 */
 
-int               /*+ Purpose: write an intervals set to a file +*/
-  itv_write(
-    char  *fname,  /*+ In: file name                            +*/
-    itv_t *itv,    /*+ In: intervals set                        +*/
-    window_t *win, /*+ In: window                               +*/
-    apert_t *apt   /*+ In: aperture                             +*/
-  )
-/*+ Return: 1 on success, 0 on failure                          +*/
-{
+int itv_write(char *fname, itv_t *itv, window_t *win /*apert_t *apt*/) {
 /*  author: Nina S. Tomita & R. Hirata Jr. (nina@ime.usp.br)     */
 /*  date: Thu Oct 31 17:10:14 EDT 1996                           */
 
@@ -440,6 +432,8 @@ pac_debug("Entering ITV_WRITE()") ;
 
     case GB:
     case GG: {
+      return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
+      /*
       itv_GX *p ;
 
       for(p = (itv_GX *)itv_get_head(itv); p; p=p->next) {
@@ -451,13 +445,14 @@ pac_debug("Entering ITV_WRITE()") ;
           fprintf(fd, "%d ", (unsigned char)p->B[j]) ;
         }
         fprintf(fd, "%d\n", (unsigned char)p->label) ;
-      }
+      }*/
     }
     break;
 
     case WKC:
     case WKF: {
-      itv_GX *p ;
+        return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
+      /*itv_GX *p ;
 
 #ifdef _DEBUG_
 pac_debug("Entering WKC or WKF") ;
@@ -472,7 +467,7 @@ pac_debug("Entering WKC or WKF") ;
           fprintf(fd, "%d ", p->B[j]) ;
         }
         fprintf(fd, "%d\n", p->label) ;
-      }
+      }*/
     }
     break;
 

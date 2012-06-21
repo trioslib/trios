@@ -1,4 +1,4 @@
-#include <pacbasic.h>
+#include <trios.h>
 
 /* #define _DEBUG_ */
 
@@ -367,18 +367,20 @@ int xpl_conflicts(xpl_t *xpl) {
     break ;
   }  
   case BG : {
-    xpl_BG *p ;
+    trios_error(1, "Operator no supported");
+    return -1;
+    /*xpl_BG *p ;
     freq_node *q ;
-    
+
     p = (xpl_BG *)xpl->root ; ncflt = 0 ;
     while(p) {
       q = p->freqlist ;
       if((q->freq != 0) && (q->next)) {
-	ncflt++ ;
-      }  
+    ncflt++ ;
+      }
       p = p->right ;
+    }*/
     }
-  }
   break ;
 
   case GG :  
@@ -387,6 +389,7 @@ int xpl_conflicts(xpl_t *xpl) {
   case WK3F:
   case GG3 : {
     trios_error(MSG, "This operator is not supported yet");
+    return -1;
     /*xpl_GG *p ;
     freq_node *q ;
     

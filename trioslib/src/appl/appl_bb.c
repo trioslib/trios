@@ -1,7 +1,16 @@
-#include <paclib.h>
+#include <trios.h>
 
-#include <pac_img.h>
+#include <trios_img.h>
 
+/*!
+  Reads a mask from a file or creates a new image with all pixels set to 1 if there is no mask.
+
+  \param f_mask Path to the mask.
+  \param width Width of the mask.
+  \param height Height of the mask.
+  \param win Window to use the mask with.
+  \return Mask read from file or a new image with all pixels set to 1 if no file was given.
+  */
 img_t *set_mask (char *f_mask, int width, int height, window_t *win) {
     if (f_mask == NULL) {
         img_t *mask = img_create(width, height, 1, sz8BIT);
@@ -17,6 +26,17 @@ img_t *set_mask (char *f_mask, int width, int height, window_t *win) {
     }
 }
 
+/*!
+    Applies an operator in an image.
+
+    \param f_appl Input image filename.
+    \param f_basis Basis file.
+    \param cv
+    \param hash_flag Switch between normal and hash application.
+    \param on_value Value of the output pixels.
+    \param f_out Output image filename.
+    \return 1 on success. 0 on failure.
+ */
 int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_flag, int  on_value, char *f_out ) {
   int     width, height, npixels , type ;
 
@@ -29,7 +49,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
   unsigned char  *ucpixels2 ; /*  resulting output image (byte)       */
   unsigned short *uspixels2 ; /*  resulting output image (short)      */
   window_t *win ;
-  apert_t  *apt ;
+  /*apert_t  *apt ;*/
   itv_t    *itv ;
   /* read input image file */
   img_appl = img_readPGM(f_appl);
@@ -51,7 +71,7 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
     img_free(img_appl);
     img_appl = img_tmp;
   }
-  if ((itv = itv_read(f_basis, &win, &apt))==NULL) {
+  if ((itv = itv_read(f_basis, &win/*, &apt*/))==NULL) {
     img_free(img_appl) ;
     return trios_error(MSG, "lpapplic: itv_read() failed.") ;
   }
@@ -176,14 +196,21 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: papplic_bx
-     -------------------------------------------
+/*!
+    Applies an operator (given by a set of intervals) on a binary image. Produces a sz8BIT image.
+
+    \param uspixels Pixels of the input image.
+    \param ucpixels1 Pixels of the mask image.
+    \param ucpixels2 Pixels of the output image.
+    \param cv On template matching, looks only to pixels under the window with the same label as the center's one.
+    \param itv Basis file.
+    \param win Window of the operator.
+    \param width Width of the input image.
+    \param npixels Number of pixels in the image.
+    \return 1 on success. 0 on failure.
 */
 
-int             /*+ Purpose: Applies an operator (given by a set of intervals)
-                    on a binary image. Produces a BYTE image               +*/
+int             /*+ Purpose:                +*/
   papplic_bx(
     unsigned short *uspixels,  /*+ In: Image to be operated                +*/
     unsigned char  *ucpixels1, /*+ In: Mask image                          +*/
@@ -329,10 +356,18 @@ for(i=0; i<wsize; i++) {
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: papplic_short
-     -------------------------------------------
+/*!
+    Applies an operator (given by a set of intervals) on a binary image and produces a gray-scale sz16BIT image.
+
+    \param uspixels Pixels of the input image.
+    \param ucpixels1 Pixels of the mask image.
+    \param ucpixels2 Pixels of the output image.
+    \param cv On template matching, looks only to pixels under the window with the same label as the center's one.
+    \param itv Basis file.
+    \param win Window of the operator.
+    \param width Width of the input image.
+    \param npixels Number of pixels in the image.
+    \return 1 on success. 0 on failure.
 */
 
 int             /*+ Purpose: Applies an operator (given by a set of intervals)

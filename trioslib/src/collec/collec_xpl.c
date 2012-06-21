@@ -1,21 +1,8 @@
-#include <paclib.h>
+#include <trios.h>
 #include <stdlib.h>
 
 xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int cv);
 
-/**
-    Reads three images from an IMGSET: the input image, the ideal image and the mask. If no mask is present,
-    an img_t with all pixels set to 1 is returned.
-
-    \param imgset Image set with the images.
-    \param map_type Type of the operator that will use the images.
-    \param win Estimation window.
-    \param k Index of the images in the IMGSET.
-    \param img1 Address to put the input image.
-    \param img2 Address to put ideal image.
-    \param img3 Address to put mask image.
-    \return 1 on sucess. 0 on failure.
-  */
 int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t **img1, img_t **img2, img_t **img3) {
     /* Read first image */
     char *filename = imgset_get_fname(imgset, 1, k);
@@ -70,7 +57,7 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
 int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int  output_type, int  cv_flag, char *fname_o1, char *fname_o2) {
     imgset_t *imgset = NULL ;
     window_t *win  = NULL ;
-    apert_t  *apt ;
+    /*apert_t  *apt ;*/
     xpl_t    *xpl  = NULL ;
     int      wsize=0, map_type ;
     #ifdef _DEBUG_
@@ -123,7 +110,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
     /* if an input XPL file is given, then read it;
     otherwise create an empty XPL structure */ 
     if(fname_i3 != NULL) {
-        if(!(xpl=xpl_read(fname_i3, &win, &apt))) {
+        if(!(xpl=xpl_read(fname_i3, &win/*, &apt*/))) {
             imgset_free(imgset) ;
             win_free(win) ;
             return trios_error(MSG, "lcollec: xpl_read() failed.") ;
@@ -145,7 +132,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         pac_debug("lcollec_main: done.") ;
     #endif
     /* write contents of XPL to output file */
-    if(!xpl_write(fname_o1, xpl, win, apt)) {
+    if(!xpl_write(fname_o1, xpl, win/*, apt*/)) {
         imgset_free(imgset) ;
         win_free(win) ;
         xpl_free(xpl) ;

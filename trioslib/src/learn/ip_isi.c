@@ -1,6 +1,11 @@
-#include <paclib_kernel.h>
-
+#include "trios_win.h"
+#include "trios_itv.h"
+#include "trios_mtm.h"
+#include <trios_xpl.h>
 #include "paclearn_local.h"
+#include <stdio.h>
+
+
 
 #include <sys/time.h>
 #include <unistd.h>
@@ -44,7 +49,7 @@
 char     *GLtmp_bas_file, *GLlog_file ;
 int       GLlog_step ;
 window_t *GLwin ;
-apert_t  *GLapt ;
+/*apert_t  *GLapt ;*/
 FILE     *GLfd ;
 
 #define Print_Log(i) {                                           \
@@ -62,7 +67,7 @@ FILE     *GLfd ;
                                                                  \
       /* and write current set of intervals if required */       \
       if(GLtmp_bas_file) {                                       \
-        if(!itv_write(GLtmp_bas_file, itv, GLwin, GLapt)) {             \
+        if(!itv_write(GLtmp_bas_file, itv, GLwin/*, GLapt*/)) {             \
           trios_warning("Warning : could not write int. basis file %s.",  \
                   GLtmp_bas_file) ;                              \
         }                                                        \

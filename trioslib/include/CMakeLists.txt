@@ -1,17 +1,20 @@
-SET (PAC_HEADERS pacbasic.h
-                 pacio.h
-                 pacapplic.h
-                 pac_apert.h
-                 pacappl.h
-                 pac_error.h
-                 pac_imgset.h
-                 pac_img.h
-                 pac_itv.h
-                 pac_kernel.h
-                 pac_mtm.h
-                 pac_win.h
-                 pac_xpl.h
-                 xpl_collec.h
+SET(TRIOS_HEADERS
+                 trios.h
+                 trios_appl.h
+                 trios_win.h
+                 trios_img.h
+                 trios_error.h
+                 trios_io.h
+                 trios_imgset.h
+                 trios_mtm.h
+                 trios_itv.h
+                 io_header.h
+                 trios_misc.h
+                 trios_learn.h
+                 trios_collec.h
+                 trios_xpl.h
+                 trios_common.h
                  )
 
-INSTALL(FILES ${PAC_HEADERS}  DESTINATION include)
+INSTALL(FILES ${TRIOS_HEADERS}  DESTINATION ${TRIOS_BINARY_DIR}/include)
+file(COPY ${TRIOS_HEADERS} DESTINATION  ${CMAKE_BINARY_DIR}/include)

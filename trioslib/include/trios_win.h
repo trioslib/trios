@@ -1,25 +1,60 @@
 /* Window definition */
 
-#ifndef _pac_win_h_
-#define _pac_win_h_
+#ifndef _trios_win_h_
+#define _trios_win_h_
 
 #define MAXWINWIDTH  256
 #define MAXWINHEIGHT 256
 #define MAXWINBANDS  256
 
+/*!
+    Structure that holds a W-operator window. Below, a simple description of the window structure :
 
+                                _
+                                /
+                               /---> bands (depth)
+          window matrix width /
+          <----------------> /
+                            /
+          +--+--+-...---+--+    _
+          |  |  |       |  |    |
+          +--+--+-...---+--+    |
+          |  |  |       |  |    |
+          +--+--+-...---+--+    |------> window matrix height
+          :  :  :       :  :    |
+          +--+--+-...---+--+    |
+          |  |  |       |  |    |
+          +--+--+-...---+--+    -
+
+          The points (i,j,k) of the window matrix whose value is 1
+          define the window format.
+
+
+   Internal representation :
+
+                                          +----> (height*width*bands)-1
+           0                              |
+          +--+--+--+--+--+--+--+...---+--+--+
+          |  |  |  |  |  |  |  |      |  |  |
+          +--+--+--+--+--+--+--+...---+--+--+
+
+          This array of bytes is created scanning the window matrix
+          in the raster order, band 0 to nbands.
+
+
+   The window structure contains the following informations :
+
+          - window size
+          - window matrix height, width and bands
+          - window data (the array of bytes representing the matrix)
+ */
 typedef struct {
-  unsigned char width ;  /* window matrix width (1<=width<=256)  */
-  unsigned char height ; /* window matrix height (1<=width<=256) */
-  unsigned char nbands ; /* window matrix bands (1<=bands<=256)  */
-  int  *wsize ;          /* window size                          */
-  char *windata ;        /* window description array             */
+  unsigned char width ;  /*!< window matrix width (1<=width<=256)  */
+  unsigned char height ; /*!< window matrix height (1<=width<=256) */
+  unsigned char nbands ; /*!< window matrix bands (1<=bands<=256)  */
+  int  *wsize ;          /*!< window size                          */
+  char *windata ;        /*!< window description array             */
 } window_t ;
-
-
-/*===========================================================================\
-   pac_win.c
-\========================================================================== */
 
 
 int           /*+ Purpose: get the window size of a given band             +*/
@@ -96,7 +131,7 @@ void           /*+ Purpose: free the memory area of a window               +*/
     ) ;
 
 
-#endif /* _pac_win_h_ */
+#endif /* _trios_win_h_ */
 
 
 

@@ -1,5 +1,9 @@
-#include <paclib_kernel.h>
+#include "trios_win.h"
+#include "trios_itv.h"
+#include "trios_mtm.h"
+#include <trios_xpl.h>
 #include "paclearn_local.h"
+#include <stdio.h>
 
 #define _DEBUG_ 
 
@@ -58,7 +62,7 @@ int                   /*+ Purpose: ISI algorithm                           +*/
 /* Mod: Garbage collection de-implemented                                  */
 
   window_t *win1, *win2 ;
-  apert_t  *apt, *apt2 ;
+  /*apert_t  *apt, *apt2 ;*/
   mtm_t    *mtm ;
   itv_t    *itv ;
   int       nmtm, zeros=0, ones=0, ngrouped ;
@@ -83,7 +87,7 @@ int                   /*+ Purpose: ISI algorithm                           +*/
 
   /* read classified examples */
 
-  if(!(mtm=mtm_read(fname_i1, &win1, &apt))) {
+  if(!(mtm=mtm_read(fname_i1, &win1/*, &apt*/))) {
     return trios_error(MSG, "lisi: mtm_read() failed to read %s", fname_i1) ;
   }
 
@@ -103,7 +107,7 @@ trios_debug("Examples with label 1 = %d", ones) ;
 
 
   /* read starting intervals */
-  if(!(itv=itv_read(fname_i2, &win2, &apt2))) {
+  if(!(itv=itv_read(fname_i2, &win2/*, &apt2*/))) {
     win_free(win1) ;
     mtm_free(mtm) ;
     return trios_error(MSG, "lisi: itv_read() failed to read %s", fname_i2) ;
@@ -144,7 +148,7 @@ trios_debug("Reading starting intervals: done.") ;
 
 
   /* write resulting intervals to the output file */
-  if(!itv_write(fname_o, itv, win1, apt)) {
+  if(!itv_write(fname_o, itv, win1/*, apt*/)) {
     win_free(win1) ;
     win_free(win2) ;
     itv_free(itv) ;

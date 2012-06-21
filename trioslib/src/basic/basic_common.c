@@ -1,4 +1,4 @@
-#include <pacbasic.h>
+#include <trios.h>
 
 /* Macro that computes the bit mask for the POSITION-th bit. */
 #define BITMSK(POSITION) ( 1 << (POSITION) )
@@ -272,6 +272,26 @@ int DIM[256] = {
      /* 253 */  7,
      /* 254 */  7,
      /* 255 */  8 } ;
+
+/*! Computes the number of bits ON of an integer (4 bytes)
+  m_dim : the size vector
+ m_d : the size of the integer
+ m_X : the integer
+ */
+#define Comp_Dim(m_X, m_dim, m_d)    \
+        {                            \
+          int m_k;                   \
+                                     \
+          m_d = 0 ;                  \
+          m_k = m_X & 0xff ;         \
+          m_d = m_d + m_dim[m_k] ;   \
+          m_k = (m_X>>8)&0xff ;      \
+          m_d = m_d + m_dim[m_k] ;   \
+          m_k = (m_X>>16)&0xff ;     \
+          m_d = m_d + m_dim[m_k] ;   \
+          m_k = (m_X>>24)&0xff ;     \
+          m_d = m_d + m_dim[m_k] ;   \
+        }
 
 
 

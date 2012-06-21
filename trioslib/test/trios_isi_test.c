@@ -1,4 +1,4 @@
-#include <paclib.h>
+#include <trios.h>
 
 #include "minunit.h"
 
@@ -20,7 +20,7 @@ TEST(test_decision_pair1) {
 
     itv_t *itv = itv_gen_itv(win, 1, BB, 0, 1, 0);
 
-    itv_write("ITV_TEST.itv", itv, win, NULL);
+    itv_write("ITV_TEST.itv", itv, win);
     itv_free(itv);
     win_free(win);
 
