@@ -39,6 +39,7 @@ Item {
                 }
 
                 MenuItem {
+                    id: menu_project
                     image: "img/project.svg"
                     text: "Project"
                     root_state: "project"
@@ -88,6 +89,10 @@ Item {
 
             }
 
+            ProjectView {
+                id:project_view
+            }
+
             WindowView {
                 id: window_view
             }
@@ -95,6 +100,7 @@ Item {
             SamplesView {
                 id: samples_view
             }
+
         }
     }
     states: [
@@ -124,6 +130,11 @@ Item {
                 target: samples_view
                 visible: false
             }
+
+            PropertyChanges {
+                target: project_view
+                visible: false
+            }
         },
         State {
             name: "window"
@@ -150,6 +161,11 @@ Item {
                 target: samples_view
                 visible: false
             }
+
+            PropertyChanges {
+                target: project_view
+                visible: false
+            }
         },
         State {
             name: "samples"
@@ -173,6 +189,40 @@ Item {
                 target: menu_samples
                 state: "selected"
             }
+
+            PropertyChanges {
+                target: project_view
+                visible: false
+            }
+        },
+        State {
+            name: "project"
+
+            PropertyChanges {
+                target: welcome_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: project_view
+                visible: true
+            }
+
+            PropertyChanges {
+                target: window_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: samples_view
+                visible: false
+            }
+
+            PropertyChanges {
+                target: menu_project
+                state: "selected"
+            }
+
         }
     ]
 }

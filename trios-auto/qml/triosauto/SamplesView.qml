@@ -19,7 +19,6 @@ Rectangle {
 
         function add_sample(input, ideal) {
             images.append({"input": input, "ideal": ideal});
-            console.log("APPEND");
         }
     }
 
@@ -67,37 +66,7 @@ Rectangle {
         anchors.bottomMargin: 0
         orientation: ListView.Horizontal
         model: images
-        delegate: Item {
-            x: 5
-            width: 70
-            height: parent.height
-            Column {
-                id: row1
-                spacing: 10
-                Image {
-                    width: 50
-                    height: 50
-                    source: input
-                }
-
-                Image {
-                    width: 50
-                    height: 50
-                    source: ideal
-                }
-
-                Text {
-                    text: index
-                }
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    input_image.source = input;
-                    ideal_image.source = ideal;
-                }
-            }
+        delegate: SampleQuickItem {
         }
     }
 
@@ -113,7 +82,7 @@ Rectangle {
         width: parent.width/2
         boundsBehavior: Flickable.StopAtBounds
         anchors.bottom: samples_quick_view.top
-        anchors.bottomMargin: 0
+        anchors.bottomMargin: 10
         anchors.top: input_label.bottom
         anchors.topMargin: 0
         clip: true
@@ -147,7 +116,7 @@ Rectangle {
         anchors.top: ideal_label.bottom
         anchors.topMargin: 0
         anchors.bottom: samples_quick_view.top
-        anchors.bottomMargin: 0
+        anchors.bottomMargin: 10
         clip: true
         contentWidth: ideal_image.width
         contentHeight: ideal_image.height
