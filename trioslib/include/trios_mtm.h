@@ -1,6 +1,11 @@
 #ifndef _pac_mtm_h_
 #define _pac_mtm_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include "trios_misc.h"
 
 #define MODA               5 
@@ -308,6 +313,9 @@ unsigned int    /*+ Purpose: Index mtm by frequencies                      +*/
     ) ;
 /*+ Return: 1 on success or 0 on failure                                   +*/
 
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

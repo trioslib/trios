@@ -1,6 +1,10 @@
 #ifndef _trios_error_h_
 #define _trios_error_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /*!
   Prints error messages. Works like printf.
@@ -29,5 +33,10 @@ void trios_fatal(const char* format, ...);
   \param va_list Arguments to the error message (like printf).
 */
 void trios_debug(const char* format, ...);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif

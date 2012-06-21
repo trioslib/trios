@@ -1,6 +1,11 @@
 #ifndef _trios_io_h_
 #define _trios_io_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <io_header.h>
 #include <trios_img.h>
 #include "trios_mtm.h"
@@ -127,6 +132,11 @@ int xpl_write(char *fname, xpl_t *xpl, window_t *win/*, apert_t  *apt*/);
     \param win Window used in the lcollec_threshold.
 */
 int swt_write(char *fname, xpl_t *xpl, window_t *win);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif
 

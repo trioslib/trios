@@ -36,8 +36,15 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # The .cpp file which was generated for your project. Feel free to hack it.
 
 INCLUDEPATH += "../trioslib/include/"
-LIBSPATH += ../bin/lib
-LIBS += libtriosappl.a libtriosbasic.a libtrios_collec.a libtriosio.a libtrioslearn.a
+LIBPATH += "../bin/lib/"
+LIBS += ../bin/lib/libtriosbasic.a
+LIBS += -ltriosbasic
+LIBS += -ltriosappl
+LIBS += -ltriosio
+LIBS += -ltrioslearn
+LIBS += -ltrios_collec
+
+
 
 SOURCES += main.cpp \
     fileutils.cpp

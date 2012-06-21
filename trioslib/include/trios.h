@@ -1,6 +1,11 @@
 #ifndef TRIOS_H
 #define TRIOS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -20,6 +25,9 @@
 #include <trios_learn.h>
 
 
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif // TRIOS_H

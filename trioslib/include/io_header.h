@@ -1,6 +1,11 @@
 #ifndef _io_header_h_
 #define _io_header_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <stdio.h>
 
 #define SIZECHAR 256
@@ -35,6 +40,10 @@ int     /*+ Purpose: checks if the header keyword matches a given keyword +*/
     FILE     *fd,         /*+ In: File descriptor                         +*/
     const char     *keyword     /*+ In: a keyword (up to 8 characters)          +*/
     ) ;
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif /* _io_header_h_ */

@@ -1,6 +1,10 @@
 #ifndef _trios_appl_h_
 #define _trios_appl_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /*!
     Applies an operator in an image.
@@ -14,6 +18,11 @@
     \return 1 on success. 0 on failure.
  */
 int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_flag, int  on_value, char *f_out );
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif
 

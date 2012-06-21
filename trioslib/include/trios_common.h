@@ -1,6 +1,11 @@
 #ifndef _trios_common_h_
 #define _trios_common_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include <trios_error.h>
 #include <trios_win.h>
 #include "trios_imgset.h"
@@ -184,6 +189,9 @@ unsigned int    /*+ Purpose: Sums the frequencies of w-pattern             +*/
             w-pattern                                                      +*/
 
 
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif /* _trios_common_h_ */

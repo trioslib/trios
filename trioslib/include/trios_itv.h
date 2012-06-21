@@ -1,6 +1,11 @@
 #ifndef _trios_itv_h_
 #define _trios_itv_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #define ISI_0 0
 #define ISI_1 1
 #define ISI_2 2
@@ -308,6 +313,11 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
     int  def_label     /*+ In: label outside the interval (default label)  +*/
 ) ;
      /*+ Return: Pointer to ITV structure on success, NULL on failure           +*/ 
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif /* _trios_itv_h_ */
 

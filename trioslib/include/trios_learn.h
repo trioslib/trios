@@ -1,6 +1,9 @@
 #ifndef _trios_learn_h_
 #define _trios_learn_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
 /*!
@@ -44,6 +47,11 @@ int lisi(char *fname_i1, char *fname_i2, int isi_type, int isi3_step, int multi,
 */
 
 int lmincover(char *fname1, char *fname2, char *fname3);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _trios_learn_h_ */
 

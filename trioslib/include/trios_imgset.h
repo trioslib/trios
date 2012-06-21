@@ -1,6 +1,11 @@
 #ifndef _trios_imgset_h_
 #define _trios_imgset_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /*!
     Structure that holds a collection of images.
 
@@ -100,5 +105,10 @@ int imgset_set_dname(imgset_t *imgset, int i, char *dir);
 */
 
 char *imgset_get_ffullname(imgset_t *imgset, int i, int k);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif /* _trios_imgset_h_ */
