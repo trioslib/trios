@@ -156,7 +156,6 @@ Rectangle {
 
         onClicked: {
             var path = fileUtils.fileOpenDialog("Select the operator", "", "Operator (*.itv)");
-
             operator_path.text = path;
         }
 

@@ -34,6 +34,9 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # CONFIG += qt-components
 
 # The .cpp file which was generated for your project. Feel free to hack it.
+
+INCLUDEPATH += "../trioslib/include/"
+
 SOURCES += main.cpp \
     fileutils.cpp
 
