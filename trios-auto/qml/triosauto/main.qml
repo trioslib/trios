@@ -103,6 +103,7 @@ Item {
 
             ApplyView {
                 id: apply_view
+                visible: false
             }
 
         }
