@@ -53,6 +53,12 @@ Rectangle {
         width: 76
         height: 29
         text: "Load"
+
+        onClicked: {
+            var path = fileUtils.fileOpenDialog("Select the window configuration file", "", "Window configuration (*.win)");
+
+            win_path.text = path;
+        }
     }
 
     Button {
@@ -97,6 +103,12 @@ Rectangle {
         width: 76
         height: 29
         text: "Load"
+
+        onClicked: {
+            var path = fileUtils.fileOpenDialog("Select the image set", "", "Image Set (*.imgset)");
+
+            imgset_path.text = path;
+        }
     }
 
     Button {
@@ -141,6 +153,13 @@ Rectangle {
         width: 76
         height: 29
         text: "Load"
+
+        onClicked: {
+            var path = fileUtils.fileOpenDialog("Select the operator", "", "Operator (*.itv)");
+
+            operator_path.text = path;
+        }
+
     }
 
     Button {

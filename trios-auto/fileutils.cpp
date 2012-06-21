@@ -8,11 +8,15 @@ FileUtils::FileUtils(QObject *parent) :
 
 }
 
-QString FileUtils::fileDialog() {
-    return fileDialog("Choose an image");
+QString FileUtils::fileOpenDialog() {
+    return fileOpenDialog("Choose an image");
 }
 
 
-QString FileUtils::fileDialog(QString caption) {
-    return QFileDialog::getOpenFileName(0, caption, "", "ImageFiles (*.pgm)");
+QString FileUtils::fileOpenDialog(QString caption) {
+    return fileOpenDialog(caption, "", "ImageFiles (*.pgm)");
+}
+
+QString FileUtils::fileOpenDialog(QString caption, QString path, QString file_type) {
+    return QFileDialog::getOpenFileName(0, caption, path, file_type);
 }

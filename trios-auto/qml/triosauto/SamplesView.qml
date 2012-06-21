@@ -43,9 +43,9 @@ Rectangle {
             text: "Load Sample"
 
             onClicked: {
-                var input = fileUtils.fileDialog("Choose the input image");
-                var ideal = fileUtils.fileDialog("Choose the ideal image");
-                var mask = fileUtils.fileDialog("Choose the mask image (optional)");
+                var input = fileUtils.fileOpenDialog("Choose the input image");
+                var ideal = fileUtils.fileOpenDialog("Choose the ideal image");
+                var mask = fileUtils.fileOpenDialog("Choose the mask image (optional)");
                 if (input != "" && ideal != "") {
                     images.add_sample(input, ideal);
                 }

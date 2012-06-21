@@ -8,8 +8,9 @@ class FileUtils : public QObject
     Q_OBJECT
 public:
     explicit FileUtils(QObject *parent = 0);
-    Q_INVOKABLE QString fileDialog();
-    Q_INVOKABLE QString fileDialog(QString caption);
+    Q_INVOKABLE QString fileOpenDialog();
+    Q_INVOKABLE QString fileOpenDialog(QString caption);
+    Q_INVOKABLE QString fileOpenDialog(QString caption, QString path, QString file_type);
 
 signals:
     
