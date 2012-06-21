@@ -11,6 +11,16 @@ Rectangle {
     height: 300
     border.color: "#000000"
 
+    function set(i, j, value) {
+        var k;
+        for (k = 0; k < root.children.length; k++) {
+            var w = root.children[k];
+            if (w.i == i && w.j == j) {
+                w.selected = value;
+            }
+        }
+    }
+
     Component.onCompleted: {
         // create window configuration
         Script.update();

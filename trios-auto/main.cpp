@@ -2,7 +2,7 @@
 #include <QtDeclarative>
 #include "qmlapplicationviewer.h"
 #include "fileutils.h"
-
+#include "trios_to_qml.h"
 #include "trios.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
@@ -13,14 +13,13 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     FileUtils fu;
     viewer.rootContext()->setContextProperty("fileUtils", &fu);
 
+    TRIOS_to_QML t2qml;
+    viewer.rootContext()->setContextProperty("trios2qml", &t2qml);
+
     viewer.setWindowTitle("TRIOS - Automatic image operator design tool");
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.setMainQmlFile(QLatin1String("qml/triosauto/main.qml"));
     viewer.showExpanded();
-
-    window_t *w = win_create(4, 4, 1);
-
-    win_free(w);
 
     return app->exec();
 }
