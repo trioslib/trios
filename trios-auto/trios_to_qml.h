@@ -13,6 +13,7 @@ public:
     Q_INVOKABLE QVariantMap read_window(QString path);
     Q_INVOKABLE QVariantMap read_imgset(QString path);
     Q_INVOKABLE bool write_window(QVariantMap window, QString path);
+    Q_INVOKABLE bool write_imgset(QVariantMap imgset, QString path);
     
 signals:
     

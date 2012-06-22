@@ -135,6 +135,17 @@ Rectangle {
         text: "Save Current"
         anchors.right: parent.right
         anchors.rightMargin: 10
+
+        onClicked: {
+            var s = samples_view.getSamples();
+            var path = fileUtils.fileSaveDialog("Save image set", "", "Image set (*.imgset)");
+            var r = trios2qml.write_imgset(s, path);
+            if (r) {
+                imgset_path.text = path;
+            } else {
+                console.log("IMGSERT WRITE FAIL");
+            }
+        }
     }
 
     Text {
@@ -163,8 +174,8 @@ Rectangle {
         width: 76
         height: 29
         text: "Load"
-        anchors.right: save_operator.left
-        anchors.rightMargin: 15
+        anchors.right: parent.right
+        anchors.rightMargin: 126
 
         onClicked: {
             var path = fileUtils.fileOpenDialog("Select the operator", "", "Operator (*.itv)");
@@ -174,17 +185,6 @@ Rectangle {
             console.log(apply_view.operator_path);
         }
 
-    }
-
-    Button {
-        id: save_operator
-        x: 462
-        y: 306
-        width: 101
-        height: 29
-        text: "Save Current"
-        anchors.right: parent.right
-        anchors.rightMargin: 10
     }
 
 }

@@ -16,6 +16,16 @@ Rectangle {
         }
     }
 
+    function getSamples() {
+        var samples = {};
+        var i;
+        for (i = 0; i < images.count; i++) {
+            var sample = images.get(i);
+            samples[i] = [sample["input"], sample["ideal"]];
+        }
+        return samples;
+    }
+
     ListModel {
         id: images
 

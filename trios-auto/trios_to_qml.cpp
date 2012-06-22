@@ -70,3 +70,20 @@ bool TRIOS_to_QML::write_window(QVariantMap window, QString path) {
     int r = win_write((char *)path.toStdString().c_str(), win);
     return r == 1;
 }
+
+bool TRIOS_to_QML::write_imgset(QVariantMap imgset, QString path) {
+    int ngroups = imgset.size();
+    int grpsize = QVariant(imgset["0"]).toList().length();
+
+    imgset_t *is = imgset_create(ngroups, grpsize);
+    for (int i = 0; i < ngroups; i++) {
+        QVariantList group = QVariant(imgset[QString::number(i)]).toList();
+        for (int j = 0; j < grpsize; j++) {
+            char *fname = (char *) QVariant(group[j]).toString().toStdString().c_str();
+            printf("%d %d -> %s", i, j, fname);
+            imgset_set_fname(is, j+1, i+1, fname);
+        }
+    }
+    int r = imgset_write((char *)path.toStdString().c_str(), is);
+    return r == 1;
+}
