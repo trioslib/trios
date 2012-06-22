@@ -56,8 +56,11 @@ Rectangle {
 
         onClicked: {
             var path = fileUtils.fileOpenDialog("Select the window configuration file", "", "Window configuration (*.win)");
-
-            win_path.text = path;
+            if (path != null && path != "") {
+                var window = trios2qml.read_window(path);
+                window_view.loadWindow(window['width'], window['height'], window['window_data']);
+                win_path.text = path;
+            }
         }
     }
 

@@ -12,11 +12,10 @@ Rectangle {
     function loadWindow(w_width, w_height, w_window) {
         win_width.text = w_width;
         win_height.text = w_height;
-
-        var i, j;
+        var i, j, k = 0;
         for (i = 0; i < w_height; i++) {
             for (j = 0; j < w_width; j++) {
-                windowconfiguration.set(i, j, w_window[i][j]);
+                windowconfiguration.set(i, j, w_window[k]);
             }
         }
     }
