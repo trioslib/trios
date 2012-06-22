@@ -11,7 +11,7 @@ function create_grid() {
     var i, j;
     for (i = 0; i < root.window_height; i++) {
         for (j = 0; j < root.window_width; j++) {
-            var box = window_button_component.createObject(root, {"i": i, "j": j});
+            var box = window_button_component.createObject(root, {"i": i, "j": j, "selected": true});
         }
     }
 
