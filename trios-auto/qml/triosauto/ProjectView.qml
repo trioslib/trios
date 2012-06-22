@@ -21,29 +21,24 @@ Rectangle {
 
     Text {
         id: win_label
-        x: 30
         y: 96
         text: qsTr("Window Configuration")
+        anchors.left: parent.left
+        anchors.leftMargin: 30
         font.pixelSize: 16
     }
 
-    Rectangle {
-        id: rectangle1
-        x: 30
-        y: 135
-        width: 326
-        height: 29
-        color: "#ffffff"
-        radius: 5
 
-        Text {
-            id: win_path
-            text: qsTr("None")
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignLeft
-            anchors.fill: parent
-            font.pixelSize: 12
-        }
+
+    TextInput {
+        id: win_path
+        y: 135
+        height: 29
+        text: "None"
+        anchors.left: parent.left
+        anchors.leftMargin: 30
+        anchors.right: load_win.left
+        anchors.rightMargin: 15
     }
 
     Button {
@@ -53,6 +48,8 @@ Rectangle {
         width: 76
         height: 29
         text: "Load"
+        anchors.right: save_win.left
+        anchors.rightMargin: 15
 
         onClicked: {
             var path = fileUtils.fileOpenDialog("Select the window configuration file", "", "Window configuration (*.win)");
@@ -71,6 +68,8 @@ Rectangle {
         width: 101
         height: 29
         text: "Save Current"
+        anchors.right: parent.right
+        anchors.rightMargin: 10
 
         onClicked: {
             var obj = {};
@@ -96,22 +95,15 @@ Rectangle {
         font.pixelSize: 16
     }
 
-    Rectangle {
-        id: rectangle2
-        x: 29
+    TextInput {
+        id: imgset_path
         y: 222
-        width: 326
         height: 29
-        color: "#ffffff"
-        radius: 5
-        Text {
-            id: imgset_path
-            text: qsTr("None")
-            font.pixelSize: 12
-            anchors.fill: parent
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-        }
+        text: "None"
+        anchors.right: load_imgset.left
+        anchors.rightMargin: 15
+        anchors.left: parent.left
+        anchors.leftMargin: 30
     }
 
     Button {
@@ -121,6 +113,8 @@ Rectangle {
         width: 76
         height: 29
         text: "Load"
+        anchors.right: save_imgset.left
+        anchors.rightMargin: 15
 
         onClicked: {
             var path = fileUtils.fileOpenDialog("Select the image set", "", "Image Set (*.imgset)");
@@ -139,6 +133,8 @@ Rectangle {
         width: 101
         height: 29
         text: "Save Current"
+        anchors.right: parent.right
+        anchors.rightMargin: 10
     }
 
     Text {
@@ -149,22 +145,15 @@ Rectangle {
         font.pixelSize: 16
     }
 
-    Rectangle {
-        id: rectangle3
-        x: 30
+    TextInput {
+        id: operator_path
         y: 306
-        width: 326
         height: 29
-        color: "#ffffff"
-        radius: 5
-        Text {
-            id: operator_path
-            text: qsTr("None")
-            font.pixelSize: 12
-            anchors.fill: parent
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-        }
+        text: "None"
+        anchors.right: load_operator.left
+        anchors.rightMargin: 15
+        anchors.left: parent.left
+        anchors.leftMargin: 30
     }
 
     Button {
@@ -174,6 +163,8 @@ Rectangle {
         width: 76
         height: 29
         text: "Load"
+        anchors.right: save_operator.left
+        anchors.rightMargin: 15
 
         onClicked: {
             var path = fileUtils.fileOpenDialog("Select the operator", "", "Operator (*.itv)");
@@ -192,5 +183,8 @@ Rectangle {
         width: 101
         height: 29
         text: "Save Current"
+        anchors.right: parent.right
+        anchors.rightMargin: 10
     }
+
 }
