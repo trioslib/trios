@@ -71,6 +71,21 @@ Rectangle {
         width: 101
         height: 29
         text: "Save Current"
+
+        onClicked: {
+            var obj = {};
+            obj["width"] = window_view.win_width;
+            obj["height"] = window_view.win_height;
+            obj["window_data"] = window_view.getWindowData();
+
+            var save_path = fileUtils.fileSaveDialog("Save window configuration", "", "Window configuration (*.win)");
+            if (trios2qml.write_window(obj, save_path)) {
+                console.log("WRITE OK!");
+                win_path.text = save_path;
+            } else {
+                console.log("WRITE ERROR");
+            }
+        }
     }
 
     Text {

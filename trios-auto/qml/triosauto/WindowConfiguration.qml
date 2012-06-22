@@ -11,6 +11,17 @@ Rectangle {
     height: 300
     border.color: "#000000"
 
+    function get(i, j) {
+        var k;
+        for (k = 0; k < root.children.length; k++) {
+            var w = root.children[k];
+            if (w.i == i && w.j == j) {
+                return w.selected;
+            }
+        }
+        return false;
+    }
+
     function set(i, j, value) {
         var k;
         for (k = 0; k < root.children.length; k++) {

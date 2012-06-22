@@ -11,6 +11,8 @@ public:
     Q_INVOKABLE QString fileOpenDialog();
     Q_INVOKABLE QString fileOpenDialog(QString caption);
     Q_INVOKABLE QString fileOpenDialog(QString caption, QString path, QString file_type);
+    Q_INVOKABLE QString fileSaveDialog(QString caption);
+    Q_INVOKABLE QString fileSaveDialog(QString caption, QString path, QString file_type);
 
 signals:
     

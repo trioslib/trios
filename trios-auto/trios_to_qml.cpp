@@ -50,3 +50,23 @@ QVariantMap TRIOS_to_QML::read_imgset(QString path) {
     }
     return m;
 }
+
+
+bool TRIOS_to_QML::write_window(QVariantMap window, QString path) {
+    int width = QVariant(window["width"]).toInt();
+    int height = QVariant(window["height"]).toInt();
+    QVariantList data = QVariant(window["window_data"]).toList();
+
+    printf("%d x %d --  %d\n", width, height, data.length());
+
+    window_t *win = win_create(height, width, 1);
+    int k = 0;
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++, k++) {
+            win_set_point(i, j, 1, data[k].toInt(), win);
+        }
+    }
+
+    int r = win_write((char *)path.toStdString().c_str(), win);
+    return r == 1;
+}

@@ -3,6 +3,8 @@ import QtQuick 1.1
 import "components"
 
 Rectangle {
+    property int win_width: windowconfiguration.window_width
+    property int win_height: windowconfiguration.window_height
 
     id: root
     width: 640
@@ -19,6 +21,17 @@ Rectangle {
                 windowconfiguration.set(i, j, w_window[k]);
             }
         }
+    }
+
+    function getWindowData() {
+        var i, j;
+        var m = []
+        for (i = 0; i < win_height; i++) {
+            for (j = 0; j < win_width; j++) {
+                m.push(windowconfiguration.get(i, j));
+            }
+        }
+        return m;
     }
 
     Text {
@@ -51,7 +64,7 @@ Rectangle {
         }
 
         TextInput {
-            id: win_width
+            id: win_width_text
             width: 50
             height: 20
             color: "#00000000"
@@ -71,7 +84,7 @@ Rectangle {
         }
 
         TextInput {
-            id: win_height
+            id: win_height_text
             width: 50
             height: 20
             color: "#00000000"

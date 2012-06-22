@@ -20,3 +20,12 @@ QString FileUtils::fileOpenDialog(QString caption) {
 QString FileUtils::fileOpenDialog(QString caption, QString path, QString file_type) {
     return QFileDialog::getOpenFileName(0, caption, path, file_type);
 }
+
+
+QString FileUtils::fileSaveDialog(QString caption) {
+    return QFileDialog::getSaveFileName(0, caption);
+}
+
+QString FileUtils::fileSaveDialog(QString caption, QString path, QString file_type) {
+    return QFileDialog::getSaveFileName(0, caption, path, file_type);
+}
