@@ -11,6 +11,7 @@ class TRIOS_to_QML : public QObject
 public:
     explicit TRIOS_to_QML(QObject *parent = 0);
     Q_INVOKABLE QVariantMap read_window(QString path);
+    Q_INVOKABLE QVariantMap read_imgset(QString path);
     
 signals:
     

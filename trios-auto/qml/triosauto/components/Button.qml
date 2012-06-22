@@ -6,7 +6,6 @@ Rectangle {
     property alias text: label.text
     signal clicked
 
-
     width: 100
     height: 62
     radius: 9

@@ -109,8 +109,11 @@ Rectangle {
 
         onClicked: {
             var path = fileUtils.fileOpenDialog("Select the image set", "", "Image Set (*.imgset)");
-
-            imgset_path.text = path;
+            if (path != null && path != "") {
+                var obj = trios2qml.read_imgset(path);
+                samples_view.loadSamples(obj);
+                imgset_path.text = path;
+            }
         }
     }
 
@@ -160,6 +163,9 @@ Rectangle {
         onClicked: {
             var path = fileUtils.fileOpenDialog("Select the operator", "", "Operator (*.itv)");
             operator_path.text = path;
+            console.log(path);
+            apply_view.operator_path = path;
+            console.log(apply_view.operator_path);
         }
 
     }

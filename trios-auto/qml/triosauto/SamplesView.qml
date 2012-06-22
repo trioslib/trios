@@ -9,13 +9,15 @@ Rectangle {
     anchors.fill: parent
     color: "#d5d5d5"
 
+    function loadSamples(samples) {
+        for (var k in samples) {
+            var sample = samples[k];
+            images.add_sample(sample[0], sample[1]);
+        }
+    }
+
     ListModel {
         id: images
-
-        ListElement {
-            input: "/home/igor/sources/trioslib-code/bin/bin/test_img/input1.pgm"
-            ideal: "/home/igor/sources/trioslib-code/bin/bin/test_img/ideal1.pgm"
-        }
 
         function add_sample(input, ideal) {
             images.append({"input": input, "ideal": ideal});
@@ -108,7 +110,7 @@ Rectangle {
 
     Flickable {
         id: ideal_view_flick
-        y: 0
+        boundsBehavior: Flickable.StopAtBounds
         anchors.right: parent.right
         anchors.rightMargin: 0
         anchors.left: input_view_flick.right

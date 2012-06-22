@@ -3,6 +3,7 @@
 #include "qmlapplicationviewer.h"
 #include "fileutils.h"
 #include "trios_to_qml.h"
+#include "triosinterface.h"
 #include "trios.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
@@ -15,6 +16,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     TRIOS_to_QML t2qml;
     viewer.rootContext()->setContextProperty("trios2qml", &t2qml);
+
+    TriosInterface ti;
+    viewer.rootContext()->setContextProperty("trios", &ti);
 
     viewer.setWindowTitle("TRIOS - Automatic image operator design tool");
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);

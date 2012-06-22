@@ -43,7 +43,8 @@ LIBS += -ltrios
 
 SOURCES += main.cpp \
     fileutils.cpp \
-    trios_to_qml.cpp
+    trios_to_qml.cpp \
+    triosinterface.cpp
 
 # Please do not modify the following two lines. Required for deployment.
 include(qmlapplicationviewer/qmlapplicationviewer.pri)
@@ -51,4 +52,5 @@ qtcAddDeployment()
 
 HEADERS += \
     fileutils.h \
-    trios_to_qml.h
+    trios_to_qml.h \
+    triosinterface.h

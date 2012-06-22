@@ -2,6 +2,8 @@ import QtQuick 1.1
 import "components"
 
 Rectangle {
+    property string operator_path: ""
+
     id: root
     width: 640
     height: 460
@@ -35,7 +37,7 @@ Rectangle {
         color: "#ffffff"
         radius: 5
         Text {
-            id: win_path
+            id: input_apply_path
             text: qsTr("None")
             font.pixelSize: 12
             anchors.fill: parent
@@ -45,12 +47,20 @@ Rectangle {
     }
 
     Button {
-        id: load_win
+        id: load_apply_input
         x: 375
         y: 85
         width: 76
         height: 29
         text: "Load"
+
+        onClicked: {
+            var path = fileUtils.fileOpenDialog("Choose an image to apply the operator");
+            if (path !=  null && path != "") {
+                input_apply_path.text = path;
+                input_image.source = path;
+            }
+        }
     }
 
     ImageButton {
@@ -63,6 +73,11 @@ Rectangle {
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 16
         image: "img/play.svg"
+
+        onClicked: {
+            console.log("Apply: " + root.operator_path + " " + input_apply_path.text)
+            var res_path = trios.apply(root.operator_path, input_apply_path.text);
+        }
     }
 
     Item {
@@ -78,7 +93,7 @@ Rectangle {
         boundsBehavior: Flickable.StopAtBounds
         anchors.bottom: apply_button.top
         anchors.bottomMargin: 10
-        anchors.top: load_win.bottom
+        anchors.top: load_apply_input.bottom
         anchors.topMargin: 10
         clip: true
         contentWidth: input_image.width
@@ -88,12 +103,12 @@ Rectangle {
 
         onContentXChanged: {
             flick_props.flickX = contentX;
-            input_view_flick.returnToBounds();
+            result_flick.returnToBounds();
         }
 
         onContentYChanged: {
             flick_props.flickY = contentY;
-            input_view_flick.returnToBounds();
+            result_flick.returnToBounds();
         }
 
         Image {
@@ -107,7 +122,7 @@ Rectangle {
         anchors.rightMargin: 0
         anchors.left: input_flick.right
         anchors.leftMargin: 0
-        anchors.top: load_win.bottom
+        anchors.top: load_apply_input.bottom
         anchors.topMargin: 10
         anchors.bottom: apply_button.top
         anchors.bottomMargin: 10

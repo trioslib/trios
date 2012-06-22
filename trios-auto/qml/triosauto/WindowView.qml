@@ -3,6 +3,7 @@ import QtQuick 1.1
 import "components"
 
 Rectangle {
+
     id: root
     width: 640
     height: 480
