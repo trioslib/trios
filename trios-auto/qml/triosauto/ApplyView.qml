@@ -76,7 +76,9 @@ Rectangle {
 
         onClicked: {
             console.log("Apply: " + root.operator_path + " " + input_apply_path.text)
-            var res_path = trios.apply(root.operator_path, input_apply_path.text);
+            var res_path = trios.apply(input_apply_path.text, root.operator_path);
+            console.log("FINISH " + res_path);
+            result_image.source = res_path;
         }
     }
 
