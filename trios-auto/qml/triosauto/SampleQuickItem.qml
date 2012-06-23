@@ -30,8 +30,8 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            input_image.source = input;
-            ideal_image.source = ideal;
+            sample_panel.image_left = input;
+            sample_panel.image_right = ideal;
         }
     }
 

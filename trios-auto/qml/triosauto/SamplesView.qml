@@ -82,73 +82,7 @@ Rectangle {
         }
     }
 
-    Item {
-        id: flick_props
-        property int flickX: 0
-        property int flickY: 0
-    }
 
-    Flickable {
-        id: input_view_flick
-        x: 0
-        width: parent.width/2
-        boundsBehavior: Flickable.StopAtBounds
-        anchors.bottom: samples_quick_view.top
-        anchors.bottomMargin: 10
-        anchors.top: input_label.bottom
-        anchors.topMargin: 0
-        clip: true
-        contentWidth: input_image.width
-        contentHeight: input_image.height
-        contentX: flick_props.flickX
-        contentY: flick_props.flickY
-
-        onContentXChanged: {
-            flick_props.flickX = contentX;
-            input_view_flick.returnToBounds();
-        }
-
-        onContentYChanged: {
-            flick_props.flickY = contentY;
-            input_view_flick.returnToBounds();
-        }
-
-        Image {
-            id: input_image
-        }
-    }
-
-    Flickable {
-        id: ideal_view_flick
-        boundsBehavior: Flickable.StopAtBounds
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: input_view_flick.right
-        anchors.leftMargin: 0
-        anchors.top: ideal_label.bottom
-        anchors.topMargin: 0
-        anchors.bottom: samples_quick_view.top
-        anchors.bottomMargin: 10
-        clip: true
-        contentWidth: ideal_image.width
-        contentHeight: ideal_image.height
-        contentX: flick_props.flickX
-        contentY: flick_props.flickY
-
-        Image {
-            id: ideal_image
-        }
-
-        onContentXChanged: {
-            flick_props.flickX = contentX;
-            ideal_view_flick.returnToBounds();
-        }
-
-        onContentYChanged: {
-            flick_props.flickY = contentY;
-            ideal_view_flick.returnToBounds();
-        }
-    }
 
     Text {
         id: input_label
@@ -165,6 +99,18 @@ Rectangle {
         anchors.top: rectangle1.bottom
         anchors.topMargin: 0
         font.pixelSize: 12
+    }
+
+    DualImagePanel {
+        id: sample_panel
+        anchors.bottom: samples_quick_view.top
+        anchors.bottomMargin: 10
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.top: input_label.bottom
+        anchors.topMargin: 10
     }
 
 

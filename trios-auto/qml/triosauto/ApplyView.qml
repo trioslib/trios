@@ -58,7 +58,7 @@ Rectangle {
             var path = fileUtils.fileOpenDialog("Choose an image to apply the operator");
             if (path !=  null && path != "") {
                 input_apply_path.text = path;
-                input_image.source = path;
+                apply_panel.image_left = path;
             }
         }
     }
@@ -75,80 +75,23 @@ Rectangle {
         image: "img/play.svg"
 
         onClicked: {
-            console.log("Apply: " + root.operator_path + " " + input_apply_path.text)
             var res_path = trios.apply(input_apply_path.text, root.operator_path);
-            console.log("FINISH " + res_path);
-            result_image.source = "";
-            result_image.source = res_path;
+            apply_panel.image_right = res_path;
         }
     }
 
-    Item {
-        id: flick_props
-        property int flickX: 0
-        property int flickY: 0
-    }
-
-    Flickable {
-        id: input_flick
-        x: 0
-        width: parent.width/2
-        boundsBehavior: Flickable.StopAtBounds
+    DualImagePanel {
+        id: apply_panel
         anchors.bottom: apply_button.top
         anchors.bottomMargin: 10
-        anchors.top: load_apply_input.bottom
-        anchors.topMargin: 10
-        clip: true
-        contentWidth: input_image.width
-        contentHeight: input_image.height
-        contentX: flick_props.flickX
-        contentY: flick_props.flickY
-
-        onContentXChanged: {
-            flick_props.flickX = contentX;
-            result_flick.returnToBounds();
-        }
-
-        onContentYChanged: {
-            flick_props.flickY = contentY;
-            result_flick.returnToBounds();
-        }
-
-        Image {
-            id: input_image
-        }
-    }
-
-    Flickable {
-        id: result_flick
         anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: input_flick.right
-        anchors.leftMargin: 0
-        anchors.top: load_apply_input.bottom
+        anchors.rightMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.top: rectangle1.bottom
         anchors.topMargin: 10
-        anchors.bottom: apply_button.top
-        anchors.bottomMargin: 10
-        clip: true
-        contentWidth: result_image.width
-        contentHeight: result_image.height
-        contentX: flick_props.flickX
-        contentY: flick_props.flickY
-
-        Image {
-            id: result_image
-            cache: false
-        }
-
-        onContentXChanged: {
-            flick_props.flickX = contentX;
-            result_flick.returnToBounds();
-        }
-
-        onContentYChanged: {
-            flick_props.flickY = contentY;
-            result_flick.returnToBounds();
-        }
     }
+
+
 
 }
