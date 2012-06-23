@@ -76,6 +76,7 @@ Rectangle {
 
         onClicked: {
             var res_path = trios.apply(input_apply_path.text, root.operator_path);
+            apply_panel.image_right = "";
             apply_panel.image_right = res_path;
         }
     }
