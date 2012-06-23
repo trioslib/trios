@@ -137,6 +137,7 @@ Rectangle {
 
         Image {
             id: result_image
+            cache: false
         }
 
         onContentXChanged: {
