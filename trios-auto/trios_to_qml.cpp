@@ -2,6 +2,9 @@
 #include "trios.h"
 
 #include <QDir>
+#include <QFile>
+
+#include <iostream>
 
 TRIOS_to_QML::TRIOS_to_QML(QObject *parent) :
     QObject(parent)
@@ -37,6 +40,7 @@ QVariantMap TRIOS_to_QML::read_imgset(QString path) {
             QVariantList images;
             for (int j = 0; j < imgset_get_grpsize(imgset); j++) {
                 char *str = imgset_get_ffullname(imgset, j+1, i+1);
+                printf("SDFDFS %s\n\n", str);
                 QDir img_dir(str);
                 if (!img_dir.isAbsolute()) {
                     QString path = file_dir.absoluteFilePath(QString(str));
@@ -75,14 +79,32 @@ bool TRIOS_to_QML::write_imgset(QVariantMap imgset, QString path) {
     int ngroups = imgset.size();
     int grpsize = QVariant(imgset["0"]).toList().length();
 
+    QDir path_dir(path);
+    QString filename = path_dir.dirName();
+    path_dir.cdUp();
+    QString input_path(filename + "-input");
+    path_dir.mkdir(input_path);
+    QString ideal_path(filename + "-ideal");
+    path_dir.mkdir(ideal_path);
+
+    QDir input_dir(path_dir.filePath(input_path));
+    QDir ideal_dir(path_dir.filePath(ideal_path));
+
     imgset_t *is = imgset_create(ngroups, grpsize);
+    imgset_set_dname(is, 1, (char *)input_path.toStdString().c_str());
+    imgset_set_dname(is, 2, (char *)ideal_path.toStdString().c_str());
     for (int i = 0; i < ngroups; i++) {
         QVariantList group = QVariant(imgset[QString::number(i)]).toList();
-        for (int j = 0; j < grpsize; j++) {
-            char *fname = (char *) QVariant(group[j]).toString().toStdString().c_str();
-            printf("%d %d -> %s", i, j, fname);
-            imgset_set_fname(is, j+1, i+1, fname);
-        }
+        QString input = QVariant(group[0]).toString();
+        QString ideal = QVariant(group[1]).toString();
+
+        QDir d(input);
+        QFile::copy(input, input_dir.filePath(d.dirName()));
+        imgset_set_fname(is, 1, i+1, (char *)d.dirName().toStdString().c_str());
+        d = QDir(ideal);
+        QFile::copy(ideal, ideal_dir.filePath(d.dirName()));
+        imgset_set_fname(is, 2, i+1, (char *)d.dirName().toStdString().c_str());
+
     }
     int r = imgset_write((char *)path.toStdString().c_str(), is);
     return r == 1;
