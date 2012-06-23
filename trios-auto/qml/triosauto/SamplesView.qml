@@ -10,6 +10,7 @@ Rectangle {
     color: "#d5d5d5"
 
     function loadSamples(samples) {
+        images.clear();
         for (var k in samples) {
             var sample = samples[k];
             images.add_sample(sample[0], sample[1]);

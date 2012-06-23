@@ -47,8 +47,8 @@ Item {
             onClicked: {
                 images.remove(index);
                 if (samples_quick_view.currentIndex == index) {
-                    input_image.source = "";
-                    ideal_image.source = "";
+                    sample_panel.image_left = "";
+                    sample_panel.image_right = "";
                 }
             }
         }
