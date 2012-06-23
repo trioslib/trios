@@ -35,6 +35,20 @@ Rectangle {
         height: 46
         image: "img/build.svg"
         text: "Build"
+
+        onClicked: {
+            var obj = {};
+            obj["width"] = window_view.win_width;
+            obj["height"] = window_view.win_height;
+            obj["window_data"] = window_view.getWindowData();
+            trios2qml.write_window(obj, "window.win");
+
+            var s = samples_view.getSamples();
+            trios2qml.write_imgset(s, "images.imgset");
+
+            trios.build("window.win", "images.imgset");
+            console.log("BUILD FINISH");
+        }
     }
 
 
