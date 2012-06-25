@@ -87,6 +87,7 @@ View {
             var path = fileUtils.fileSaveDialog("Save operator", "", "Operator (*.itv)");
             if (path != null && path != "") {
                 fileUtils.copy("itv_final.itv", path);
+                project_view.operator_path = path;
             }
             root.state = "";
         }

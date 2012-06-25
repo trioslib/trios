@@ -13,7 +13,9 @@ Rectangle {
         images.clear();
         for (var k in samples) {
             var sample = samples[k];
-            images.add_sample(sample[0], sample[1]);
+            if (k != 'error') {
+                images.add_sample(sample[0], sample[1]);
+            }
         }
     }
 

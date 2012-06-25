@@ -3,6 +3,8 @@ import QtQuick 1.1
 import "components"
 
 View {
+    property alias operator_path: operator_path_txt.text
+
     id: root
 
     Text {
@@ -51,8 +53,12 @@ View {
             var path = fileUtils.fileOpenDialog("Select the window configuration file", "", "Window configuration (*.win)");
             if (path != null && path != "") {
                 var window = trios2qml.read_window(path);
-                window_view.loadWindow(window['width'], window['height'], window['window_data']);
-                win_path.text = path;
+                if (window['error'] == false) {
+                    window_view.loadWindow(window['width'], window['height'], window['window_data']);
+                    win_path.text = path;
+                } else {
+                    root.state = "error_load";
+                }
             }
         }
     }
@@ -120,7 +126,7 @@ View {
                     samples_view.loadSamples(obj);
                     imgset_path.text = path;
                 } else {
-                    root.state = "error";
+                    root.state = "error_load";
                 }
             }
         }
@@ -157,7 +163,7 @@ View {
     }
 
     TextInput {
-        id: operator_path
+        id: operator_path_txt
         y: 306
         height: 29
         text: "None"
@@ -179,8 +185,7 @@ View {
 
         onClicked: {
             var path = fileUtils.fileOpenDialog("Select the operator", "", "Operator (*.itv)");
-            operator_path.text = path;
-            apply_view.operator_path = path;
+            operator_path_txt.text = path;
         }
 
     }

@@ -53,6 +53,9 @@ QVariantMap TRIOS_to_QML::read_imgset(QString path) {
             }
             m.insert(QString::number(i), images);
         }
+        m.insert("error", false);
+    } else {
+        m.insert("error", true);
     }
     return m;
 }

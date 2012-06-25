@@ -2,7 +2,6 @@ import QtQuick 1.1
 import "components"
 
 View {
-    property string operator_path: ""
 
     id: root
 
@@ -71,7 +70,7 @@ View {
         image: "img/play.svg"
 
         onClicked: {
-            var res_path = trios.apply(input_apply_path.text, root.operator_path);
+            var res_path = trios.apply(input_apply_path.text, project_view.operator_path);
             apply_panel.image_right = "";
             apply_panel.image_right = res_path;
             root.state = "apply_finished";
