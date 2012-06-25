@@ -78,6 +78,7 @@ Rectangle {
             var res_path = trios.apply(input_apply_path.text, root.operator_path);
             apply_panel.image_right = "";
             apply_panel.image_right = res_path;
+            root.state = "apply_finished";
         }
     }
 
@@ -92,6 +93,32 @@ Rectangle {
         anchors.top: rectangle1.bottom
         anchors.topMargin: 10
     }
+
+    InfoDialog {
+        id: apply_finished_dialog
+        x: 30
+        y: 85
+        visible: false
+
+        title: "Apply finished"
+        content: "The operator was applied with success."
+        dialog_width: 300
+        dialog_height: 130
+
+        onDismissed: {
+            root.state = "";
+        }
+    }
+    states: [
+        State {
+            name: "apply_finished"
+
+            PropertyChanges {
+                target: apply_finished_dialog
+                visible: true
+            }
+        }
+    ]
 
 
 
