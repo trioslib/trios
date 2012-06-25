@@ -2,15 +2,11 @@
 import QtQuick 1.1
 import "components"
 
-Rectangle {
+View {
     property int win_width: windowconfiguration.window_width
     property int win_height: windowconfiguration.window_height
 
     id: root
-    width: 640
-    height: 480
-    anchors.fill: parent
-    color: "#d5d5d5"
 
     function loadWindow(w_width, w_height, w_window) {
         win_width.text = w_width;

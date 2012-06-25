@@ -2,12 +2,8 @@
 import QtQuick 1.1
 import "components"
 
-Rectangle {
+View {
     id: root
-    width: 640
-    height: 460
-    anchors.fill: parent
-    color: "#d5d5d5"
 
     Text {
         id: title

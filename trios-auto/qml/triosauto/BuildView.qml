@@ -2,12 +2,8 @@
 import QtQuick 1.1
 import "components"
 
-Rectangle {
+View {
     id: root
-    width: 640
-    height: 460
-    anchors.fill: parent
-    color: "#d5d5d5"
 
     Text {
         id: text1
@@ -37,6 +33,8 @@ Rectangle {
         text: "Build"
 
         onClicked: {
+            root.state = "building";
+
             var obj = {};
             obj["width"] = window_view.win_width;
             obj["height"] = window_view.win_height;
@@ -46,10 +44,71 @@ Rectangle {
             var s = samples_view.getSamples();
             trios2qml.write_imgset(s, "images.imgset");
 
-            trios.build("window.win", "images.imgset");
-            console.log("BUILD FINISH");
+            var temp_operator_path = trios.build("window.win", "images.imgset");
+            root.state = "build_finished";
         }
     }
+
+    Rectangle {
+        id: building_message
+        color: "#ffffff"
+        visible: false
+        anchors.fill: parent
+
+        Image {
+            id: wait_building
+            anchors.centerIn: parent
+            source: "img/wait.gif"
+
+            RotationAnimation {
+                target: wait_building
+                direction: RotationAnimation.Clockwise
+                duration: 3000
+                from: 0
+                to: 359
+                running: true
+                loops: Animation.Infinite
+            }
+        }
+    }
+
+    InfoDialog {
+        id: infodialog1
+        x: 38
+        y: -105
+        visible: false
+
+        onDismissed: {
+            root.state = "";
+        }
+    }
+    states: [
+        State {
+            name: "building"
+
+            PropertyChanges {
+                target: building_message
+                visible: true
+            }
+
+            PropertyChanges {
+                target: infodialog1
+                visible: false
+            }
+        },
+        State {
+            name: "build_finished"
+
+            PropertyChanges {
+                target: infodialog1
+                dialog_height: 150
+                title: "Build finished"
+                content: "The build has finished. Click Ok to save the operator."
+                visible: true
+                opacity: 1
+            }
+        }
+    ]
 
 
 }
