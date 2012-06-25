@@ -40,7 +40,6 @@ QVariantMap TRIOS_to_QML::read_imgset(QString path) {
             QVariantList images;
             for (int j = 0; j < imgset_get_grpsize(imgset); j++) {
                 char *str = imgset_get_ffullname(imgset, j+1, i+1);
-                printf("SDFDFS %s\n\n", str);
                 QDir img_dir(str);
                 if (!img_dir.isAbsolute()) {
                     QString path = file_dir.absoluteFilePath(QString(str));
@@ -60,8 +59,6 @@ bool TRIOS_to_QML::write_window(QVariantMap window, QString path) {
     int width = QVariant(window["width"]).toInt();
     int height = QVariant(window["height"]).toInt();
     QVariantList data = QVariant(window["window_data"]).toList();
-
-    printf("%d x %d --  %d\n", width, height, data.length());
 
     window_t *win = win_create(height, width, 1);
     int k = 0;

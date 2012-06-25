@@ -14,6 +14,8 @@ public:
     Q_INVOKABLE QString fileSaveDialog(QString caption);
     Q_INVOKABLE QString fileSaveDialog(QString caption, QString path, QString file_type);
 
+    Q_INVOKABLE bool copy(QString source, QString dest);
+
 signals:
     
 public slots:

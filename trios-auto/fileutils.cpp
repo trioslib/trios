@@ -29,3 +29,7 @@ QString FileUtils::fileSaveDialog(QString caption) {
 QString FileUtils::fileSaveDialog(QString caption, QString path, QString file_type) {
     return QFileDialog::getSaveFileName(0, caption, path, file_type);
 }
+
+bool FileUtils::copy(QString source, QString dest) {
+    return QFile::copy(source, dest);
+}

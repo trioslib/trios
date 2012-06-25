@@ -34,26 +34,34 @@ View {
 
         onClicked: {
             root.state = "building";
+            build_timer.start();
 
-            var obj = {};
-            obj["width"] = window_view.win_width;
-            obj["height"] = window_view.win_height;
-            obj["window_data"] = window_view.getWindowData();
-            trios2qml.write_window(obj, "window.win");
-
-            var s = samples_view.getSamples();
-            trios2qml.write_imgset(s, "images.imgset");
-
-            var temp_operator_path = trios.build("window.win", "images.imgset");
-            root.state = "build_finished";
         }
+
+        Timer {
+            id: build_timer
+
+            onTriggered: {
+                var obj = {};
+                obj["width"] = window_view.win_width;
+                obj["height"] = window_view.win_height;
+                obj["window_data"] = window_view.getWindowData();
+                trios2qml.write_window(obj, "window.win");
+
+                var s = samples_view.getSamples();
+                trios2qml.write_imgset(s, "images.imgset");
+
+                var temp_operator_path = trios.build("window.win", "images.imgset");
+                root.state = "build_finished";
+            }
+        }
+
+
     }
 
-    Rectangle {
+    View {
         id: building_message
-        color: "#ffffff"
         visible: false
-        anchors.fill: parent
 
         Image {
             id: wait_building
@@ -79,6 +87,10 @@ View {
         visible: false
 
         onDismissed: {
+            var path = fileUtils.fileSaveDialog("Save operator", "", "Operator (*.itv)");
+            if (path != null && path != "") {
+                fileUtils.copy("itv_final.itv", path);
+            }
             root.state = "";
         }
     }
