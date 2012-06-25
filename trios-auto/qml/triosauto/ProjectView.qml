@@ -116,8 +116,12 @@ View {
             var path = fileUtils.fileOpenDialog("Select the image set", "", "Image Set (*.imgset)");
             if (path != null && path != "") {
                 var obj = trios2qml.read_imgset(path);
-                samples_view.loadSamples(obj);
-                imgset_path.text = path;
+                if (obj['error'] == false) {
+                    samples_view.loadSamples(obj);
+                    imgset_path.text = path;
+                } else {
+                    root.state = "error";
+                }
             }
         }
     }
@@ -176,11 +180,57 @@ View {
         onClicked: {
             var path = fileUtils.fileOpenDialog("Select the operator", "", "Operator (*.itv)");
             operator_path.text = path;
-            console.log(path);
             apply_view.operator_path = path;
-            console.log(apply_view.operator_path);
         }
 
     }
+
+    InfoDialog {
+        id: error_load
+        anchors.fill: parent
+        dialog_width: 250
+        dialog_height: 130
+        title: "Error loading the file."
+        content: "There was an error loading the file."
+        visible: false
+
+        onDismissed: {
+            root.state = "";
+        }
+    }
+
+    InfoDialog {
+        id: error_save
+        anchors.fill: parent
+        dialog_width: 250
+        dialog_height: 130
+        title: "Error saving the file."
+        content: "There was an error saving the file."
+        visible: false
+
+        onDismissed: {
+            root.state = "";
+        }
+    }
+
+    states: [
+        State {
+            name: "error_load"
+
+            PropertyChanges {
+                target: error_load
+                visible: true
+            }
+        },
+
+        State {
+            name: "error_save"
+
+            PropertyChanges {
+                target: error_save
+                visible: true
+            }
+        }
+    ]
 
 }

@@ -26,6 +26,9 @@ QVariantMap TRIOS_to_QML::read_window(QString path) {
             rows.append(n);
         }
         m.insert("window_data", rows);
+        m.insert("error", false);
+    } else {
+        m.insert("error", true);
     }
     return m;
 }
