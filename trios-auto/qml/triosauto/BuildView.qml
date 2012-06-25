@@ -5,23 +5,10 @@ import "components"
 View {
     id: root
 
-    Text {
-        id: text1
-        text: "Build Operator"
-        anchors.left: parent.left
-        anchors.leftMargin: 30
-        anchors.top: parent.top
-        anchors.topMargin: 30
-        font.pixelSize: 24
+    function build_finished(path) {
+        root.state = "build_finished";
     }
 
-    Text {
-        id: text4
-        x: 30
-        y: 100
-        text: qsTr("Building an operator takes a really long time. Push the button below and go pick a cofee.")
-        font.pixelSize: 12
-    }
 
     ImageButton {
         id: imagebutton1
@@ -34,29 +21,18 @@ View {
 
         onClicked: {
             root.state = "building";
-            build_timer.start();
+            var obj = {};
+            obj["width"] = window_view.win_width;
+            obj["height"] = window_view.win_height;
+            obj["window_data"] = window_view.getWindowData();
+            trios2qml.write_window(obj, "window.win");
 
+            var s = samples_view.getSamples();
+            trios2qml.write_imgset(s, "images.imgset");
+
+            trios.build_finished.connect(build_finished);
+            trios.build("window.win", "images.imgset");
         }
-
-        Timer {
-            id: build_timer
-
-            onTriggered: {
-                var obj = {};
-                obj["width"] = window_view.win_width;
-                obj["height"] = window_view.win_height;
-                obj["window_data"] = window_view.getWindowData();
-                trios2qml.write_window(obj, "window.win");
-
-                var s = samples_view.getSamples();
-                trios2qml.write_imgset(s, "images.imgset");
-
-                var temp_operator_path = trios.build("window.win", "images.imgset");
-                root.state = "build_finished";
-            }
-        }
-
-
     }
 
     View {
@@ -67,6 +43,7 @@ View {
             id: wait_building
             anchors.centerIn: parent
             source: "img/wait.gif"
+            opacity: 0.5
 
             RotationAnimation {
                 target: wait_building
@@ -78,6 +55,26 @@ View {
                 loops: Animation.Infinite
             }
         }
+
+        Text {
+            id: text4
+            x: 63
+            text: qsTr("Building an operator takes a really long time. Go pick a(t least one) cofee.")
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: wait_building.bottom
+            anchors.topMargin: 10
+            font.pixelSize: 12
+        }
+    }
+
+    Text {
+        id: text1
+        text: "Build Operator"
+        anchors.left: parent.left
+        anchors.leftMargin: 30
+        anchors.top: parent.top
+        anchors.topMargin: 30
+        font.pixelSize: 24
     }
 
     InfoDialog {

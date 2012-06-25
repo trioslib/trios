@@ -3,6 +3,7 @@
 #include "misc.h"
 
 #include <QDir>
+#include <QtConcurrentRun>
 
 TriosInterface::TriosInterface(QObject *parent) :
     QObject(parent)
@@ -22,14 +23,12 @@ QString TriosInterface::apply(QString input_path, QString operator_path) {
     }
 }
 
-QString TriosInterface::build(QString window_path, QString imgset_path) {
-    char *w_path = fromQString(window_path);
-    char *s_path = fromQString(imgset_path);
+void build_run(char *w_path, char *s_path, TriosInterface *trios) {
     if (!lcollec(s_path, w_path, NULL, 1, 1, 0, "result.xpl", NULL)) {
-        return "";
+        trios->send_build_finished("");
     }
     if (!ldecision("result.xpl",  1, 0, AVERAGE, 0, 0, "decision.mtm")) {
-        return "";
+        trios->send_build_finished("");
     }
     window_t *w = win_read(w_path);
     itv_t *i = itv_gen_itv(w, 1, BB, 0, 1, 0);
@@ -37,7 +36,19 @@ QString TriosInterface::build(QString window_path, QString imgset_path) {
     win_free(w);
     itv_free(i);
     if (!lisi("decision.mtm", "itv_temp.itv", 3, 5, 0, 0, "itv_final.itv", 0, NULL, NULL)) {
-        return "";
+        trios->send_build_finished("");
     }
-    return "itv_final.itv";
+    trios->send_build_finished("itv_final.itv");
+
+}
+
+QString TriosInterface::build(QString window_path, QString imgset_path) {
+    char *w_path = fromQString(window_path);
+    char *s_path = fromQString(imgset_path);
+    QtConcurrent::run(build_run, w_path, s_path, this);
+    return "";
+}
+
+void TriosInterface::send_build_finished(QString op) {
+    emit build_finished(op);
 }
