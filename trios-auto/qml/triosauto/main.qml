@@ -55,7 +55,7 @@ Item {
                 MenuItem {
                     id: menu_samples
                     text: "Samples"
-                    image: "img/project.svg"
+                    image: "img/samples.svg"
                     root_state: "samples"
                 }
 

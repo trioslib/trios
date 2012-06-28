@@ -12,17 +12,22 @@ Rectangle {
     width: 100
     height: 62
     radius: 9
-    border.color: "#000000"
+    color: pallete.button
+    border.color: "black"
+
+    SystemPalette {
+        id: pallete
+        colorGroup: SystemPalette.Active
+    }
+
 
     Image {
         id: img
         anchors.left: parent.left
-        anchors.leftMargin: 10
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 3
-        anchors.top: parent.top
-        anchors.topMargin: 3
+        anchors.verticalCenter: parent.verticalCenter
         width: 30
+        anchors.leftMargin: 10
+        fillMode: Image.PreserveAspectFit
     }
 
     Text {
@@ -32,6 +37,7 @@ Rectangle {
         anchors.leftMargin: 10
         verticalAlignment: Text.AlignVCenter
         anchors.verticalCenter: parent.verticalCenter
+        color: pallete.buttonText
     }
 
     MouseArea {

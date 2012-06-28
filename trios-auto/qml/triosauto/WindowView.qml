@@ -32,29 +32,24 @@ View {
     }
 
     Text {
-        id: text1
-        text: qsTr("Window Configuration")
-        anchors.top: parent.top
-        anchors.topMargin: 0
-        horizontalAlignment: Text.AlignHCenter
+        id: title
+        text: qsTr("Observation Window")
         anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        font.pixelSize: 20
+        anchors.leftMargin: 30
+        anchors.top: parent.top
+        anchors.topMargin: 30
+        font.pixelSize: 24
     }
 
     Row {
         id: row1
-        x: 170
-        y: 44
         width: 300
-        height: 59
+        height: 29
+        anchors.left: text4.left
+        anchors.leftMargin: 0
         spacing: 9
-        anchors.horizontalCenterOffset: 0
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: text1.bottom
-        anchors.topMargin: 21
+        anchors.top: text4.bottom
+        anchors.topMargin: 10
 
         Text {
             text: "Width"
@@ -98,9 +93,14 @@ View {
 
     WindowConfiguration {
         id: windowconfiguration
-        x: 156
-        y: 123
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.right: parent.right
+        anchors.rightMargin: 15
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 15
+        anchors.top: row1.bottom
+        anchors.topMargin: 10
+        anchors.left: parent.left
+        anchors.leftMargin: 30
     }
 
     Text {
@@ -108,10 +108,10 @@ View {
         x: 170
         y: 19
         text: qsTr("Window Size")
-        anchors.left: row1.left
-        anchors.leftMargin: 0
-        anchors.top: row1.top
-        anchors.topMargin: -25
+        anchors.left: parent.left
+        anchors.leftMargin: 30
+        anchors.top: title.bottom
+        anchors.topMargin: 15
         font.pixelSize: 12
     }
 }

@@ -10,6 +10,12 @@ Rectangle {
     height: 62
     radius: 9
     border.color: "#000000"
+    color: pallete.button
+
+    SystemPalette {
+        id: pallete
+        colorGroup: SystemPalette.Active
+    }
 
     Text {
         id: label
@@ -17,6 +23,7 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
+        color: pallete.buttonText
     }
 
     MouseArea {

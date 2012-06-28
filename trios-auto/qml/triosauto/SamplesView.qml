@@ -1,6 +1,7 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.1
 import "components"
+import QtQuick 1.0
 
 Rectangle {
     id: root
@@ -37,36 +38,24 @@ Rectangle {
         }
     }
 
-    Rectangle {
-        id: rectangle1
-        width: 640
-        height: 62
-        color: "#ffffff"
-        anchors.right: parent.right
-        anchors.rightMargin: 0
-        anchors.left: parent.left
-        anchors.leftMargin: 0
-        anchors.top: parent.top
-        anchors.topMargin: 0
+    Button {
+        id: button1
+        x: 13
+        y: 6
+        width: 140
+        height: 50
+        text: "Load Sample"
 
-        Button {
-            id: button1
-            x: 13
-            y: 6
-            width: 100
-            height: 50
-            text: "Load Sample"
-
-            onClicked: {
-                var input = fileUtils.fileOpenDialog("Choose the input image");
-                var ideal = fileUtils.fileOpenDialog("Choose the ideal image");
-                var mask = fileUtils.fileOpenDialog("Choose the mask image (optional)");
-                if (input != "" && ideal != "") {
-                    images.add_sample(input, ideal);
-                }
+        onClicked: {
+            var input = fileUtils.fileOpenDialog("Choose the input image");
+            var ideal = fileUtils.fileOpenDialog("Choose the ideal image");
+            var mask = fileUtils.fileOpenDialog("Choose the mask image (optional)");
+            if (input != "" && ideal != "") {
+                images.add_sample(input, ideal);
             }
         }
     }
+
 
     ListView {
         clip: true
@@ -90,17 +79,19 @@ Rectangle {
     Text {
         id: input_label
         x: 20
-        y: 62
         text: qsTr("Input Image")
+        anchors.top: button1.bottom
+        anchors.topMargin: 5
         font.pixelSize: 12
     }
 
     Text {
         id: ideal_label
-        x: 381
         text: qsTr("Ideal Image")
-        anchors.top: rectangle1.bottom
-        anchors.topMargin: 0
+        anchors.leftMargin: parent.width/2
+        anchors.left: parent.left
+        anchors.top: button1.bottom
+        anchors.topMargin: 5
         font.pixelSize: 12
     }
 

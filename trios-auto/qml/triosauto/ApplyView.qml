@@ -2,7 +2,7 @@ import QtQuick 1.1
 import "components"
 
 View {
-
+    property bool has_result: false
     id: root
 
     Text {
@@ -23,7 +23,7 @@ View {
         font.pixelSize: 16
     }
 
-    Rectangle {
+    /*Rectangle {
         id: rectangle1
         x: 30
         y: 85
@@ -39,6 +39,15 @@ View {
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
         }
+    }*/
+
+    TextInput {
+        id: input_apply_path
+        x: 30
+        y: 85
+        width: 326
+        height: 29
+        radius: 5
     }
 
     Button {
@@ -74,6 +83,29 @@ View {
             apply_panel.image_right = "";
             apply_panel.image_right = res_path;
             root.state = "apply_finished";
+            has_result = true;
+        }
+    }
+
+    ImageButton {
+        id: save_button
+        y: 405
+        width: 100
+        height: 39
+        text: "Save"
+        anchors.left: apply_button.right
+        anchors.leftMargin: 15
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 16
+        image: "img/save.svg"
+
+        onClicked: {
+            if (has_result) {
+                var save_path = fileUtils.fileSaveDialog("Save image as...", "", "Image (*.pgm)");
+                if (save_path != null && save_path != "") {
+                    fileUtils.copy("result.pgm", save_path);
+                }
+            }
         }
     }
 
@@ -85,7 +117,7 @@ View {
         anchors.rightMargin: 10
         anchors.left: parent.left
         anchors.leftMargin: 10
-        anchors.top: rectangle1.bottom
+        anchors.top: input_apply_path.bottom
         anchors.topMargin: 10
     }
 

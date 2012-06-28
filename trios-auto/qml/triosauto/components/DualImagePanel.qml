@@ -54,7 +54,7 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 0
         anchors.left: input_flick.right
-        anchors.leftMargin: 0
+        anchors.leftMargin: 5
         anchors.top: parent.top
         anchors.topMargin: 0
         anchors.bottom: parent.bottom
