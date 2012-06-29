@@ -1,6 +1,11 @@
 #ifndef TRIOS_IMG__
 #define TRIOS_IMG__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /*! Size of an unsigned char.*/
 #define sz8BIT sizeof(unsigned char) 
 /*! Size of an unsigned short. */
@@ -116,5 +121,10 @@ unsigned char *img_get_data(img_t *);
   \param t Image.
   */
 void img_free(img_t *i);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif

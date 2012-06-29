@@ -1,13 +1,13 @@
 PROJECT(TRIOS_IO)
 SET(TRIOS_IO_SRCS
-io_header.c			   
-io_imgset.c
-io_img.c
-io_itv.c
-io_mtm.c
-io_win.c
-io_xpl.c
-io_xpl_swt.c
+io/io_header.c
+io/io_imgset.c
+io/io_img.c
+io/io_itv.c
+io/io_mtm.c
+io/io_win.c
+io/io_xpl.c
+io/io_xpl_swt.c
 )
 ADD_LIBRARY(triosio ${TRIOS_IO_SRCS})
 

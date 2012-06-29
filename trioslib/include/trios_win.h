@@ -3,6 +3,11 @@
 #ifndef _trios_win_h_
 #define _trios_win_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #define MAXWINWIDTH  256
 #define MAXWINHEIGHT 256
 #define MAXWINBANDS  256
@@ -129,6 +134,10 @@ void           /*+ Purpose: free the memory area of a window               +*/
   win_free(
     window_t *win                /*+ In: a pointer to a window             +*/
     ) ;
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif /* _trios_win_h_ */

@@ -43,6 +43,8 @@ IF(APPLE)
   ENDIF(BUILD_SHARED_LIBS)
 ENDIF(APPLE)
 
+get_directory_property(TRIOS_BASIC_SRCS DIRECTORY src TRIOS_BASIC_SRCS)
+message("SRC ${TRIOS_BASIC_SRCS}")
 
 
 # Save the compiler settings so another project can import them.

@@ -5,7 +5,7 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
 
 int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t **img1, img_t **img2, img_t **img3) {
     /* Read first image */
-    char *filename = imgset_get_fname(imgset, 1, k);
+    char *filename = imgset_get_ffullname(imgset, 1, k);
     img_t *img = img_readPGM(filename);
     if (img == NULL) {
         return 0;
@@ -13,7 +13,7 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
     *img1 = img_convert_type(img, sz16BIT);
     img_free(img);
     /* Read second image */
-    filename = imgset_get_fname(imgset, 2, k);
+    filename = imgset_get_ffullname(imgset, 2, k);
     img = img_readPGM(filename);
     if (img == NULL) {
         return 0;
@@ -21,7 +21,7 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
     *img2 = img;
     /* If there is a mask, read it */
     if (imgset_get_grpsize(imgset) >= 3) {
-        filename = imgset_get_fname(imgset, 3, k);
+        filename = imgset_get_ffullname(imgset, 3, k);
         img = img_readPGM(filename);
         if (img == NULL) {
             return 0;

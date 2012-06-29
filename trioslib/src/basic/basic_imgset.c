@@ -1,6 +1,6 @@
 #include <trios.h>
 
- /*#define _DEBUG_*/
+/*#define _DEBUG_*/
 
 
 /*!
@@ -324,9 +324,12 @@ trios_debug("dirname=%s", dirname) ;
 trios_debug("fname=%s", fname) ;
 #endif
 
-  fullname = (char *)malloc(strlen(dirname)+strlen(fname)+1) ;
+  fullname = (char *)malloc(strlen(dirname)+strlen(fname)+2) ;
 
-  strcpy(fullname, dirname) ;
+  strcpy(fullname, dirname);
+  if (dirname[strlen(dirname) - 1] != '/') {
+      strcat(fullname, "/");
+  }
   strcat(fullname, fname) ;
 
   return(fullname) ;

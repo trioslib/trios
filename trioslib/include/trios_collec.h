@@ -2,6 +2,11 @@
 #include "trios_win.h"
 #include "trios_imgset.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #define SWT_OUTPUT 1
 #define XPL_OUTPUT 2
 
@@ -51,3 +56,8 @@ int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_fo
 /* Internal functions. */
 int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int cv_flag, char *log_file);
 xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int cv);
+
+
+#ifdef __cplusplus
+}
+#endif

@@ -1,8 +1,8 @@
 PROJECT(TRIOS_LEARN)
 SET(TRIOS_LEARN_SRCS
-ip_isi.c
+learn/ip_isi.c
 #ip_isigray.c			   
-ip_mincover.c
+learn/ip_mincover.c
 #ip_newdec.c			   
 #ip_shannon.c
 #ip_switch.c			   
@@ -10,7 +10,7 @@ ip_mincover.c
 #ipac_mtmGG.c
 #dp_newdec.c
 #ip_group.c
-dp_isi.c
+learn/dp_isi.c
 #dp_group.c
 #dp_partition.c
 #dp_itvconcat.c  
@@ -19,8 +19,8 @@ dp_isi.c
 # dp_train0.c
 # dp_train1.c
 #dp_switch.c
-decision.c
-decision_bb.c
+learn/decision.c
+learn/decision_bb.c
 #dp_isigray.c  
 #dp_mincover.c
 #dp_rank.c

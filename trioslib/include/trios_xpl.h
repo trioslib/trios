@@ -1,6 +1,11 @@
 #ifndef _pac_xpl_h_
 #define _pac_xpl_h_
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define  EQUAL   0
 #define  LESS    -1
 #define  GREAT   1
@@ -483,6 +488,9 @@ int                /*+ Purpose: insert a node in a BB XPL tree, balancing
 /*+ Return: >= 0 on success, -1 on failure                                 +*/
 
 
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif

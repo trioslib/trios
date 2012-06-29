@@ -2,6 +2,10 @@
 import QtQuick 1.1
 
 Rectangle {
-    width: 100
-    height: 62
+    id: root
+    width: 640
+    height: 460
+    anchors.fill: parent
+    color: "#d5d5d5"
+
 }

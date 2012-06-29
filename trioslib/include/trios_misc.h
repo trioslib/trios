@@ -1,6 +1,9 @@
 #ifndef _trios_misc_h_
 #define _trios_misc_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
 #define  MSG     2    /*!< parameter for routine pac_error()
@@ -91,6 +94,10 @@ typedef struct idx_ll {
 	---------------------------------------*/
 
 extern unsigned int bitmsk[32] ;
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif
