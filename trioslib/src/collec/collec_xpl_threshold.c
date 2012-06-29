@@ -25,13 +25,6 @@ colthresh_BB(unsigned short *s1,	/* + In: input image data + */
  * + Returns: an example's set on success, NULL on failure +
  */
 {
-	/*
-	 * author: Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br) 
-	 */
-	/*
-	 * date: Apr 06 1999 
-	 */
-
 	int i, j, k, s;
 	unsigned int freq0, freq1;
 	int nshifts;
@@ -179,13 +172,6 @@ colthresh_BB(unsigned short *s1,	/* + In: input image data + */
 
 
 int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_format, char *o1_fname) {
-	/*
-	 * author: Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br) 
-	 */
-	/*
-	 * date: Mon Apr 06 1999 
-	 */
-
 	imgset_t *imgset;
 	window_t *win;
 	xpl_t *xpl, *xpl_new;

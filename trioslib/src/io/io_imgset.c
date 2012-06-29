@@ -13,14 +13,6 @@
 */
 
 imgset_t *imgset_read(char *fname) {
-/*  author: Nina S. Tomita (nina@ime.usp.br)                                */
-/*  date: Mon Nov 25 1996                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Mon Nov  3 1997                                                   */
-/*  Mod: Modified to read the new file format                               */
-
-
   char tag, dot ;
   int  tags_read, stop ;
 
@@ -138,7 +130,7 @@ pac_debug("ngroups=%d  grpsize=%d", ngroups, grpsize);
 
 
 /*!
-    Wrtie an image set to a file.
+    Write an image set to a file.
 
     \param fname Filename.
     \param imgset Image set.
@@ -146,14 +138,6 @@ pac_debug("ngroups=%d  grpsize=%d", ngroups, grpsize);
 */
 
 int imgset_write(char *fname, imgset_t *imgset) {
-/*  author: Nina S. Tomita  (nina@ime.usp.br)                      */
-/*  date: Mon Nov 25 1996                                          */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Mon Nov  3 1997                                                   */
-/*  Mod: Modified to write the new file format                              */
-
-
   header_t header = {"IMGSET  ", ""};
   FILE *fd ;
   int  i, k ;

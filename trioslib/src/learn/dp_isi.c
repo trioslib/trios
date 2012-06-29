@@ -45,22 +45,6 @@ int                   /*+ Purpose: ISI algorithm                           +*/
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec  9 1997                                                   */
-
-/*  Date: Mon Feb 14 2000                                                   */
-/*  Mod: Added parameters and code needed for the generation of intermediary*/
-/*    and final log files                                                   */
-
-/* Date: Wed Feb 17 2000                                                   */
-/* Mod: Window structure (1) changed to support multiple bands, (2) no     */
-/*      longer holds information about aperture.                           */
-/*      New structure "apert_t" was created.                               */
-/*      Modifications were made to adequate to the structure changing.     */
-
-/* Date: Dec 20 2001                                                       */
-/* Mod: Garbage collection de-implemented                                  */
-
   window_t *win1, *win2 ;
   /*apert_t  *apt, *apt2 ;*/
   mtm_t    *mtm ;

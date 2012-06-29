@@ -13,9 +13,6 @@
 */
 
 header_t *header_read(FILE *fd) {
-/* author Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br)             */
-/* date: Mon Oct 21 1996                                                 */
-
   char      buffer[64];
   header_t  *aHeader;
   int	     index1=0;
@@ -45,10 +42,6 @@ header_t *header_read(FILE *fd) {
 */
 
 void header_write(FILE *fd, header_t *aHeader) {
-
-/* author: Nina S. Tomita and R. Hirata Jr.(nina@ime.usp.br)   */
-/* date: Mon Oct 21 1996                                       */
-
   int i ;
   int aux ;
   
@@ -79,10 +72,6 @@ void header_write(FILE *fd, header_t *aHeader) {
 */
 
 int header_compare(header_t *aHeader, header_t *otherHeader) {
-
-/* author: Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br)              */
-/* date: Mon Oct 21 1996                                                   */
-
   return(!strcmp(aHeader->fileType, otherHeader->fileType));
 
 }
@@ -98,10 +87,6 @@ int header_compare(header_t *aHeader, header_t *otherHeader) {
 */
 
 int header_match(FILE *fd, const char *keyword) {
-
-/* author: Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br)              */
-/* date: Thu Feb 17 2000                                                   */
-
   header_t *aHeader ;
   int      result ;
 

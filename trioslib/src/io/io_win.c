@@ -5,13 +5,6 @@
 /* #define _DEBUG_ */
 /* #define _DEBUG_1_ */
 
-/* Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/* Date: Wed Feb 17 2000                                                   */
-/* Mod: Window structure (1) changed to support multiple bands, (2) no     */
-/*      longer holds information about aperture. Modifications were made   */
-/*      to adequate to the structure changing.                             */
-
-
 window_t *win_read_data(FILE *fd);
 void win_write_data(FILE *fd, window_t *win);
 
@@ -23,10 +16,6 @@ void win_write_data(FILE *fd, window_t *win);
 */
 
 window_t *win_read(char *fname) {
-/* author:  Nina S. Tomita & Roberto Hirata Jr. (nina@ime.usp.br)         */
-/* date: Thu Oct 17 1996                                                  */
-
-
   FILE      *fd ;
   window_t  *win;                 /* window            */
 
@@ -70,29 +59,6 @@ window_t *win_read(char *fname) {
 */
 
 window_t *win_read_data(FILE *fd) {
-/* author:  Nina S. Tomita & Roberto Hirata Jr. (nina@ime.usp.br)  */
-/*  date: Thu Oct 17 1996                                          */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Oct 30 1997                                                   */
-/*  Mod: The specification of the file format was changed to include tags   */
-/*       (.h, .w, etc). The reading procedure was modified to read this new */
-/*       format. It was also included a new parameter wkrange.              */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Jun  3 1998                                                   */
-/*  Mod: Modified to include the vertical placement                         */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Oct 29 1999                                                   */
-/*  Mod: Modified to include support to different input/output ranges       */
-
-/* Date: Wed Feb 16 2000                                                   */
-/* Mod: Window structure (1) changed to support multiple bands, (2) no     */
-/*      longer holds information about aperture. Modifications were made   */
-/*      to adequate to the structure changing.                             */
-
-
   char     tag, dot ;
   int      i, j, k, pt, tags_read, stop ;
   int      height, width, nbands ;
@@ -197,10 +163,6 @@ window_t *win_read_data(FILE *fd) {
 */
 
 int win_write(char *fname, window_t *win) {
-/* author:  Nina S. Tomita & Roberto Hirata Jr. (nina@ime.usp.br)        */
-/*  date: Thu Oct 17 1996                                                */
-
-
   header_t winHeader = {"WINSPEC ", ""};
   FILE     *fd ;
 
@@ -239,28 +201,6 @@ pac_debug("Passei pelo fopen().");
 */
 
 void win_write_data(FILE *fd, window_t *win) {
-/* author  Nina S. Tomita & Roberto Hirata Jr. (nina@ime.usp.br)     */
-/* date: Thu Oct 17 1996                                             */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Oct 31 1997                                                   */
-/*  Mod: The specification of the file format was changed to include tags   */
-/*  (.h, .w, etc). The writing procedure was modified to write this new     */
-/*  format. It was also included a new parameter wkrange                    */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Jun  3 1998                                                   */
-/*  Mod: Modified to include the vertical placement                         */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Oct 29 1999                                                   */
-/*  Mod: Modified to include support to different input/output ranges       */
-
-/* Date: Wed Feb 16 2000                                                   */
-/* Mod: Window structure (1) changed to support multiple bands, (2) no     */
-/*      longer holds information about aperture. Modifications were made   */
-/*      to adequate to the structure changing.                             */
-
   int      width, height, nbands ;
   int      i, j, k ;
    

@@ -11,17 +11,6 @@
 
 
 int ldecision(char *fname_i, int comp_prob, double freqmin, double estim, int comptype, int undflabel, char *fname_o) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                */
-/*  date: Tue Oct 29 1996                                                  */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)      */
-/*  Date: Tue Jan  6 1998                                                  */
-/*  Mod: Added a new parameter - comp_prob                                 */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Sun Feb 20 2000                                                   */
-/*  Mod: treatment of the undecidable cases (tie condition) fixed and       */
-/*       improved. New parameter comptype introduced                        */
     xpl_t    *xpl ;
     mtm_t    *mtm ;
     window_t *win ;
@@ -88,20 +77,6 @@ pac_debug("DEpois dos frees finais") ;
     \return The created classified examples set.
   */
 mtm_t *mtm_decide(xpl_t *xpl, int   comp_prob, double freqmin, double estimator, int comptype,int undflabel) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Oct 29 1996                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan  6 1998                                                   */
-/*  Mod: Added a new parameter - comp_prob                                  */
-/*  Mod: Routine modified to compute the probabilities P(x) and p(y|x) if   */
-/*       comp_prob== 1                                                      */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Sun Feb 20 2000                                                   */
-/*  Mod: treatment of the undecidable cases (tie condition) fixed and       */
-/*       improved. New parameter comptype introduced                        */
-
   mtm_t *mtm ;
   int   type, wsize ;
   unsigned int nmtm, sum ;

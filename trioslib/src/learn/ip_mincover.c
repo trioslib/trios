@@ -16,16 +16,6 @@ int all_covered2( itv_t  *itv, mtx_t  *mx_head, mtm_t  *mtm );
 
 void mtx_free(mtx_t *mp) ;
 
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Dec 19 1997                                                   */
-/*  Mod: added a couple of new routines for minimum cover computation       */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Apr 20 1999                                                   */
-/*  Mod: No relevant modifications, only release of allocated memory        */
-/*       or insertion of some documentation                                 */
-
 void mtx_free(mtx_t *mp) {
 
   if(mp->I != NULL) {
@@ -53,10 +43,6 @@ int            /*+ Purpose: compute the minimun cover of a set of minterms.+*/
 )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Dec 19 1997                                      */
-
   /* remove from itv all intervals that do not contain any example 
      with label 1 */
   if(!itv_filter(mtm, itv)) {
@@ -87,10 +73,6 @@ int            /*+ Purpose: compute the minimun cover of a set of minterms.
 )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 9 1997                                                    */
-
   idx_ll   *ll_head ;
   mtx_t    *mx_head, *mx ;
   itv_BX   *p_essen ;
@@ -198,10 +180,6 @@ idx_ll *          /*+ Purpose: create a list of indices pointing to the
 /*+ Return: a pointer to a list of indices. If it is NULL, then either
      the examples set is empty or an error has occurred                    +*/
 {
- 
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Nov 26 1996                                                    */
-
 
   idx_ll  *p, *head ;
   int     i ;
@@ -238,11 +216,6 @@ int             /*+ Purpose: create auxiliar structure to hold intervals   +*/
 )
 /*+ Return: 1 on success, 0 on failure. The interval set will be empty     +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 16 1997                                      */
-
-
   mtx_t  *mp, *mp_head ;
   itv_BX **p_vector, *p, *p_next ;
   int    wsize, i, dim ;
@@ -323,11 +296,6 @@ itv_BX *        /*+ Purpose: select essential intervals                    +*/
   )
 /*+ Return: a pointer to a list with essential intervals                   +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 16 1997                                                   */
-
-
   mtx_t    *mp_head, *mp, *mp_bef, *xp, *xp_bef ;
   mtm_BX   *q ;
   idx_ll   *p, *p_next ;
@@ -437,10 +405,6 @@ void           /*+ Purpose: delete from the list of indices, those that
   )
 /*+ Return: nothing                                                        +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 16 1997                                                   */
-
   idx_ll  *cur, *curbef ;
   mtm_BX  *q ;
   int     j, stop_flag ;
@@ -504,10 +468,6 @@ int             /*+ Purpose: add a list of intervals to a set of intervals
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 16 1997                                                   */
-
   itv_BX *p ;
   int    count ;
 
@@ -547,10 +507,6 @@ int             /*+ Purpose: delete dominated rows of the prime implicant
 /*+ Return: 0 on failure, 2 if there is no modification and 1 if some rows
     were deleted                                                           +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 16 1997                                      */
-
    mtx_t  *m, *m1, *ant, *ant1 ;
    int    cob_type, rowsize, i, flag, retcode ;
 
@@ -702,11 +658,6 @@ int             /*+ Purpose: given pointers for intervals and examples,
 )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 16 1997                                                   */
-
-
   mtx_t     *m ;
   mtm_BX    *q ;
   idx_ll    *p ;
@@ -780,11 +731,6 @@ itv_BX *        /*+ Purpose: select a cover by the greedy method           +*/
 )
 /*+ Return: the selected subset of intervals                               +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 16 1997                                                   */
-
-
   itv_BX   *essen ;
   mtx_t    *mp, *last ;
   mtm_BX   *q ;
@@ -879,10 +825,6 @@ int             /*+ Purpose: delete, from a list of indices, those that
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 16 1997                                                   */
-
   idx_ll  *cur, *curbef, *px ;
   mtm_BX  *q ;
   int     j, stop_flag ;
@@ -949,10 +891,6 @@ int             /*+ Purpose: check if some interval of a list contains a
 )
 /*+ Return: 1 if wpat in some interval, 0 otherwise                        +*/
 {
- 
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Nov 26 1996                                                    */
-
   int    label ;
   int    i ;
   itv_BX *p ;
@@ -1003,10 +941,6 @@ int             /*+ Purpose: check if some interval of a list contains a
 )
 /*+ Return: 1 if wpat in some interval, 0 otherwise                        +*/
 {
- 
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Nov 26 1996                                                    */
-
   int    label ;
   int    i ;
   mtx_t  *p ;
@@ -1053,10 +987,6 @@ int             /*+ Purpose: check wether all examples of a set are covered +*/
 )
 /*+ Return: 1 if all of them are covered, 0 otherwise                      +*/
 {
- 
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Nov 26 1996                                                    */
-
   mtm_BX *q ;
   int    wzip, i ;
 
@@ -1089,10 +1019,6 @@ int             /*+ Purpose: check wether all examples of a set are covered +*/
 )
 /*+ Return: 1 if all of them are covered, 0 otherwise                      +*/
 {
- 
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Nov 26 1996                                                    */
-
   mtm_BX *q ;
   int    wzip, i ;
 

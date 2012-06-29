@@ -6,18 +6,6 @@
 /* #define _DEBUG_1_ */
 /* #define _DEBUG_2_ */
 
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan 13 1998                                                   */
-/*  Mod: Modified to include WK support                                     */
-
-/* Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/* Date: Wed Feb 17 2000                                                   */
-/* Mod: Window structure (1) changed to support multiple bands, (2) no     */
-/*      longer holds information about aperture.                           */
-/*      New structure "apert_t" was created.                               */
-/*      Modifications were made to adequate to the structure changing.     */
-
-
 /*!
     Read an examples file.
 
@@ -27,16 +15,6 @@
 */
 
 xpl_t *xpl_read(char *fname, window_t **win/*, apert_t **apt*/) {
-/*  author:  Nina S. Tomita, Roberto Hirata Jr. (nina@ime.usp.br)           */
-/*  date: Thu Oct 17 1996                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Mon Nov 3 1997                                                    */
-/*  Mod: Modified to support new file format                                */
-
-/*  Date: Thu Feb 17 2000                                                   */
-/*  Mod: New parameter (aperture)                                           */
-
   FILE      *fd ;
   xpl_t     *xpl ; 
   freq_node *freqnode, *freqlist ;   /* pointers to a frequency node */
@@ -411,17 +389,6 @@ pac_debug("xpl type=%d", xpl->type) ;
 */
 
 int xpl_write(char *fname, xpl_t *xpl, window_t *win/*, apert_t  *apt*/) {
-/*  author:  Nina S. Tomita, Roberto Hirata Jr. (nina@ime.usp.br)           */
-/*  date: Thu Oct 17 1996                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Mon Nov 3 1997                                                    */
-/*  Mod: Modified to support new file format                                */
-
-/*  Date: Thu Feb 17 2000                                                   */
-/*  Mod: New parameter (aperture)                                           */
-
-
   header_t xplHeader = { "EXAMPLE ", ""};
   FILE     *fd ;
   int      type, wzip, wsize ;
@@ -528,9 +495,6 @@ pac_debug("type=%d", type) ;
 */
 
 void xpl_BB_write_tree(FILE *fd, xpl_BB *p, int wzip) {
-/*  author:  Nina S. Tomita, Roberto Hirata Jr. (nina@ime.usp.br)             */
-/*  date: Thu Oct 17 1996                                                     */
-
   int i ;
   
   if(p != NULL) {

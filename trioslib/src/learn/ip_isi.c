@@ -25,26 +25,6 @@
 #include </usr/include/time.h>
 #endif
 
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Mon Dec 29 1997                                                   */
-/*  Mod: Implementation of ISI by points (ISI-0, ISI-1 and ISI-3). Also,    */
-/*       implementation of multiclassification ISI. Added a couple of new   */
-/*       routines for that purpose                                          */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Apr 20 1999                                                   */
-/*  Mod: Some code line to free allocated memory have been inserted.        */
-/*       No major modifications.                                            */
-
-/* Date: Dec 20 2001                                                        */
-/* Mod: Garbage collection de-implemented                                   */
-
-/*  Modification by:  Nina S. T. Hirata  (nina@ime.usp.br)                  */
-/*  Date: Jan 09 2002                                                       */
-/*  Mod: memory de-allocation tested with dmalloc.4.8.2                     */
-/*       Incorporated execution time computation done by Martha             */
-
-
 /* GLobal variables */
 char     *GLtmp_bas_file, *GLlog_file ;
 int       GLlog_step ;
@@ -128,23 +108,6 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 9 1997                                                    */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Mon Aug 23 1999                                                   */
-/*  Mod: Modifications on multiclassification (BG ISI) due to changes made  */
-/*       on the MTM file format.                                            */
-
-/*  Date: Fri Feb 25 2000                                                   */
-/*  Mod: support for ISI-2                                                  */
-/*  Mod: new parameters for printing log messages during the processing     */
-/*       and also to save basis at intermediary steps of the processing.    */
-/*  Mod: support for minimum cover computation step for ISI-3               */
-
-/* Date: Dec 20 2001                                                       */
-/* Mod: Garbage collection de-implemented                                  */
-
   mtm_t     *mtm0, *mtm1, *mtm ;
   itv_t     *itv, *itv_o ;
   itv_BX    *p_out ;
@@ -395,19 +358,6 @@ int                 /*+ Purpose: ISI with groupment of examples            +*/
  )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Thu Nov 21 1996                                                    */
-  
-/*  Date: Fri Feb 25 2000                                                   */
-/*  Mod: new parameters for printing log messages during the processing     */
-/*       and also to save basis at intermediary steps of the processing.    */
-/*  Mod: support for minimum cover computation step for ISI-3               */
-/*  Mod: support for multiclassification with grouping                      */
-/*  Mod: garbage collection implemented                                     */
-
-/* Date: Dec 20 2001                                                       */
-/* Mod: Garbage collection de-implemented                                  */
-
   itv_t     *itv, *itv_o ;
   mtm_t     *mtm0, *mtm1, *mtm ;
   itv_BX    *itv_list1, *itv_list2 = NULL, *p_out ;
@@ -678,13 +628,6 @@ int             /*+ Purpose: sort labels of a classified examples set
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Thu Feb 24 2000                                                   */
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/* date: Thu Feb 24 2000                                                   */
-/* Mod: (counting sort) modified to support negative numbers too           */ 
-
   int       i, j, aux, k ;
   freq_node *p ;
   int       fq[256] ; 
@@ -782,10 +725,6 @@ int             /*+ Purpose: ISI-0 by points                               +*/
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 9 1997                                                    */
-
 
   mtm_BX  *q ;
   itv_t   *itv ;
@@ -939,11 +878,6 @@ int             /*+ Purpose: ISI-1 (point case)                            +*/
 )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 9 1997                                                    */
-
-
   mtm_BX  *q ;
   itv_t   *itv ;
   itv_BX  *p_list, *tmp0, *tmp, *p_new, *p_kill, *p_split ;
@@ -1109,10 +1043,6 @@ int             /*+ Purpose: ISI-2 (point case)                            +*/
 )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 9 1997                                                    */
-
   idx_ll  *ll_head, *ll_aux, *ll_yes, *ll_no ;
   mtm_BX  *q ;
   itv_t   *itv ;
@@ -1323,12 +1253,7 @@ int             /*+ Purpose: ISI-3 (point case)                            +*/
 )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 9 1997                                                    */
-
-
-  mtm_BX  *q ;
+   mtm_BX  *q ;
   itv_t   *itv ;
   itv_BX  *p_list, *tmp0, *tmp, *p_new, *p_kill, *p_split ;
   int     stop_flag, covered ;
@@ -1650,9 +1575,6 @@ int              /*+ Purpose: split all intervals of a list (of intervals)
   )
 /*+ Return: number of intervals in the second list on success, 0 on failure +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Thu Nov 21 1996                                                    */
-  
   itv_BX  *p, *tmp, *p_new, *p_kill, *p_split, *I ;
   int      stop_flag, covered ;
   int      wzip, nitv_new ;
@@ -1785,9 +1707,6 @@ int              /*+ Purpose: split all intervals of a list (of intervals)
   )
 /*+ Return: number of intervals processed on success, 0 on failure           +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                    */
-/* date: Thu Nov 21 1996                                                      */
-  
   itv_BX  *p, *tmp, *p_new, *p_kill, *p_split, *I ;
   int      stop_flag, covered ;
   int      wzip, nitv_new ;
@@ -1931,9 +1850,6 @@ int     /*+ Purpose: split all intervals of a list (of intervals)
   )
 /*+ Return: number of intervals processed (removed) on success, 0 on failure +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Thu Nov 21 1996                                                    */
-  
   itv_BX  *p, *tmp, *p_new, *p_kill, *p_split, *I ;
   int      stop_flag, covered ;
   int      wzip, nitv_new ;
@@ -2103,9 +2019,6 @@ itv_BX *        /*+ Purpose: Given an interval I, and a point X, computes
 )
 /*+ Return: a pointer to a set of intervals on success, NULL on failure    +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 9 1997                                                    */
-
   itv_BX *p_list, *p ;
   int    j, lim, bit, i_wzip, nsh ;
 
@@ -2194,9 +2107,6 @@ itv_BX *        /*+ Purpose: Given two intervals, I1 and I2, computes a
 /*+ Return: a pointer to an intervals set structure on success,
     NULL on failure                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Thu Nov 21 1996                                                    */
- 
   itv_BX *p, *p1 ;
   int    j, lim, bit, i_wzip, nsh ;
 
@@ -2275,9 +2185,6 @@ int            /*+ Purpose: copy a set of intervals to the end of a list   +*/
 )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 { 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec  9 1997                                                   */
-
   itv_BX *p, *p1, *p2 ;
   int    wzip, j ;
 
@@ -2324,9 +2231,6 @@ int             /*+ Purpose: check wether the interval I contains any
 )
 /*+ Return: 1 if I contains any example, 0 otherwise                       +*/
 { 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec  9 1997                                                   */
-
   mtm_BX   *q ;
   int      i, stop_flag, j ;
 
@@ -2367,10 +2271,6 @@ int             /*+ Purpose: remove intervals that do not contain any
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
  
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec 16 1997                                                   */
-
-
   itv_BX *p1, *p2 ;
   mtm_BX *q ;
   int    i, j, flg, stop_flag ;

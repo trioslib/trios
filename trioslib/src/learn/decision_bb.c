@@ -8,25 +8,6 @@
 /* #define _DEBUG_ */
 /* #define _DEBUG_1_ */
 
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan  6 1998                                                   */
-/*  Mod: mtm_decide changed to compute probabilities P(x) and p(y|x) if     */
-/*       comp_prob==1                                                       */
-/*  Mod: recursive routine to do the decision changed by a non-recursive    */
-/*       in the BB case (decide_ll_bb)                                      */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan 13 1998                                                   */
-/*  Mod: Modified to treat the case WK                                      */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Aug 19 1999                                                   */
-/*  Mod: each node of the mtm table will incorporate a field fq, which      */
-/*       tells how many times the example has been observed during          */
-/*       sampling (or when that is not possible, gives an idea of the       */
-/*       frequency of that example)                                         */
-
-
 /*!
     Makes the decision for BB and BG. Recursive version.
 
@@ -40,9 +21,6 @@
     \return 1 on success. 0 on failure.
 */
 int decide_tree_bb(xpl_BB *p, mtm_t *mtm, unsigned int sum, int wzip, double freqmin, double estimator, int undflabel) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/*  date: Wed Oct 30 1996                                                    */
-  
   float     verify;
   int       wpat_max ;
   unsigned int wpat_freq ;
@@ -157,19 +135,7 @@ pac_debug("mtmbbtree Vai inserir wpat[0]=%d label=%d", p->wpat[0], wpat_label) ;
     \return 1 on success. 0 on failure.
 */
 int decide_ll_bb(xpl_t *xpl, mtm_t *mtm, double freqmin, double estimator, int undflabel, int comp_prob) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Jan  6 1998                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Mon Feb 23 1998                                                   */
-/*  Mod: estimator==AVERAGE case modified to assign the conflicting case    */
-/*       label to the example when freq0==freq1 (instead of 0)              */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Mar 10 1998                                                   */
-/*  Mod: Probabilities changed from "float" to "double"                     */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
+/*  Modification */
 /*  Date: Thu Aug 19 1999                                                   */
 /*  Mod: instead keeping frequency information as probabilities, now they   */
 /*       will be kept as integer numbers. The frequency of a given pattern  */

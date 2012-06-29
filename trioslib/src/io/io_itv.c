@@ -14,36 +14,6 @@
  */
 
 itv_t *itv_read(char *fname, window_t **win/*, apert_t **apt*/) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)            */
-/*  date: Thu Oct 31 13:25:36 EDT 1996                                 */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)  */
-/*  Date: Tue Nov  4 1997                                              */
-/*  Mod: File format was modified                                      */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Aug 11 1999                                                   */
-/*  Mod: the way the list of intervals was being built was modified.        */
-/*       Now, intervals in the list appear in the same order as they appear */
-/*       in the file. Before, they appeared in the reverse order.           */
-/*       The order does not matter for binary output (because all intervals */
-/*       in the list has the same label), however for multi-output case,    */
-/*       the first intervals are subintervals of the subsequent ones.       */
-/*       See multi-classification for more details.                         */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Aug 17 1999                                                   */
-/*  Mod: modified to set a new field _maxlabel_ of itv_t structure          */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Aug 16 2000                                                   */
-/*  Mod: modified to set a new field _rep_type_ of itv_t structure          */
-/*       added new parameter _apert_t *apt_                                 */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Sep 20 2000                                                   */
-/*  Mod: The parameter rep_type has been deployed                           */
-
   FILE *fd ;
 
   itv_t  *itv ; 
@@ -355,21 +325,6 @@ itv_t *itv_read(char *fname, window_t **win/*, apert_t **apt*/) {
 */
 
 int itv_write(char *fname, itv_t *itv, window_t *win /*apert_t *apt*/) {
-/*  author: Nina S. Tomita & R. Hirata Jr. (nina@ime.usp.br)     */
-/*  date: Thu Oct 31 17:10:14 EDT 1996                           */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Nov  4 1997                                                   */
-/*  Mod: Changes to conform to the file format modification                 */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Aug 16 2000                                                   */
-/*  Mod: New parameter _apt_ added                                          */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Sep 20 2000                                                   */
-/*  Mod: The parameter rep_type has been removed                            */
-
   header_t itvHeader = { "ITVSPEC ", ""};
   FILE     *fd ;
   int      wsize, wzip, type ;

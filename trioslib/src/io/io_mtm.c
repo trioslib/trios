@@ -3,28 +3,6 @@
 #include "pacio_local.h"
 
 /* #define _DEBUG_ */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan  6 1998                                                   */
-/*  Mod: changed to support new tag .p. This is an optional tag that        */
-/*       indicates that probabilities Px and p(y|x) are present in the file */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan 13 1998                                                   */
-/*  Mod: Modified to include WK support                                     */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Mar 10 1998                                                   */
-/*  Mod: Probabilities P(x) and p(1|x) changed from "float" to "double"     */
-
-/* Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/* Date: Wed Feb 17 2000                                                   */
-/* Mod: Window structure (1) changed to support multiple bands, (2) no     */
-/*      longer holds information about aperture.                           */
-/*      New structure "apert_t" was created.                               */
-/*      Modifications were made to adequate to the structure changing.     */
-
-
 /*!
     Reads a classified examples set from a file.
 
@@ -34,34 +12,6 @@
 */
 
 mtm_t *mtm_read(char *fname, window_t **win/*, apert_t  **apt*/) {
-/*  author: Nina S. Tomita, R. Hirata Jr.   (nina@ime.usp.br)                */
-/*  date: Thu Oct 24 1996                                                    */
-
-/*  Modification: by  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)        */
-/*  Date: Tue Nov  4 1997                                                    */
-/*  Mod:  A new file format was introduced                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)        */
-/*  Date: Fri Nov 14 1997                                                    */
-/*  Mod: New routines to read gray-scale classified examples                 */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan  6 1998                                                   */
-/*  Mod: changed to support new tag .p. This is an optional tag that        */
-/*       indicates that probabilities Px and p(y|x) are present in the file */
-/*       It is compatible only with type 0 (.t 0)                           */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Aug 19 1999                                                   */
-/*  Mod: mtm_BX and mtm_GX structure changed. For mtm_BX, field Px and      */
-/*       px were changed to fq and fq1, respectively. For mtm_GX, a new     */
-/*       field fq was introduced. fq keeps the number of times a w-pattern  */
-/*       has been observed during sampling. fq1 keeps how many times        */
-/*       the label 1 was observed assigned to the w-pattern                 */
-
-/*  Date: Thu Feb 17 2000                                                   */
-/*  Mod: New parameter (aperture)                                           */
-
   FILE     *fd ;
   mtm_t    *mtm ;
   unsigned int *bwpat ;
@@ -417,39 +367,6 @@ pac_debug("Now it will get out") ;
 */
 
 int mtm_write(char *fname, mtm_t *mtm, window_t *win/*, apert_t *apt*/) {
-/*  author: Nina S. Tomita, R. Hirata Jr.  (nina@ime.usp.br)                */
-/*  date: Thu Oct 24 1996                                                   */
-
-/*  Modification: by  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Nov  4 1997                                                   */
-/*  Mod: A new file format write was implemented                            */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Nov 14 1997                                                   */
-/*  Mod: New routines for writing classified examples                       */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan  6 1998                                                   */
-/*  Mod: changed to support new tag .p. This is an optional tag that        */
-/*       indicates that probabilities Px and p(y|x) are present in the file */
-/*       It is compatible only with type 0 (.t 0)                           */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Aug 10 1999                                                   */
-/*  Mod: Inserted code to treat the list of frequencies                     */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Aug 19 1999                                                   */
-/*  Mod: mtm_BX and mtm_GX structure changed. For mtm_BX, field Px and      */
-/*       px were changed to fq and fq1, respectively. For mtm_GX, a new     */
-/*       field fq was introduced. fq keeps the number of times a w-pattern  */
-/*       has been observed during sampling. fq1 keeps how many times        */
-/*       the label 1 was observed assigned to thw w-pattern                 */
-
-/*  Date: Thu Feb 17 2000                                                   */
-/*  Mod: New parameter (aperture)                                           */
-
-
   header_t mtmHeader = { "MINTERM ", ""};
   FILE     *fd ;
   mtm_BX   *table_BX ;
