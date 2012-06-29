@@ -4,8 +4,9 @@
 
 TEST(test_pair1) {
     imgset_t *set = imgset_create(1, 2);
-    imgset_set_fname(set, 1, 1, "./test_img/input1.pgm");
-    imgset_set_fname(set, 2, 1, "./test_img/ideal1.pgm");
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input1.pgm");
+    imgset_set_fname(set, 2, 1, "ideal1.pgm");
     imgset_write("IMGSET.s", set);
     imgset_free(set);
 
