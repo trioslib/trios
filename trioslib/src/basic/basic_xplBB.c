@@ -17,9 +17,6 @@ int            /*+ Purpose: set a pointer to a XPL tree                    +*/
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   if(xpl->type != BB) {
     return trios_error(1, "Incompatible types of data.") ;
   }
@@ -40,9 +37,6 @@ void              /*+ Purpose: rotate a subtree to the left                +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   xpl_BB *p, *r ;
 
   p = *pp ;
@@ -67,9 +61,6 @@ void             /*+ Purpose: rotate a subtree to the right                +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   xpl_BB *p, *l ;
 
   p = *pp ;
@@ -94,9 +85,6 @@ xpl_BB *                /*+ Purpose: allocate a BB node                    +*/
   )
 /*+ Return: a pointer to a node of BB type                                 +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   xpl_BB *p ;
 
   p = (xpl_BB *)malloc(sizeof(xpl_BB)) ;
@@ -131,9 +119,6 @@ void                     /*+ Purpose: set the fields of a BB node          +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   int j ;
 
   p->fq0 += fq0 ;
@@ -159,9 +144,6 @@ int              /*+ Purpose: insert a node in a BB tree (recursively)     +*/
   )
 /*+ Return: -1 on failure, >= 0  on success                                +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   int deltaH = 0, st ;
   xpl_BB *p ;
 
@@ -226,9 +208,6 @@ void         /*+ Purpose: free memory area used by a BB node               +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
    free(p->wpat) ;
    free(p) ;
 }
@@ -245,9 +224,6 @@ void                  /*+ Purpose: free memory area used by a BB tree      +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   if(p != NULL) {
     xpl_BB_free_tree(p->left) ;
     xpl_BB_free_tree(p->right) ;
@@ -269,9 +245,6 @@ int             /*+ Purpose: merge two BB tree, recursively                +*/
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   xpl_BB *right ;
 
   if(p != NULL) {
@@ -323,9 +296,6 @@ int               /*+ Purpose: add a new node into a BB tree, recursively  +*/
   )
 /*+ Return: -1 on failure, >= 0  on success                                +*/
 { 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   int deltaH = 0, st ;
   xpl_BB *p ;
 
@@ -390,9 +360,6 @@ int           /*+ Purpose: change BB tree structure to the linked list
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   if(p!=NULL) {
     if(!tree2ll_BB_asc(p->right, pp)) {
       return trios_error(MSG, "tree2xpl_BB() failed.") ;
@@ -421,9 +388,6 @@ int           /*+ Purpose: change BB tree structure to the linked list
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   if(p!=NULL) {
     if(!tree2ll_BB_desc(p->left, pp)) {
       return trios_error(MSG, "tree2xpl_BB() failed.") ;
@@ -452,9 +416,6 @@ int                /*+ Purpose: sort BB XPL set                            +*/
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   if(p != NULL) {
     if(!xpl_sort_BB(p->left, pp)) {
       return trios_error(MSG,"xpl_sort_BB: recursive call to xpl_sort_BB() failed.");
@@ -481,9 +442,6 @@ int                /*+ Purpose: insert a node in a BB XPL tree, balancing
   )
 /*+ Return: >= 0 on success, -1 on failure                                 +*/
 { 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   int deltaH = 0 ;
   xpl_BB     *q ;
 

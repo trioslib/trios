@@ -1,7 +1,3 @@
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Aug  3 1999                                                   */
-/*  Mod: label type changed from char to int                                */
-
 #include <trios.h>
 #include "trios_itv.h"
 
@@ -19,9 +15,6 @@ int       /*+ Purpose: give the number of intervals in a set of intervals  +*/
   )
 /*+ Return: a  positive integer                                            +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   if(itv!=NULL) {
     return(itv->nitv) ;
   }
@@ -43,9 +36,6 @@ int            /*+ Purpose: give the size of w-pattern                     +*/
   )
 /*+ Return: a positive integer                                             +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   return(itv->wsize) ;
 }
 
@@ -65,9 +55,6 @@ int            /*+ Purpose: give the pointer to the header of the list
 /*+ Return: a pointer to integer (it must be converted to the adequate
     type to be used)                                                       +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   return(itv->head) ;
 }
 
@@ -85,13 +72,6 @@ int   /*+ Purpose: gives the default label associated to the intervals set +*/
   )
 /*+ Return: an integer (default label)                                     +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Aug  3 1999                                                   */
-/*  Mod: return type changed from char to int                               */
-
   return(itv->deflabel) ;
 }
 
@@ -108,9 +88,6 @@ int          /*+ Purpose: give the type : BB, BG, GB or GG                 +*/
   )
 /*+ Return: an integer                                                     +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   return(itv->type) ;
 }
 
@@ -128,9 +105,6 @@ int            /*+ Purpose: give  the compacted w-pattern size             +*/
   )
 /*+ Return: a positive integer                                             +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   return(itv->wzip) ;
 }
 
@@ -147,9 +121,6 @@ int            /*+ Purpose: gives the maximum label found in a set of intervals 
   )
 /*+ Return: a positive integer (maximum label)                             +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Aug 17 1999                                                    */
-
   return(itv->maxlabel) ;
 }
 
@@ -168,9 +139,6 @@ void      /*+ Purpose: set the number of intervals in a ITV structure      +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   itv->nitv = nitv ;
 }
 
@@ -187,9 +155,6 @@ void            /*+ Purpose: set the w-pattern size of an intervals set    +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   itv->wsize = wsize ;
 }
 
@@ -208,9 +173,6 @@ void   /*+ Purpose: set the head of the intervals list of an intervals set +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   itv->head = head ;
 }
 
@@ -227,9 +189,6 @@ void             /*+ Purpose: set the default label in an intervals set    +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   itv->deflabel = deflabel ;
 }
 
@@ -247,9 +206,6 @@ void        /*+ Purpose: set the type in an intervals set                  +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   itv->type = type ;
 }
 
@@ -268,9 +224,6 @@ void   /*+ Purpose: set the compacted w-pattern's size of an intervals set +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   itv->wzip = wzip;
 }
 
@@ -288,9 +241,6 @@ void           /*+ Purpose: set the maximum label of a set of intervals    +*/
   )
 /*+ Return: a positive integer (maximum label)                             +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Aug 17 1999                                                    */
-
   itv->maxlabel = maxlabel ;
 
 }
@@ -311,17 +261,6 @@ itv_t *       /*+ Purpose: create a ITV structure                          +*/
   )
 /*+ Return: a pointer to a ITV structure on success, 0 on failure          +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Wed Aug 16 2000                                                    */
-/* Mod: field _rep_type_ initialization                                     */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Sep 20 2000                                                   */
-/*  Mod: The parameter rep_type has been deployed                           */
-
   itv_t *itv ;
   int   wzip ;
 
@@ -363,9 +302,6 @@ void          /*+ Purpose: free memory area used by a ITV structure        +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   if(itv != NULL) {
     itv_list_free(itv_get_head(itv),itv_get_type(itv)) ;
   }
@@ -385,9 +321,6 @@ void            /*+ Purpose: free a intervals list                         +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   itv_BX *local_head, *p ;
   /*itv_GX *local_head_gx, *q ;*/
 
@@ -424,9 +357,6 @@ void      /*+ Purpose: free memory area used by an interval of BX type     +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   free(p->A) ;
   free(p->B) ;
   free(p) ;
@@ -447,9 +377,6 @@ itv_BX *           /*+ Purpose: create an interval of BX type              +*/
   )
 /*+ Return: pointer to an interval of BX type                              +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   itv_BX *p ;
 
   p = (itv_BX *)malloc(sizeof(itv_BX)) ;
@@ -499,9 +426,6 @@ void     /*+ Purpose: set some data  of an interval                        +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   int i ;
 
   for(i=0; i<wzip; i++) {
@@ -531,9 +455,6 @@ int             /*+ Purpose: compute the dimension of an interval          +*/
   )
 /*+ Return: an integer between 0 and n (where n stands for wsize)          +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 22 1996                                                    */
-
   int dim ;
   int Xor ;
   int i, j ;
@@ -571,9 +492,6 @@ int             /*+ Purpose: check if two intervals are identical          +*/
 /*+ Return: 1 if they are equal, 0 otherwise                               +*/
 {
 
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 22 1996                                                    */
-
   int i ;
 
   for(i=0; i<wzip; i++) {
@@ -607,10 +525,6 @@ itv_BX *        /*+ Purpose: compute  the intersection of two intervals    +*/
 /*+ Return: pointer to the resulting interval (NULL if the interval is empty),
     -1 on failure                                                          +*/
 {
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 22 1996                                                    */
-
   itv_BX *itv ;
   int    i ;
 
@@ -649,9 +563,6 @@ itv_BX *        /*+ Purpose: group two adjacent intervals                  +*/
 /*+ Return: a pointer to an interval on success, NULL on failure           +*/
 {
 
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 22 1996                                                    */
-
   itv_BX *itv ;
   int    j ;
 
@@ -687,14 +598,6 @@ itv_t *         /*+ Purpose: separate all intervals, with a given label, from
             containing only intervals with the specified label) on success,
             NULL on failure                                                +*/
 {
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Nov 26 1996                                                    */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Jul 14 2000                                                   */
-/*  Mod: Added support for grayscale                                        */
-
   itv_t *itv_new ;
   itv_BX *p1, *tmp ;
   /*itv_GX *pgx, *tmp_gx ;*/
@@ -772,10 +675,6 @@ int             /*+ Purpose: sort intervals according to its dimension +*/
   )
 /*+ Return: 1 on success, 0 on failure                                 +*/
 {
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)              */
-/* date: Wed Nov 27 1996                                                */
-
   itv_BX **p_vector ;
   itv_BX *p, *tmp ;
   int    i, dim, wsize, wzip ;
@@ -842,10 +741,6 @@ int             /*+ Purpose: check if an interval contains a w-pattern     +*/
 )
 /*+ Return: 1 if the w-pattern is contained in the interval, 0 otherwise   +*/
 {
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Nov 26 1996                                                    */
-
   int  i ;
 
 
@@ -883,9 +778,6 @@ int             /*+ Purpose: given an interval set and a label "old_label",
 )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Thu Nov 28 1996                                                    */
 
   int type ;
 
@@ -946,10 +838,6 @@ int             /*+ Purpose: check if some interval of a list contains a
 /*+ Return: the label of the interval that contains the w-pattern, or the
             default label value otherwise                                  +*/
 {
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Nov 26 1996                                                    */
-
   int    label ;
   int    i ;
   itv_BX *p ;
@@ -1006,29 +894,6 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
 )
 /*+ Return: Pointer to ITV structure on success, NULL on failure           +*/
 {
-
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Wed Jul  8 1998                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Dec 10 1999                                                   */
-/*  Mod: Bug fixed. If interval does not contain origin, no change is made. */
-/*       A warning message is issued. And the [empty,W] interval is returned*/
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Mon Feb 21 2000                                                   */
-/*  Mod: added new parameters. Now it is possible to specify the mapping    */
-/*       type associated to the interval (BB or BG), the label assigned     */
-/*       to the interval, and outside de interval (default label)           */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Sep 19 2000                                                   */
-/*  Mod: Modified to create gray-level and wk intervals                     */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Oct 31 2000                                                   */
-/*  Mod: Changes to initialize the new field "size" of itv_GX structure.    */
-
   int       wsize, wzip, i, cx, cy, count ;
   char      *Ag, *Bg ;
   unsigned  int *A, *B ;

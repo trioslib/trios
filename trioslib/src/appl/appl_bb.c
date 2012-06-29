@@ -225,10 +225,6 @@ int             /*+ Purpose:                +*/
 )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   int label ;
   int i, j, k , s, nshifts ;
   int wsize , wzip ;
@@ -386,10 +382,6 @@ int             /*+ Purpose: Applies an operator (given by a set of intervals)
 )
 /*+ Return: 1 on success 0 on failure                                      +*/
 {
-
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Tue Aug 17 1999                                                    */
-
   int label ;
   int i, j, k , s, nshifts;
   int wsize , wzip ;

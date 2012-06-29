@@ -12,9 +12,6 @@
 */
 
 imgset_t *imgset_create(int ngroups, int grpsize) {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   imgset_t *imgset ;
   int      i, k ;
   char     **f ;
@@ -78,8 +75,6 @@ void        /*+ Purpose: free image set memory area                        +*/
   )
 /*+ Return: nothing                                                        +*/
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
  
   int  i, k ;
   char **f ;
@@ -124,8 +119,6 @@ void        /*+ Purpose: free image set memory area                        +*/
 */
 
 int imgset_get_ngroups(imgset_t *imgset) {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
   return(imgset->ngroups) ;
 }
 
@@ -137,9 +130,6 @@ int imgset_get_ngroups(imgset_t *imgset) {
 */
 
 int imgset_get_grpsize(imgset_t *imgset) {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   return(imgset->grpsize) ;
 }
 
@@ -151,9 +141,6 @@ int imgset_get_grpsize(imgset_t *imgset) {
     \param k Group identifier.
 */
 char *imgset_get_fname(imgset_t *imgset, int i, int k) {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
- 
   char **f, *fname ;
 
 
@@ -188,9 +175,6 @@ trios_debug("File name : %s.", fname) ;
 */
 
 int imgset_set_fname(imgset_t *imgset, int i, int k, char *fname) {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
- 
   char **f ;
 
 
@@ -233,9 +217,6 @@ char *             /*+ Purpose: get the i-th pathname                      +*/
   )
 /*+ Return: the i-th pathname on succes, NULL on failure                   +*/ 
 {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
   char *dir ;
 
 
@@ -265,9 +246,6 @@ trios_debug("Directory name : %s.", dir) ;
 */
 
 int imgset_set_dname(imgset_t *imgset, int i, char *dir) {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
- 
 #ifdef _DEBUG_
 trios_debug("%d-th diretorio %s", i, dir) ;
 #endif
@@ -301,10 +279,6 @@ trios_debug("%d-th diretorio %s", i, dir) ;
 */
  
 char *imgset_get_ffullname(imgset_t *imgset, int i, int k) {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Mar 20 1998                                                   */
-
   char *dirname ;
   char *fname ;
   char *fullname ;

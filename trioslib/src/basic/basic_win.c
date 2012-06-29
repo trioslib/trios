@@ -48,9 +48,6 @@
 
  * --------------------------------------------------------------- */
 
-
-/* Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/* Date: Wed Feb 16 2000                                                   */
 /* Mod: Window structure (1) changed to support multiple bands, (2) no     */
 /*      longer holds information about aperture. Modifications were made   */
 /*      to adequate to the structure changing.                             */
@@ -63,9 +60,6 @@
     \return The window size.
 */
 int win_get_wsize(window_t *win) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
- 
   return( win->wsize[win_get_nbands(win)] ) ;
 }
 
@@ -77,9 +71,6 @@ int win_get_wsize(window_t *win) {
     \param wsize Window size.
 */
 void win_set_wsize(window_t *win, int wsize) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
- 
   win->wsize[ win_get_nbands(win) ] = wsize ;
 }
 
@@ -92,9 +83,6 @@ void win_set_wsize(window_t *win, int wsize) {
     \return The window size of the band.
 */
 int win_get_band_wsize(window_t *win, int band) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Thu Feb 17 2000                                                   */
-  
   return( win->wsize[band-1] ) ;
 }
 
@@ -106,9 +94,6 @@ int win_get_band_wsize(window_t *win, int band) {
     \return The window width.
 */
 int win_get_width(window_t *win) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
   return(win->width) ;
 }
 
@@ -120,9 +105,6 @@ int win_get_width(window_t *win) {
     \return The window height.
 */
 int win_get_height(window_t *win) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
- 
   return(win->height) ;
 }
 
@@ -134,9 +116,6 @@ int win_get_height(window_t *win) {
     \return The number of bands of a window.
 */
 int win_get_nbands(window_t *win) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
- 
   return(win->nbands) ;
 }
 
@@ -147,9 +126,6 @@ int win_get_nbands(window_t *win) {
     \param nbands Number of bands.
 */
 void win_set_nbands(window_t *win, int nbands) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
- 
   win->nbands = nbands ;
 }
 
@@ -161,10 +137,7 @@ void win_set_nbands(window_t *win, int nbands) {
     \return The window data pointer.
 */
 char *win_get_data(window_t *win) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
- 
-  return(win->windata) ;
+ return(win->windata) ;
 }
 
 
@@ -179,13 +152,6 @@ char *win_get_data(window_t *win) {
     \return 1 on success. 0 on failure.
 */
 int win_set_point(int i, int j, int k, int value, window_t *win) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                */
-/*  date: Fri Nov 29 1996                                                  */
-
-/* Date: Wed Feb 16 2000                                                   */
-/* Mod: Window structure changed to support multiple bands. Changes to     */
-/*      adequate to the structure changing                                 */
-
 
   int nbands ;
 
@@ -228,13 +194,6 @@ trios_debug("nbands=%d k=%d i=%d j=%d pos=%d", nbands, k, i, j, (k-1)*win->width
 int win_get_point(int i, int j, int k, window_t *win)
 /*+ Return: the value of the window matrix at win->windata(i,j)            +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
-
-/* Date: Wed Feb 16 2000                                                   */
-/* Mod: Window structure changed to support multiple bands. Changes to     */
-/*      adequate to the structure changing                                 */
-
 
   if(i >= win->height) {
     return trios_error(1,"Window point is out of its dimension.") ;
@@ -261,25 +220,6 @@ int win_get_point(int i, int j, int k, window_t *win)
     \return A window with the desired size. NULL on error.
   */
 window_t *win_create(int height, int width, int nbands) {
-/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/* date: Fri Nov 29 1996                                                    */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Oct 30 1997                                                   */
-/*  Mod: Modified to include wkrange                                        */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Jun  3 1998                                                   */
-/*  Mod: Modified to include the vertical placement                         */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Oct 29 1999                                                   */
-/*  Mod: Modified to include support to input/output ranges                 */
-
-/* Date: Wed Feb 16 2000                                                   */
-/* Mod: Window structure changed to support multiple bands. Changes to     */
-/*      adequate to the structure changing                                 */
-
   window_t *win ;
   int      i ;
 
@@ -327,9 +267,6 @@ window_t *win_create(int height, int width, int nbands) {
     \param win Pointer to window.
   */
 void win_free(window_t *win) {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Nov 29 1996                                                   */
- 
   if(win) {
     if(win->wsize) free(win->wsize) ;
     if(win->windata) free(win->windata) ;

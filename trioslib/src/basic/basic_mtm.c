@@ -4,42 +4,6 @@
  /*#define _DEBUG_
  #define _DEBUG_2_*/
 
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Dec 19 1997                                                   */
-/*  Mod: Modified to include two new routines mtm_sep() and mtm_count()     */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan  6 1998                                                   */
-/*  Mod: Added new routines - mtm_set_comp_prob(), mtm_get_comp_prob()      */
-/*  Mod: Routines modified to take proper actions with respect to the       */
-/*       new fields of mtm_t and mtm_bx structures (Px, px, comp_prob)      */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Jan  8 1998                                                   */
-/*  Mod: Modified to include two new routines mtm_GX_get_pattern() and      */
-/*       mtm_GX_get_label()                                                 */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Jan  13 1998                                                  */
-/*  Mod: Modified to include WKGG type                                      */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Mar 10 1998                                                   */
-/*  Mod: probabilities P(x) and p(1|x) changed from "float" to "double"     */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Aug 19 1999                                                   */
-/*  Mod: mtm_BX and mtm_GX structure changed. For mtm_BX, field PofX and    */
-/*       px were changed to fq and fq1, respectively. For mtm_GX, a new     */
-/*       field fq was introduced. fq keeps the number of times a w-pattern  */
-/*       has been observed during sampling. fq1 keeps how many times        */
-/*       the label 1 was observed assigned to thw w-pattern                 */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Jan 28 2000                                                   */
-/*  Mod: Remarks fixed                                                      */
-/*  Mod: xpl_freq_free changed to freqlist_free                             */
-
 /*
      -------------------------------------------
      FUNCTION: MTM CREATE
@@ -54,13 +18,6 @@ mtm_t *          /*+ Purpose: allocate a MTM structure                     +*/
 )
 /*+ Return: a pointer to the MTM structure                                 +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Mon Oct 28 1996                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Nov 11 1997                                                   */
-/*  Mod: Implemented the case GG                                            */
-
   mtm_t *mtm ;
 
   if((mtm=(mtm_t *)malloc(sizeof(mtm_t))) == NULL) {
@@ -131,20 +88,6 @@ void                      /*+ Purpose: free memory area used MTM structure  +*/
 )
 /*+ Return: nothing                                                         +*/ 
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Mon Oct 28 1996                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Wed Nov 12 1997                                                   */
-/*  Mod:  GG case implemented                                               */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Aug 10 1999                                                   */
-/*  Mod:  Call to free the list of frequencies                              */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Jan 28 2000                                                   */
-/*  Mod: xpl_freq_free changed to freqlist_free                             */
 
   int i ;
   mtm_BX *table_BX ; 
@@ -212,11 +155,7 @@ int                 /*+ Purpose: get the size of w-pattern                  +*/
 )
 /*+ Return: the size of w-pattern (integer between 1 and 256)               +*/ 
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
-/*  date: Mon Oct 28 1996                                                    */
-
   return(mtm->wsize) ;
-
 }
 
 
@@ -233,11 +172,7 @@ int                 /*+ Purpose: get the type of the labeled examples      +*/
 )
 /*+ Return: the type of w-pattern                                          +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Mon Oct 28 1996                                                   */
-
   return(mtm->type) ;
-
 }
 
 
@@ -254,11 +189,7 @@ unsigned int        /*+ Purpose: get the number of minterms                +*/
 )
 /*+ Return: the number of minterms                                         +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Mon Oct 28 1996                                                   */
- 
   return(mtm->nmtm) ;
-
 }
 
 
@@ -273,9 +204,6 @@ unsigned int        /*+ Purpose: get the number of seen examples           +*/
 )
 /*+ Return: the number of seen examples                                    +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Aug 20 1999                                                   */
- 
   return(mtm->nsum) ;
 
 }
@@ -292,9 +220,6 @@ int                 /*+ Purpose: get the comp_prob flag value              +*/
 )
 /*+ Return: comp_prob value (0 or 1)                                       +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Jan  6 1998                                                   */
- 
   return(mtm->comp_prob) ;
 
 }
@@ -314,9 +239,6 @@ freq_node *     /*+ Purpose: Get list of frequencies                        +*/
 )
 /*+ Return: freqlist                                                        +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Mon Jul 17 2000                                                   */
-
   freq_node    *p ;
 
   p = mtm_i->mtm_freq ;
@@ -338,9 +260,6 @@ void                /*+ Purpose: set the size of w-pattern                 +*/
 )
 /*+ Return: nothing                                                        +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Mon Oct 28 1996                                                   */
-
   mtm->wsize = wsize ;
 
 }
@@ -361,9 +280,6 @@ void                /*+ Purpose: set the type of a labeled example         +*/
 )
 /*+ Return: nothing                                                        +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Mon Oct 28 1996                                                   */
-
   mtm->type = type ;
 
 }
@@ -384,9 +300,6 @@ void                /*+ Purpose: set the number of minterms                +*/
 )
 /*+ Return: nothing                                                        +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Mon Oct 28 1996                                                   */
-
   mtm->nmtm = nmtm ;
 
 }
@@ -405,8 +318,6 @@ void                /*+ Purpose: set the number of seen examples           +*/
 )
 /*+ Return: nothing                                                        +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Aug 20 1999                                                   */
 
   mtm->nsum = nsum ;
 
@@ -425,9 +336,7 @@ void                /*+ Purpose: get the comp_prob flag value              +*/
 )
 /*+ Return: comp_prob value (0 or 1)                                       +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Jan  6 1998                                                   */
- 
+
   mtm->comp_prob = comp_prob ;
 
 }
@@ -451,21 +360,6 @@ int                       /*+ Purpose: inserts a minterm in the table      +*/
 )
 /*+ Return: 1 on success 0 on failure                                      +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Mon Oct 28 1996                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Jan  6 1998                                                   */
-/*  Mod: added two new parameters : Px and px                               */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Tue Aug 10 1999                                                   */
-/*  Mod: Inserted code to treat the list of frequencies                     */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Thu Aug 19 1999                                                   */
-/*  Mod: changes regarding frequency information                            */
-
   mtm_BX *p ;
   freq_node *freqlist, *freqnode ;
   int j ;
@@ -520,9 +414,6 @@ int             /*+ Purpose: Separate examples of a given class k          +*/
   )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Mon Dec 15 1997                                                   */
-
   mtm_BX   *p ;
   int      ct1, ct2 ;
   int      wsize, wzip, type, comp_prob ;
@@ -601,12 +492,6 @@ unsigned int    /*+ Purpose: Count examples in class k                     +*/
 )
 /*+ Return: the number of examples in class k                              +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Tue Dec  9 1997                                                   */
-
-/*  Date: Sun Feb 27 2000                                                   */
-/*  Mod: required information is taken from the frequency list and not      */
-/*       from the data table, as it was being done before.                  */
 
   freq_node    *p ;
   unsigned int counter ;
@@ -637,9 +522,6 @@ unsigned int    /*+ Purpose: Index mtm by frequencies                      +*/
 )
 /*+ Return: 1 on success or 0 on failure                                   +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Mon Jul 17 2000                                                   */
-
   unsigned int i, freqmax, nlabels, fnow, flast, fold, nmtm ;
   freq_node    *p, *q, *p_last, *qlist, *qmax, *q_last, *p_zero ;
 
@@ -779,20 +661,6 @@ int             /*+ Purpose: given a mtm table, computes the mae           +*/
 )
 /*+ Return: 1 on success, 0 on failure                                     +*/
 {
- 
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Fri Mar  6 1998                                                   */
-
-/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
-/*  Date: Fri Aug 20 1999                                                   */
-/*  Mod: now that frequency information are not kept as probabilities, but  */
-/*       as integer numbers, computation of MAE was changed                 */
-
-/*  Date: Tue Feb 08 2000                                                   */
-/*  Mod: added command that checks if the frequency info is available in    */
-/*       the mtm table                                                      */
-
-
   mtm_BX *q ;
   int    i, nmtm ;
   int    FMAE ;
@@ -870,9 +738,6 @@ int             /*+ Purpose: Search examples table for a given wpat        +*/
   )
 /*+ Return: Index on success, -1 on failure                                +*/
 {
-/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
-/*  date: Sun May 28 2000                                                   */
-
   mtm_BX   *p ;
   int      success, result ;
   int      middle, low, high ;
