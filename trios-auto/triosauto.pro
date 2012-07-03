@@ -54,4 +54,5 @@ HEADERS += \
     fileutils.h \
     trios_to_qml.h \
     triosinterface.h \
-    misc.h
+    misc.h \
+    wheel_area.h

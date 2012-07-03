@@ -1,9 +1,13 @@
 // import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.1
+import Wheel 1.0
 
 Item {
     property alias image_left: input_image.source
     property alias image_right: result_image.source
+    property int original_width;
+    property int original_height;
+    property double zoom: 1.0;
 
     id: root
     width: 640
@@ -45,6 +49,13 @@ Item {
         Image {
             id: input_image
             cache: false
+
+            onStatusChanged: {
+                if (status == Image.Ready) {
+                    root.original_height = height;
+                    root.original_width = width;
+                }
+            }
         }
     }
 
@@ -68,6 +79,13 @@ Item {
         Image {
             id: result_image
             cache: false
+
+            onStatusChanged: {
+                if (status == Image.Ready) {
+                    root.original_height = height;
+                    root.original_width = width;
+                }
+            }
         }
 
         onContentXChanged: {
@@ -78,6 +96,22 @@ Item {
         onContentYChanged: {
             flick_props.flickY = contentY;
             result_flick.returnToBounds();
+        }
+    }
+
+    WheelArea {
+        anchors.fill: parent
+        onVerticalWheel: {
+            if (delta > 0) {
+                zoom += 0.03;
+            } else if (delta < 0) {
+                zoom -= 0.03;
+                if (zoom < 1.0) zoom = 1.0;
+            }
+            input_image.width = original_width * zoom;
+            input_image.height = original_height * zoom;
+            result_image.width = input_image.width;
+            result_image.height = input_image.height;
         }
     }
 
