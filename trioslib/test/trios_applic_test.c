@@ -5,8 +5,10 @@
 TEST(test_decision_pair1) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
-    imgset_set_fname(set, 1, 1, "./test_img/input1.pgm");
-    imgset_set_fname(set, 2, 1, "./test_img/ideal1.pgm");
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input1.pgm");
+    imgset_set_fname(set, 2, 1, "ideal1.pgm");
     imgset_write("IMGSET.s", set);
     imgset_free(set);
 
@@ -34,8 +36,10 @@ TEST(test_decision_pair1) {
 TEST(test_decision_pair2) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
-    imgset_set_fname(set, 1, 1, "./test_img/input2.pgm");
-    imgset_set_fname(set, 2, 1, "./test_img/ideal2.pgm");
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input2.pgm");
+    imgset_set_fname(set, 2, 1, "ideal2.pgm");
     imgset_write("IMGSET.s", set);
     imgset_free(set);
 
@@ -63,8 +67,10 @@ TEST(test_decision_pair2) {
 TEST(test_decision_pair3) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
-    imgset_set_fname(set, 1, 1, "./test_img/input3.pgm");
-    imgset_set_fname(set, 2, 1, "./test_img/ideal3.pgm");
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input3.pgm");
+    imgset_set_fname(set, 2, 1, "ideal3.pgm");
     imgset_write("IMGSET.s", set);
     imgset_free(set);
 
