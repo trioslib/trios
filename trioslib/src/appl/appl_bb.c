@@ -59,11 +59,6 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
   width = img_get_width(img_appl) ;
   height = img_get_height(img_appl);
   if(img_get_pixel_size(img_appl) != sz16BIT) {
-    /*img_tmp = img_create(width, height, 1, sz16BIT);
-    if(!img_tmp) {
-      img_free(img_appl) ;
-      return pac_error(MSG, "lpapplic: mm_createimage() failed.") ;
-    }*/
     img_tmp = img_convert_type(img_appl, sz16BIT);
     if(!img_tmp) {
       return trios_error(MSG, "lpapplic: type conversion failed failed.") ;
@@ -97,7 +92,6 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
         img_free(img_mask) ;
         return trios_error(MSG, "lpapplic: image creation failed.") ;
       }
-      /*mm_const_image(img_out, (double)0) ;  */
       uspixels2 = (unsigned short *)img_get_data(img_out) ;
     }
     else {
@@ -107,7 +101,6 @@ int  lpapplic(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  hash_fla
         img_free(img_mask) ;
         return trios_error(MSG, "lpapplic: mm_createimage() failed.") ;
       }
-      /*mm_const_image(img_out, (double)0) ;  */
       ucpixels2 = (unsigned char *)img_get_data(img_out) ;
     }
   }
