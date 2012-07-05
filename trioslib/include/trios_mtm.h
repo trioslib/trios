@@ -70,248 +70,188 @@ typedef struct {
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: MTM CREATE
-     -------------------------------------------
+/*!
+ *Alloc classified example structure.
+ *
+ *\param wsize W-pattern size.
+ *\param type Transformation type. Only BB is supported.
+ *\param nmtm Number of classified examples.
+ *\return Created mtm_t structure.
 */
-
-mtm_t *          /*+ Purpose: allocate a MTM structure                     +*/
-  mtm_create(
-    int wsize,   /*+ In: w-pattern size                                    +*/
-    int type,    /*+ In: transformation type (BB, BG, GB or GG)            +*/
-    unsigned int nmtm  /*+ In: number of minterms                          +*/
-)
-/*+ Returns: a pointer to the MTM structure                                +*/ ;
+mtm_t *mtm_create(int wsize, int type, unsigned int nmtm);
 
 
+/*!
+ * Free memory used by a classified examples structure.
+ * \param mtm Pointer to the structure.
+ */
+void mtm_free(mtm_t *mtm);
 
-/*
-     -------------------------------------------
-     FUNCTION: MTM FREE
-     -------------------------------------------
+
+
+/*!
+ * Get the size of W-patterns.
+ *\param mtm Pointer to the structure.
+ *\return The size of the W-patterns.
 */
-void                      /*+ Purpose: free memory area used MTM structure  +*/
-  mtm_free(
-    mtm_t *mtm            /*+ In: pointer to the MTM structure              +*/
-)
-/*+ Return: nothing                                                         +*/ ;
+int mtm_get_wsize(mtm_t *mtm);
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: MTM GET SIZE
-     -------------------------------------------
-*/
-int                 /*+ Purpose: get the size of w-pattern                  +*/
-  mtm_get_wsize(
-    mtm_t *mtm      /*+ In: pointer to the MTM                              +*/
-)
-/*+ Return: the size of w-pattern (integer between 1 and 256)               +*/ ;
+/*!
+ *Get the type of the labeled examples.
+ *\param mtm Pointer to the structure.
+ *\return The type of the W-pattern. Only BB is supported.
+ */
+int mtm_get_type(mtm_t *mtm);
+
+
+/*!
+ * Get the number of classified examples.
+ *\param mtm Pointer to the structure.
+ *\return The number of classified examples.
+ */
+unsigned int mtm_get_nmtm(mtm_t *mtm);
+
+
+/*!
+ * Get the number of analysed examples.
+ *\param mtm Pointer to the structure.
+ *\return The number of analysed examples.
+ */
+unsigned int mtm_get_nsum(mtm_t *mtm);
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: MTM GET TYPE
-     -------------------------------------------
-*/
-int                 /*+ Purpose: get the type of the labeled examples      +*/
-  mtm_get_type(
-    mtm_t *mtm      /*+ In: pointer to the MTM                             +*/
-)
-/*+ Return: the type of w-pattern                                          +*/ ;
+/*!
+ * Get the comp_prob flag value.
+ *\param mtm Pointer to the structure.
+ *\return The flag value.
+ *\sa mtm_t
+ */
+int mtm_get_comp_prob(mtm_t *mtm);
 
 
-
-/*
-     -------------------------------------------
-     FUNCTION: MTM GET NMTM
-     -------------------------------------------
-*/
-unsigned int                 /*+ Purpose: get the number of minterms                +*/
-  mtm_get_nmtm(
-    mtm_t *mtm      /*+ In: pointer to the MTM                             +*/
-)
-/*+ Return: the number of minterms                                         +*/ ;
+/*!
+ * Get the list of frequencies.
+ *\param mtm Pointer to the structure.
+ *\return The list of frequencies.
+ */
+freq_node *mtm_get_freqlist(mtm_t *mtm_i);
 
 
-
-/*
-     -------------------------------------------
-     FUNCTION: MTM GET NSUM
-     -------------------------------------------
-*/
-unsigned int                 /*+ Purpose: get the number of seen examples           +*/
-  mtm_get_nsum(
-    mtm_t *mtm      /*+ In: pointer to the MTM                             +*/
-)
-/*+ Return: the number of seen examples                                    +*/ ;
-
-
-
-/*
-     -------------------------------------------
-     FUNCTION: MTM GET COMP_PROB
-     -------------------------------------------
-*/
-int                 /*+ Purpose: get the comp_prob flag value              +*/
-  mtm_get_comp_prob(
-    mtm_t *mtm      /*+ In: pointer to the MTM                             +*/
-)
-/*+ Return: comp_prob value (0 or 1)                                       +*/ ;
-
-
-freq_node *     /*+ Purpose: Get list of frequencies                        +*/
-  mtm_get_freqlist(                                                                   
-    mtm_t *mtm_i       /*+ In: classified examples set                      +*/
-) ;
-
-
-/*
-     -------------------------------------------
-     FUNCTION: MTM SET SIZE
-     -------------------------------------------
-*/
-void                /*+ Purpose: set the size of w-pattern                 +*/
-  mtm_set_wsize(
-    mtm_t *mtm,     /*+ In: pointer to the MTM                             +*/
-    int wsize       /*+ In: number of variables                            +*/
-)
-/*+ Return: nothing                                                        +*/ ;
+/*!
+ * Set the size of W-pattern.
+ *\param mtm Pointer to the structure.
+ *\param
+ */
+void mtm_set_wsize(mtm_t *mtm, int wsize);
 
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: MTM SET TYPE
-     -------------------------------------------
-*/
-void                /*+ Purpose: set the type of a labeled example         +*/
-  mtm_set_type(
-    mtm_t *mtm,     /*+ In: pointer to the MTM                             +*/
-    int  type       /*+ In: type of the w-patterns                         +*/
-)
-/*+ Return: nothing                                                        +*/ ;
+/*!
+ * Set the type of the labeled example.
+ *\param mtm Pointer to the structure.
+ *\param type Type of the W-patterns.
+ */
+void mtm_set_type(mtm_t *mtm, int type);
 
 
 
-
-/*
-     -------------------------------------------
-     FUNCTION: MTM SET NMTM
-     -------------------------------------------
-*/
-void                /*+ Purpose: set the number of minterms                +*/
-  mtm_set_nmtm(
-    mtm_t *mtm,     /*+ pointer to the MTM                                 +*/
-    unsigned int nmtm  /*+ In: number of minterms                             +*/  
-)
-/*+ Return: nothing                                                        +*/ ;
+/*!
+ * Set the number of classified examples.
+ *\param mtm Pointer to the structure.
+ *\param nmtm Number of classified examples.
+ */
+void mtm_set_nmtm(mtm_t *mtm, unsigned int nmtm);
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: MTM SET Nsum
-     -------------------------------------------
-*/
-void                /*+ Purpose: set the number of seen examples           +*/
-  mtm_set_nsum(
-    mtm_t *mtm,     /*+ pointer to the MTM                                 +*/
-    unsigned int nsum  /*+ In: number of minterms                             +*/  
-)
-/*+ Return: nothing                                                        +*/ ;
+/*!
+ * Set the number of analysed examples.
+ *\param mtm Pointer to the structure.
+ *\param nsum Number of analysed examples.
+ */
+void mtm_set_nsum(mtm_t *mtm, unsigned int nsum);
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: MTM SET COMP_PROB
-     -------------------------------------------
-*/
-void                /*+ Purpose: get the comp_prob flag value              +*/
-  mtm_set_comp_prob(
-    mtm_t *mtm,     /*+ In: pointer to the MTM                             +*/
-    int   comp_prob /*+ In: comp_prob flag (0 or 1)                        +*/
-)
-/*+ Return: comp_prob value (0 or 1)                                       +*/ ;
+/*!
+ * Set the comp_prob flag value.
+ *\param mtm Pointer to the structure.
+ *\param comp_prob New value.
+ */
+void mtm_set_comp_prob(mtm_t *mtm, int comp_prob);
 
 
 
-/*
-     -------------------------------------------
-     FUNCTION: MTM_BX_insert 
-     -------------------------------------------
-*/
-int                       /*+ Purpose: inserts a minterm in the table      +*/
-  mtm_BX_insert(
-    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/ 
-    int index1,            /*+ In: insert position                          +*/
-    int wzip,             /*+ In: wpat size in bytes                       +*/
-    unsigned int *wpat,
-    int label,            /*+ In: label of the inserted minterm            +*/
-    unsigned int fq,      /*+ In: frequency of wpat                        +*/
-    unsigned int fq1      /*+ In: 1-frequency of wpat                      +*/
-) ;
-/*+ Return: 1 on success 0 on failure                                      +*/
+/*!
+ * Inserts a classified example in the structure.
+ *\param mtm Pointer to the structure.
+ *\param index1 Insert position.
+ *\param wzip W-pattern size in bytes.
+ *\param wpat W-pattern.
+ *\param label Label of the example.
+ *\param fq Frequency of the W-pattern.
+ *\param fq1 Frequency of the W-pattern with label 1.
+ *\return 1 on success. 0 on failure.
+ *\sa mtm_t
+ */
+int mtm_BX_insert(mtm_t *mtm, int index1, int wzip, unsigned int *wpat, int label, unsigned int fq, unsigned int fq1);
 
 
-/*
-     -------------------------------------------
-     FUNCTION: mtm_sep
-     -------------------------------------------
+/*!
+ *Separate examples of a given class k.
+ *
+ *\param mtm_i Pointer to mtm_t structure.
+ *\param k Class to be separated.
+ *\param mtm_o1 Examples of class k
+ *\param mtm_o2 Examples of class different than k.
 */
  
-int             /*+ Purpose: Separate examples of a given class k          +*/
-  mtm_sep(
-    mtm_t *mtm_i,      /*+ In/Out: classified examples set                 +*/
-    int   k,           /*+ In: class to be separeted                       +*/
-    mtm_t **mtm_o1,    /*+ In/Out: examples of class k                     +*/
-    mtm_t **mtm_o2     /*+ In/Out: examples of classes other than k        +*/
-  )
-/*+ Return: 1 on success, 0 on failure                                     +*/ ;
+int mtm_sep(mtm_t *mtm_i, int k, mtm_t **mtm_o1, mtm_t **mtm_o2);
 
 
-/*
-     -------------------------------------------
-     FUNCTION: mtm_count
-     -------------------------------------------
-*/
- 
-unsigned int    /*+ Purpose: Count examples in class k                     +*/
-  mtm_count(                                                                  
-    mtm_t *mtm_i,      /*+ In: classified examples set                     +*/
-    int   k            /*+ In: class number                                +*/
-)
-/*+ Return: the number of examples in class k                              +*/ ;
+/*!
+ * Count the number of examples in the class k.
+ *
+ *\param mtm_i Pointer to mtm_t structure.
+ *\param k Class number.
+ *\return The number of examples in class k.
+*/ 
+unsigned int mtm_count(mtm_t *mtm_i, int k);
 
- 
-int             /*+ Purpose: given a mtm table, computes the mae           +*/
-  mtm_compute_mae(                                                                
-    mtm_t *mtm,        /*+ In: mtm table                                   +*/
-    double *mae_error  /*+ Out: mae                                        +*/
-) ;
+/*!
+ * Computes the MAE of a mtm_t structure.
+ *
+ * \param mtm Pointer to mtm_t structure.
+ * \param mae_error MAE error.
+ * \return 1 on success. 0 on failure.
+ */
+int mtm_compute_mae(mtm_t *mtm, double *mae_error);
 
 
+/*!
+ *Search examples table for a given W-pattern.
+ *
+ * \param nmtm Size of the table
+ * \param mtm Pointer to mtm_t structure.
+ * \param wpat W-pattern.
+ * \param wzip Size of the W-pattern.
+ * \return Index on success. 0 on failure.
+ */
+int mtm_search_wpat_BX(unsigned int nmtm, mtm_t *mtm, unsigned int *wpat, int wzip);
 
-int             /*+ Purpose: Search examples table for a given wpat        +*/
-  mtm_search_wpat_BX(
-    unsigned int  nmtm,     /*+ In: size of the table                      +*/ 
-    mtm_t         *mtm,     /*+ In: classified examples table              +*/
-    unsigned int *wpat,     /*+ In: wpattern                               +*/
-    int           wzip      /*+ In: size of wpattern                       +*/
-    ) ;
 
-
-unsigned int    /*+ Purpose: Index mtm by frequencies                      +*/
-  mtm_index_by_freq_count(                                                                  
-    mtm_t *mtm_i,      /*+ In: classified examples set                     +*/
-    int   *indexes     /*+ In: vector of indexes                           +*/
-    ) ;
-/*+ Return: 1 on success or 0 on failure                                   +*/
+/*!
+ * Index mtm_t by frequencies.
+ *
+ * \param mtm_i Pointer to mtm_t structure.
+ * \param indexes Vector of indexes.
+ * \return 1 on success. 0 on failure.
+ */
+unsigned int mtm_index_by_freq_count(mtm_t *mtm_i, int *indexes);
 
 #ifdef __cplusplus
 }
