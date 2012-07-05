@@ -21,6 +21,9 @@ typedef struct itv_bx { /*!< Structure of the interval                      +*/
   struct itv_bx *next ; /*!< pointer to the next interval                   +*/
 } itv_BX ;
 
+
+
+
 /*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
 /*  Date: Tue Aug 17 1999                                                   */
 /*  Mod: a new field _maxlabel_ was inserted into itv_t structure.          */

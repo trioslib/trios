@@ -53,10 +53,6 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
  */
 int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_format, char *o1_fname);
 
-/* Internal functions. */
-int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int cv_flag, char *log_file);
-xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int cv);
-
 
 #ifdef __cplusplus
 }

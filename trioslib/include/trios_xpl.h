@@ -29,7 +29,7 @@ typedef struct xpl_bb {
  */
 typedef struct {
   int   wsize ;          /*!< size of w-pattern                                */
-  int   wzip ;           /*!< size of compacted w-size                         */
+  int   wzip ;           /*!< size of compacted W-pattern                      */
   int   type ;           /*!< type of examples: BB, BG, GB or GG               */
   unsigned int n_nodes ; /*!< number of nodes (distinct examples)              */
   unsigned int sum ;     /*!< sum of frequency                                 */
