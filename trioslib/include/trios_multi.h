@@ -1,0 +1,101 @@
+#ifndef TRIOS_MULTI_H
+#define TRIOS_MULTI_H
+
+#include <trios_win.h>
+#include <trios_xpl.h>
+#include <trios_collec.h>
+#include <trios_error.h>
+#include <trios_itv.h>
+
+/*!
+ * Structure that represents an architecture in a multi-level
+ * image operator. It supports operators with an arbitrary number
+ * of levels and, for each level, an arbitrary number of operators.
+ * The only limitation is that an operator in one level can use only
+ * pixels in it's previous level.
+ *
+ * \sa multi_architecture_level_t
+ */
+typedef struct  {
+    int nlevels; /*! < Number of levels of the operator.*/
+    multi_architecture_level_t *levels; /*! < Array of levels */
+} multi_architecture_t;
+
+
+/*!
+ * This structure stores the data that represents a level in a multi-level
+ * image operator. Each level can contain an arbitrary number of operators
+ * and each operator takes as input "ninputs" windows that collect pixels
+ * of each operator in the previous level.
+ *
+ * \sa multi_architecture_t
+ */
+typedef struct {
+    int ninputs; /*! < Number of operators in the previous level. It is also the number of input windows that each operator in this level uses. */
+    int noperators; /*! < Number of operators in this level. The last level must have only one operator.  */
+    window_t **windows; /*! < Matrix of windows. The (i, j) element contains the j-th window of the i-th operator. */
+} multi_architecture_level_t;
+
+
+typedef struct {
+    int nlevels;
+    multi_level_operator_level_t *levels;
+} multi_level_operator_t;
+
+typedef struct {
+    int ninputs;
+    int noperators;
+    window_t **windows; /*! < Matrix of windows. The (i, j) element contains the j-th window of the i-th operator. */
+    itv_t *trained_operator; /*! < Array of the trained operators. */
+} multi_level_operator_level_t;
+
+/*!
+ *
+ * \param nlevels
+ * \param operators_in_level
+ * \return The created multi level architecture.
+ */
+multi_architecture_t *multi_level_arch_create(int nlevels, int *operators_in_level);
+
+/*!
+ * Set the window of the "input"-th of the "operator"-th in the "level"-th level. The window is not copied,
+ * so if you free the window elsewhere this structure will break.
+ * \param m Multi-level architecture.
+ * \param level Number of the level.
+ * \param op Number of the operator.
+ * \param input Number of the input.
+ * \param window Window to add to the architecture.
+ * \return 1 on success. 0 on failure.
+ */
+int multi_level_arch_set_window(multi_architecture_t *m, int level, int op, int input, window_t *window);
+
+/*!
+ * Frees the memory area used by a multi-level architecture.
+ * \param m A multi-level architecture.
+ */
+void multi_level_arch_free(multi_architecture_t *m);
+
+/*!
+ * Build a multi-level operator using a given multi-level architecture using samples from a given image set.
+ * \param m Multi-level architecture of the operator.
+ * \param set Image set to extract examples from.
+ * \return The trained multi-level operator.
+ * \sa multi_architecture_t, imgset_t
+ */
+multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set);
+
+/*!
+ * Applies a multi-level operator to an image.
+ * \param op Trained multi-level operator.
+ * \param img Image to apply the operator
+ * \return Result image.
+ */
+img_t *multi_level_apply(multi_level_operator_t *op, img_t *img);
+
+/*!
+ * Frees the memory area used by a multi-level operator.
+ * \param op Multi-level operator.
+ */
+void multi_level_operator_free(multi_level_operator_t *op);
+
+#endif // TRIOS_MULTI_H
