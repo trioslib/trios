@@ -23,7 +23,7 @@ extern "C" {
 typedef struct {
     int ninputs; /*!< Number of operators in the previous level. It is also the number of input windows that each operator in this level uses. */
     int noperators; /*!< Number of operators in this level. The last level must have only one operator.  */
-    window_t **windows; /*!< Matrix of windows. The (i, j) element contains the j-th window of the i-th operator. */
+    window_t ***windows; /*!< Matrix of windows. The (i, j) element contains the j-th window of the i-th operator. */
 } multi_architecture_level_t;
 
 /*!
@@ -46,8 +46,8 @@ typedef struct  {
 typedef struct {
     int ninputs; /*!< Number of operators in the previous level. It is also the number of inputs that each operator in this level takes. */
     int noperators; /*!< Number of operators in this level. */
-    window_t **windows; /*!< Matrix of windows. The (i, j) element contains the j-th window of the i-th operator. */
-    itv_t *trained_operator; /*!< Array of the trained operators. */
+    window_t ***windows; /*!< Matrix of windows. The (i, j) element contains the j-th window of the i-th operator. */
+    itv_t **trained_operator; /*!< Array of the trained operators. */
 } multi_level_operator_level_t;
 
 /*!
@@ -113,12 +113,6 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
  * \return Result image.
  */
 img_t *multi_level_apply(multi_level_operator_t *op, img_t *img);
-
-/*!
- * Frees the memory area used by a multi-level operator.
- * \param op Multi-level operator.
- */
-void multi_level_operator_free(multi_level_operator_t *op);
 
 #ifdef __cplusplus
 }

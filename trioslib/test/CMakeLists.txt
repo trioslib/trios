@@ -33,6 +33,10 @@ add_executable(trios_applic_test trios_applic_test.c)
 target_link_libraries(trios_applic_test triosio triosbasic trios_collec triosappl trioslearn m)
 add_test(NAME ApplicTest WORKING_DIRECTORY ${TRIOS_BINARY_DIR}/bin/ COMMAND ${TRIOS_BINARY_DIR}/bin/trios_applic_test )
 
+add_executable(trios_multi_level_test trios_multi_level_test.c)
+target_link_libraries(trios_multi_level_test triosio triosbasic trios_collec triosappl trioslearn m)
+add_test(NAME MultiLevelTest WORKING_DIRECTORY ${TRIOS_BINARY_DIR}/bin/ COMMAND ${TRIOS_BINARY_DIR}/bin/trios_applic_test )
+
 
 file(COPY test_read_win.txt DESTINATION  ${CMAKE_BINARY_DIR}/bin)
 file(COPY test_img DESTINATION  ${CMAKE_BINARY_DIR}/bin)
