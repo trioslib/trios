@@ -9,6 +9,7 @@ basic/basic_imgset.c
 basic/basic_img.c
 basic/basic_itv.c
 basic/basic_mtm.c
+basic/basic_multi.c
 basic/basic_win.c
 basic/basic_xpl.c
 basic/basic_xplBB.c)

@@ -1,25 +1,15 @@
 #ifndef TRIOS_MULTI_H
 #define TRIOS_MULTI_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <trios_win.h>
 #include <trios_xpl.h>
 #include <trios_collec.h>
 #include <trios_error.h>
 #include <trios_itv.h>
-
-/*!
- * Structure that represents an architecture in a multi-level
- * image operator. It supports operators with an arbitrary number
- * of levels and, for each level, an arbitrary number of operators.
- * The only limitation is that an operator in one level can use only
- * pixels in it's previous level.
- *
- * \sa multi_architecture_level_t
- */
-typedef struct  {
-    int nlevels; /*! < Number of levels of the operator.*/
-    multi_architecture_level_t *levels; /*! < Array of levels */
-} multi_architecture_t;
 
 
 /*!
@@ -31,23 +21,42 @@ typedef struct  {
  * \sa multi_architecture_t
  */
 typedef struct {
-    int ninputs; /*! < Number of operators in the previous level. It is also the number of input windows that each operator in this level uses. */
-    int noperators; /*! < Number of operators in this level. The last level must have only one operator.  */
-    window_t **windows; /*! < Matrix of windows. The (i, j) element contains the j-th window of the i-th operator. */
+    int ninputs; /*!< Number of operators in the previous level. It is also the number of input windows that each operator in this level uses. */
+    int noperators; /*!< Number of operators in this level. The last level must have only one operator.  */
+    window_t **windows; /*!< Matrix of windows. The (i, j) element contains the j-th window of the i-th operator. */
 } multi_architecture_level_t;
 
+/*!
+ * Structure that represents an architecture in a multi-level
+ * image operator. It supports operators with an arbitrary number
+ * of levels and, for each level, an arbitrary number of operators.
+ * The only limitation is that an operator in one level can use only
+ * pixels in it's previous level.
+ *
+ * \sa multi_architecture_level_t
+ */
+typedef struct  {
+    int nlevels; /*!< Number of levels of the operator.*/
+    multi_architecture_level_t *levels; /*!< Array of levels */
+} multi_architecture_t;
 
+/*!
+ * A level in a multi-level operator. It contains the trained operators and its windows.
+ */
 typedef struct {
-    int nlevels;
-    multi_level_operator_level_t *levels;
-} multi_level_operator_t;
-
-typedef struct {
-    int ninputs;
-    int noperators;
-    window_t **windows; /*! < Matrix of windows. The (i, j) element contains the j-th window of the i-th operator. */
-    itv_t *trained_operator; /*! < Array of the trained operators. */
+    int ninputs; /*!< Number of operators in the previous level. It is also the number of inputs that each operator in this level takes. */
+    int noperators; /*!< Number of operators in this level. */
+    window_t **windows; /*!< Matrix of windows. The (i, j) element contains the j-th window of the i-th operator. */
+    itv_t *trained_operator; /*!< Array of the trained operators. */
 } multi_level_operator_level_t;
+
+/*!
+ * A multi-level operator that contains "nlevels" levels.
+ */
+typedef struct {
+    int nlevels; /*!< Number of levels of the operator. */
+    multi_level_operator_level_t *levels; /*!< Array of operator levels. */
+} multi_level_operator_t;
 
 /*!
  *
@@ -76,6 +85,19 @@ int multi_level_arch_set_window(multi_architecture_t *m, int level, int op, int 
 void multi_level_arch_free(multi_architecture_t *m);
 
 /*!
+ * Creates a multi-level operator based on a given architecture.
+ * \param m Multi-level architecture.
+ * \return The created operator.
+ */
+multi_level_operator_t *multi_level_operator_create(multi_architecture_t *m);
+
+/*!
+ * Frees the memory used by a multi-level operator.
+ * \param op Multi-level operator.
+ */
+void multi_level_operator_free(multi_level_operator_t *op);
+
+/*!
  * Build a multi-level operator using a given multi-level architecture using samples from a given image set.
  * \param m Multi-level architecture of the operator.
  * \param set Image set to extract examples from.
@@ -97,5 +119,9 @@ img_t *multi_level_apply(multi_level_operator_t *op, img_t *img);
  * \param op Multi-level operator.
  */
 void multi_level_operator_free(multi_level_operator_t *op);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // TRIOS_MULTI_H
