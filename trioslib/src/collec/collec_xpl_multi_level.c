@@ -12,7 +12,7 @@ window_t *multi_level_operator_joint_window(int win_size, int i)
     return joint_win;
 }
 
-xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int op, img_t **inputs) {
+xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *ideal_output) {
     window_t *joint_win = NULL;
     int i, j, k, l, npixels, win_size = 0;
 
@@ -39,13 +39,22 @@ xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int
         for (l = 0; l < win_size; l++) {
             joint_wpat[l] = 0;
         }
-        int curr_win_size = 0;
+        int curr_win_size = 0; /* number of points of the previous windows. */
         for (i = 0; i < mop->levels[level].ninputs; i++) {
             offset_set(offset, multi_level_operator_get_window(mop, level, op, i), img_get_width(inputs[i]), 1);
+            for (j = 0; j < win_get_wsize(mop->levels[level].windows[op][i]); j++) {
+                int l = j + k;
+                if (l >= 0 && l <= npixels && inputs[i]->data[l] != 0) {
+                    int index = (j + curr_win_size)/NB;
+                    int bit = (j + curr_win_size) % NB;
+                    joint_wpat[index] = (joint_wpat[index] | bitmsk[bit]);
+                }
+            }
             // seta os bits no joint_wpat
             curr_win_size += win_get_wsize(mop->levels[level].windows[op][i]);
         }
         // insere na árvore.
+        xpl_BB_insert(xpl, (xpl_BB **) &xpl->root, joint_wpat, 0, 0);
     }
     return xpl;
 }
