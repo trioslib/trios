@@ -69,6 +69,45 @@ TEST(COLLEC1) {
     win_free(win);
 } TEST_END
 
+TEST(COLLEC2) {
+    int levels[] = {2, 1};
+    int i, j;
+    multi_architecture_t *arch = multi_level_arch_create(2, levels);
+
+    window_t *win = win_create(3, 3, 1);
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            win_set_point(i, j, 1, 1, win);
+        }
+    }
+
+
+    multi_level_arch_set_window(arch, 0, 0, 0, win);
+    multi_level_arch_set_window(arch, 0, 1, 0, win);
+
+    multi_level_arch_set_window(arch, 1, 0, 0, win);
+    multi_level_arch_set_window(arch, 1, 0, 1, win);
+
+    multi_level_operator_t *op = multi_level_operator_create(arch);
+    img_t *ideal = img_readPGM("./test_img/ideal1.pgm");
+
+    img_t *inputs[2];
+    inputs[0] = img_readPGM("./test_img/input1.pgm");
+    inputs[1] = img_readPGM("./test_img/input1.pgm");
+
+    xpl_t *xpl = collec_level_operator_bb_main(op, 1, 0, inputs, ideal);
+
+    xpl_write("multi.xpl", xpl, win);
+
+    multi_level_arch_free(arch);
+    multi_level_operator_free(op);
+    img_free(inputs[0]);
+    img_free(inputs[1]);
+    img_free(ideal);
+    xpl_free(xpl);
+    win_free(win);
+} TEST_END
+
 
 
 #include "runner.h"

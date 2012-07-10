@@ -29,7 +29,6 @@ xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int
     for (i = 0; i < mop->levels[level].ninputs; i++) {
         win_size += win_get_wsize(mop->levels[level].windows[op][i]);
     }
-    printf("win_size %d\n", win_size);
     xpl_t *xpl = xpl_create(win_size, BB);
     int *joint_wpat = malloc(sizeof(int) * size_of_zpat(win_size));
     int *offset = malloc(sizeof(int) * win_size);
