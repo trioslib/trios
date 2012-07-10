@@ -12,7 +12,7 @@ window_t *multi_level_operator_joint_window(int win_size, int i)
     return joint_win;
 }
 
-xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *ideal_output) {
+xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *ideal) {
     window_t *joint_win = NULL;
     int i, j, k, l, npixels, win_size = 0;
 
@@ -29,6 +29,7 @@ xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int
     for (i = 0; i < mop->levels[level].ninputs; i++) {
         win_size += win_get_wsize(mop->levels[level].windows[op][i]);
     }
+    printf("win_size %d\n", win_size);
     xpl_t *xpl = xpl_create(win_size, BB);
     int *joint_wpat = malloc(sizeof(int) * size_of_zpat(win_size));
     int *offset = malloc(sizeof(int) * win_size);
@@ -36,15 +37,15 @@ xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int
     npixels = img_get_width(inputs[0]) * img_get_height(inputs[0]);
     for (k = 0; k < npixels; k++) {
         /* varre todo pixel */
-        for (l = 0; l < win_size; l++) {
+        for (l = 0; l < size_of_zpat(win_size); l++) {
             joint_wpat[l] = 0;
         }
         int curr_win_size = 0; /* number of points of the previous windows. */
         for (i = 0; i < mop->levels[level].ninputs; i++) {
             offset_set(offset, multi_level_operator_get_window(mop, level, op, i), img_get_width(inputs[i]), 1);
             for (j = 0; j < win_get_wsize(mop->levels[level].windows[op][i]); j++) {
-                int l = j + k;
-                if (l >= 0 && l <= npixels && inputs[i]->data[l] != 0) {
+                int l = offset[j] + k;
+                if (l >= 0 && l < npixels && inputs[i]->data[l] != 0) {
                     int index = (j + curr_win_size)/NB;
                     int bit = (j + curr_win_size) % NB;
                     joint_wpat[index] = (joint_wpat[index] | bitmsk[bit]);
@@ -54,7 +55,13 @@ xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int
             curr_win_size += win_get_wsize(mop->levels[level].windows[op][i]);
         }
         // insere na árvore.
-        xpl_BB_insert(xpl, (xpl_BB **) &xpl->root, joint_wpat, 0, 0);
+        if (ideal->data[k] == 0) {
+            xpl_BB_insert(xpl, (xpl_BB **) &xpl->root, joint_wpat, 1, 0);
+        } else {
+            xpl_BB_insert(xpl, (xpl_BB **) &xpl->root, joint_wpat, 0, 1);
+        }
     }
+    free(offset);
+    free(joint_wpat);
     return xpl;
 }
