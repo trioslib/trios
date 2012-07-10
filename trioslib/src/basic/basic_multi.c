@@ -148,7 +148,7 @@ window_t *multi_level_operator_get_window(multi_level_operator_t *mop, int level
         return trios_error(MSG, "Operator %d in level %d contains less than %d inputs.", op, level, input);
     }
 
-    return NULL;
+    return mop->levels[level].windows[op][input];
 }
 
 void multi_level_operator_free(multi_level_operator_t *op) {
