@@ -107,6 +107,16 @@ void multi_level_operator_free(multi_level_operator_t *op);
 multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set);
 
 /*!
+ * Returns the window used in the input-th input of the op-th operator in the "level"-th level.
+ * \param mop Multi-level operator.
+ * \param level Level number.
+ * \param op Operator number.
+ * \param input Input number.
+ * \return The window used in the input-th input of the op-th operator in the "level"-th level.
+ */
+window_t *multi_level_operator_get_window(multi_level_operator_t *mop, int level, int op, int input);
+
+/*!
  * Applies a multi-level operator to an image.
  * \param op Trained multi-level operator.
  * \param img Image to apply the operator

@@ -133,6 +133,24 @@ multi_level_operator_t *multi_level_operator_create(multi_architecture_t *m) {
     return op;
 }
 
+window_t *multi_level_operator_get_window(multi_level_operator_t *mop, int level, int op, int input) {
+    int i, j, k;
+    if (mop == NULL) {
+        return trios_error(MSG, "Operator pointer is null");
+    }
+    if (level >= mop->nlevels) {
+        return trios_error(MSG, "Operator has less than %d levels", level);
+    }
+    if (op >= mop->levels[level].noperators) {
+        return trios_error(MSG, "Level %d contains less than %d operators.", op);
+    }
+    if (input >= mop->levels[level].ninputs) {
+        return trios_error(MSG, "Operator %d in level %d contains less than %d inputs.", op, level, input);
+    }
+
+    return NULL;
+}
+
 void multi_level_operator_free(multi_level_operator_t *op) {
     int i, j, k;
     for (i = 0; i < op->nlevels; i++) {
