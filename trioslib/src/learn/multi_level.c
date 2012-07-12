@@ -59,9 +59,9 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
             /* isi em cada um dos operadores = wait forever */
             window_t *joint_window = multi_level_operator_joint_window(mop, i, j);
             starting_interval = itv_gen_itv(joint_window, 1, BB, 0, 1, 0);
-            itv_t *level_op = lisi_memory(op_dec, joint_window, 3, 5, 0, 0);
-            itv_free(starting_interval);
+            itv_t *level_op = lisi_memory(op_dec, starting_interval, 3, 5, 0, 0);
             win_free(joint_window);
+            mop->levels[i].trained_operator[j] = level_op;
             /* if its the last level there is no need to apply the resulting operator. */
             if (i < mop->nlevels - 1) {
                 /* muda os ponteiros dos input e ideal_images */

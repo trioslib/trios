@@ -16,10 +16,37 @@ int				/*+ Given a set of intervals and a set of classified
     );
 
 
-itv_t *lisi_memory(mtm_t *mtm, itv_t *itv, int isi_type,	int isi3_step,
+itv_t *lisi_memory(mtm_t *mtm, itv_t *itv, int isi_type, int isi3_step,
               int multi, int group_flag) {
+    int ngrouped, zeros, nmtm, ones;
 
-    return 0;
+    nmtm = mtm->nmtm;
+    zeros = mtm_count(mtm, 0);
+    ones = mtm_count(mtm, 1);
+
+    if (!group_flag) {
+        ngrouped = zeros;
+        if (!isi_basic(&itv, mtm, multi, isi_type, isi3_step,
+                   0, NULL, NULL, NULL)) {
+            itv_free(itv);
+            mtm_free(mtm);
+            return trios_error(MSG, "lisi: isi_basic() failed.");
+        }
+        mtm = NULL;
+    } else {
+        /*if (!isi_gen(&itv, mtm, multi, isi_type, isi3_step, log_step,
+                 log_file, tmp_bas_file, win1, &ngrouped, &time_usr,
+                 &time_sys)) {
+            win_free(win1);
+            win_free(win2);
+            itv_free(itv);
+            mtm_free(mtm);
+            return trios_error(MSG, "lisi: isi_gen() failed.");
+        }*/
+        mtm = NULL;
+    }
+
+    return itv;
 }
 
 int lisi_disk(char *fname_i1, char *fname_i2, int isi_type,	int isi3_step,
