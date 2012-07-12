@@ -57,7 +57,7 @@ TEST(COLLEC1) {
     multi_level_operator_t *op = multi_level_operator_create(arch);
     img_t *input = img_readPGM("./test_img/input1.pgm");
     img_t *ideal = img_readPGM("./test_img/ideal1.pgm");
-    xpl_t *xpl = collec_level_operator_bb_main(op, 0, 0, &input, ideal);
+    xpl_t *xpl = collec_level_operator_bb_main(op, 0, 0, &input, NULL, ideal);
 
     xpl_write("multi.xpl", xpl, win);
 
@@ -95,9 +95,9 @@ TEST(COLLEC2) {
     inputs[0] = img_readPGM("./test_img/input1.pgm");
     inputs[1] = img_readPGM("./test_img/input1.pgm");
 
-    xpl_t *xpl = collec_level_operator_bb_main(op, 1, 0, inputs, ideal);
+    xpl_t *xpl = collec_level_operator_bb_main(op, 1, 0, inputs, NULL, ideal);
 
-    xpl_write("multi.xpl", xpl, win);
+    xpl_write("multi2.xpl", xpl, win);
 
     multi_level_arch_free(arch);
     multi_level_operator_free(op);
@@ -105,6 +105,32 @@ TEST(COLLEC2) {
     img_free(inputs[1]);
     img_free(ideal);
     xpl_free(xpl);
+    win_free(win);
+} TEST_END
+
+TEST(BUILD1) {
+    int levels[] = {1};
+    int i, j;
+    multi_architecture_t *arch = multi_level_arch_create(1, levels);
+
+    window_t *win = win_create(3, 3, 1);
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            win_set_point(i, j, 1, 1, win);
+        }
+    }
+    multi_level_arch_set_window(arch, 0, 0, 0, win);
+
+    imgset_t *set = imgset_create(1, 2);
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input1.pgm");
+    imgset_set_fname(set, 2, 1, "ideal1.pgm");
+
+    multi_level_operator_t *op = multi_level_build(arch, set);
+
+    multi_level_arch_free(arch);
+    multi_level_operator_free(op);
     win_free(win);
 } TEST_END
 
