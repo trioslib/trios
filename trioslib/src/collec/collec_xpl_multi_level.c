@@ -6,15 +6,6 @@
 
 xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask, img_t *ideal);
 
-window_t *multi_level_operator_joint_window(int win_size, int i)
-{
-    window_t *joint_win = win_create(1, win_size, 1);
-    for (i = 0; i < win_size; i++) {
-        win_set_point(0, i,1, 1, joint_win);
-    }
-    return joint_win;
-}
-
 xpl_t *lcollec_multi_level(multi_level_operator_t *mop, int level, int op, img_t ***input, img_t **mask, img_t **ideal) {
     xpl_t *xpl = NULL, *xpl_new = NULL;
     int i;
@@ -43,7 +34,7 @@ xpl_t *lcollec_multi_level(multi_level_operator_t *mop, int level, int op, img_t
         }
     }
 
-    return NULL;
+    return xpl;
 }
 
 xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask, img_t *ideal) {

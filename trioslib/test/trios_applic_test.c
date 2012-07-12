@@ -29,7 +29,7 @@ TEST(test_decision_pair1) {
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
     mu_assert("ldecision failed", 1 == ldecision_disk("XPL_RESULT.xpl", 1, 0, AVERAGE, 0, 0, "DECISION_RESULT.mtm"));
-    mu_assert("lisi failed", 1 == lisi("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 0, "ITV_MIN.itv", 0, NULL, NULL ));
+    mu_assert("lisi_disk failed", 1 == lisi_disk("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 0, "ITV_MIN.itv", 0, NULL, NULL ));
     mu_assert("lpapplic_disk failed", 1 == lpapplic_disk("./test_img/input1.pgm", "ITV_MIN.itv", NULL, 0, 0, 255, "./test_img/test1.pgm"));
 } TEST_END
 
@@ -60,7 +60,7 @@ TEST(test_decision_pair2) {
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
     mu_assert("ldecision failed", 1 == ldecision_disk("XPL_RESULT.xpl", 1, 0, AVERAGE, 0, 0, "DECISION_RESULT.mtm"));
-    mu_assert("lisi failed", 1 == lisi("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 0, "ITV_MIN.itv", 0, NULL, NULL ));
+    mu_assert("lisi_disk failed", 1 == lisi_disk("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 0, "ITV_MIN.itv", 0, NULL, NULL ));
     mu_assert("lpapplic_disk failed", 1 == lpapplic_disk("./test_img/input2.pgm", "ITV_MIN.itv", NULL, 0, 0, 255, "./test_img/test2.pgm"));
 } TEST_END
 
@@ -91,7 +91,7 @@ TEST(test_decision_pair3) {
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
     mu_assert("ldecision failed", 1 == ldecision_disk("XPL_RESULT.xpl", 1, 0, AVERAGE, 0, 0, "DECISION_RESULT.mtm"));
-    mu_assert("lisi failed", 1 == lisi("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 0, "ITV_MIN.itv", 0, NULL, NULL ));
+    mu_assert("lisi_disk failed", 1 == lisi_disk("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 0, "ITV_MIN.itv", 0, NULL, NULL ));
     mu_assert("lpapplic_disk failed", 1 == lpapplic_disk("./test_img/input3.pgm", "ITV_MIN.itv", NULL, 0, 0, 255, "./test_img/test3.pgm"));
 } TEST_END
 
@@ -120,7 +120,7 @@ TEST(test_apply_in_memory) {
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
     mu_assert("ldecision failed", 1 == ldecision_disk("XPL_RESULT.xpl", 1, 0, AVERAGE, 0, 0, "DECISION_RESULT.mtm"));
-    mu_assert("lisi failed", 1 == lisi("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 0, "ITV_MIN.itv", 0, NULL, NULL ));
+    mu_assert("lisi_disk failed", 1 == lisi_disk("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 0, "ITV_MIN.itv", 0, NULL, NULL ));
 
     itv = itv_read("ITV_MIN.itv", &win);
     img_t *input = img_readPGM("./test_img/input3.pgm");

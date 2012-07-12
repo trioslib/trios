@@ -32,6 +32,18 @@ xpl_t *ldecision_memory(xpl_t *xpl, int comp_prob, double freqmin, double estim,
 int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim, int comptype, int undflabel, char *fname_o);
 
 /*!
+ * ISI algorithm for boolean function minimization.
+ * \param mtm Classified examples.
+ * \param itv Starting intervals.
+    \param isi_type    0 (ISI-0), 1 (ISI-1), 2 (ISI-2), 3 (ISI-3)
+    \param isi3_step   Minimum cover computation step for ISI-3
+    \param multi    If 1, indicates multi-classification
+    \param group_flag  If 1, examples will be grouped before extraction
+ * \return
+ */
+itv_t *lisi_memory(mtm_t *mtm, itv_t *itv, int isi_type, int isi3_step, int multi, int group_flag);
+
+/*!
     ISI algorithm for boolean function minimization.
 
     \param fname_i1   Classified examples file
@@ -47,7 +59,7 @@ int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim, i
 
     \return 1 on success. 0 on failure. The resulting operator is written to fname_o.
 */
-int lisi(char *fname_i1, char *fname_i2, int isi_type, int isi3_step, int multi, int group_flag, char *fname_o, int log_step, char *log_file,char *tmp_bas_file);
+int lisi_disk(char *fname_i1, char *fname_i2, int isi_type, int isi3_step, int multi, int group_flag, char *fname_o, int log_step, char *log_file,char *tmp_bas_file);
 
 /*!
     Computes an approximate minimum cover.
