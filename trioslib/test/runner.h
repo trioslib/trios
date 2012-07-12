@@ -26,6 +26,16 @@ extern test test0;
 
 volatile int test_counter, num_tests = __COUNTER__, tests_passed = 0;
 
+void run_test(int t) {
+    test test_func = *(&test0 + t);
+    #ifdef BEFORE_TEST
+        BEFORE_TEST();
+    #endif
+    mux_run_test(test_func);
+    #ifdef AFTER_TEST
+        AFTER_TEST();
+    #endif
+}
 
 void test_runner()
 {
@@ -53,11 +63,16 @@ void segfault_handler(int signum)
     exit(-1);
 }
 
-int main() 
+int main(int argc, char *argv[])
 {
     signal(SIGSEGV, segfault_handler);
     printf("Testing: %s\n", __BASE_FILE__);
-    test_runner();
+    if (argc < 2) {
+        test_runner();
+    } else {
+        int t = atoi(argv[1]);
+        run_test(t);
+    }
     return 0;
 }
 
