@@ -9,8 +9,11 @@
 #define _DEBUG_
 */
 
+xpl_t *ldecision_memory(xpl_t *xpl, int comp_prob, double freqmin, double estim, int comptype, int undflabel) {
+    return mtm_decide(xpl, comp_prob, freqmin, estim, comptype, undflabel );
+}
 
-int ldecision(char *fname_i, int comp_prob, double freqmin, double estim, int comptype, int undflabel, char *fname_o) {
+int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim, int comptype, int undflabel, char *fname_o) {
     xpl_t    *xpl ;
     mtm_t    *mtm ;
     window_t *win ;

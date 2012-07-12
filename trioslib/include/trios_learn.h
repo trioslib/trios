@@ -5,6 +5,18 @@
 extern "C" {
 #endif
 
+/*!
+ * Builds a classified examples table from a set of observed examples.
+ *
+ * \param xpl Observed examples.
+    \param comp_prob A flag indicating if the probabiities should be computed (0=NO, 1=YES).
+    \param freqmin Minimum frequency. If the example has frequency below this value it is ignored.
+    \param estim Decision estimator.
+    \param comptype Type of computation for undecidable cases.
+    \param undflabel Label to use in the undecidable cases, if comptype == 1.
+ * \return The classified example set.
+ */
+xpl_t *ldecision_memory(xpl_t *xpl, int comp_prob, double freqmin, double estim, int comptype, int undflabel);
 
 /*!
     Builds a classified examples table from a set of observed examples.
@@ -17,8 +29,7 @@ extern "C" {
     \param undflabel Label to use in the undecidable cases, if comptype == 1.
     \return 1 on success. 0 on failure.
 */
-
-int ldecision(char *fname_i, int comp_prob, double freqmin, double estim, int comptype, int undflabel, char *fname_o);
+int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim, int comptype, int undflabel, char *fname_o);
 
 /*!
     ISI algorithm for boolean function minimization.
