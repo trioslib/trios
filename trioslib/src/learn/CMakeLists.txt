@@ -27,7 +27,7 @@ learn/multi_level.c
 #dp_rank.c
 )
 ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})
-target_link_libraries(trioslearn triosbasic triosio trios_collec m)
+target_link_libraries(trioslearn triosbasic triosio trios_collec triosappl m)
 
 INSTALL(TARGETS trioslearn
   RUNTIME DESTINATION bin

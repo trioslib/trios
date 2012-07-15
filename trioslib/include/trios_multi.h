@@ -124,6 +124,9 @@ window_t *multi_level_operator_get_window(multi_level_operator_t *mop, int level
  */
 img_t *multi_level_apply(multi_level_operator_t *op, img_t *img);
 
+
+img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, img_t **inputs);
+
 #ifdef __cplusplus
 }
 #endif

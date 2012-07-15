@@ -44,17 +44,18 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
     }
 
     for (i = 0; i < mop->nlevels; i++) {
+        printf("Building level %d\n", i);
         if (i < mop->nlevels - 1) {
             for (j = 0; j < imgset_get_ngroups(set); j++) {
-                trios_malloc(new_input_images[i], sizeof(img_t *) * mop->levels[i+1].ninputs, "Bad alloc");
+                trios_malloc(new_input_images[j], sizeof(img_t *) * mop->levels[i].noperators, "Bad alloc");
             }
         }
 
         for (j = 0; j < mop->levels[i].noperators; j++) {
+            printf("Operator %d ninputs %d \n", j, mop->levels[i].ninputs);
             /* faz collec em cada um dos operadores */
-            xpl_t *op_collec = lcollec_multi_level(mop, i, j, input_images, mask_images, ideal_images);
+            xpl_t *op_collec = lcollec_multi_level(mop, i, j, input_images, mask_images, ideal_images, imgset_get_ngroups(set));
             /* decision em cada um dos operadores */
-            //mtm_t *dec = ldecision();
             mtm_t *op_dec = ldecision_memory(op_collec, 1, 0, AVERAGE, 0, 0);
             /* isi em cada um dos operadores = wait forever */
             window_t *joint_window = multi_level_operator_joint_window(mop, i, j);
@@ -65,7 +66,12 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
             /* if its the last level there is no need to apply the resulting operator. */
             if (i < mop->nlevels - 1) {
                 /* muda os ponteiros dos input e ideal_images */
-                /* aplica cada um dos operadores do nível e passa para o próximo nível treinar */
+                for(k = 0; k < imgset_get_ngroups(set); k++) {
+                    /* aplica cada um dos operadores do nível e passa para o próximo nível treinar */
+                    printf("APPLY %d, %d input %d\n\n", i, j, k);
+                    new_input_images[k][j] = multi_level_apply_level(mop, i, j, input_images[k]);
+                }
+                input_images = new_input_images;
             }
         }
 

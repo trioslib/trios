@@ -6,7 +6,7 @@
 
 xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask, img_t *ideal);
 
-xpl_t *lcollec_multi_level(multi_level_operator_t *mop, int level, int op, img_t ***input, img_t **mask, img_t **ideal) {
+xpl_t *lcollec_multi_level(multi_level_operator_t *mop, int level, int op, img_t ***input, img_t **mask, img_t **ideal, int n_images) {
     xpl_t *xpl = NULL, *xpl_new = NULL;
     int i;
     if (mop == NULL) {
@@ -19,7 +19,7 @@ xpl_t *lcollec_multi_level(multi_level_operator_t *mop, int level, int op, img_t
         return trios_error(MSG, "Level %d contains less than %d operators.", op);
     }
 
-    for (i = 0; i < mop->levels[level].ninputs; i++) {
+    for (i = 0; i < n_images; i++) {
         xpl_new = collec_level_operator_bb_main(mop, level, op, input[i], mask[i], ideal[i]);
         if (xpl == NULL) {
             xpl = xpl_new;
