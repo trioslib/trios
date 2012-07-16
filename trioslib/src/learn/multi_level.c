@@ -55,10 +55,12 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
             printf("Operator %d ninputs %d \n", j, mop->levels[i].ninputs);
             /* faz collec em cada um dos operadores */
             xpl_t *op_collec = lcollec_multi_level(mop, i, j, input_images, mask_images, ideal_images, imgset_get_ngroups(set));
+            window_t *joint_window = multi_level_operator_joint_window(mop, i, j);
+            xpl_write("xplmulti.xpl", op_collec, joint_window);
             /* decision em cada um dos operadores */
             mtm_t *op_dec = ldecision_memory(op_collec, 1, 0, AVERAGE, 0, 0);
+            mtm_write("mtm_multi.mtm", op_dec, joint_window);
             /* isi em cada um dos operadores = wait forever */
-            window_t *joint_window = multi_level_operator_joint_window(mop, i, j);
             starting_interval = itv_gen_itv(joint_window, 1, BB, 0, 1, 0);
             itv_t *level_op = lisi_memory(op_dec, starting_interval, 3, 5, 0, 0);
             win_free(joint_window);
@@ -70,12 +72,16 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
                     /* aplica cada um dos operadores do nível e passa para o próximo nível treinar */
                     printf("APPLY %d, %d input %d\n\n", i, j, k);
                     new_input_images[k][j] = multi_level_apply_level(mop, i, j, input_images[k]);
+                    img_writePGM("a.pgm", new_input_images[k][j]);
+                    itv_write("itv.itv", mop->levels[i].trained_operator[j], mop->levels[i].windows[j][0]);
                 }
                 input_images = new_input_images;
             }
+            goto end;
         }
 
     }
+    end:
     /* free everything */
     return mop;
 }
