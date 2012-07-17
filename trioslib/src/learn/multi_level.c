@@ -65,8 +65,10 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
             win_free(joint_window);
             mop->levels[i].trained_operator[j] = level_op;
             /* if its the last level there is no need to apply the resulting operator. */
-            if (i < mop->nlevels) {
-                /* muda os ponteiros dos input e ideal_images */
+        }
+        if (i < mop->nlevels) {
+            /* muda os ponteiros dos input e ideal_images */
+            for (j = 0; j < mop->levels[i].noperators; j++) {
                 for(k = 0; k < imgset_get_ngroups(set); k++) {
                     /* aplica cada um dos operadores do nível e passa para o próximo nível treinar */
                     printf("APPLY %d, %d input %d\n\n", i, j, k);
@@ -74,8 +76,8 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
                     new_input_images[k][j] = multi_level_apply_level(mop, i, j, input_images[k]);
                     img_writePGM(filename, new_input_images[k][j]);
                 }
-                input_images = new_input_images;
             }
+            input_images = new_input_images;
         }
 
     }
