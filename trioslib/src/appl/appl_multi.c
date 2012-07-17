@@ -20,6 +20,11 @@ img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, i
     w = img_get_width(inputs[0]);
     h = img_get_height(inputs[0]);
     npixels = w * h;
+
+    if (!itv_label(mop->levels[level].trained_operator[op], 1, 255)) {
+        return trios_error(MSG, "lpapplic: itv_label() failed.");
+    }
+
     for (i = 0; i < mop->levels[level].ninputs; i++) {
         win_size += win_get_wsize(mop->levels[level].windows[op][i]);
     }
@@ -27,27 +32,27 @@ img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, i
     output = img_create(w, h, 1, img_get_pixel_size(inputs[0]));
     trios_malloc(w_pattern, sizeof(int) * size_of_zpat(win_size), "Bad alloc");
     trios_malloc(offset, sizeof(int) * win_size, "Bad alloc");
-    for (i = 0; i < npixels; i++) {
+    for (k = 0; k < npixels; k++) {
         for (l = 0; l < size_of_zpat(win_size); l++) {
             w_pattern[l] = 0;
         }
         curr_off = 0;
-        for (l = 0; l < mop->levels[level].ninputs; l++) {
-            offset_set(offset, multi_level_operator_get_window(mop, level, op, l), img_get_width(inputs[l]), 1);
-            for (m = 0; m < win_get_width(mop->levels[level].windows[op][l]); m++) {
-                int img_idx = i + offset[m];
-                if (img_idx >= 0 && img_idx < npixels && output->data[img_idx] != 0) {
+        for (i = 0; i < mop->levels[level].ninputs; i++) {
+            offset_set(offset, multi_level_operator_get_window(mop, level, op, i), img_get_width(inputs[i]), 1);
+            for (j = 0; j < win_get_wsize(mop->levels[level].windows[op][i]); j++) {
+                l = k + offset[j];
+                if (l >= 0 && l < npixels && img_get_pixel(inputs[i], l / inputs[i]->width, l % inputs[i]->width, 0) != 0) {
                     int idx, bit;
-                    idx = (m + curr_off) / NB;
-                    bit = (m + curr_off) % NB;
-                    w_pattern[idx] = w_pattern[idx] | bitmsk[bit];
+                    idx = (j + curr_off) / NB;
+                    bit = (j + curr_off) % NB;
+                    w_pattern[idx] = (w_pattern[idx] | bitmsk[bit]);
                 }
-                curr_off += win_get_wsize(mop->levels[level].windows[op][l]);
             }
+            curr_off += win_get_wsize(mop->levels[level].windows[op][i]);
         }
         /* look for w_pattern in intervals */
         int label = itv_list_contain(mop->levels[level].trained_operator[op], w_pattern, size_of_zpat(win_size));
-        output->data[i] = (unsigned char) label;
+        img_set_pixel(output, k / output->width, k % output->width, 0, (unsigned char) label);
     }
 
     free(offset);

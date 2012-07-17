@@ -61,7 +61,7 @@ xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int
             for (j = 0; j < win_get_wsize(mop->levels[level].windows[op][i]); j++) {
                 l = offset[j] + k;
                 if (l >= 0 && l < npixels) {
-                    if (img_get_pixel(inputs[i], l / 697, l % 697, 0) != 0) {
+                    if (img_get_pixel(inputs[i], l / inputs[i]->width, l % inputs[i]->width, 0) != 0) {
                         int index = (j + curr_win_size)/NB;
                         int bit = (j + curr_win_size) % NB;
                         joint_wpat[index] = (joint_wpat[index] | bitmsk[bit]);
