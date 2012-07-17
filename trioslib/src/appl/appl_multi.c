@@ -69,6 +69,14 @@ img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, i
     return output;
 }
 
-img_t *multi_level_apply(multi_level_operator_t *op, img_t *img) {
-    return NULL;
+img_t *multi_level_apply(multi_level_operator_t *mop, img_t *img) {
+    img_t **input, **next;
+    int i, j, k;
+    input = &img;
+    trios_malloc(next, sizeof(img_t *) * mop->levels[0].noperators, "Bad alloc");
+    for (i = 0; i < mop->nlevels; i++) {
+        for (j = 0; j < mop->levels[i].noperators; j++) {
+            next[j] = multi_level_apply_level(mop, i, j, input);
+        }
+    }
 }
