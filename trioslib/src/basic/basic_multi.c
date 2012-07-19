@@ -117,6 +117,7 @@ multi_level_operator_t *multi_level_operator_create(multi_architecture_t *m) {
             return trios_error(MSG, "Bad alloc");
         }
         for (j = 0; j < op->levels[i].noperators; j++) {
+            op->levels[i].trained_operator[j] = NULL;
             op->levels[i].windows[j] = malloc(sizeof(window_t *) * op->levels[i].ninputs);
             if (op->levels[i].windows[j] == NULL) {
                 return trios_error(MSG, "Bad alloc");
@@ -154,13 +155,14 @@ window_t *multi_level_operator_get_window(multi_level_operator_t *mop, int level
 void multi_level_operator_free(multi_level_operator_t *op) {
     int i, j, k;
     for (i = 0; i < op->nlevels; i++) {
-        free(op->levels[i].trained_operator);
         for (j = 0; j < op->levels[i].noperators; j++) {
             for (k = 0; k < op->levels[i].ninputs; k++) {
                 win_free(op->levels[i].windows[j][k]);
             }
             free(op->levels[i].windows[j]);
+            itv_free(op->levels[i].trained_operator[j]);
         }
+        free(op->levels[i].trained_operator);
         free(op->levels[i].windows);
     }
     free(op->levels);
