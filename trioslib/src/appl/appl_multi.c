@@ -4,14 +4,6 @@
 #include <stdlib.h>
 
 img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, img_t **inputs) {
-    /* roteiro
-     *
-     *  1. Passeia pelas imagens de input.
-     *  2. Monta a janela.
-     *  3. Consulta operador
-     *  4. Coloca resultado na saída.
-     *
-     */
     img_t *output;
     int i, j, k, l, m;
     int w, h, win_size = 0, curr_off;
@@ -78,5 +70,17 @@ img_t *multi_level_apply(multi_level_operator_t *mop, img_t *img) {
         for (j = 0; j < mop->levels[i].noperators; j++) {
             next[j] = multi_level_apply_level(mop, i, j, input);
         }
+
+        if (i > 0) {
+            for (j = 0; j < mop->levels[i].ninputs; j++) {
+                img_free(input[j]);
+            }
+            free(input);
+        }
+        input = next;
+        if (i < mop->nlevels - 1) {
+            trios_malloc(next, sizeof(img_t *) * mop->levels[i].noperators, "Bad alloc");
+        }
     }
+    return input[0];
 }

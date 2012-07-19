@@ -66,7 +66,7 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
             mop->levels[i].trained_operator[j] = level_op;
             /* if its the last level there is no need to apply the resulting operator. */
         }
-        if (i < mop->nlevels - 1) {
+        if (i < mop->nlevels ) {
             /* muda os ponteiros dos input e ideal_images */
             for (j = 0; j < mop->levels[i].noperators; j++) {
                 for(k = 0; k < imgset_get_ngroups(set); k++) {
