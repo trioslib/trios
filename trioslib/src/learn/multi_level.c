@@ -33,9 +33,11 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
     itv_t *starting_interval;
 
     trios_malloc(input_images, sizeof(img_t **) * imgset_get_ngroups(set), "Bad alloc");
-    trios_malloc(new_input_images, sizeof(img_t **) * imgset_get_ngroups(set), "Bad alloc");
     for (i = 0; i < imgset_get_ngroups(set); i++) {
         trios_malloc(input_images[i], sizeof(img_t *), "Bad alloc");
+    }
+    if (mop->nlevels > 1) {
+        trios_malloc(new_input_images, sizeof(img_t **) * imgset_get_ngroups(set), "Bad alloc");
     }
     trios_malloc(mask_images, sizeof(img_t *) * imgset_get_ngroups(set), "Bad alloc");
     trios_malloc(ideal_images, sizeof(img_t *) * imgset_get_ngroups(set), "Bad alloc");
@@ -63,10 +65,11 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
             starting_interval = itv_gen_itv(joint_window, 1, BB, 0, 1, 0);
             itv_t *level_op = lisi_memory(op_dec, starting_interval, 3, 5, 0, 0);
             win_free(joint_window);
+            xpl_free(op_collec);
             mop->levels[i].trained_operator[j] = level_op;
             /* if its the last level there is no need to apply the resulting operator. */
         }
-        if (i < mop->nlevels ) {
+        if (i < mop->nlevels -1) {
             /* muda os ponteiros dos input e ideal_images */
             for (j = 0; j < mop->levels[i].noperators; j++) {
                 for(k = 0; k < imgset_get_ngroups(set); k++) {
@@ -77,9 +80,26 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
                     img_writePGM(filename, new_input_images[k][j]);
                 }
             }
+            for(k = 0; k < imgset_get_ngroups(set); k++) {
+                for (j = 0; j < mop->levels[i].ninputs; j++) {
+                    img_free(input_images[k][j]);
+                }
+                free(input_images[k]);
+            }
+            free(input_images);
             input_images = new_input_images;
         }
     }
-    /* free everything */
+    for(k = 0; k < imgset_get_ngroups(set); k++) {
+        img_free(mask_images[k]);
+        img_free(ideal_images[k]);
+        for (j = 0; j < mop->levels[mop->nlevels-1].ninputs; j++) {
+            img_free(input_images[k][j]);
+        }
+        free(input_images[k]);
+    }
+    free(mask_images);
+    free(ideal_images);
+    free(input_images);
     return mop;
 }
