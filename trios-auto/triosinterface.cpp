@@ -2,6 +2,8 @@
 #include "trios.h"
 #include "misc.h"
 
+#include <iostream>
+
 #include <QDir>
 #include <QtConcurrentRun>
 
@@ -45,6 +47,7 @@ void build_run(char *w_path, char *s_path, TriosInterface *trios) {
 QString TriosInterface::build(QString window_path, QString imgset_path) {
     char *w_path = fromQString(window_path);
     char *s_path = fromQString(imgset_path);
+    std::cout << "WWWWW" << std::endl;
     QtConcurrent::run(build_run, w_path, s_path, this);
     return "";
 }

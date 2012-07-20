@@ -28,10 +28,11 @@ View {
             trios2qml.write_window(obj, "window.win");
 
             var s = samples_view.getSamples();
-            trios2qml.write_imgset(s, "images.imgset");
+            var path = trios2qml.temp_path("images.imgset");
+            trios2qml.write_imgset(s, path);
 
             trios.build_finished.connect(build_finished);
-            trios.build("window.win", "images.imgset");
+            trios.build("window.win", path);
         }
     }
 
