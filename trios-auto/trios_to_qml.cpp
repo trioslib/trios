@@ -95,6 +95,9 @@ bool TRIOS_to_QML::write_imgset(QVariantMap imgset, QString path) {
 
     QDir input_dir(path_dir.filePath(input_path));
     QDir ideal_dir(path_dir.filePath(ideal_path));
+    input_dir.mkpath(input_dir.absolutePath());
+    input_dir.mkpath(ideal_dir.absolutePath());
+
 
     imgset_t *is = imgset_create(ngroups, grpsize);
     imgset_set_dname(is, 1, (char *)input_path.toStdString().c_str());
