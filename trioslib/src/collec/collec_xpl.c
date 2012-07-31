@@ -7,6 +7,7 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
     /* Read first image */
     char *filename = imgset_get_ffullname(imgset, 1, k);
     img_t *img = img_readPGM(filename);
+    free(filename);
     if (img == NULL) {
         return 0;
     }
@@ -15,6 +16,7 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
     /* Read second image */
     filename = imgset_get_ffullname(imgset, 2, k);
     img = img_readPGM(filename);
+    free(filename);
     if (img == NULL) {
         return 0;
     }
@@ -23,6 +25,7 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
     if (imgset_get_grpsize(imgset) >= 3) {
         filename = imgset_get_ffullname(imgset, 3, k);
         img = img_readPGM(filename);
+        free(filename);
         if (img == NULL) {
             return 0;
         }

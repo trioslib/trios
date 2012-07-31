@@ -25,6 +25,7 @@ extern "C" {
 #include <trios_misc.h>
 #include <trios_learn.h>
 #include <trios_io.h>
+#include <trios_multi.h>
 
 
 #ifdef __cplusplus

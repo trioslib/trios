@@ -14,6 +14,7 @@ SET(TRIOS_HEADERS
                  trios_collec.h
                  trios_xpl.h
                  trios_common.h
+                 trios_multi.h
                  )
 
 INSTALL(FILES ${TRIOS_HEADERS}  DESTINATION ${TRIOS_BINARY_DIR}/include)

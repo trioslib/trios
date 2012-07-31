@@ -5,6 +5,18 @@
 extern "C" {
 #endif
 
+/*!
+ * Builds a classified examples table from a set of observed examples.
+ *
+ * \param xpl Observed examples.
+    \param comp_prob A flag indicating if the probabiities should be computed (0=NO, 1=YES).
+    \param freqmin Minimum frequency. If the example has frequency below this value it is ignored.
+    \param estim Decision estimator.
+    \param comptype Type of computation for undecidable cases.
+    \param undflabel Label to use in the undecidable cases, if comptype == 1.
+ * \return The classified example set.
+ */
+xpl_t *ldecision_memory(xpl_t *xpl, int comp_prob, double freqmin, double estim, int comptype, int undflabel);
 
 /*!
     Builds a classified examples table from a set of observed examples.
@@ -17,8 +29,19 @@ extern "C" {
     \param undflabel Label to use in the undecidable cases, if comptype == 1.
     \return 1 on success. 0 on failure.
 */
+int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim, int comptype, int undflabel, char *fname_o);
 
-int ldecision(char *fname_i, int comp_prob, double freqmin, double estim, int comptype, int undflabel, char *fname_o);
+/*!
+ * ISI algorithm for boolean function minimization.
+ * \param mtm Classified examples.
+ * \param itv Starting intervals.
+    \param isi_type    0 (ISI-0), 1 (ISI-1), 2 (ISI-2), 3 (ISI-3)
+    \param isi3_step   Minimum cover computation step for ISI-3
+    \param multi    If 1, indicates multi-classification
+    \param group_flag  If 1, examples will be grouped before extraction
+ * \return
+ */
+itv_t *lisi_memory(mtm_t *mtm, itv_t *itv, int isi_type, int isi3_step, int multi, int group_flag);
 
 /*!
     ISI algorithm for boolean function minimization.
@@ -36,7 +59,7 @@ int ldecision(char *fname_i, int comp_prob, double freqmin, double estim, int co
 
     \return 1 on success. 0 on failure. The resulting operator is written to fname_o.
 */
-int lisi(char *fname_i1, char *fname_i2, int isi_type, int isi3_step, int multi, int group_flag, char *fname_o, int log_step, char *log_file,char *tmp_bas_file);
+int lisi_disk(char *fname_i1, char *fname_i2, int isi_type, int isi3_step, int multi, int group_flag, char *fname_o, int log_step, char *log_file,char *tmp_bas_file);
 
 /*!
     Computes an approximate minimum cover.

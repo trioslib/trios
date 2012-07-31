@@ -21,12 +21,13 @@ learn/dp_isi.c
 #dp_switch.c
 learn/decision.c
 learn/decision_bb.c
+learn/multi_level.c
 #dp_isigray.c  
 #dp_mincover.c
 #dp_rank.c
 )
 ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})
-target_link_libraries(trioslearn triosbasic triosio m)
+target_link_libraries(trioslearn triosbasic triosio trios_collec triosappl m)
 
 INSTALL(TARGETS trioslearn
   RUNTIME DESTINATION bin
