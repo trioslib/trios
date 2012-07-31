@@ -370,7 +370,7 @@ int mtm_write(char *fname, mtm_t *mtm, window_t *win/*, apert_t *apt*/) {
   header_t mtmHeader = { "MINTERM ", ""};
   FILE     *fd ;
   mtm_BX   *table_BX ;
-  /*mtm_GX   *table_GX ; */
+  mtm_GX   *table_GX ;
   freq_node *freqlist ;
   unsigned int nmtm ;
   int      type, wzip, wsize, wsize1, freqsize ;
@@ -479,7 +479,7 @@ pac_debug("Header data writing: done") ;
 
     case GG:
     case GG3:
-        /*
+
       table_GX = (mtm_GX *)mtm->mtm_data ; 
 
       for (i = 0; i < nmtm; i++) {
@@ -488,8 +488,7 @@ pac_debug("Header data writing: done") ;
           fprintf(fd, "%d ", value);
         } 
 	fprintf(fd, "%d %d\n", table_GX[i].label, table_GX[i].fq);
-      }*/
-      trios_error(MSG, "Operator not supported");
+      }
       break ;
 
     case WKC:

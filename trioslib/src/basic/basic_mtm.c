@@ -45,13 +45,10 @@ mtm_t *mtm_create(int wsize, int type, unsigned int nmtm)
 	case WKGG2F:
 	case WKGG2C:
 	case GG3:{
-			trios_error(MSG, "Operator not supported");
-			/*
-			   if(!(mtm->mtm_data = (int *) malloc( sizeof(mtm_GX) * nmtm))) {
-			   free ( mtm ) ;
-			   return 
-			   (mtm_t *)trios_error(1, "mtm_create: memory allocation error for mtm") ;
-			   } */
+            if(!(mtm->mtm_data = (int *) malloc( sizeof(mtm_GX) * nmtm))) {
+                free ( mtm ) ;
+                return (mtm_t *)trios_error(1, "mtm_create: memory allocation error for mtm") ;
+             }
 			break;
 		}
 
@@ -73,7 +70,7 @@ void mtm_free(mtm_t * mtm)
 
 	int i;
 	mtm_BX *table_BX;
-	/*mtm_GX *table_GX ; */
+    mtm_GX *table_GX ;
 
 	if (mtm == NULL)
 		return;
@@ -103,11 +100,9 @@ void mtm_free(mtm_t * mtm)
 		case WKGG2F:
 		case WKGG2C:
 		case GG3:{
-				trios_error(MSG, "Operator not supported");
-				/*
-				   table_GX = (mtm_GX *)mtm->mtm_data ; 
-				   for (i = 0; i < mtm->nmtm; i++) 
-				   free( table_GX[i].wpat ) ; */
+                table_GX = (mtm_GX *)mtm->mtm_data ;
+                for (i = 0; i < mtm->nmtm; i++)
+                   free( table_GX[i].wpat ) ;
 				break;
 			}
 
@@ -249,6 +244,124 @@ int mtm_BX_insert(mtm_t * mtm, int index1, int wzip, unsigned int *wpat,
 
 	return (1);
 }
+
+
+/*
+     -------------------------------------------
+     FUNCTION: MTM_GX_insert
+     -------------------------------------------
+*/
+int                       /*+ Purpose: inserts a minterm in the table      +*/
+  mtm_GX_insert(
+    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/
+    int index1,            /*+ In: insert position                          +*/
+    int wsize,            /*+ In: wpat size in bytes                       +*/
+    char *wpat,           /*+ In: w-pattern                                +*/
+    int label,            /*+ In: label of the inserted minterm            +*/
+    unsigned int fq       /*+ In: frequency of wpat                        +*/
+)
+/*+ Return: 1 on success 0 on failure                                      +*/
+{
+/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
+/*  date: Fri Nov 13 1997                                                   */
+
+/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
+/*  Date: Tue Aug 10 1999                                                   */
+/*  Mod: Inserted code to treat the list of frequencies                     */
+
+/*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
+/*  Date: Thu Aug 19 1999                                                   */
+/*  Mod: changes regarding frequency information                            */
+
+  mtm_GX *p ;
+  freq_node *freqlist, *freqnode ;
+  int j ;
+
+  p = (mtm_GX *)mtm->mtm_data ;
+
+  freqlist = (freq_node *) mtm->mtm_freq ;
+
+  p[index1].wpat = (char *)malloc(sizeof(char)*wsize) ;
+  if(!p[index1].wpat) {
+    return trios_error(1, "Memory allocation failed.") ;
+  }
+
+#ifdef _DEBUG_
+pac_debug("index=%d", index1) ;
+pac_debug("mtm_gx_insert ") ;
+for (j=0;j<wsize;j++) {
+  pac_debug("wpat[%d]=%d", j, p[index1].wpat[j]) ;
+}
+pac_debug("with label = %d", label) ;
+#endif
+
+  for ( j = 0; j < wsize; j++)
+    p[index1].wpat[j] = (char)wpat[j] ;
+
+  p[index1].label = label ;  /* Here we removed a cast to char */
+  p[index1].fq = fq ;        /* Aug 19, 1999 */
+
+  if((freqnode = freq_node_create(label, 1))==NULL) {
+    return trios_error(MSG, "mtm_insert: freq_node_create() failed.") ;
+  }
+
+  set_freq(freqnode, &freqlist) ; /* Insert the node to the list */
+  mtm->mtm_freq = freqlist ;
+  mtm->nsum = mtm->nsum + fq ;
+
+  return(1) ;
+}
+
+
+/*
+     -------------------------------------------
+     FUNCTION: mtm_GX_get_pattern
+     -------------------------------------------
+*/
+
+char *          /*+ Purpose: Get a pattern from the table                  +*/
+  mtm_GX_get_pattern(
+    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/
+    int index1             /*+ In: pattern position                         +*/
+)
+/*+ Return: A char pointer to a pattern                                    +*/
+{
+
+/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
+/*  date: Thu Jan  8 1998                                                   */
+
+  mtm_GX *p ;
+
+  p = (mtm_GX *)mtm->mtm_data ;
+
+  return(p[index1].wpat) ;
+
+}
+
+
+
+
+
+int             /*+ Purpose: Get the label of a  pattern from the table    +*/
+  mtm_GX_get_label(
+    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/
+    int index1             /*+ In: pattern position                         +*/
+)
+/*+ Return: the label of the pattern at the given position                 +*/
+{
+
+/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
+/*  date: Thu Jan  8 1998                                                   */
+
+  mtm_GX *p ;
+
+  p = (mtm_GX *)mtm->mtm_data ;
+
+  return(p[index1].label) ;
+
+}
+
+
 
 
 int mtm_sep(mtm_t * mtm_i, int k, mtm_t ** mtm_o1, mtm_t ** mtm_o2)

@@ -21,6 +21,7 @@ learn/dp_isi.c
 #dp_switch.c
 learn/decision.c
 learn/decision_bb.c
+learn/decision_gg.c
 learn/multi_level.c
 #dp_isigray.c  
 #dp_mincover.c

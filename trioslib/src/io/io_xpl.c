@@ -108,7 +108,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 				    "Aperture operators are not supported at this moment");
 			/*if(NULL==(*apt = apert_read_data(fd))) {
 			   fclose(fd) ;
-			   return (xpl_t *)pac_error(MSG, "xpl_read: apert_read_data() failed.") ;
+               return (xpl_t *)trios_error(MSG, "xpl_read: apert_read_data() failed.") ;
 			   } */
 			break;
 
@@ -224,7 +224,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 
 		   if(NULL==(xpl = xpl_create(wsize,BG))) {
 		   fclose(fd);
-		   return (xpl_t *)pac_error(MSG, "xpl_read: xpl_create() failed.") ;
+           return (xpl_t *)trios_error(MSG, "xpl_read: xpl_create() failed.") ;
 		   }
 
 		   wzip = xpl_get_wzip(xpl) ;
@@ -232,7 +232,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 		   if((bwpat = (unsigned int *)malloc(sizeof(int)*wzip)) == NULL) {
 		   fclose(fd) ;
 		   return 
-		   (xpl_t *)pac_error(1, "Memory allocation error.") ;
+           (xpl_t *)trios_error(1, "Memory allocation error.") ;
 		   }
 
 		   /* reading loop --------------------------------- */
@@ -246,7 +246,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 		   if(1 != fscanf(fd, "%x ", &bwpat[j])) {
 		   free(bwpat) ;
 		   fclose(fd) ;
-		   pac_fatal("Unexpected data or end of file") ;
+           trios_fatal("Unexpected data or end of file") ;
 		   }
 		   }
 
@@ -256,20 +256,20 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 		   if(1 != fscanf(fd, "%d", &freq)) {
 		   free(bwpat) ;
 		   fclose(fd) ;
-		   pac_fatal("Unexpected data or end of file") ;
+           trios_fatal("Unexpected data or end of file") ;
 		   }
 
 		   if (freq) {
 		   if(1 != fscanf(fd, "%d", &label)) {
 		   free(bwpat) ;
 		   fclose(fd) ;
-		   pac_fatal("Unexpected data or end of file") ;
+           trios_fatal("Unexpected data or end of file") ;
 		   }
 
 		   if((freqnode=freq_node_create(label, freq))==NULL) {
 		   free(bwpat) ;
 		   fclose(fd) ;
-		   return (xpl_t *)pac_error(MSG, "read_xpl: freq_node_create() failed.") ;
+           return (xpl_t *)trios_error(MSG, "read_xpl: freq_node_create() failed.") ;
 		   }
 
 		   #ifdef _DEBUG_2_
@@ -280,7 +280,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 		   if (!set_freq(freqnode, &freqlist)) {
 		   free(bwpat) ;
 		   fclose(fd) ;
-		   return (xpl_t *)pac_error(MSG, "xpl_read: set_freq() failed.") ;
+           return (xpl_t *)trios_error(MSG, "xpl_read: set_freq() failed.") ;
 		   }
 		   }
 		   }
@@ -293,7 +293,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 		   if(xpl_BG_insert(xpl, (xpl_BG **)(&xpl->root), bwpat, freqlist) == -1) {
 		   free(bwpat) ;
 		   fclose(fd) ;
-		   return (xpl_t *)pac_error(MSG,"read_xpl : xpl_BG_insert() failed.") ;
+           return (xpl_t *)trios_error(MSG,"read_xpl : xpl_BG_insert() failed.") ;
 		   }
 		   }
 		   free(bwpat) ; */
@@ -307,28 +307,27 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 	case WKGG2F:
 	case WKGG2C:
 	case GG3:
-		trios_error(MSG, "This operator is not supported yet");	/*
 									   wsize = win_get_wsize(*win);
 
 									   if(NULL==(xpl = xpl_create(wsize,type))) {
 									   fclose(fd);
-									   return (xpl_t *)pac_error(MSG, "xpl_read: xpl_create() failed.") ;
+                                       return (xpl_t *)trios_error(MSG, "xpl_read: xpl_create() failed.") ;
 									   }
 
 									   if((wpat = (char *)malloc(sizeof(char)*wsize)) == NULL) {
 									   fclose(fd) ;
 									   return 
-									   (xpl_t *)pac_error(MSG, "Memory allocation error.") ;
+                                       (xpl_t *)trios_error(MSG, "Memory allocation error.") ;
 									   }
 
 									   /* reading loop --------------------------------- */
-		/*
+
 		   for(i= 0; i<n_nodes ; i++) {
 
 		   for(j=0; j<wsize; j++) {
 		   if(1 != fscanf(fd, "%d ", &x)) {
 		   fclose(fd) ;
-		   pac_fatal("Unexpected data or end of file") ;
+           trios_fatal("Unexpected data or end of file") ;
 		   }
 		   wpat[j] = (char) x ;
 		   }
@@ -338,19 +337,19 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 		   do{
 		   if(1 != fscanf(fd, "%d", &freq)) {
 		   fclose(fd) ;
-		   pac_fatal("Unexpected data or end of file") ;
+           trios_fatal("Unexpected data or end of file") ;
 		   }
 
 		   if (freq) {
 		   if(1 != fscanf(fd, "%d", &label)) {
 		   fclose(fd) ;
-		   pac_fatal("Unexpected data or end of file") ;
+           trios_fatal("Unexpected data or end of file") ;
 		   }
 
 		   if((freqnode=freq_node_create(label, freq))==NULL) {
 		   free(wpat) ;
 		   fclose(fd) ;
-		   return (xpl_t *)pac_error(MSG, "read_xpl: freq_node_create() failed.") ;
+           return (xpl_t *)trios_error(MSG, "read_xpl: freq_node_create() failed.") ;
 		   }
 
 		   #ifdef _DEBUG_2_
@@ -361,7 +360,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 		   if (!set_freq(freqnode, &freqlist)) {
 		   free(wpat) ;
 		   fclose(fd) ;
-		   return (xpl_t *)pac_error(MSG, "xpl_read: set_freq() failed.") ;
+           return (xpl_t *)trios_error(MSG, "xpl_read: set_freq() failed.") ;
 		   }
 		   }
 		   }
@@ -371,13 +370,13 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 		   /* insert new w-pattern into example's set */
 		/* Remember : xpl_GG_insert increments xpl->sum, and xpl->nodes when  */
 		/*            it is neccessary                                        */
-		/*
+
 		   if(xpl_GG_insert(xpl, (xpl_GG **)(&xpl->root), wpat, freqlist) == -1) {
 		   fclose(fd) ;
-		   return (xpl_t *)pac_error(MSG," read_xpl : xpl_GG_insert() failed.") ;
+           return (xpl_t *)trios_error(MSG," read_xpl : xpl_GG_insert() failed.") ;
 		   }
 		   }
-		   free(wpat) ; */
+           free(wpat) ;
 		break;
 
 	default:

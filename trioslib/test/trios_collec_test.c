@@ -79,7 +79,7 @@ TEST(test_pair1_GG) {
     win_write("WIN.w", win);
     win_free(win);
 
-    mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT.xpl", NULL) );
+    mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT_GG1.xpl", NULL) );
 } TEST_END
 
 

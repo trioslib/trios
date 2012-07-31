@@ -50,7 +50,7 @@ xpl_t *collec_GG(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *o
 
 			for (i = 0; i < wsize; i++) {	/* for each point of the window... */
 				k = j + offset[i];
-				if (p1[k] != 0)
+                if (k >= 0 && k < npixels && p1[k] != 0)
 					wpat[i] = p1[k];
 			}
 
