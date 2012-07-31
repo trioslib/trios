@@ -446,6 +446,24 @@ int wpat_compare(unsigned int *wpat1, unsigned int *wpat2, int wzip) {
   return(0) ;
 }
 
+/*!
+ * Compares two XG W-patterns.
+ * \param wpat1 First W-pattern.
+ * \param wpat2 Second  W-pattern.
+ * \param wsize W-pattern size.
+ * \return 0 if they are equal, -1 if the first is less and 1 if the first is greater than the second.
+ */
+int wpat_compareXG(char *wpat1, char *wpat2, int wsize) {
+  int i ;
+
+  for(i=wsize-1; i>=0; i--) {
+    if(wpat1[i] > wpat2[i]) return(1) ;
+    if(wpat1[i] < wpat2[i]) return(-1) ;
+  }
+
+  return(0) ;
+}
+
 
 /*!
   Computes the Hamming distance between two binary w-patterns.

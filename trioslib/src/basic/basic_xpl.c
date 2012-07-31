@@ -54,8 +54,7 @@ void xpl_free(xpl_t *xpl) {
     case WKGG2F:
     case WKGG2C:
     case GG3:
-      trios_error(MSG, "This operator is not supported yet");
-      /*xpl_GG_free((xpl_GG *)xpl->root) ;*/
+      xpl_GG_free((xpl_GG *)xpl->root) ;
       break;
 
     default:
