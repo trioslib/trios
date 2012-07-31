@@ -22,7 +22,18 @@ typedef struct itv_bx { /*!< Structure of the interval                      +*/
   struct itv_bx *next ; /*!< pointer to the next interval                   +*/
 } itv_BX ;
 
-
+/*!
+ * Structure that holds an interval of a gray level W-operator.
+ */
+typedef struct itv_gx {
+  char    *A ;          /*!< lower extremity of the interval                +*/
+  char    *B ;          /*!< upper extremity of the interval                +*/
+  int     label ;       /*!< value associated to the points of the interval +*/
+  double  size ;        /*!< size of the interval                           +*/
+  int     nindexes ;    /*!< number of indexes                              +*/
+  int    *plabels ;     /*!< list of labeled examples in the interval       +*/
+  struct itv_gx *next ; /*!< pointer to the next interval                   +*/
+} itv_GX ;
 
 
 /*  Modification by:  Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)       */
