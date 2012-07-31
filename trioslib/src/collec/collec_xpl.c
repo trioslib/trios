@@ -217,7 +217,25 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
         } else if(map_type==BG) {
             return trios_error(1, "BG Mapping not supported yet.");
         } else if(map_type==GG) {
-            return trios_error(1, "BG Mapping not supported yet.");
+            /* read images and convert them to the appropriate format */
+            /* i.e, input is short, output is byte and mask is byte */
+            if(!get_setofimages(imgset, GG, win, k, &img1, &img2, &img3)) {
+                trios_error(MSG, "lcollec_main: get_images() failed.") ;
+                goto END_lcollec_main ;
+            }
+            width = img_get_width(img1);
+            npixels = img_get_width(img1) * img_get_height(img1) ;
+            /* set vector of offsets */
+            offset_set(offset, win, width, 1) ;
+
+            c1 = (unsigned char *)img_get_data(img1) ;
+            c2 = (unsigned char *)img_get_data(img2) ;
+            c3 = (unsigned char *)img_get_data(img3) ;
+            xpl_new = collec_GG(c1, c2, c3, offset, wsize, npixels) ;
+            if(xpl_new==NULL) {
+                trios_error(MSG, "lcollec_main: collec_GG() failed.") ;
+                goto END_lcollec_main ;
+            }
         } else {
             return trios_error(1, "Case GB not yet implemented.") ;
         }
