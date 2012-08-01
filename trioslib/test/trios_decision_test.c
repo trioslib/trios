@@ -1,7 +1,7 @@
 #include <trios.h>
 #include "minunit.h"
 
-TEST(test_decision_pair1) {
+UTEST(test_decision_pair1) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
@@ -24,7 +24,7 @@ TEST(test_decision_pair1) {
     mu_assert("ldecision failed", 1 == ldecision_disk("XPL_RESULT.xpl", 1, 0, AVERAGE, 0, 0, "DECISION_RESULT.mtm"));
 } TEST_END
 
-TEST(test_decision_pair1_memory) {
+UTEST(test_decision_pair1_memory) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
@@ -52,7 +52,7 @@ TEST(test_decision_pair1_memory) {
     mtm_free(result);
 } TEST_END
 
-TEST(test_decision_pair1_gg_memory) {
+UTEST(test_decision_pair1_gg_memory) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");

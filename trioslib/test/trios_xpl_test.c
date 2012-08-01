@@ -3,7 +3,7 @@
 
 #include "minunit.h"
 
-TEST(create_insert_write_xpl) 
+UTEST(create_insert_write_xpl)
     unsigned int wpat1[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
     unsigned int wpat2[9] = {1, 0, 1, 1, 1, 1, 1, 1, 1};
     xpl_t *x = xpl_create(9, BB);
@@ -13,7 +13,7 @@ TEST(create_insert_write_xpl)
     xpl_free(x);
 TEST_END
 
-TEST(create_insert_write_xpl_GG)
+UTEST(create_insert_write_xpl_GG)
     unsigned int wpat1[9] = {255, 126, 1, 1, 1, 1, 1, 1, 1};
     unsigned int wpat2[9] = {255, 0, 126, 1, 1, 1, 1, 1, 1};
     freq_node *l1 = freq_node_create(255, 120);

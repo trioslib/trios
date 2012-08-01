@@ -45,7 +45,7 @@ char test_name[256];
 
 #define VAR_NAME(name, i) VAR_NAME2(name, i)
 
-#define TEST(name) \
+#define UTEST(name) \
 char *name(); VAR_NAME(name, __COUNTER__) char *name() { strcpy(test_name, #name);
 
 

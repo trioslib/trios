@@ -2,7 +2,7 @@
 
 #include "minunit.h"
 
-TEST(test_decision_pair1) {
+UTEST(test_decision_pair1) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
@@ -32,7 +32,7 @@ TEST(test_decision_pair1) {
     mu_assert("lisi failed", 1 == lisi_disk("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 0, "ITV_MIN.itv", 0, NULL, NULL ));
 } TEST_END
 
-TEST(test_isi_memory) {
+UTEST(test_isi_memory) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
@@ -62,7 +62,7 @@ TEST(test_isi_memory) {
     win_free(win);
 } TEST_END
 
-TEST(test_isi_gg1) {
+UTEST(test_isi_gg1) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");

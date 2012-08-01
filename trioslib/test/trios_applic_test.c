@@ -2,7 +2,7 @@
 #include "trios_appl.h"
 #include "minunit.h"
 
-TEST(test_decision_pair1) {
+UTEST(test_decision_pair1) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
@@ -33,7 +33,7 @@ TEST(test_decision_pair1) {
     mu_assert("lpapplic_disk failed", 1 == lpapplic_disk("./test_img/input1.pgm", "ITV_MIN.itv", NULL, 0, 0, 255, "./test_img/test1.pgm"));
 } TEST_END
 
-TEST(test_decision_pair2) {
+UTEST(test_decision_pair2) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
@@ -64,7 +64,7 @@ TEST(test_decision_pair2) {
     mu_assert("lpapplic_disk failed", 1 == lpapplic_disk("./test_img/input2.pgm", "ITV_MIN.itv", NULL, 0, 0, 255, "./test_img/test2.pgm"));
 } TEST_END
 
-TEST(test_decision_pair3) {
+UTEST(test_decision_pair3) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
@@ -95,7 +95,7 @@ TEST(test_decision_pair3) {
     mu_assert("lpapplic_disk failed", 1 == lpapplic_disk("./test_img/input3.pgm", "ITV_MIN.itv", NULL, 0, 0, 255, "./test_img/test3.pgm"));
 } TEST_END
 
-TEST(test_apply_in_memory) {
+UTEST(test_apply_in_memory) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
