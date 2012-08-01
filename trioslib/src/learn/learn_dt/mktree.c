@@ -662,7 +662,8 @@ int deallocate_structures(int no_of_points)
 }
 
 
-float myrandom(double, double);
+float myrandom(double a, double b);
+
 
 /************************************************************************/
 /* Module name :	shuffle_points					*/
