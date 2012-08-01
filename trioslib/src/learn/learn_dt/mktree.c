@@ -1,5 +1,6 @@
 #include <trios.h>
 #include "pacdt_local.h"	/* NINA */
+#include <stdlib.h>
 
 /* #define _DEBUG_ */
 /* #define _DEBUG_1_ */
@@ -679,20 +680,17 @@ int deallocate_structures(int no_of_points)
 int shuffle_points(POINT ** array_name, int count)
 {
 	int i, newposition;
-
 	POINT *temp_point;
-
     for (i = 1; i <= count; i++) {
-        float r = myrandom(1.0, (float) count);
+        /*float r = myrandom(1.0, (double) count);*/
+        float r = 1 + drand48() * (count - 1);
         newposition = (int) r;
-		/* shuffle position "i" with "newposition" */
 		temp_point = array_name[i];
-
 		array_name[i] = array_name[newposition];
 		array_name[newposition] = temp_point;
 	}
 
-	return (1);		/* NINA */
+    return 1;
 }
 
 

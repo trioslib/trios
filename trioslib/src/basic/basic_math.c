@@ -2,6 +2,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 #include <math.h>
+#include <limits.h>
 
 
 /* #define _DEBUG_ */
@@ -364,7 +365,10 @@ float mylog2(double x)
 /************************************************************************/
 float myrandom(double above, double below)
 {
-  return ((float)(above + drand48() * (below - above))) ;
+    double r = rand();
+    r = above + drand48() * (below - above);
+    float res = (float) r;
+    return res;
 }
 
 
