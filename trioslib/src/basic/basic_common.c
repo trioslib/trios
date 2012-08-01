@@ -570,7 +570,7 @@ int set_freq(freq_node *freqlstin, freq_node **freqlist) {
 #ifdef _DEBUG_
 trios_debug("Entrou no xpl_set_freq com freqlist = null");
 trios_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
-#endif // _DEBUG_
+#endif
 
   }
 
@@ -579,7 +579,7 @@ trios_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
 #ifdef _DEBUG_
 trios_debug("Entrou no xpl_set_freq");
 trios_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
-#endif // _DEBUG_
+#endif
 
     qfreq = freqlstin ;
     pfreqprev = NULL ;

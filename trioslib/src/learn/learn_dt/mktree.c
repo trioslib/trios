@@ -662,6 +662,8 @@ int deallocate_structures(int no_of_points)
 }
 
 
+float myrandom(double, double);
+
 /************************************************************************/
 /* Module name :	shuffle_points					*/
 /* Functionality :	Pseudo-randomly shuffles the points in the	*/
@@ -682,9 +684,11 @@ int shuffle_points(POINT ** array_name, int count)
 	int i, newposition;
 	POINT *temp_point;
     for (i = 1; i <= count; i++) {
-        /*float r = myrandom(1.0, (double) count);*/
-        float r = 1 + drand48() * (count - 1);
+        float r = myrandom(1.0, (double) count);
+        /*float r = 1 + drand48() * (count - 1);*/
         newposition = (int) r;
+        /*myrandom(1.0, (double) count);*/
+        printf("shuffle %d %d\n", i, newposition);
 		temp_point = array_name[i];
 		array_name[i] = array_name[newposition];
 		array_name[newposition] = temp_point;

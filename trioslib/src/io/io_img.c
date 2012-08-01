@@ -32,7 +32,7 @@ void removeComments(FILE *f) {
   \return An img_t with the image.
   */
 img_t *img_readPGM(char *filename) {
-    //TODO: ERRORS
+    /*TODO: ERRORS*/
     int w, h, val, maxval;
     int i, j, k;
     char magic1, magic2;

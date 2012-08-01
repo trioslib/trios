@@ -63,7 +63,7 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
                 /* gets the w-pattern centered at the point j */
                 for(i=0; i<wsize; i++) {  /* for each point of the window...*/
                     k = j+offset[i] ;
-                    if(k >= 0 && k < npixels && s1[k] != 0) { // TODO: see if changes here impact something. It shouldn't, but who knows.
+                    if(k >= 0 && k < npixels && s1[k] != 0) { /* TODO: see if changes here impact something. It shouldn't, but who knows.*/
                         s = i/NB ;
                         nshifts = i%NB ;
                         wpat[s] = (wpat[s] | bitmsk[nshifts]) ;

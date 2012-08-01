@@ -63,7 +63,7 @@ int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim,
 #ifdef _DEBUG_
 	trios_debug("DEpois dos free mtm");
 #endif
-	//if(apt) apert_free(apt) ;
+    /*if(apt) apert_free(apt) ;*/
 #ifdef _DEBUG_
 	trios_debug("DEpois dos frees finais");
 #endif

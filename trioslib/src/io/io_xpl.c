@@ -446,7 +446,7 @@ int xpl_write(char *fname, xpl_t * xpl, window_t * win /*, apert_t  *apt */ )
 
 	if ((type > 3) && (type < 10)) {
 		fprintf(fd, "%s\n", ".A");
-		//apert_write_data(fd, apt);
+        /*apert_write_data(fd, apt);*/
 		trios_error(MSG,
 			    "Aperture operatos are not supported at this moment");
 	}
@@ -467,7 +467,7 @@ int xpl_write(char *fname, xpl_t * xpl, window_t * win /*, apert_t  *apt */ )
 	case BG:
 		trios_error(MSG,
 			    "This operator is not supported at this moment");
-		//xpl_BG_write_tree(fd, (xpl_BG *)(xpl->root), wzip) ;
+        /*xpl_BG_write_tree(fd, (xpl_BG *)(xpl->root), wzip) ;*/
 		break;
 
 	case GG:
@@ -481,15 +481,15 @@ int xpl_write(char *fname, xpl_t * xpl, window_t * win /*, apert_t  *apt */ )
 	case WK3C:
 		trios_error(MSG,
 			    "This operator is not supported at this moment");
-		//xpl_WK_write_tree(fd, (xpl_GG *)(xpl->root), wsize) ;
+        /*xpl_WK_write_tree(fd, (xpl_GG *)(xpl->root), wsize) ;*/
 		break;
 
 	case WKGG2F:
 	case WKGG2C:
 		trios_error(MSG,
 			    "This operator is not supported at this moment");
-		//xpl_WKGG_write_tree(fd, (xpl_GG *)(xpl->root),
-		//                    win_get_band_wsize(win,1), wsize) ;
+        /*xpl_WKGG_write_tree(fd, (xpl_GG *)(xpl->root),
+                            win_get_band_wsize(win,1), wsize) ;*/
 		break;
 
 	default:
