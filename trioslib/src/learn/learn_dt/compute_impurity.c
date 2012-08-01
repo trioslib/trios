@@ -64,19 +64,19 @@ float compute_impurity(cur_no_of_points)
   if (cur_no_of_points <= 1) return(0);
 
 #ifdef _DEBUG_1_
-  pac_debug("no_of_cat = %d",no_of_categories) ;
+  trios_debug("no_of_cat = %d",no_of_categories) ;
 #endif
 
   for (i = 1; i <= no_of_categories; i++) {
     j += left_count[i] + right_count[i]; 
 
 #ifdef _DEBUG_2_
-    pac_debug("i = %d, left_count = %d, right_count = %d, j = %d", i,left_count[i],right_count[i],j);
+    trios_debug("i = %d, left_count = %d, right_count = %d, j = %d", i,left_count[i],right_count[i],j);
 #endif
   } 
 
   if (j != cur_no_of_points)
-    pac_fatal("Compute_Impurity: Left_Count and Right_Count not correctly set.");
+    trios_fatal("Compute_Impurity: Left_Count and Right_Count not correctly set.");
   
   if (stop_splitting()) return(0);
   
@@ -122,20 +122,20 @@ void set_counts(cur_points,cur_no_of_points,flag)
   if (!flag) {
 
 #ifdef _DEBUG_1_
-pac_debug("set_counts: flag e' 0. cur_no_of_points=%d\n", cur_no_of_points) ;
+trios_debug("set_counts: flag e' 0. cur_no_of_points=%d\n", cur_no_of_points) ;
 #endif
 
     for (i=1; i <= cur_no_of_points; i++) {
 #ifdef _DEBUG_2_
       if (cur_points[i]->category != 0) {
-	pac_debug("cur_points[%d]->category = %d",i,cur_points[i]->category) ;
+	trios_debug("cur_points[%d]->category = %d",i,cur_points[i]->category) ;
       }
 #endif
       right_count[cur_points[i]->category]++ ;
     }
     
 #ifdef _DEBUG_1_
-    pac_debug("set_counts: terminei de setar\n") ;
+    trios_debug("set_counts: terminei de setar\n") ;
 #endif
 
   }
@@ -172,7 +172,7 @@ void reset_counts()
   int i;
 
 #ifdef _DEBUG_
-pac_debug("Entrei no reset_counts") ;
+trios_debug("Entrei no reset_counts") ;
 #endif
 
   for (i=1; i <= no_of_categories; i++)

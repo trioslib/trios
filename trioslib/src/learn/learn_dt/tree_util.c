@@ -71,27 +71,27 @@ struct tree_node *read_tree(decision_tree)
   */
 
   if ((dtree = fopen(decision_tree,"r")) == NULL)
-    pac_fatal("Decision Tree file can not be opened.") ;
+    trios_fatal("Decision Tree file can not be opened.") ;
   
 
 #ifdef _DEBUG_
-  pac_debug("opened the file") ;
+  trios_debug("opened the file") ;
 #endif
 
   if ( !(read_header(dtree))) {
-    pac_fatal("Decision tree invalid/absent.") ;
+    trios_fatal("Decision tree invalid/absent.") ;
   }
 
 #ifdef _DEBUG_
-  pac_debug("read the header") ;
+  trios_debug("read the header") ;
 #endif
 
   if ((root = read_hp(dtree)) == NULL) {
-    pac_fatal("Decision tree invalid/absent.") ;
+    trios_fatal("Decision tree invalid/absent.") ;
   }
 
 #ifdef _DEBUG_
-  pac_debug("read the tree") ;
+  trios_debug("read the tree") ;
 #endif
 
   root->parent = NULL ;
@@ -218,21 +218,21 @@ struct tree_node *read_hp(dtree)
   while (TRUE) {
     if ((fscanf(dtree,"%f %c",&temp,&c)) != 2) {
 #ifdef _DEBUG_2_
-      pac_debug("Dump of next 100 bytes of the file after temp = %f and c = %c", temp,c) ;
+      trios_debug("Dump of next 100 bytes of the file after temp = %f and c = %c", temp,c) ;
       for (i=0; i < 100; i++) {
 	if ((fscanf(dtree,"%c",&c)) != 1) {
-	  pac_fatal ("Oops, failed to read") ;
+	  trios_fatal ("Oops, failed to read") ;
 	}
-	pac_debug("c = %c",c) ;
+	trios_debug("c = %c",c) ;
       }
 #endif
-      pac_fatal("Invalid/Absent hyperplane equation.") ;
+      trios_fatal("Invalid/Absent hyperplane equation.") ;
     }
     if (c == 'x') { 
       if ((fscanf(dtree,"[%d] +",&i)) != 1) 
-	pac_fatal("Read-Hp: Invalid hyperplane equation.");
+	trios_fatal("Read-Hp: Invalid hyperplane equation.");
       if (i <= 0 || i > no_of_dimensions+1) 
-	pac_fatal("Read_Hp: Invalid coefficient index in decision tree.") ;
+	trios_fatal("Read_Hp: Invalid coefficient index in decision tree.") ;
       cur_node->coefficients[i] = temp ;
     }
     else if (c == '=') {
@@ -399,11 +399,11 @@ void write_tree(root, dt_file_local)
   /* char gdata ; */
 
 #ifdef _DEBUG_
-  pac_debug("Entered write_tree()") ;
+  trios_debug("Entered write_tree()") ;
 #endif
 
   if ((dtree = fopen(dt_file_local, "w")) == NULL)
-    pac_fatal("Write_Tree: Decision Tree file can not be opened.") ;
+    trios_fatal("Write_Tree: Decision Tree file can not be opened.") ;
 
   write_header(dtree) ;
 

@@ -13,7 +13,8 @@ basic/basic_multi.c
 basic/basic_win.c
 basic/basic_xpl.c
 basic/basic_xplBB.c
-basic/basic_xplGG.c)
+basic/basic_xplGG.c
+basic/basic_math.c)
 
 ADD_LIBRARY(triosbasic ${TRIOS_BASIC_SRCS})
 

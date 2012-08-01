@@ -37,7 +37,7 @@ int                 /*+ Purpose: Reads a dt file                            +*/
   int   i, tags_read, stop ;
 
 #ifdef _DEBUG_
-pac_debug("Entrou no DT_READ.") ;
+trios_debug("Entrou no DT_READ.") ;
 #endif
 
   tags_read = 0 ;
@@ -46,19 +46,19 @@ pac_debug("Entrou no DT_READ.") ;
   /* open file -----------------------------------------------------------*/
 
   if((fd=fopen(fname, "r"))==NULL) {
-    return (int)pac_error(1, "File (%s) open failed.", fname) ;
+    return (int)trios_error(1, "File (%s) open failed.", fname) ;
   }
  
   /* read & check file header ------------------------------------------- */
 
   aHeader = header_read(fd);
   if(!aHeader) {
-    return (int)pac_error(1, "Error : unrecognized file header.") ;
+    return (int)trios_error(1, "Error : unrecognized file header.") ;
   }
 
   if(!header_compare(aHeader, &dtHeader)) {
     fclose(fd) ;
-    return (int)pac_error(1, "Error : wrong file header.") ;
+    return (int)trios_error(1, "Error : wrong file header.") ;
   }
 
   while(!stop)  {
@@ -67,7 +67,7 @@ pac_debug("Entrou no DT_READ.") ;
 
     if(dot==(char)EOF) {
       fclose(fd) ;
-      return (int)pac_error(1, "Unexpected end of file. No tag found.") ;
+      return (int)trios_error(1, "Unexpected end of file. No tag found.") ;
     }
 
     tag = (char)fgetc(fd) ;
@@ -86,17 +86,17 @@ pac_debug("Entrou no DT_READ.") ;
     case 'W':
       if(NULL==(*win = win_read_data(fd))) {
 	fclose(fd) ;
-	return (int)pac_error(MSG, "dt_read: win_read_data() failed.") ;
+    return (int)trios_error(MSG, "dt_read: win_read_data() failed.") ;
       }
       tags_read++ ;
       break ;
 
 
     case 'A':
-      if(NULL==(*apt = apert_read_data(fd))) {
+      /*if(NULL==(*apt = apert_read_data(fd))) {
 	fclose(fd) ;
-	return (int)pac_error(MSG, "dt_read: win_read_data() failed.") ;
-      }
+    return (int)trios_error(MSG, "dt_read: win_read_data() failed.") ;
+      }*/
       break ;
 
 
@@ -107,7 +107,7 @@ pac_debug("Entrou no DT_READ.") ;
       fscanf(fd, "%d", &no_of_categories) ;
       
       if (NULL == (map = (int *) malloc(sizeof(int)*(no_of_categories+1)))) 
-	return pac_error(MSG,"dt_read: malloc failed for map") ;  
+    return trios_error(MSG,"dt_read: malloc failed for map") ;
 
       map[0] = 0 ;
 
@@ -123,23 +123,23 @@ pac_debug("Entrou no DT_READ.") ;
  
     default : 
       fclose(fd);   
-      (void)pac_error(1," dt_read: Unexpected tag %c ",tag) ;
-      return (int)pac_error(1, " File format error") ;
+      (void)trios_error(1," dt_read: Unexpected tag %c ",tag) ;
+      return (int)trios_error(1, " File format error") ;
     }
   }
 
   if(tags_read!=3)
-    return (int) pac_error(1,
+    return (int) trios_error(1,
       "dt_read: Missing Parameters. Look for .t, .n, .f or .W") ;
 
 #ifdef _DEBUG_
-pac_debug("Leu Data header") ;
+trios_debug("Leu Data header") ;
 #endif
 
   fclose(fd) ;
 
 #ifdef _DEBUG_
-pac_debug("Now it will get out") ;
+trios_debug("Now it will get out") ;
 #endif
 
   return(1) ;
@@ -171,21 +171,21 @@ int                  /*+ Purpose: Writes the miniterms collection to a file  +*/
   int i ;
 
 #ifdef _DEBUG_
-pac_debug("Entrou no DT_WRITE") ;
+trios_debug("Entrou no DT_WRITE") ;
 #endif
 
   fd = fopen(fname, "w") ;
   if(fd == NULL) 
-    return pac_error(1, "write_dt : file open error.") ;
+    return trios_error(1, "write_dt : file open error.") ;
   
 #ifdef _DEBUG_
-pac_debug("File opened.") ;
+trios_debug("File opened.") ;
 #endif
 
   header_write(fd, &dtHeader);
 
 #ifdef _DEBUG_
-pac_debug("Header written.") ;
+trios_debug("Header written.") ;
 #endif
 
   fprintf(fd, "%s %d \n", ".t", type) ;
@@ -197,19 +197,19 @@ pac_debug("Header written.") ;
   win_write_data(fd, win);
 
 #ifdef _DEBUG_
-pac_debug("Window written.") ;
+trios_debug("Window written.") ;
 #endif
 
   if ((type > 3)&&(type < 10)) {
 
     fprintf(fd, "%s\n", ".A") ;
     
-    apert_write_data(fd, apt);
+    /*apert_write_data(fd, apt);*/
     
   }
 
 #ifdef _DEBUG_
-pac_debug("Aperture written.") ;
+trios_debug("Aperture written.") ;
 #endif
 
   fprintf(fd, "%s %d\n", ".m", no_of_categories) ;

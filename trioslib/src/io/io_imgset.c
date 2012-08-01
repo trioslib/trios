@@ -59,7 +59,7 @@ imgset_t *imgset_read(char *fname) {
 
 
 #ifdef _DEBUG_
-pac_debug("It will read %s", fname) ;
+trios_debug("It will read %s", fname) ;
 #endif
 
   tags_read = 0 ;
@@ -124,7 +124,7 @@ pac_debug("It will read %s", fname) ;
   }
 
 #ifdef _DEBUG_
-pac_debug("ngroups=%d  grpsize=%d", ngroups, grpsize);
+trios_debug("ngroups=%d  grpsize=%d", ngroups, grpsize);
 #endif
 
   if(!(imgset = imgset_create(ngroups, grpsize))) {
@@ -245,8 +245,8 @@ int imgset_create_write(char *fname, char *fname_obs, char *fname_ide, char *fna
 
 
 #ifdef _DEBUG_
-pac_debug("obs= %s", fname_obs) ;
-pac_debug("ide= %s", fname_ide) ;
+trios_debug("obs= %s", fname_obs) ;
+trios_debug("ide= %s", fname_ide) ;
 #endif
 
   ngroups = 1 ;
@@ -267,8 +267,8 @@ pac_debug("ide= %s", fname_ide) ;
   dir[len] = '\0' ;
 
 #ifdef _DEBUG_
-  pac_debug("observed file name=%s", fil) ;
-  pac_debug("observed directory name=%s", dir) ;
+  trios_debug("observed file name=%s", fil) ;
+  trios_debug("observed directory name=%s", dir) ;
 #endif
 
   if(!imgset_set_dname(imgset, 1, dir)) {
@@ -288,8 +288,8 @@ pac_debug("ide= %s", fname_ide) ;
   dir[len] = '\0' ;
 
 #ifdef _DEBUG_
-  pac_debug("ideal file name=%s", fil) ;
-  pac_debug("ideal directory name=%s", dir) ;
+  trios_debug("ideal file name=%s", fil) ;
+  trios_debug("ideal directory name=%s", dir) ;
 #endif
 
   if(!imgset_set_dname(imgset, 2, dir)) {
@@ -310,8 +310,8 @@ pac_debug("ide= %s", fname_ide) ;
     dir[len] = '\0' ;
 
 #ifdef _DEBUG_
-    pac_debug("mask file name=%s", fil) ;
-    pac_debug("mask directory name=%s", dir) ;
+    trios_debug("mask file name=%s", fil) ;
+    trios_debug("mask directory name=%s", dir) ;
 #endif
 
     if(!imgset_set_dname(imgset, 3, dir)) {

@@ -2,7 +2,7 @@
 
 #include "minunit.h"
 
-UTEST(test_decision_pair1) {
+UTEST(test_isi_pair1) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
@@ -62,7 +62,7 @@ UTEST(test_isi_memory) {
     win_free(win);
 } TEST_END
 
-UTEST(test_isi_gg1) {
+UTEST(test_train_gg1) {
     int i, j;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
@@ -85,10 +85,11 @@ UTEST(test_isi_gg1) {
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT_GG1.xpl", NULL));
     xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
-    itv_t *final = lisi_memory(mtm, itv, 3, 5, 0, 0);
-    mu_assert("lisi failed", NULL != final);
+    mtm_write("mtm_gg1.mtm", mtm, win);
+    ltrainDT("mtm_gg1.mtm", 0, 0, 0, 0, NULL, "tree_gg1");
 
-    itv_free(final);
+
+
     win_free(win);
 } TEST_END
 

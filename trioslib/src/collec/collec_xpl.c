@@ -64,7 +64,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
     xpl_t    *xpl  = NULL ;
     int      wsize=0, map_type ;
     #ifdef _DEBUG_
-        pac_debug("Starting lcollec %s e %s e cv=%d", fname_i1, fname_o1, cv_flag) ;
+        trios_debug("Starting lcollec %s e %s e cv=%d", fname_i1, fname_o1, cv_flag) ;
     #endif
     /* read image set file */
     if ((imgset = imgset_read(fname_i1))==NULL) {
@@ -88,7 +88,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         return trios_error(MSG, "lcollec: win_read() failed.") ;
     }
     #ifdef _DEBUG_
-        pac_debug("Window reading : done.") ;
+        trios_debug("Window reading : done.") ;
     #endif
     wsize = win_get_band_wsize(win, 1) ;
     /* If window has multiple bands, force it to ONE band only */
@@ -108,7 +108,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         else map_type = GG ;
     }
     #ifdef _DEBUG_
-    pac_debug("Map_type=%d", map_type) ;
+    trios_debug("Map_type=%d", map_type) ;
     #endif
     /* if an input XPL file is given, then read it;
     otherwise create an empty XPL structure */ 
@@ -132,7 +132,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         return trios_error(MSG, "lcollec: lcollec_main() failed.") ;    
     }
     #ifdef _DEBUG_
-        pac_debug("lcollec_main: done.") ;
+        trios_debug("lcollec_main: done.") ;
     #endif
     /* write contents of XPL to output file */
     if(!xpl_write(fname_o1, xpl, win/*, apt*/)) {
@@ -142,7 +142,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         return trios_error(MSG, "lcollec : xpl_write() failed.") ;
     }
     #ifdef _DEBUG_
-        pac_debug("Writing XPL: done") ;
+        trios_debug("Writing XPL: done") ;
     #endif
     /* free allocated memory */
     imgset_free(imgset) ;

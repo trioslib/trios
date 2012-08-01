@@ -708,7 +708,7 @@ int             /*+ Purpose: Finds the moda of the labels                    +*/
 
 
 #ifdef _DEBUG_
-    pac_debug("Starting freq moda") ;
+    trios_debug("Starting freq moda") ;
 #endif
 
   qfreq = pqfreq  ;
@@ -834,7 +834,7 @@ int             /*+ Purpose: Finds the average of the labels                 +*/
                         /* observed to be taken in consideration          */
 
 #ifdef _DEBUG_
-    pac_debug("Starting freq average") ;
+    trios_debug("Starting freq average") ;
 #endif
 
   *wpat_freq = 0 ;

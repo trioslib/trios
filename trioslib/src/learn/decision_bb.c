@@ -35,7 +35,7 @@ int decide_tree_bb(xpl_BB *p, mtm_t *mtm, unsigned int sum, int wzip, double fre
     verify = ((float)wpat_freq / sum) * 100 ;
     
 #ifdef _DEBUG_
-pac_debug("mtmbbtree wpat_freq=%d, sum=%d, verify=%f wzip=%d", wpat_freq, sum, verify,wzip) ;
+trios_debug("mtmbbtree wpat_freq=%d, sum=%d, verify=%f wzip=%d", wpat_freq, sum, verify,wzip) ;
 #endif
 
     if(verify >= freqmin) {
@@ -50,7 +50,7 @@ pac_debug("mtmbbtree wpat_freq=%d, sum=%d, verify=%f wzip=%d", wpat_freq, sum, v
 	  wpat_label = 0 ; 
 
 #ifdef _DEBUG_
-pac_debug("mtmbbtree Vai inserir wpat[0]=%d label=%d", p->wpat[0], wpat_label) ;
+trios_debug("mtmbbtree Vai inserir wpat[0]=%d label=%d", p->wpat[0], wpat_label) ;
 #endif
 	
 	if(!mtm_BX_insert( mtm, (int)mtm->nmtm , wzip, p->wpat, wpat_label, 0, 0)) {
@@ -71,7 +71,7 @@ pac_debug("mtmbbtree Vai inserir wpat[0]=%d label=%d", p->wpat[0], wpat_label) ;
 	  wpat_label = undflabel ;
 	
 #ifdef _DEBUG_
-pac_debug("mtmbbtree Vai inserir wpat[0]=%d label=%d", p->wpat[0], wpat_label) ;
+trios_debug("mtmbbtree Vai inserir wpat[0]=%d label=%d", p->wpat[0], wpat_label) ;
 #endif
 
 	if(!mtm_BX_insert( mtm, (int)mtm->nmtm , wzip, p->wpat, wpat_label, 0, 0 )) {

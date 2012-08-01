@@ -242,7 +242,7 @@ int xpl_merge(xpl_t * xpl1, xpl_t * xpl2)
 					    "This operator is not supported yet");
 				/*     
 				   if(!xpl_BG_merge(xpl1, (xpl_BG *)xpl2->root)) {
-				   return pac_error(MSG, "xpl_merge : xpl_BG_merge() failed.") ;
+				   return trios_error(MSG, "xpl_merge : xpl_BG_merge() failed.") ;
 				   }   */
 			} else {
                 if(!xpl_GG_merge(xpl1, (xpl_GG *)xpl2->root)) {
@@ -308,12 +308,12 @@ int xpl_tree2ll(xpl_t * xpl, int order_type)
 
 			   if(order_type == 1) {
 			   if(!tree2ll_BG_asc((xpl_BG *)xpl->root, &head)) {
-			   return pac_error(MSG, "tree2ll : tree2ll_BG() failed.") ;
+			   return trios_error(MSG, "tree2ll : tree2ll_BG() failed.") ;
 			   }
 			   }
 			   else {
 			   if(!tree2ll_BG_desc((xpl_BG *)xpl->root, &head)) {
-			   return pac_error(MSG, "tree2ll : tree2ll_BG() failed.") ;
+			   return trios_error(MSG, "tree2ll : tree2ll_BG() failed.") ;
 			   }
 			   for(p=head; p!=NULL; ) {
 			   p->right = p->left ;
@@ -335,12 +335,12 @@ int xpl_tree2ll(xpl_t * xpl, int order_type)
 
 			   if(order_type == 1) {
 			   if(!tree2ll_GG_asc((xpl_GG *)xpl->root, &head)) {
-			   return pac_error(MSG, "tree2ll : tree2ll_GG() failed.") ;
+			   return trios_error(MSG, "tree2ll : tree2ll_GG() failed.") ;
 			   }
 			   }
 			   else {
 			   if(!tree2ll_GG_desc((xpl_GG *)xpl->root, &head)) {
-			   return pac_error(MSG, "tree2ll : tree2ll_GG() failed.") ;
+			   return trios_error(MSG, "tree2ll : tree2ll_GG() failed.") ;
 			   }
 			   for(p=head; p!=NULL; ) {
 			   p->right = p->left ;
@@ -472,7 +472,7 @@ int xpl_sort(xpl_t * xpl)
 			/*xpl_BG *p ;
 			   p = NULL ;
 			   if(!xpl_sort_BG((xpl_BG *)xpl->root, &p)) {
-			   return pac_error(MSG, "xpl_sort : xpl_sort_BG() failed.") ;
+			   return trios_error(MSG, "xpl_sort : xpl_sort_BG() failed.") ;
 			   }
 			   xpl->root = (int *)p ; */
 		}
@@ -491,7 +491,7 @@ int xpl_sort(xpl_t * xpl)
 
 			   p = NULL ;
 			   if(!xpl_GG_sort((xpl_GG *)xpl->root, &p)) {
-			   return pac_error(MSG, "xpl_sort : xpl_GG_sort() failed.") ;
+			   return trios_error(MSG, "xpl_sort : xpl_GG_sort() failed.") ;
 			   }
 			   xpl->root = (int *)p ; */
 		}

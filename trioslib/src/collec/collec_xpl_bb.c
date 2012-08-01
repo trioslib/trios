@@ -25,11 +25,11 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
     xpl_t *xpl ;                /* XPL structure */
 
     #ifdef _DEBUG_
-        pac_debug("Entrei no collec_BB") ;
+        trios_debug("Entrei no collec_BB") ;
     #endif
     #ifdef _DEBUG_1_
         for(i=0;i<wsize;i++) {
-            pac_debug("offset[%d]=%d\n", i, offset[i]) ;
+            trios_debug("offset[%d]=%d\n", i, offset[i]) ;
         }
     #endif
     wpat = (unsigned int *)malloc(sizeof(int)*size_of_zpat(wsize)) ;
@@ -45,20 +45,20 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
     /* TODO: extract this case into a separate function */
     if(!cv) {
         #ifdef _DEBUG_
-            pac_debug("Vai entrar no caso cv_flag=0") ;
+            trios_debug("Vai entrar no caso cv_flag=0") ;
         #endif
         for(j = 0; j<npixels; j++) {         /* shifts the window */
             #ifdef _DEBUG_2_
-                pac_debug("Iterating...") ;
+                trios_debug("Iterating...") ;
             #endif
             if(p3[j] != 0)  {
                 /* mask condition satisfied */
                 #ifdef _DEBUG_2_
-                    pac_debug("mask condition satisfied") ;
+                    trios_debug("mask condition satisfied") ;
                 #endif
                 for(s=0; s<xpl->wzip; s++) wpat[s] = 0 ;     /* blank w-pattern */
                 #ifdef _DEBUG_2_
-                pac_debug("w-pattern cleaned!") ;
+                trios_debug("w-pattern cleaned!") ;
                 #endif
                 /* gets the w-pattern centered at the point j */
                 for(i=0; i<wsize; i++) {  /* for each point of the window...*/
@@ -70,7 +70,7 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
                     }
                 }
                 #ifdef _DEBUG_2_
-                    pac_debug("trying to insert w-pattern into example's set...") ;
+                    trios_debug("trying to insert w-pattern into example's set...") ;
                 #endif
                 /* insert new w-pattern into example's set */
                 if(p2[j] == 0) {
@@ -91,7 +91,7 @@ xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *
     /* TODO: Split this case into a separate function */
     } else {
         #ifdef _DEBUG_
-            pac_debug("Vai entrar no caso cv_flag=1") ;
+            trios_debug("Vai entrar no caso cv_flag=1") ;
         #endif
         for(j = 0; j<npixels; j++) {               /* shifts the window */
             if(p3[j] != 0) {                    /* mask condition satisfied */

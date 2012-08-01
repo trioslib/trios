@@ -192,7 +192,7 @@ mtm_t *mtm_decide(xpl_t * xpl, int comp_prob, double freqmin, double estimator,
 	case WKGG2C:
 	case GG3:
 #ifdef _DEBUG_
-		pac_debug("GRAY mtmdecide estimador = %f \n", estimator);
+        trios_debug("GRAY mtmdecide estimador = %f \n", estimator);
 #endif
 		if (estimator == AVERAGE) {
 			if (!decide_tree_gg_average

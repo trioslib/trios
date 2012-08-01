@@ -56,7 +56,7 @@ decide_tree_gg_moda(
 				   observed to be taken in consideration            */
 
 #ifdef DEBUG_
-	pac_debug("Starting decide moda");
+	trios_debug("Starting decide moda");
 #endif
 
 	if (p) {
@@ -71,7 +71,7 @@ decide_tree_gg_moda(
 			      &wpat_label, &wpat_freq);
 
 #ifdef _DEBUG_
-		pac_debug("status =%d", status);
+		trios_debug("status =%d", status);
 #endif
 
 		if (status == 1) {
@@ -141,7 +141,7 @@ decide_tree_gg_average(
 
 
 #ifdef _DEBUG_
-	pac_debug("Starting decide average");
+	trios_debug("Starting decide average");
 #endif
 
 	if (p) {
@@ -155,7 +155,7 @@ decide_tree_gg_average(
 				 &wpat_freq);
 
 #ifdef _DEBUG_
-		pac_debug("status =%d", status);
+		trios_debug("status =%d", status);
 #endif
 
 		if (status == 1) {

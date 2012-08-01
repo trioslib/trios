@@ -129,7 +129,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 					     "Missing Parameters. Looking for .t, .n, .s or .W");
 
 #ifdef _DEBUG_1_
-	pac_debug("type=%d nodes=%d sum=%d", type, n_nodes, sum);
+	trios_debug("type=%d nodes=%d sum=%d", type, n_nodes, sum);
 #endif
 
 
@@ -157,7 +157,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 
 		/* reading loop --------------------------------- */
 #ifdef _DEBUG_1_
-		pac_debug("wzip=%d", wzip);
+		trios_debug("wzip=%d", wzip);
 #endif
 
 		for (i = 0; i < n_nodes; i++) {
@@ -202,7 +202,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 			/*            it is neccessary                                        */
 
 #ifdef _DEBUG_2_
-			pac_debug("bwpat=%x fq0=%d fq1=%d", bwpat[0], fq0, fq1);
+			trios_debug("bwpat=%x fq0=%d fq1=%d", bwpat[0], fq0, fq1);
 #endif
 
 			if (xpl_BB_insert
@@ -237,7 +237,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 
 		   /* reading loop --------------------------------- */
 #ifdef _DEBUG_1_
-		pac_debug("n_nodes=%d", n_nodes);
+		trios_debug("n_nodes=%d", n_nodes);
 #endif
 		/*
 		   for(i= 0; i<n_nodes ; i++) {
@@ -273,8 +273,8 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 		   }
 
 		   #ifdef _DEBUG_2_
-		   pac_debug("freqnode criado");
-		   pac_debug("label=%d , freq=%d\n", freqnode->label, freqnode->freq) ;
+		   trios_debug("freqnode criado");
+		   trios_debug("label=%d , freq=%d\n", freqnode->label, freqnode->freq) ;
 		   #endif
 
 		   if (!set_freq(freqnode, &freqlist)) {
@@ -353,8 +353,8 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 		   }
 
 		   #ifdef _DEBUG_2_
-		   pac_debug("freqnode criado");
-		   pac_debug("label=%d , freq=%d\n", freqnode->label, freqnode->freq) ;
+		   trios_debug("freqnode criado");
+		   trios_debug("label=%d , freq=%d\n", freqnode->label, freqnode->freq) ;
 		   #endif
 
 		   if (!set_freq(freqnode, &freqlist)) {
@@ -387,7 +387,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 	}
 
 #ifdef _DEBUG_
-	pac_debug("xpl type=%d", xpl->type);
+	trios_debug("xpl type=%d", xpl->type);
 #endif
 
 	fclose(fd);
@@ -414,7 +414,7 @@ int xpl_write(char *fname, xpl_t * xpl, window_t * win /*, apert_t  *apt */ )
 
 
 #ifdef _DEBUG_
-	pac_debug("Entrou no XPL_WRITE");
+	trios_debug("Entrou no XPL_WRITE");
 #endif
 
 	fd = fopen(fname, "w");
@@ -422,18 +422,18 @@ int xpl_write(char *fname, xpl_t * xpl, window_t * win /*, apert_t  *apt */ )
 		return trios_error(1, "write_xpl : file open error.");
 
 #ifdef _DEBUG_
-	pac_debug("abriu arquivo\n");
+	trios_debug("abriu arquivo\n");
 #endif
 
 	header_write(fd, &xplHeader);
 #ifdef _DEBUG_
-	pac_debug("escreveu header no arquivo");
+	trios_debug("escreveu header no arquivo");
 #endif
 
 	type = xpl_get_type(xpl);
 
 #ifdef _DEBUG_
-	pac_debug("type=%d", type);
+	trios_debug("type=%d", type);
 #endif
 
 	fprintf(fd, "%s %d\n", ".t", type);
@@ -524,7 +524,7 @@ void xpl_BB_write_tree(FILE * fd, xpl_BB * p, int wzip)
 		xpl_BB_write_tree(fd, p->left, wzip);
 #ifdef _DEBUG_2_
 		if (p->wpat[0] == 0) {
-			pac_debug("ZERO %x", p->wpat[0]);
+			trios_debug("ZERO %x", p->wpat[0]);
 		}
 #endif
 		for (i = 0; i < wzip; i++) {

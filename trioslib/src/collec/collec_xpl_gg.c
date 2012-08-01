@@ -20,11 +20,11 @@ xpl_t *collec_GG(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *o
 	xpl_t *xpl;		/* XPL structure */
 	freq_node *freqnode;	/* pointer to a frequency node */
 #ifdef _DEBUG_
-	pac_debug("Entrei no collec_GG");
+    trios_debug("Entrei no collec_GG");
 #endif
 #ifdef _DEBUG_1_
 	for (i = 0; i < wsize; i++) {
-		pac_debug("offset[%d]=%d\n", i, offset[i]);
+        trios_debug("offset[%d]=%d\n", i, offset[i]);
 	}
 #endif
 
@@ -55,11 +55,11 @@ xpl_t *collec_GG(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *o
 			}
 
 #ifdef _DEBUG_2_
-			pac_debug("Pattern coletado");
+            trios_debug("Pattern coletado");
 			for (i = 0; i < wsize; i++) {
-				pac_debug("wpat[%d]=%d\n", i, wpat[i]);
+                trios_debug("wpat[%d]=%d\n", i, wpat[i]);
 			}
-			pac_debug("p2[%d]=%d\n", j, p2[j]);
+            trios_debug("p2[%d]=%d\n", j, p2[j]);
 #endif
 
 			if ((freqnode =
@@ -72,8 +72,8 @@ xpl_t *collec_GG(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *o
 			/* insert new w-pattern into example's set */
 
 #ifdef _DEBUG_2_
-			pac_debug("freqnode criado");
-			pac_debug("label1=%d , freq1=%d\n", freqnode->label,
+            trios_debug("freqnode criado");
+            trios_debug("label1=%d , freq1=%d\n", freqnode->label,
 				  freqnode->freq);
 #endif
 

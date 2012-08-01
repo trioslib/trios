@@ -133,7 +133,7 @@ img_t *lpapplic_memory(img_t * img_appl, itv_t * itv, window_t *win, img_t * img
                    img_free(img_appl) ;
                    img_free(img_mask) ;
                    img_free(img_out) ;
-                   pac_error(MSG, "lpapplic : hashapplic_bx() failed.") ;
+                   trios_error(MSG, "lpapplic : hashapplic_bx() failed.") ;
                    } */
             }
         } else {
@@ -153,7 +153,7 @@ img_t *lpapplic_memory(img_t * img_appl, itv_t * itv, window_t *win, img_t * img
                    img_free(img_appl) ;
                    img_free(img_mask) ;
                    img_free(img_out) ;
-                   pac_error(MSG, "lpapplic : hashapplic_short() failed.") ;
+                   trios_error(MSG, "lpapplic : hashapplic_short() failed.") ;
                    } */
             }
         }
@@ -233,7 +233,7 @@ int lpapplic_disk(char *f_appl, char *f_basis, char *f_mask, int cv,
 				   img_free(img_appl) ;
 				   img_free(img_mask) ;
 				   img_free(img_out) ;
-				   pac_error(MSG, "lpapplic : hashapplic_bx() failed.") ;
+				   trios_error(MSG, "lpapplic : hashapplic_bx() failed.") ;
 				   } */
 			}
 		} else {
@@ -253,7 +253,7 @@ int lpapplic_disk(char *f_appl, char *f_basis, char *f_mask, int cv,
 				   img_free(img_appl) ;
 				   img_free(img_mask) ;
 				   img_free(img_out) ;
-				   pac_error(MSG, "lpapplic : hashapplic_short() failed.") ;
+				   trios_error(MSG, "lpapplic : hashapplic_short() failed.") ;
 				   } */
 			}
 		}
@@ -266,7 +266,7 @@ int lpapplic_disk(char *f_appl, char *f_basis, char *f_mask, int cv,
 	   img_free(img_appl) ;
 	   img_free(img_mask) ;
 	   img_free(img_out) ;
-	   pac_error(MSG, "lpapplic : mm_writeimage() failed.") ;
+	   trios_error(MSG, "lpapplic : mm_writeimage() failed.") ;
 	   } */
 
 	itv_free(itv);
@@ -318,7 +318,7 @@ int /*+ Purpose:                + */ papplic_bx(
 
 
 #ifdef _DEBUG_
-	pac_debug("Entering papplic_bx()");
+	trios_debug("Entering papplic_bx()");
 #endif
 
 	wsize = win_get_band_wsize(win, 1);
@@ -331,15 +331,15 @@ int /*+ Purpose:                + */ papplic_bx(
 		return trios_error(MSG, "papplic_bx: offset_create() failed.");
 	}
 #ifdef _DEBUG_
-	pac_debug("It will set vector of offsets");
+	trios_debug("It will set vector of offsets");
 #endif
 	trios_debug("%d", width);
 	offset_set(offset, win, width, 1);
 
 #ifdef _DEBUG_
-	pac_debug("It called offset_set, cv = %d", cv);
+	trios_debug("It called offset_set, cv = %d", cv);
 	for (i = 0; i < wsize; i++) {
-		pac_debug("offset[%d]=%d\n", i, offset[i]);
+		trios_debug("offset[%d]=%d\n", i, offset[i]);
 	}
 #endif
 
@@ -480,7 +480,7 @@ int				/*+ Purpose: Applies an operator (given by a set of intervals)
 
 
 #ifdef _DEBUG_
-	pac_debug("Entering papplic_short()");
+	trios_debug("Entering papplic_short()");
 #endif
 
 	wsize = win_get_band_wsize(win, 1);
@@ -496,9 +496,9 @@ int				/*+ Purpose: Applies an operator (given by a set of intervals)
 	offset_set(offset, win, width, 1);
 
 #ifdef _DEBUG_
-	pac_debug("It called offset_set, cv = %d", cv);
+	trios_debug("It called offset_set, cv = %d", cv);
 	for (i = 0; i < wsize; i++) {
-		pac_debug("offset[%d]=%d\n", i, offset[i]);
+		trios_debug("offset[%d]=%d\n", i, offset[i]);
 	}
 #endif
 

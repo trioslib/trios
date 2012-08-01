@@ -287,12 +287,12 @@ int                       /*+ Purpose: inserts a minterm in the table      +*/
   }
 
 #ifdef _DEBUG_
-pac_debug("index=%d", index1) ;
-pac_debug("mtm_gx_insert ") ;
+trios_debug("index=%d", index1) ;
+trios_debug("mtm_gx_insert ") ;
 for (j=0;j<wsize;j++) {
-  pac_debug("wpat[%d]=%d", j, p[index1].wpat[j]) ;
+  trios_debug("wpat[%d]=%d", j, p[index1].wpat[j]) ;
 }
-pac_debug("with label = %d", label) ;
+trios_debug("with label = %d", label) ;
 #endif
 
   for ( j = 0; j < wsize; j++)
