@@ -13,11 +13,7 @@ basic/basic_multi.c
 basic/basic_win.c
 basic/basic_xpl.c
 basic/basic_xplBB.c
-basic/basic_xplGG.c
-basic/basic_dt/compute_impurity.c
-basic/basic_dt/impurity_measures.c
-basic/basic_dt/perturb.c
-basic/basic_dt/tree_util.c)
+basic/basic_xplGG.c)
 
 ADD_LIBRARY(triosbasic ${TRIOS_BASIC_SRCS})
 
