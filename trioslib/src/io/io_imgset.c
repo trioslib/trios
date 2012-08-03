@@ -15,10 +15,14 @@ char *get_dir_name(char *path, char *read_dir_name) {
     separator = '/';
 #endif
 
-    if (read_dir_name[0] == '.' && read_dir_name[1] == separator) {
+    if (read_dir_name[0] == '/') {
+        /* absolute path provided */
+        return read_dir_name;
+    } else if (read_dir_name[0] == '.' && read_dir_name[1] == separator) {
         read_dir_name += 2;
     }
     dir_name_len = strlen(read_dir_name);
+
 
     for (i = strlen(path) - 1; path[i] != separator && i >= 0; i--) ;
     if (i < 0) {
@@ -139,7 +143,7 @@ pac_debug("ngroups=%d  grpsize=%d", ngroups, grpsize);
     } 
     if(strcmp(name, "\"\"") == 0) name[0]='\0';
     dir_name = get_dir_name(fname, name);
-    printf("AA%s\n", dir_name);
+    /*printf("AA%s\n", dir_name);*/
 
     if(!imgset_set_dname(imgset, i, dir_name)) {
       return
