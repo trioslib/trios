@@ -4,7 +4,7 @@
 
 #include "minunit.h"
 
-TEST(create_image) 
+UTEST(create_image) 
     img_t *img  = img_create(5, 4, 1, sz8BIT);
     img_set_pixel(img, 2, 1, 0, 44);
     mu_assert("Image width:", 4 == img_get_height(img));
@@ -14,7 +14,7 @@ TEST(create_image)
     img_free(img);
 TEST_END
 
-TEST(image_16_bit) 
+UTEST(image_16_bit) 
     img_t *img  = img_create(5, 4, 1, sz16BIT);
     img_set_pixel(img, 0, 1, 0, 128);
     img_set_pixel(img, 2, 1, 0, 454);
@@ -25,7 +25,7 @@ TEST(image_16_bit)
     img_free(img);
 TEST_END
 
-TEST(image_32_bit) 
+UTEST(image_32_bit) 
     img_t *img  = img_create(5, 4, 1, sz32BIT);
     img_set_pixel(img, 0, 1, 0, 128);
     img_set_pixel(img, 2, 1, 0, 454);
@@ -38,7 +38,7 @@ TEST(image_32_bit)
     img_free(img);
 TEST_END
 
-TEST(write_image) 
+UTEST(write_image) 
     img_t *img  = img_create(5, 4, 1, sz8BIT);
     img_set_pixel(img, 0, 0, 0, 197);
     img_set_pixel(img, 2, 1, 0, 240);
@@ -47,7 +47,7 @@ TEST(write_image)
     img_free(img);
 TEST_END
 
-TEST(read_image) 
+UTEST(read_image) 
     img_t *img  = img_readPGM("test_img/test_read.pgm");
     mu_assert("read: width fail", img_get_width(img) == 3);
     mu_assert("read: height fail", img_get_height(img) == 2);
@@ -60,7 +60,7 @@ TEST(read_image)
 	    img_free(img);
 TEST_END
 
-TEST(read_real_image) {
+UTEST(read_real_image) {
     img_t *img  = img_readPGM("test_img/input1.pgm");
     img_free(img);
     img  = img_readPGM("test_img/input2.pgm");

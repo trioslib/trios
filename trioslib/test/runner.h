@@ -56,8 +56,6 @@ void test_runner()
 
 void segfault_handler(int signum)
 {
-    test test_func;
-    int i;
     printf("\e[1;1m\e[1;41m\e[1;37mSEGMENTATION FAULT\e[0m " 
                "in %s:%s \n", __BASE_FILE__, test_name);
     exit(-1);

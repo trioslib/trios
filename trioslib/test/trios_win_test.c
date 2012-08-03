@@ -2,7 +2,7 @@
 
 #include "minunit.h"
 
-TEST(create_write_window) 
+UTEST(create_write_window) 
     window_t *w = win_create(4, 7, 1);
     char *data = win_get_data(w);
     int i, j;
@@ -16,7 +16,7 @@ TEST(create_write_window)
 TEST_END
 
 
-TEST(read_window)
+UTEST(read_window)
     window_t *w = NULL;
     w = win_read("test_read_win.txt");
     win_free(w);

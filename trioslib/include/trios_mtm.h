@@ -45,6 +45,16 @@ extern "C" {
 /*       the label 1 was observed assigned to the w-pattern                 */
 
 /*!
+    Structure that holds a classified example for operators with gray-level input.
+ */
+typedef struct mtm_gx {
+  char  *wpat ;             /*!< pointer to w-pattern             */
+  int   label ;             /*!< label attributed to the pattern  */
+  unsigned int fq ;         /*!< frequency of the w-pattern       */
+} mtm_GX ;
+
+
+/*!
     Structure that holds a classified example for operators with binary input.
  */
 typedef struct mtm_bx {

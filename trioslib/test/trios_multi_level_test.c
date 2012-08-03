@@ -1,7 +1,7 @@
 #include "minunit.h"
 #include <trios.h>
 
-TEST(STRUCTURES_CREATION) {
+UTEST(STRUCTURES_CREATION) {
     int levels[] = {3, 1};
     multi_architecture_t *arch = multi_level_arch_create(2, levels);
 
@@ -20,7 +20,7 @@ TEST(STRUCTURES_CREATION) {
     win_free(win);
 } TEST_END
 
-TEST(STRUCTURES_CREATION2) {
+UTEST(STRUCTURES_CREATION2) {
     int levels[] = {3, 1};
     multi_architecture_t *arch = multi_level_arch_create(2, levels);
 
@@ -41,7 +41,7 @@ TEST(STRUCTURES_CREATION2) {
     win_free(win);
 } TEST_END
 
-TEST(COLLEC1) {
+UTEST(COLLEC1) {
     int levels[] = {1};
     int i, j;
     multi_architecture_t *arch = multi_level_arch_create(1, levels);
@@ -69,7 +69,7 @@ TEST(COLLEC1) {
     win_free(win);
 } TEST_END
 
-TEST(COLLEC2) {
+UTEST(COLLEC2) {
     int levels[] = {2, 1};
     int i, j;
     multi_architecture_t *arch = multi_level_arch_create(2, levels);
@@ -108,7 +108,7 @@ TEST(COLLEC2) {
     win_free(win);
 } TEST_END
 
-TEST(BUILD1) {
+UTEST(BUILD1) {
     int levels[] = {1};
     int i, j;
     multi_architecture_t *arch = multi_level_arch_create(1, levels);
@@ -136,7 +136,7 @@ TEST(BUILD1) {
 } TEST_END
 
 
-TEST(BUILD2) {
+UTEST(BUILD2) {
     int levels[] = {2, 1};
     int i, j;
     multi_architecture_t *arch = multi_level_arch_create(2, levels);
@@ -181,7 +181,7 @@ TEST(BUILD2) {
 } TEST_END
 
 
-TEST(APPLY1) {
+UTEST(APPLY1) {
     int levels[] = {2, 1};
     int i, j;
     multi_architecture_t *arch = multi_level_arch_create(2, levels);

@@ -138,4 +138,4 @@ img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, i
 }
 #endif
 
-#endif // TRIOS_MULTI_H
+#endif

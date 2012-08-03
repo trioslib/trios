@@ -64,7 +64,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
     xpl_t    *xpl  = NULL ;
     int      wsize=0, map_type ;
     #ifdef _DEBUG_
-        pac_debug("Starting lcollec %s e %s e cv=%d", fname_i1, fname_o1, cv_flag) ;
+        trios_debug("Starting lcollec %s e %s e cv=%d", fname_i1, fname_o1, cv_flag) ;
     #endif
     /* read image set file */
     if ((imgset = imgset_read(fname_i1))==NULL) {
@@ -88,7 +88,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         return trios_error(MSG, "lcollec: win_read() failed.") ;
     }
     #ifdef _DEBUG_
-        pac_debug("Window reading : done.") ;
+        trios_debug("Window reading : done.") ;
     #endif
     wsize = win_get_band_wsize(win, 1) ;
     /* If window has multiple bands, force it to ONE band only */
@@ -108,7 +108,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         else map_type = GG ;
     }
     #ifdef _DEBUG_
-    pac_debug("Map_type=%d", map_type) ;
+    trios_debug("Map_type=%d", map_type) ;
     #endif
     /* if an input XPL file is given, then read it;
     otherwise create an empty XPL structure */ 
@@ -132,7 +132,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         return trios_error(MSG, "lcollec: lcollec_main() failed.") ;    
     }
     #ifdef _DEBUG_
-        pac_debug("lcollec_main: done.") ;
+        trios_debug("lcollec_main: done.") ;
     #endif
     /* write contents of XPL to output file */
     if(!xpl_write(fname_o1, xpl, win/*, apt*/)) {
@@ -142,7 +142,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         return trios_error(MSG, "lcollec : xpl_write() failed.") ;
     }
     #ifdef _DEBUG_
-        pac_debug("Writing XPL: done") ;
+        trios_debug("Writing XPL: done") ;
     #endif
     /* free allocated memory */
     imgset_free(imgset) ;
@@ -217,7 +217,25 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
         } else if(map_type==BG) {
             return trios_error(1, "BG Mapping not supported yet.");
         } else if(map_type==GG) {
-            return trios_error(1, "BG Mapping not supported yet.");
+            /* read images and convert them to the appropriate format */
+            /* i.e, input is short, output is byte and mask is byte */
+            if(!get_setofimages(imgset, GG, win, k, &img1, &img2, &img3)) {
+                trios_error(MSG, "lcollec_main: get_images() failed.") ;
+                goto END_lcollec_main ;
+            }
+            width = img_get_width(img1);
+            npixels = img_get_width(img1) * img_get_height(img1) ;
+            /* set vector of offsets */
+            offset_set(offset, win, width, 1) ;
+
+            c1 = (unsigned char *)img_get_data(img1) ;
+            c2 = (unsigned char *)img_get_data(img2) ;
+            c3 = (unsigned char *)img_get_data(img3) ;
+            xpl_new = collec_GG(c1, c2, c3, offset, wsize, npixels) ;
+            if(xpl_new==NULL) {
+                trios_error(MSG, "lcollec_main: collec_GG() failed.") ;
+                goto END_lcollec_main ;
+            }
         } else {
             return trios_error(1, "Case GB not yet implemented.") ;
         }
@@ -255,130 +273,3 @@ END_lcollec_main:
 }
 
 
-/**
-    Builds an example's set from a pair of input-output
-    images that represents a binary-to-binary transformation. The examples
-    collecting process can be gathered by a mask image.
-    These three images are considered binary ones, i.e, all pixels which
-    value is not ZERO are treated as a pixel with value equal to ONE.
-    
-    \param s1 Input image data (short-valued image)
-    \param p2 Output image data (byte-valued image)
-    \param p3 Mask image data (byte-valued image)
-    \param offset Vector of offsets (with window information)
-    \param wsize Size of vector of offsets.
-    \param npixels Number of pixels in the image
-    \param cv Center-value flag.
-    \return An example's set on success, NULL on failure.
-*/
-xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int cv) {
-    int   i, j, k, s ;
-    int   nshifts ;
-    unsigned int *wpat ;      /* w-pattern */
-    int   st ;
-    xpl_t *xpl ;                /* XPL structure */
-
-    #ifdef _DEBUG_
-        pac_debug("Entrei no collec_BB") ;
-    #endif
-    #ifdef _DEBUG_1_
-        for(i=0;i<wsize;i++) {
-            pac_debug("offset[%d]=%d\n", i, offset[i]) ;
-        }
-    #endif
-    wpat = (unsigned int *)malloc(sizeof(int)*size_of_zpat(wsize)) ;
-    if(wpat == NULL) {
-        return (xpl_t *)trios_error(1,"Memory allocation failed.") ;
-    }
-    if((xpl=xpl_create(wsize, BB))==NULL) {
-        free(wpat) ;
-        return (xpl_t *)trios_error(MSG, "collec_BB: xpl_create() failed.") ;
-    }
-    /* Begin case A : cv=0 (All pixels with value different from
-    0 are considered in the w-pattern) */
-    /* TODO: extract this case into a separate function */
-    if(!cv) {
-        #ifdef _DEBUG_
-            pac_debug("Vai entrar no caso cv_flag=0") ;
-        #endif
-        for(j = 0; j<npixels; j++) {         /* shifts the window */
-            #ifdef _DEBUG_2_
-                pac_debug("Iterating...") ;
-            #endif
-            if(p3[j] != 0)  {
-                /* mask condition satisfied */
-                #ifdef _DEBUG_2_
-                    pac_debug("mask condition satisfied") ;
-                #endif
-                for(s=0; s<xpl->wzip; s++) wpat[s] = 0 ;     /* blank w-pattern */
-                #ifdef _DEBUG_2_
-                pac_debug("w-pattern cleaned!") ;
-                #endif
-                /* gets the w-pattern centered at the point j */
-                for(i=0; i<wsize; i++) {  /* for each point of the window...*/
-                    k = j+offset[i] ;
-                    if(k >= 0 && k < npixels && s1[k] != 0) { // TODO: see if changes here impact something. It shouldn't, but who knows.
-                        s = i/NB ;
-                        nshifts = i%NB ;
-                        wpat[s] = (wpat[s] | bitmsk[nshifts]) ;
-                    }
-                }
-                #ifdef _DEBUG_2_
-                    pac_debug("trying to insert w-pattern into example's set...") ;
-                #endif
-                /* insert new w-pattern into example's set */
-                if(p2[j] == 0) {
-                    st = xpl_BB_insert(xpl, (xpl_BB **)(&xpl->root), wpat, 1, 0) ;
-                } else {
-                    st = xpl_BB_insert(xpl, (xpl_BB **)(&xpl->root), wpat, 0, 1) ;
-                }
-                if(st == -1) {
-                    xpl_free(xpl) ;
-                    free(wpat) ;
-                    return (xpl_t *)trios_error(MSG, "collec_BB: xpl_BB_insert() failed.") ;
-                }
-            }
-        }
-     /* end case A */
-    /* Begin case B : cv=1 (Only pixels with same value as the value of the
-    pixel under the center of the window are considered in the w-pattern */
-    /* TODO: Split this case into a separate function */
-    } else {
-        #ifdef _DEBUG_
-            pac_debug("Vai entrar no caso cv_flag=1") ;
-        #endif
-        for(j = 0; j<npixels; j++) {               /* shifts the window */
-            if(p3[j] != 0) {                    /* mask condition satisfied */
-                for(s=0; s<xpl->wzip; s++) wpat[s] = 0 ;      /* blank wpat */
-                /* if current pixel j has value=0, then pattern is the zero vector */
-                if(s1[j]) {
-                    /*  get the w-pattern centered at the point j */
-                    for(i=0; i<wsize; i++) {      /* for each point of the window ... */
-                        k = j+offset[i] ;
-                        /* Only pixels with the same value as of the pixel j    */
-                        /* will be turned on in the w-pattern                   */
-                        if(k >= 0 && k < npixels && s1[k]==s1[j]) {
-                            s = i/NB ;
-                            nshifts = i%NB ;
-                            wpat[s] = (wpat[s] | bitmsk[nshifts]) ;
-                        }
-                    }
-                }
-                /* insert new w-pattern into example's set */
-                if(p2[j] == 0) {
-                    st = xpl_BB_insert(xpl, (xpl_BB **)(&xpl->root), wpat, 1, 0) ;
-                }
-                else {
-                    st = xpl_BB_insert(xpl, (xpl_BB **)(&xpl->root), wpat, 0, 1) ;
-                }
-                if(st == -1) {
-                    free(wpat) ;
-                    xpl_free(xpl) ;
-                    return (xpl_t *)trios_error(MSG, "collec_BB: xpl_BB_insert() failed.") ;
-                }
-            }
-        }
-    } /* end case B */
-    free(wpat);
-    return xpl;
-}

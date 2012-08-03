@@ -97,7 +97,7 @@ int header_match(FILE *fd, const char *keyword) {
   }
   
 #ifdef _DEBUG_ 
-  pac_debug("header_read() done") ;  
+  trios_debug("header_read() done") ;  
 #endif
 
   result = !((int)strcmp(aHeader->fileType, keyword)) ;
