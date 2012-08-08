@@ -88,8 +88,6 @@ UTEST(test_train_gg1) {
     mtm_write("mtm_gg1.mtm", mtm, win);
     ltrainDT("mtm_gg1.mtm", 0, 0, 0, 0, NULL, "tree_gg1");
 
-
-
     win_free(win);
 } TEST_END
 

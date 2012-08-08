@@ -31,7 +31,7 @@ extern float *coeff_array;
 extern float *modified_coeff_array;
 extern struct unidim *candidates;
 extern double *temp_val; /*Work area */
-  extern int no_of_stagnant_perturbations ;
+extern int no_of_stagnant_perturbations ;
 
 float mygamma;
 /*

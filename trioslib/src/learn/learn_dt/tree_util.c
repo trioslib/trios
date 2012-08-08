@@ -41,7 +41,7 @@ extern int *map ;
 
 struct tree_node *extra_node ;
 
-char train_data[LINESIZE] ;
+extern char train_data[LINESIZE] ;
 
 /************************************************************************/
 /* Module name :	read_tree					*/ 
@@ -492,15 +492,16 @@ void write_hp(cur_node,dtree)
 void write_header(dtree)
      FILE *dtree ;
 {
-  /* NINA
+
   extern int no_of_dimensions,
              no_of_categories ;
 
   extern char train_data[LINESIZE] ; 
-  */
+
 
   if (dtree == NULL) return ;
-  
+
+  strcpy(train_data, "SSFD");
   fprintf(dtree,"Training set: %s, ",train_data) ;
   fprintf(dtree,"Dimensions: %d, Categories: %d\n",
 	  no_of_dimensions,no_of_categories) ;

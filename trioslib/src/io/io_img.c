@@ -67,25 +67,25 @@ img_t *img_readPGM(char *filename) {
   \param img Image to be saved.
   */
 void img_writePGM(char *filename, img_t *img) {
-        FILE *f = fopen(filename, "w");
-        int i, j, w, h;
-        if (f == NULL) {
-            trios_error(1, "img_writePGM: Cannot open file");
-            return;
+    FILE *f = fopen(filename, "w");
+    int i, j, w, h;
+    if (f == NULL) {
+        trios_error(1, "img_writePGM: Cannot open file");
+        return;
+    }
+    if (img == NULL) {
+        trios_error(1, "img_writePGM: NULL image");
+        return;
+    }
+    w = img_get_width(img);
+    h = img_get_height(img);
+    fprintf(f, "P5\n%d %d\n%d\n", w, h, 255);
+    for (i = 0; i < h; i++) {
+        for (j = 0; j < w; j++) {
+            fputc(img_get_pixel(img, i, j, 0), f);
         }
-        if (img == NULL) {
-            trios_error(1, "img_writePGM: NULL image");
-            return;
-        }
-        w = img_get_width(img);
-        h = img_get_height(img);
-        fprintf(f, "P5\n%d %d\n%d\n", w, h, 255);
-        for (i = 0; i < h; i++) {
-            for (j = 0; j < w; j++) {
-                fputc(img_get_pixel(img, i, j, 0), f);
-            }
-        }
-        fputc('\n', f);
-        fclose(f);
+    }
+    fputc('\n', f);
+    fclose(f);
 }
 
