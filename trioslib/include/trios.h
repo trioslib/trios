@@ -28,6 +28,7 @@ extern "C" {
 #include <trios_multi.h>
 #include <trios_apert.h>
 #include <trios_dt.h>
+#include <trios_common.h>
 
 
 #ifdef __cplusplus

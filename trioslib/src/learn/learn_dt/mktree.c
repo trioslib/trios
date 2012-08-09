@@ -199,8 +199,6 @@ int				/*+ Purpose: Generates a decision tree from a mtm
 
 	freq_node *freqlist;	/* pointers to a frequency node */
 
-
-
 #ifdef _mktreetime_
 	unsigned long int tu0, tuf, ts0, tsf, time_usr, time_sys;
 	struct rusage rusage;
@@ -311,6 +309,8 @@ int				/*+ Purpose: Generates a decision tree from a mtm
 		map[i] = freqlist->label;
 		freqlist = freqlist->next;
 	}
+
+    printf("map map %p\n", map);
 
 #ifdef _DEBUG_2_
 	for (i = 1; i <= no_of_categories; i++) {

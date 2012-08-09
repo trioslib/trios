@@ -12,6 +12,8 @@ learn/learn_dt/tree_util.c
 learn/learn_dt/impurity_measures.c
 learn/learn_dt/compute_impurity.c
 learn/learn_dt/perturb.c
+learn/learn_dt/io_dt.c
+learn/learn_dt/appl_gg.c
 )
 ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})
 target_link_libraries(trioslearn triosbasic triosio trios_collec triosappl m)

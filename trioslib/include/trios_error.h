@@ -35,12 +35,21 @@ void trios_fatal(const char* format, ...);
 void trios_debug(const char* format, ...);
 
 /*!
+  Prints warning messages. Works like printf.
+
+  \param type A flag 1 : print message; 0 : do not print message.
+  \param format The error message and the arguments.
+  \param va_list Arguments to the error message (like printf).
+*/
+void trios_warning(const char* format, ...);
+
+/*!
  * Macro that expands to a malloc with error checking and on error behavior.
  */
-#define trios_malloc(var_name, sz, error_msg, ...) \
+#define trios_malloc(var_name, sz, error_msg) \
     var_name = malloc(sz);  \
     if (var_name == NULL) { \
-        return trios_error(MSG, error_msg, ##__VA_ARGS__); \
+        return trios_error(MSG, error_msg); \
     } \
 
 

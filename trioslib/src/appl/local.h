@@ -12,4 +12,4 @@
   */
 img_t *set_mask(char *f_mask, int width, int height, window_t * win);
 
-#endif // LOCAL_H
+#endif

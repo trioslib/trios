@@ -1110,7 +1110,7 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 
 	case WKC:
 	case WKF:
-		return trios_error(MSG, "Operator not supported");
+        return (itv_t *) trios_error(MSG, "Operator not supported");
 		/*
 		   #ifdef _DEBUG_
 		   trios_debug("itv_gen_itv: WKC or WKF entered") ;

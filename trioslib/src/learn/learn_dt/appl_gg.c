@@ -1,9 +1,11 @@
 #include <trios.h>
 
+#include "../../appl/local.h"
+
 extern int no_of_dimensions, no_of_categories;
 extern FILE *logfile;
-extern char misclassified_data[LINESIZE];
-extern int *map ;
+extern char dt_file[LINESIZE], train_data[LINESIZE], misclassified_data[LINESIZE];
+extern int *map;
 
 
 int             /*+ Purpose: Applies a decision tree on an image       +*/
@@ -28,9 +30,6 @@ int             /*+ Purpose: Applies a decision tree on an image       +*/
   unsigned char  *ucpixels1 ; /*  Mask image                          */
   unsigned char  *ucpixels2 ; /*  resulting output image  (char)      */
   unsigned int   *uipixels2 ; /*  resulting output image   (int)      */
-
-  char dt_file[LINESIZE], train_data[LINESIZE];
-
 
   int    width, height, npixels, type, output_type = sz8BIT ;
 
@@ -76,11 +75,12 @@ trios_debug("type = %d",type) ;
   if(img_get_pixel_size(img_appl) != sz8BIT) {
       img_tmp = img_convert_type(img_appl, sz8BIT);
       img_free(img_appl);
-      /*img_tmp = img_create(width, height, 1, sz8BIT ) ;
+      /*img_tmp = img_create(width, height, 1, sz8BIT ) ; */
 
 /*      if(!mm_conv_norm(img_appl, img_tmp, sz8BIT, 0, 0)) { */
 /*        return trios_error(MSG, "lapplicDT: mm_conv_norm() failed.") ; */
-/*      }
+
+      /*      }
 
 
     if(!mm_conv(img_appl, img_tmp, sz8BIT)) {
@@ -123,9 +123,9 @@ trios_debug("fmask = %s",f_mask) ;
   ucpixels  = (unsigned char *)img_get_data(img_appl) ;
   ucpixels1 = (unsigned char *)img_get_data(img_mask) ;
 
-  if (type==WKF)
+  /*if (type==WKF)*/
     ucpixels2 = (unsigned char *)img_get_data(img_res) ;
-  else uipixels2 = (unsigned int *)img_get_data(img_res) ;
+  /*else uipixels2 = (unsigned int *)img_get_data(img_res) ;*/
 
 
   /* run dtapplic                         */
@@ -247,7 +247,6 @@ int             /*+ Purpose: To transform an image by an operator          +*/
   if(offset==NULL) {
     return (int )trios_error(MSG, "papplic: offset_create() failed.") ;
   }
-  printf("E dtapplic0\n");
 #ifdef _DEBUG_
 trios_debug("GG: It will call offset_set") ;
 #endif
@@ -309,7 +308,7 @@ trios_debug("Pattern coletado");
 #endif
 
       /* if found, put the gray-level to the output image */
-
+       printf("map %p label %d  mapla %d  i %d \n", (void *) map, label, map[label], i);
       ucpixels2[i] = (unsigned char) map[label] ;
 
     }

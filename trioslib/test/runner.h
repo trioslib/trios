@@ -39,7 +39,6 @@ void run_test(int t) {
 
 void test_runner()
 {
-    char *result;
     test test_func;
     for (test_counter = 0; test_counter < num_tests; test_counter++) {
         test_func = *(&test0 + test_counter);

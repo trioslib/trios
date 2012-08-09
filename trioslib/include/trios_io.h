@@ -10,6 +10,7 @@ extern "C" {
 #include <trios_img.h>
 #include "trios_mtm.h"
 #include "trios_itv.h"
+#include <trios_apert.h>
 
 /*!
   Read a PGM image.
@@ -132,6 +133,27 @@ int xpl_write(char *fname, xpl_t *xpl, window_t *win/*, apert_t  *apt*/);
     \param win Window used in the lcollec_threshold.
 */
 int swt_write(char *fname, xpl_t *xpl, window_t *win);
+
+/*!
+ * Reads a decision tree from a file.
+ * \param fname File name.
+ * \param type Operator's type.
+ * \param win Window.
+ * \param apt Aperture.
+ * \return  The read decision tree.
+ */
+int dt_read(char *fname, int *type, window_t **win, apert_t **apt);
+
+
+/*!
+ * Writes a decision tree to a file
+ * \param fname File name.
+ * \param type Type of the operator.
+ * \param win Window.
+ * \param apt Aperture.
+ * \return
+ */
+int dt_write(char *fname, int type, window_t *win, apert_t *apt);
 
 #ifdef __cplusplus
 }

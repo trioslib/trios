@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <trios_img.h>
+#include <trios_error.h>
 
 /*!
   Creates a img_t structure.
@@ -41,10 +42,11 @@ img_t *img_create(int w, int h, int n, int sz) {
   */
 img_t *img_convert_type(img_t *img, int pixel_size) {
     int i, j, k, w, h, n;
+    img_t *cvt;
     w = img_get_width(img);
     h = img_get_height(img);
     n = img_get_nbands(img);
-    img_t *cvt = img_create(w, h, n, pixel_size);
+    cvt = img_create(w, h, n, pixel_size);
     for (i = 0; i < h; i++) {
         for (j = 0; j < w; j++) {
             for (k = 0; k < n; k++) {
