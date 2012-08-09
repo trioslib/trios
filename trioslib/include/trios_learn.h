@@ -16,7 +16,7 @@ extern "C" {
     \param undflabel Label to use in the undecidable cases, if comptype == 1.
  * \return The classified example set.
  */
-xpl_t *ldecision_memory(xpl_t *xpl, int comp_prob, double freqmin, double estim, int comptype, int undflabel);
+mtm_t *ldecision_memory(xpl_t *xpl, int comp_prob, double freqmin, double estim, int comptype, int undflabel);
 
 /*!
     Builds a classified examples table from a set of observed examples.

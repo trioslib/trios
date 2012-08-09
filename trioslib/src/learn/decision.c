@@ -9,7 +9,7 @@
 #define _DEBUG_
 */
 
-xpl_t *ldecision_memory(xpl_t * xpl, int comp_prob, double freqmin,
+mtm_t *ldecision_memory(xpl_t * xpl, int comp_prob, double freqmin,
 			double estim, int comptype, int undflabel)
 {
 	return mtm_decide(xpl, comp_prob, freqmin, estim, comptype, undflabel);

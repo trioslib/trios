@@ -119,7 +119,7 @@ struct tree_node
   float alpha; /* used only in error_complexity pruning. */
   int no_of_points;
   EDGE edge; /* used only in the display module. */
- } ; 
+ };
 
 struct unidim
  {
