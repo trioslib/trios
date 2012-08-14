@@ -981,7 +981,7 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 /*+ Return: Pointer to ITV structure on success, NULL on failure           +*/
 {
 	int wsize, wzip, i, cx, cy, count;
-	char *Ag, *Bg;
+    char *Ag, *Bg;
 	unsigned int *A, *B;
 	itv_t *itv;
 	itv_BX *p;
@@ -1075,18 +1075,18 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 
 	case GG:
 		/* allocates space for the patterns of the interval [A,B] */
-		if ((Ag = (char *) malloc(sizeof(char) * wsize)) == NULL) {
+        if ((Ag = (char *) malloc(sizeof(char) * wsize)) == NULL) {
 			return (itv_t *) trios_error(1,
 						     "itv_gen_itv: memory allocation error.");
 		}
-		if ((Bg = (char *) malloc(sizeof(char) * wsize)) == NULL) {
+        if ((Bg = (char *) malloc(sizeof(char) * wsize)) == NULL) {
 			return (itv_t *) trios_error(1,
 						     "itv_gen_itv: memory allocation error.");
 		}
 
 		for (i = 0; i < wsize; i++) {
 			Ag[i] = 0;
-			Bg[i] = 255;
+            Bg[i] = (char) 255;
 		}
 
 		/* create structure to hold the interval */
@@ -1114,7 +1114,7 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 		/*
 		   #ifdef _DEBUG_
 		   trios_debug("itv_gen_itv: WKC or WKF entered") ;
-		   #endif
+           #endif*/
 		   /* allocates space for the patterns of the interval [A,B] *//*
 		   if((Ag = (char *)malloc(sizeof(char)*wsize)) == NULL) {
 		   return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
@@ -1132,19 +1132,19 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 		   for(i=0; i<wsize; i++) {
 		   trios_debug("Ag[%d] = %d, Bg[%d] = %d", i, Ag[i], i, Bg[i]) ;
 		   }
-		   #endif
+           #endif*/
 
 		   /* create structure to hold the interval *//*
 		   if(NULL==(itv = itv_create(wsize, map_type, def_label))) {
 		   win_free(win) ;
 		   return (itv_t *)trios_error(MSG, "itv_gen_itv: itv_create() failed.") ;
-		   }
+           }*/
 
-		   /* the itv_t structure will contain, actually, just one interval *//*
+           /* the itv_t structure will contain, actually, just one interval
 
 		   pg = itv_nodegx_create(wsize) ;
 		   itvgx_set(pg, Ag, Bg, wsize, label, 0, 0, NULL, (itv_GX *)(itv->head)) ;
-		   pg->size = itvgx_size(pg, wsize) ; /* added on Oct 31, 2000 - Nina *//*
+           pg->size = itvgx_size(pg, wsize) ;*/ /* added on Oct 31, 2000 - Nina */ /*
 		   itv->head = (int *)pg ;
 		   itv->nitv = 1 ;
 

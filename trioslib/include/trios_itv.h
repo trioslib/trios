@@ -329,6 +329,9 @@ itv_t *         /*+ Purpose: create one interval (1: [empty,W], 2:[o,W],
 ) ;
      /*+ Return: Pointer to ITV structure on success, NULL on failure           +*/ 
 
+void itv_nodegx_free(itv_GX* p);
+
+
 #ifdef __cplusplus
 }
 #endif

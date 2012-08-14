@@ -5,22 +5,22 @@ multi_architecture_t *multi_level_arch_create(int nlevels, int *operators_in_lev
     int i, j, k;
     multi_architecture_t *m;
     if (nlevels < 1) {
-        return trios_error(MSG, "Cannot create operator with less than one level.");
+        return (multi_architecture_t *) trios_error(MSG, "Cannot create operator with less than one level.");
     }
     for (i = 0; i < nlevels; i++) {
         if (operators_in_level[i] <= 0) {
-            return trios_error(MSG, "Level %d has less than 1 operator.", operators_in_level[i]);
+            return (multi_architecture_t *) trios_error(MSG, "Level %d has less than 1 operator.", operators_in_level[i]);
         }
     }
     if (operators_in_level[nlevels-1] != 1) {
-        return trios_error(MSG, "Last level MUST have only one operator.");
+        return (multi_architecture_t *) trios_error(MSG, "Last level MUST have only one operator.");
     }
     m = malloc(sizeof(multi_architecture_t));
 
     m->nlevels = nlevels;
     m->levels = malloc(sizeof(multi_architecture_level_t) * nlevels);
     if (m->levels == NULL) {
-        return trios_error(MSG, "Bad Alloc");
+        return (multi_architecture_t *) trios_error(MSG, "Bad Alloc");
     }
 
     for (i = 0; i < nlevels; i++) {
@@ -28,12 +28,12 @@ multi_architecture_t *multi_level_arch_create(int nlevels, int *operators_in_lev
         m->levels[i].noperators = operators_in_level[i];
         m->levels[i].windows = malloc(sizeof(window_t **) * m->levels[i].noperators);
         if (m->levels[i].windows == NULL) {
-            return trios_error(MSG, "Bad Alloc");
+            return (multi_architecture_t *) trios_error(MSG, "Bad Alloc");
         }
         for (j = 0; j < m->levels[i].noperators; j++) {
             m->levels[i].windows[j] = malloc(sizeof(window_t *) * m->levels[i].ninputs);
             if (m->levels[i].windows[j] == NULL) {
-                return trios_error(MSG, "Bad Alloc");
+                return (multi_architecture_t *) trios_error(MSG, "Bad Alloc");
             }
             for (k = 0; k < m->levels[i].ninputs; k++) {
                 m->levels[i].windows[j][k] = NULL;
@@ -72,7 +72,6 @@ static void copy_window(window_t *w, window_t *window) {
 }
 
 int multi_level_arch_set_window(multi_architecture_t *m, int level, int op, int input, window_t *window) {
-    int i, j, k;
     if (m == NULL) {
         return trios_error(MSG, "Architecture pointer is null");
     }
@@ -96,12 +95,12 @@ multi_level_operator_t *multi_level_operator_create(multi_architecture_t *m) {
     int i, j, k;
     multi_level_operator_t *op = malloc(sizeof(multi_level_operator_t));
     if (op == NULL) {
-        return trios_error(MSG, "Bad alloc");
+        return (multi_level_operator_t *) trios_error(MSG, "Bad alloc");
     }
     op->nlevels = m->nlevels;
     op->levels = malloc(sizeof(multi_level_operator_level_t) * op->nlevels);
     if (op->levels == NULL) {
-        return trios_error(MSG, "Bad alloc");
+        return (multi_level_operator_t *) trios_error(MSG, "Bad alloc");
     }
     for (i = 0; i < m->nlevels; i++) {
         op->levels[i].ninputs = m->levels[i].ninputs;
@@ -109,18 +108,18 @@ multi_level_operator_t *multi_level_operator_create(multi_architecture_t *m) {
 
         op->levels[i].trained_operator = malloc(sizeof(itv_t) * op->levels[i].noperators);
         if (op->levels[i].trained_operator == NULL) {
-            return trios_error(MSG, "Bad alloc");
+            return (multi_level_operator_t *) trios_error(MSG, "Bad alloc");
         }
 
         op->levels[i].windows = malloc(sizeof(window_t **) * op->levels[i].noperators);
         if (op->levels[i].windows == NULL) {
-            return trios_error(MSG, "Bad alloc");
+            return (multi_level_operator_t *) trios_error(MSG, "Bad alloc");
         }
         for (j = 0; j < op->levels[i].noperators; j++) {
             op->levels[i].trained_operator[j] = NULL;
             op->levels[i].windows[j] = malloc(sizeof(window_t *) * op->levels[i].ninputs);
             if (op->levels[i].windows[j] == NULL) {
-                return trios_error(MSG, "Bad alloc");
+                return (multi_level_operator_t *) trios_error(MSG, "Bad alloc");
             }
             for (k = 0; k < op->levels[i].ninputs; k++) {
                 window_t *w = m->levels[i].windows[j][k];
@@ -135,18 +134,17 @@ multi_level_operator_t *multi_level_operator_create(multi_architecture_t *m) {
 }
 
 window_t *multi_level_operator_get_window(multi_level_operator_t *mop, int level, int op, int input) {
-    int i, j, k;
     if (mop == NULL) {
-        return trios_error(MSG, "Operator pointer is null");
+        return (window_t *) trios_error(MSG, "Operator pointer is null");
     }
     if (level >= mop->nlevels) {
-        return trios_error(MSG, "Operator has less than %d levels", level);
+        return (window_t *) trios_error(MSG, "Operator has less than %d levels", level);
     }
     if (op >= mop->levels[level].noperators) {
-        return trios_error(MSG, "Level %d contains less than %d operators.", op);
+        return (window_t *) trios_error(MSG, "Level %d contains less than %d operators.", op);
     }
     if (input >= mop->levels[level].ninputs) {
-        return trios_error(MSG, "Operator %d in level %d contains less than %d inputs.", op, level, input);
+        return (window_t *) trios_error(MSG, "Operator %d in level %d contains less than %d inputs.", op, level, input);
     }
 
     return mop->levels[level].windows[op][input];
