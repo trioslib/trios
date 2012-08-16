@@ -87,7 +87,7 @@ struct test_outcome estimate_accuracy(POINT ** points, int no_of_points,
 	struct tree_node *cur_node;
 	struct test_outcome result;
 	double sum;
-
+    printf("ESTIMATE ACCURACY\n");
 	if (root == NULL)
 		trios_fatal
 		    ("Estimate_Accuracy : Called with empty decision tree.");
@@ -102,11 +102,13 @@ struct test_outcome estimate_accuracy(POINT ** points, int no_of_points,
 		cur_node = root;
 		while (cur_node != NULL) {
 			sum = cur_node->coefficients[no_of_dimensions + 1];
-			for (j = 1; j <= no_of_dimensions; j++)
+            for (j = 1; j <= no_of_dimensions; j++) {
 				sum +=
 				    cur_node->coefficients[j] *
 				    points[i]->dimension[j];
-
+                printf("%f ", points[i]->dimension[j]);
+            }
+            printf(" sum %f\n", sum);
 			if (sum < 0) {
 				if (cur_node->left != NULL)
 					cur_node = cur_node->left;
@@ -187,7 +189,7 @@ int				/*+ Purpose: Generates a decision tree from a mtm
 	apert_t *apt;
 	mtm_t *mtm;
 
-	char *pattern;
+    unsigned char *pattern;
 	int label_aux;
 
 	int type;
@@ -309,8 +311,6 @@ int				/*+ Purpose: Generates a decision tree from a mtm
 		map[i] = freqlist->label;
 		freqlist = freqlist->next;
 	}
-
-    printf("map map %p\n", map);
 
 #ifdef _DEBUG_2_
 	for (i = 1; i <= no_of_categories; i++) {

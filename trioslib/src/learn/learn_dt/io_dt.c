@@ -1,6 +1,6 @@
 #include <trios.h>
 
-#define _DEBUG_
+/*#define _DEBUG_*/
 /* #define _PRINFO_ */
 
 int dt_read ( char *fname, int *type, window_t **win, apert_t **apt);

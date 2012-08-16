@@ -91,7 +91,6 @@ decide_tree_gg_moda(
 			return trios_error(MSG,
 					   "decide_tree_gg: decide_tree_gg_moda() failed");
 	}
-
 	return (1);
 
 }

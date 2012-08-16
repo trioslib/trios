@@ -106,7 +106,7 @@ trios_debug("type = %d",type) ;
     img_free(img_mask) ;
     return trios_error(MSG, "lapplicDT: read_tree() failed.") ;
   }
-  printf("FD\n");
+  printf("FD %d\n", no_of_dimensions);
 #ifdef _DEBUG_
 trios_debug("fmask = %s",f_mask) ;
 #endif
@@ -124,7 +124,7 @@ trios_debug("fmask = %s",f_mask) ;
   ucpixels1 = (unsigned char *)img_get_data(img_mask) ;
 
   /*if (type==WKF)*/
-    ucpixels2 = (unsigned char *)img_get_data(img_res) ;
+  ucpixels2 = (unsigned char *)img_get_data(img_res) ;
   /*else uipixels2 = (unsigned int *)img_get_data(img_res) ;*/
 
 
@@ -136,6 +136,7 @@ trios_debug("fmask = %s",f_mask) ;
 
   switch(type) {
     case GG:
+      printf("FD %d\n", no_of_dimensions);
       dtapplic0(ucpixels, ucpixels1, ucpixels2, root, win, width, npixels) ;
       break;
     case WKF:
@@ -175,12 +176,12 @@ int             /*+ Purpose: To label a wpattern                           +*/
   double sum = 0 ;
 
   struct tree_node *cur_node ;
-
   cur_node = root;
   while (cur_node != NULL) {
     sum = cur_node->coefficients[no_of_dimensions+1];
-    for (j=1; j<=no_of_dimensions; j++)
+    for (j=1; j<=no_of_dimensions; j++) {
       sum += cur_node->coefficients[j] * wpat[j-1] ;
+    }
     if (sum < 0) {
       if (cur_node->left != NULL)
     cur_node = cur_node->left;
@@ -199,7 +200,7 @@ int             /*+ Purpose: To label a wpattern                           +*/
       }
     }
   }
-
+  printf(": %d\n", label);
   return(label) ;
 
 }
@@ -247,6 +248,8 @@ int             /*+ Purpose: To transform an image by an operator          +*/
   if(offset==NULL) {
     return (int )trios_error(MSG, "papplic: offset_create() failed.") ;
   }
+
+  printf("FD %d\n", no_of_dimensions);
 #ifdef _DEBUG_
 trios_debug("GG: It will call offset_set") ;
 #endif
@@ -308,7 +311,10 @@ trios_debug("Pattern coletado");
 #endif
 
       /* if found, put the gray-level to the output image */
-       printf("map %p label %d  mapla %d  i %d \n", (void *) map, label, map[label], i);
+       for(j = 0; j < wsize; j++) {
+           printf("%d ", wpat[j]);
+       }
+       printf("label %d map to %d i %d \n", label, map[label], i);
       ucpixels2[i] = (unsigned char) map[label] ;
 
     }

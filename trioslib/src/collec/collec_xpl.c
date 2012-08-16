@@ -11,8 +11,14 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
     if (img == NULL) {
         return 0;
     }
-    *img1 = img_convert_type(img, sz16BIT);
-    img_free(img);
+    if (map_type == BB) {
+        printf("SDFSD\n\n");
+        *img1 = img_convert_type(img, sz16BIT);
+        img_free(img);
+    } else {
+        *img1 = img;
+    }
+
     /* Read second image */
     filename = imgset_get_ffullname(imgset, 2, k);
     img = img_readPGM(filename);
