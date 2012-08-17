@@ -114,26 +114,22 @@ UTEST(test_apply_in_memory) {
     win_write("WIN.w", win);
 
     itv_t *itv = itv_gen_itv(win, 1, BB, 0, 1, 0);
-    itv_write("ITV_TEST.itv", itv, win);
-    /*itv_free(itv);*/
     win_free(win);
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
     xpl_t *xpl = xpl_read("XPL_RESULT.xpl", &win);
     mtm_t *mtm = ldecision_memory(xpl, 1, 0, AVERAGE, 0, 0);
     mu_assert("ldecision failed", mtm != NULL);
-    /*mu_assert("ldecision failed", 1 == ldecision_disk("XPL_RESULT.xpl", 1, 0, AVERAGE, 0, 0, "DECISION_RESULT.mtm"));*/
     itv = lisi_memory(mtm, itv, 3, 5, 0, 0);
     mu_assert("lisi failed", itv != NULL);
-    /*mu_assert("lisi_disk failed", 1 == lisi_disk("DECISION_RESULT.mtm", "ITV_TEST.itv", 3, 5, 0, 0, "ITV_MIN.itv", 0, NULL, NULL ));*/
 
-    /*itv = itv_read("ITV_MIN.itv", &win);*/
     img_t *input = img_readPGM("./test_img/input3.pgm");
     img_t *output = lpapplic_memory(input, itv, win, NULL, 0, 0, 255);
     mu_assert("lpapplic_memory failed", NULL != output);
 
     img_writePGM("memory.pgm", output);
     img_free(output);
+
     itv_free(itv);
     win_free(win);
 
@@ -202,5 +198,3 @@ UTEST(test_applic_gg_einstein) {
 
 
 #include "runner.h"
-
-
