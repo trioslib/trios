@@ -87,7 +87,6 @@ struct test_outcome estimate_accuracy(POINT ** points, int no_of_points,
 	struct tree_node *cur_node;
 	struct test_outcome result;
 	double sum;
-    printf("ESTIMATE ACCURACY\n");
 	if (root == NULL)
 		trios_fatal
 		    ("Estimate_Accuracy : Called with empty decision tree.");
@@ -106,9 +105,7 @@ struct test_outcome estimate_accuracy(POINT ** points, int no_of_points,
 				sum +=
 				    cur_node->coefficients[j] *
 				    points[i]->dimension[j];
-                printf("%f ", points[i]->dimension[j]);
             }
-            printf(" sum %f\n", sum);
 			if (sum < 0) {
 				if (cur_node->left != NULL)
 					cur_node = cur_node->left;

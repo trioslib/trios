@@ -53,8 +53,6 @@ int             /*+ Purpose: Applies a decision tree on an image       +*/
     return trios_error(MSG, "lapplicDT: dt_read() failed.") ;
   }
 
-  printf( "SDFSDFSDFSDFSDF\n\n\n");
-
 #ifdef _DEBUG_
 trios_debug("type = %d",type) ;
 #endif
@@ -100,13 +98,11 @@ trios_debug("type = %d",type) ;
 
   /* read decision tree file */
   sprintf(dt_file,"%s.dt",dt_file) ;
-  printf( "READ DT\n");
   if ((root = read_tree(dt_file)) == NULL) {
     img_free(img_appl) ;
     img_free(img_mask) ;
     return trios_error(MSG, "lapplicDT: read_tree() failed.") ;
   }
-  printf("FD %d\n", no_of_dimensions);
 #ifdef _DEBUG_
 trios_debug("fmask = %s",f_mask) ;
 #endif
@@ -136,7 +132,6 @@ trios_debug("fmask = %s",f_mask) ;
 
   switch(type) {
     case GG:
-      printf("FD %d\n", no_of_dimensions);
       dtapplic0(ucpixels, ucpixels1, ucpixels2, root, win, width, npixels) ;
       break;
     case WKF:
@@ -200,7 +195,6 @@ int             /*+ Purpose: To label a wpattern                           +*/
       }
     }
   }
-  printf(": %d\n", label);
   return(label) ;
 
 }
@@ -249,7 +243,6 @@ int             /*+ Purpose: To transform an image by an operator          +*/
     return (int )trios_error(MSG, "papplic: offset_create() failed.") ;
   }
 
-  printf("FD %d\n", no_of_dimensions);
 #ifdef _DEBUG_
 trios_debug("GG: It will call offset_set") ;
 #endif
@@ -309,12 +302,6 @@ trios_debug("Pattern coletado");
 #ifdef _DEBUG_2_
        trios_debug("achou label=%d \n", label) ;
 #endif
-
-      /* if found, put the gray-level to the output image */
-       for(j = 0; j < wsize; j++) {
-           printf("%d ", wpat[j]);
-       }
-       printf("label %d map to %d i %d \n", label, map[label], i);
       ucpixels2[i] = (unsigned char) map[label] ;
 
     }
