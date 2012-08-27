@@ -57,8 +57,8 @@ extern "C" {
 #define IR2 3791
 #define NTAB 32
 #define NDIV1 (1+IMM1/NTAB)
-#define EPS 1.2e-7
-#define RNMX (1.0-EPS)
+#define EPSILON 1.2e-7
+#define RNMX (1.0-EPSILON)
 #define NBINS 100
 #define NRAND 40000
 #define IA 16807

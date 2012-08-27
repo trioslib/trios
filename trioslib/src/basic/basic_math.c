@@ -757,11 +757,11 @@ void free_matrix(float **m, long nrl, long nrh, long ncl, long nch)
   free((FREE_ARG) (m+nrl-NR_END));
 }
 
-#ifdef EPS
-#undef EPS
+#ifdef EPSILON
+#undef EPSILON
 #endif
 /* Integral evaluation - Simpson's method */
-#define EPS 1.0e-6
+#define EPSILON 1.0e-6
 /* #define JMAX  20 */ /* original */
 #define JMAX  50
 
@@ -780,7 +780,7 @@ float qsimp(
   for (j=1; j<=JMAX; j++) {
     st = trapzd(func, a, b, j, pa, pb);
     s = (4.0*st-ost)/3.0;
-    if (fabs(s-os) < EPS*fabs(os)) return s;
+    if (fabs(s-os) < EPSILON*fabs(os)) return s;
     if (s == 0.0 && os == 0.0 && j > 6) return s;
     os = s;
     ost = st;
@@ -809,7 +809,7 @@ double a, double b,
     s[j]=trapzd(func,a,b,j,pa,pb);
     if (j >= K) {
       polint(&h[j-K],&s[j-K],K,0.0,&ss,&dss);
-      if (fabs(dss) <= EPS*fabs(ss)) return ss;
+      if (fabs(dss) <= EPSILON*fabs(ss)) return ss;
     }
     h[j+1]=0.25*h[j];
   }

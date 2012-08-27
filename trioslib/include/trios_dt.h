@@ -25,6 +25,10 @@
 #ifndef _pacdt_h_
 #define _pacdt_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 	/*-------------------------------------*
 	|       #include
@@ -285,6 +289,9 @@ int             /*+ Purpose: Applies a decision tree on a color image  +*/
 
 	/* Ghostwriter Prototypes:  Do Not Erase This Comment */
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _pacdt_h_ */
 

@@ -191,7 +191,7 @@ UTEST(test_applic_gg_einstein) {
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
     mtm_write("mtm_gg1.mtm", mtm, win);
     printf("Training step\n");
-    ltrainDT("mtm_gg1.mtm", 0, 0, 0, 0, NULL, "tree_gg1");
+    ltrainDT("mtm_gg1.mtm", 1, 0, 0, 0, NULL, "tree_gg1");
     lapplicDT("./test_img/input2-einstein.pnm", "tree_gg1", NULL, "gg_res_einstein.pgm");
     win_free(win);
 } TEST_END
