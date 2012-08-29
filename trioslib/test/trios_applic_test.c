@@ -164,8 +164,9 @@ UTEST(test_applic_gg) {
     win_free(win);
 } TEST_END
 
-void *ltrainClassifier(mtm_t *mtm);
 typedef void dTree;
+dTree *ltrainClassifier(mtm_t *mtm);
+img_t *lapplyClassifier(img_t *input, dTree *tree, window_t *win);
 
 UTEST(test_applic_gg_einstein) {
     int i, j;
@@ -192,6 +193,9 @@ UTEST(test_applic_gg_einstein) {
     printf("Decision\n");
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
     dTree *bb = ltrainClassifier(mtm);
+    img_t *in = img_readPGM("./test_img/input2-einstein.pnm");
+    img_t *out = lapplyClassifier(in, bb, win);
+    img_writePGM("gg_res_cv_einstein.pgm", out);
     mtm_write("mtm_gg1.mtm", mtm, win);
     printf("Training step\n");
     ltrainDT("mtm_gg1.mtm", 1, 0, 0, 0, NULL, "tree_gg1");

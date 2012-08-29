@@ -17,6 +17,7 @@ learn/learn_dt/appl_gg.c
 
 learn/opencv_tree_code/opencv_interface.c
 learn/opencv_tree_code/training.cpp
+learn/opencv_tree_code/apply.cpp
 learn/opencv_tree_code/classifier_io.cpp
 )
 ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})
