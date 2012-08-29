@@ -6,3 +6,4 @@ include(collec/CMakeLists.txt)
 include(io/CMakeLists.txt)
 
 add_library(trios ${TRIOS_BASIC_SRCS} ${TRIOS_APPL_SRCS} ${TRIOS_COLLEC_SRCS} ${TRIOS_LEARN_SRCS} ${TRIOS_IO_SRCS})
+target_link_libraries(trios ${OpenCV_LIBS})

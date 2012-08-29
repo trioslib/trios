@@ -9,7 +9,7 @@ target_link_libraries(trios_xpl_test triosio triosbasic m)
 add_test(XplTest ${TRIOS_BINARY_DIR}/bin/trios_xpl_test)
 
 add_executable(trios_img_test trios_img_test.c)
-target_link_libraries(trios_img_test triosio triosbasic m)
+target_link_libraries(trios_img_test triosio triosbasic m )
 add_test(NAME ImgTest WORKING_DIRECTORY ${TRIOS_BINARY_DIR}/bin/ COMMAND ${TRIOS_BINARY_DIR}/bin/trios_img_test )
 
 add_executable(trios_collec_test trios_collec_test.c)

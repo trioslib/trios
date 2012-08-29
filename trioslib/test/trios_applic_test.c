@@ -164,6 +164,8 @@ UTEST(test_applic_gg) {
     win_free(win);
 } TEST_END
 
+void *ltrainClassifier(mtm_t *mtm);
+typedef void dTree;
 
 UTEST(test_applic_gg_einstein) {
     int i, j;
@@ -189,6 +191,7 @@ UTEST(test_applic_gg_einstein) {
     xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win);
     printf("Decision\n");
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
+    dTree *bb = ltrainClassifier(mtm);
     mtm_write("mtm_gg1.mtm", mtm, win);
     printf("Training step\n");
     ltrainDT("mtm_gg1.mtm", 1, 0, 0, 0, NULL, "tree_gg1");

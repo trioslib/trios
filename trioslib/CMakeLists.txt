@@ -4,6 +4,8 @@ INCLUDE_DIRECTORIES(${TRIOSLIB_INCLUDE_DIR} )
 
 SET(CMAKE_BUILD_TYPE debug)
 
+find_package(OpenCV)
+
 SUBDIRS(include src test)
 
 
