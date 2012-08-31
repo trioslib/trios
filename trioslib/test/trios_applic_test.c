@@ -203,5 +203,37 @@ UTEST(test_applic_gg_einstein) {
     win_free(win);
 } TEST_END
 
+UTEST(test_applic_gg_einstein_io) {
+    int i, j;
+    imgset_t *set = imgset_create(1, 2);
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input1-einstein.pnm");
+    /*imgset_set_fname(set, 1, 2, "input2-einstein.pnm");*/
+    imgset_set_fname(set, 2, 1, "ideal-einstein.pnm");
+    /*imgset_set_fname(set, 2, 2, "ideal-einstein.pnm");*/
+    imgset_write("IMGSET.s", set);
+    imgset_free(set);
+
+    window_t *win = win_create(4, 4, 1);
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 4; j++) {
+            win_set_point(i, j, 1, 1, win);
+        }
+    }
+    win_write("WIN.w", win);
+    mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT_GG1.xpl", NULL));
+    xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win);
+    mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
+    dTree *bb = ltrainGG_memory(mtm);
+    write_tree2("tree2", bb);
+    dTree *gg = read_tree2("tree2");
+
+    img_t *in = img_readPGM("./test_img/input2-einstein.pnm");
+    img_t *out = lapplyGG_memory(in, gg, win);
+    img_writePGM("gg_res_cv_einstein.pgm", out);
+
+    win_free(win);
+} TEST_END
 
 #include "runner.h"

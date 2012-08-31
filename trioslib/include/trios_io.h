@@ -155,6 +155,12 @@ int dt_read(char *fname, int *type, window_t **win, apert_t **apt);
  */
 int dt_write(char *fname, int type, window_t *win, apert_t *apt);
 
+typedef void dTree;
+
+dTree *read_tree2(char *filename);
+
+void write_tree2(char *filename, dTree *tree);
+
 #ifdef __cplusplus
 }
 #endif
