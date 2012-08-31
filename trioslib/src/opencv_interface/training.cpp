@@ -17,9 +17,6 @@ cv::Mat build_classes_from_mtm(mtm_t *mtm) {
 
         }
     }
-
-    printf("k %d height %d\n", k, height);
-
     return classes;
 }
 
@@ -46,23 +43,19 @@ void test_accuracy(CvDTree &tr, cv::Mat samples, cv::Mat labels) {
     unsigned long right, wrong, mse;
     right = wrong = 0, mse;
     for (int i = 0; i < samples.rows; i++) {
-        //printf("Sample\n");
         for (int j = 0; j < samples.cols; j++) {
-            //printf("%f ", samples.at<float>(i, j));
             wpat.at<float>(0, j) = samples.at<float>(i, j);
         }
 
         CvDTreeNode *node = tr.predict(wpat);
         if (node->value == labels.at<int>(i, 0)) {
-            //printf("\n Label %d Prediction %f\n", labels.at<int>(i, 0), node->value);
             right++;
         } else {
             mse += pow(node->value - labels.at<int>(i, 0), 2);
-            //printf("\n Label %d Prediction %f\n", labels.at<int>(i, 0), node->value);
             wrong++;
         }
     }
-    printf("Acc %f MSE %lu\n", 1.0 * right/(right + wrong), mse);
+    fprintf(stderr, "Acc %f MSE %lu\n", 1.0 * right/(right + wrong), mse);
 }
 
 extern "C" void *ltrainClassifier(mtm_t *mtm) {

@@ -19,11 +19,6 @@ img_t *apply(img_t *img, CvDTree *tr, window_t *win) {
     int *offset = offset_create(win_get_wsize(win));
     offset_set(offset, win, img->width, 1);
 
-    printf("Offset\n");
-    for (int j = 0; j < win_get_wsize(win); j++) {
-        printf("%d ", offset[j]);
-    }
-    printf("\n\n");
     int n = img->width * img->height;
     for (int k = 0; k < n; k++) {
 

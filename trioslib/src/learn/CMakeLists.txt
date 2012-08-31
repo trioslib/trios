@@ -15,13 +15,9 @@ learn/learn_dt/perturb.c
 learn/learn_dt/io_dt.c
 learn/learn_dt/appl_gg.c
 
-learn/opencv_tree_code/opencv_interface.c
-learn/opencv_tree_code/training.cpp
-learn/opencv_tree_code/apply.cpp
-learn/opencv_tree_code/classifier_io.cpp
 )
 ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})
-target_link_libraries(trioslearn triosbasic triosio trios_collec triosappl m)
+target_link_libraries(trioslearn triosbasic triosio trios_collec triosappl trioscv m)
 
 
 INSTALL(TARGETS trioslearn
