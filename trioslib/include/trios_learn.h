@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+
+
 /*!
  * Builds a classified examples table from a set of observed examples.
  *
@@ -71,6 +73,7 @@ int lisi_disk(char *fname_i1, char *fname_i2, int isi_type, int isi3_step, int m
 
 int lmincover(char *fname1, char *fname2, char *fname3);
 
+dTree *ltrainGG_memory(mtm_t *mtm);
 
 #ifdef __cplusplus
 }

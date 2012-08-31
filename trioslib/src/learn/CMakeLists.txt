@@ -9,13 +9,13 @@ learn/decision_gg.c
 learn/multi_level.c
 learn/train_gg.c
 
-learn/learn_dt/mktree.c
-learn/learn_dt/tree_util.c
-learn/learn_dt/impurity_measures.c
-learn/learn_dt/compute_impurity.c
-learn/learn_dt/perturb.c
-learn/learn_dt/io_dt.c
-learn/learn_dt/appl_gg.c
+#learn/learn_dt/mktree.c
+#learn/learn_dt/tree_util.c
+#learn/learn_dt/impurity_measures.c
+#learn/learn_dt/compute_impurity.c
+#learn/learn_dt/perturb.c
+#learn/learn_dt/io_dt.c
+#learn/learn_dt/appl_gg.c
 
 )
 ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})

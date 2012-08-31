@@ -27,7 +27,6 @@ extern "C" {
 #include <trios_io.h>
 #include <trios_multi.h>
 #include <trios_apert.h>
-#include <trios_dt.h>
 #include <trios_common.h>
 
 

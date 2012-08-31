@@ -3,6 +3,7 @@
 
 #include <trios_img.h>
 #include <trios_itv.h>
+#include <trios_misc.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,6 +35,9 @@ int  lpapplic_disk(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  has
  * \return
  */
 img_t *lpapplic_memory(img_t *input, itv_t *op, window_t *win, img_t *mask, int cv, int hash, int on_value);
+
+
+img_t *lapplyGG_memory(img_t *input, dTree *tree, window_t *win);
 
 #ifdef __cplusplus
 }

@@ -86,7 +86,7 @@ UTEST(test_train_gg1) {
     xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
     mtm_write("mtm_gg1.mtm", mtm, win);
-    ltrainDT("mtm_gg1.mtm", 0, 0, 0, 0, NULL, "tree_gg1");
+    ltrainGG_memory(mtm);
 
     win_free(win);
 } TEST_END
