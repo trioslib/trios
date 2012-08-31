@@ -192,9 +192,9 @@ UTEST(test_applic_gg_einstein) {
     xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win);
     printf("Decision\n");
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
-    dTree *bb = ltrainClassifier(mtm);
+    dTree *bb = ltrainGG_memory(mtm);
     img_t *in = img_readPGM("./test_img/input2-einstein.pnm");
-    img_t *out = lapplyClassifier(in, bb, win);
+    img_t *out = lapplyGG_memory(in, bb, win);
     img_writePGM("gg_res_cv_einstein.pgm", out);
     mtm_write("mtm_gg1.mtm", mtm, win);
     printf("Training step\n");

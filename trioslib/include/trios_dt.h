@@ -88,6 +88,10 @@ extern "C" {
 #define translatex(x) ((x - xmin) * (pmaxx - pminx) / (xmax - xmin) + pminx)
 #define translatey(y) ((y - ymin) * (pmaxy - pminy) / (ymax - ymin) + pminy)
 
+typedef void dTree;
+dTree *ltrainGG_memory(mtm_t *mtm);
+img_t *lapplyGG_memory(img_t *input, dTree *tree, window_t *win);
+
 
 	/*-------------------------------------*
 	|       typedefs

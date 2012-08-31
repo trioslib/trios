@@ -4,8 +4,8 @@
 
 typedef void dTree;
 
-dTree *ltrainClassifier(mtm_t *mtm);
-img_t *lapplyClassifier(img_t *input, dTree *tree, window_t *win);
+dTree *train_cv_tree(mtm_t *mtm);
+img_t *apply_cv_tree(img_t *input, dTree *tree, window_t *win);
 
-dTree *readCVTree(char *filename);
-void writeCVTree(char *filename, dTree *tree);
+dTree *read_cv_tree(char *filename);
+void write_cv_tree(char *filename, dTree *tree);

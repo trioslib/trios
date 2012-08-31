@@ -58,7 +58,7 @@ void test_accuracy(CvDTree &tr, cv::Mat samples, cv::Mat labels) {
     fprintf(stderr, "Acc %f MSE %lu\n", 1.0 * right/(right + wrong), mse);
 }
 
-extern "C" void *ltrainClassifier(mtm_t *mtm) {
+extern "C" void *train_cv_tree(mtm_t *mtm) {
     cv::Mat samples_mtm = build_samples_from_mtm(mtm);
     cv::Mat labels_mtm = build_classes_from_mtm(mtm);
     CvDTreeParams params;

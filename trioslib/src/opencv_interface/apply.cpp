@@ -42,6 +42,6 @@ img_t *apply(img_t *img, CvDTree *tr, window_t *win) {
     return output;
 }
 
-extern "C" img_t *lapplyClassifier(img_t *input, dTree *tree, window_t *win) {
+extern "C" img_t *apply_cv_tree(img_t *input, dTree *tree, window_t *win) {
     return apply(input, (CvDTree *)tree, win);
 }

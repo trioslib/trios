@@ -7,6 +7,8 @@ learn/decision.c
 learn/decision_bb.c
 learn/decision_gg.c
 learn/multi_level.c
+learn/train_gg.c
+
 learn/learn_dt/mktree.c
 learn/learn_dt/tree_util.c
 learn/learn_dt/impurity_measures.c
