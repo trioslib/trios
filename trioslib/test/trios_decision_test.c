@@ -44,7 +44,7 @@ UTEST(test_decision_pair1_memory) {
     win_free(win);
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
-    xpl_t *xpl = xpl_read("XPL_RESULT.xpl", &win);
+    xpl_t *xpl = xpl_read("XPL_RESULT.xpl", &win, NULL);
     mtm_t *result = ldecision_memory(xpl, 1, 0, AVERAGE, 0, 0);
     mu_assert("ldecision failed", NULL != result);
     xpl_free(xpl);
@@ -72,7 +72,7 @@ UTEST(test_decision_pair1_gg_memory) {
     win_free(win);
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT_GG1.xpl", NULL));
-    xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win);
+    xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win, NULL);
     mtm_t *result = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
     mu_assert("ldecision failed", NULL != result);
     mtm_write("RESULT_GG1.mtm", result, win);

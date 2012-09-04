@@ -9,6 +9,7 @@ io/io_win.c
 io/io_xpl.c
 io/io_xpl_swt.c
 io/io_tree.c
+io/io_apert.c
 )
 ADD_LIBRARY(triosio ${TRIOS_IO_SRCS})
 target_link_libraries(triosio triosbasic trioscv m)

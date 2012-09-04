@@ -59,7 +59,7 @@ UTEST(COLLEC1) {
     img_t *ideal = img_readPGM("./test_img/ideal1.pgm");
     xpl_t *xpl = collec_level_operator_bb_main(op, 0, 0, &input, NULL, ideal);
 
-    xpl_write("multi.xpl", xpl, win);
+    xpl_write("multi.xpl", xpl, win, NULL);
 
     multi_level_arch_free(arch);
     multi_level_operator_free(op);
@@ -97,7 +97,7 @@ UTEST(COLLEC2) {
 
     xpl_t *xpl = collec_level_operator_bb_main(op, 1, 0, inputs, NULL, ideal);
 
-    xpl_write("multi2.xpl", xpl, win);
+    xpl_write("multi2.xpl", xpl, win, NULL);
 
     multi_level_arch_free(arch);
     multi_level_operator_free(op);

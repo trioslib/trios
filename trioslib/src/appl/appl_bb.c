@@ -10,14 +10,14 @@ img_t *alloc_out_image(itv_t *itv, int width, int height, int type, int on_value
         if (itv_get_maxlabel(itv) > 255) {
             img_out = img_create(width, height, 1, sz16BIT);
             if (!(img_out)) {
-                return trios_error(MSG,
+                return (img_t *) trios_error(MSG,
                            "lpapplic: image creation failed.");
             }
             *uspixels2 = (unsigned short *) img_get_data(img_out);
         } else {
             img_out = img_create(width, height, 1, sz8BIT);
             if (!(img_out)) {
-                return trios_error(MSG,
+                return (img_t *) trios_error(MSG,
                            "lpapplic: mm_createimage() failed.");
             }
             *ucpixels2 = (unsigned char *) img_get_data(img_out);
@@ -25,13 +25,13 @@ img_t *alloc_out_image(itv_t *itv, int width, int height, int type, int on_value
     } else {
         img_out = img_create(width, height, 1, sz8BIT);
         if (!(img_out)) {
-            return trios_error(MSG,
+            return (img_t *) trios_error(MSG,
                        "lpapplic: mm_createimage() failed.");
         }
         *ucpixels2 = (unsigned char *) img_get_data(img_out);
         /* Change label of the intervals in the basis by "on_value" */
         if (!itv_label(itv, 1, on_value)) {
-            return trios_error(MSG,
+            return (img_t *) trios_error(MSG,
                        "lpapplic: itv_label() failed.");
         }
 

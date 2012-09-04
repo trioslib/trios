@@ -113,7 +113,7 @@ int win_write(char *fname, window_t *win);
     \param win Window structure.
     \return Pointer to the examples and window structure.
 */
-xpl_t *xpl_read(char *fname, window_t **win/*, apert_t **apt*/);
+xpl_t *xpl_read(char *fname, window_t **win, apert_t **apt);
 
 /*!
     Write the examples file.
@@ -123,7 +123,7 @@ xpl_t *xpl_read(char *fname, window_t **win/*, apert_t **apt*/);
     \param win Window structure.
     \return 1 on success. 0 on failure.
 */
-int xpl_write(char *fname, xpl_t *xpl, window_t *win/*, apert_t  *apt*/);
+int xpl_write(char *fname, xpl_t *xpl, window_t *win, apert_t  *apt);
 
 /*!
     Write a special examples file to use with stackfd.

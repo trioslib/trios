@@ -33,6 +33,7 @@ typedef void dTree;
 
 
 #ifndef FLT_MAX
+
 #define FLT_MAX 3.40282347e+38F
 #endif
 

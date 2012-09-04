@@ -83,7 +83,7 @@ UTEST(test_train_gg1) {
     itv_t *itv = itv_gen_itv(win, 1, GG, 0, 1, 0);
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT_GG1.xpl", NULL));
-    xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win);
+    xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win, NULL);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
     mtm_write("mtm_gg1.mtm", mtm, win);
     ltrainGG_memory(mtm);

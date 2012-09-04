@@ -2,6 +2,7 @@ PROJECT(TRIOS_COLLEC)
 
 set(TRIOS_COLLEC_SRCS
     collec/collec_xpl.c
+    collec/collec_xpl_apert.c
     collec/collec_xpl_bb.c
     collec/collec_xpl_gg.c
     collec/collec_xpl_threshold.c

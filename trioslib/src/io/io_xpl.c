@@ -1,6 +1,6 @@
 #include <trios.h>
 #include "trios_io.h"
-#include "pacio_local.h"
+#include "io_local.h"
 
 /* #define _DEBUG_ */
 /* #define _DEBUG_1_ */
@@ -14,7 +14,7 @@
     \return Pointer to the examples and window structure.
 */
 
-xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
+xpl_t *xpl_read(char *fname, window_t ** win , apert_t **apt)
 {
 	FILE *fd;
 	xpl_t *xpl;
@@ -104,14 +104,11 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
 
 			/* read aperture information -------------------------------------- */
 		case 'A':
-			trios_error(MSG,
-				    "Aperture operators are not supported at this moment");
-			/*if(NULL==(*apt = apert_read_data(fd))) {
-			   fclose(fd) ;
-               return (xpl_t *)trios_error(MSG, "xpl_read: apert_read_data() failed.") ;
-			   } */
+            if(apt != NULL && NULL==(*apt = apert_read_data(fd))) {
+                fclose(fd) ;
+                return (xpl_t *)trios_error(MSG, "xpl_read: apert_read_data() failed.") ;
+            }
 			break;
-
 		case 'd':
 			stop = 1;
 			break;
@@ -405,7 +402,7 @@ xpl_t *xpl_read(char *fname, window_t ** win /*, apert_t **apt */ )
     \return 1 on success. 0 on failure.
 */
 
-int xpl_write(char *fname, xpl_t * xpl, window_t * win /*, apert_t  *apt */ )
+int xpl_write(char *fname, xpl_t * xpl, window_t * win , apert_t  *apt)
 {
 	header_t xplHeader = { "EXAMPLE ", "" };
 	FILE *fd;
@@ -446,9 +443,7 @@ int xpl_write(char *fname, xpl_t * xpl, window_t * win /*, apert_t  *apt */ )
 
 	if ((type > 3) && (type < 10)) {
 		fprintf(fd, "%s\n", ".A");
-        /*apert_write_data(fd, apt);*/
-		trios_error(MSG,
-			    "Aperture operatos are not supported at this moment");
+        apert_write_data(fd, apt);
 	}
 
 
@@ -479,17 +474,13 @@ int xpl_write(char *fname, xpl_t * xpl, window_t * win /*, apert_t  *apt */ )
 	case WKC:
 	case WK3F:
 	case WK3C:
-		trios_error(MSG,
-			    "This operator is not supported at this moment");
-        /*xpl_WK_write_tree(fd, (xpl_GG *)(xpl->root), wsize) ;*/
+        xpl_WK_write_tree(fd, (xpl_GG *)(xpl->root), wsize) ;
 		break;
 
 	case WKGG2F:
 	case WKGG2C:
-		trios_error(MSG,
-			    "This operator is not supported at this moment");
-        /*xpl_WKGG_write_tree(fd, (xpl_GG *)(xpl->root),
-                            win_get_band_wsize(win,1), wsize) ;*/
+        xpl_WKGG_write_tree(fd, (xpl_GG *)(xpl->root),
+                            win_get_band_wsize(win,1), wsize) ;
 		break;
 
 	default:
@@ -574,5 +565,104 @@ void xpl_GG_write_tree(FILE * fd, xpl_GG * p, int wsize) {
 		xpl_GG_write_tree(fd, p->right, wsize);
 
 	}
+
+}
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_WK_write_tree
+     -------------------------------------------
+*/
+
+void             /*+ Purpose: Write a WK examples                            +*/
+  xpl_WK_write_tree(
+    FILE   *fd,   /*+ In: file descriptor where the examples will be written +*/
+    xpl_GG *p,    /*+ In: Pointer to the examples tree                       +*/
+    int    wsize  /*+ In: w-pattern size                                     +*/
+  )
+/*+ Return: Nothing                                                          +*/
+{
+/*  author:  Nina S. Tomita, Roberto Hirata Jr. (nina@ime.usp.br)             */
+/*  date: Thu Oct 17 1996                                                     */
+
+  int       i ;
+  freq_node *freqlist ;
+
+
+  if(p != NULL) {
+
+    xpl_WK_write_tree(fd, p->left, wsize) ;
+
+    for(i=0; i<wsize; i++) {
+      fprintf(fd, "%d ", p->wpat[i] ) ;
+    }
+
+    freqlist = p->freqlist ;
+    while(freqlist) {
+
+      fprintf(fd, "  %d %d", freqlist->freq, freqlist->label) ;
+
+      freqlist = freqlist->next ;
+
+    }
+
+    fprintf(fd, "  %d\n", 0) ;
+
+    xpl_WK_write_tree(fd, p->right, wsize) ;
+
+  }
+
+}
+
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_WKGG_write_tree
+     -------------------------------------------
+*/
+
+void             /*+ Purpose: Write WKGG examples                            +*/
+  xpl_WKGG_write_tree(
+    FILE   *fd,   /*+ In: file descriptor where the examples will be written +*/
+    xpl_GG *p,    /*+ In: Pointer to the examples tree                       +*/
+    int    wsize1,/*+ In: w-pattern size of band 1                           +*/
+    int    wsize  /*+ In: w-pattern size                                     +*/
+  )
+/*+ Return: Nothing                                                          +*/
+{
+/*  author:  Nina S. Tomita, Roberto Hirata Jr. (nina@ime.usp.br)             */
+/*  date: Thu Fen 24 2000                                                     */
+
+  int       i ;
+  freq_node *freqlist ;
+  unsigned char  value ;
+
+
+  if(p != NULL) {
+
+    xpl_WKGG_write_tree(fd, p->left, wsize1, wsize) ;
+
+    for(i=0; i<wsize1; i++) {
+      fprintf(fd, "%d ", p->wpat[i] ) ;
+    }
+
+    for(i=wsize1; i<wsize; i++) {
+      value = (unsigned char)p->wpat[i] ;
+      fprintf(fd, "%d ", value) ;
+    }
+
+    freqlist = p->freqlist ;
+    while(freqlist) {
+
+      fprintf(fd, "  %d %d", freqlist->freq, freqlist->label) ;
+      freqlist = freqlist->next ;
+
+    }
+
+    fprintf(fd, "  %d\n", 0) ;
+
+    xpl_WKGG_write_tree(fd, p->right, wsize1, wsize) ;
+
+  }
 
 }

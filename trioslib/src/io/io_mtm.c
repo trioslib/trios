@@ -1,6 +1,6 @@
 #include <trios.h>
 #include "trios_io.h"
-#include "pacio_local.h"
+#include "io_local.h"
 
 /* #define _DEBUG_ */
 /*!

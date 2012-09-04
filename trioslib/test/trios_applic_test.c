@@ -117,7 +117,7 @@ UTEST(test_apply_in_memory) {
     win_free(win);
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
-    xpl_t *xpl = xpl_read("XPL_RESULT.xpl", &win);
+    xpl_t *xpl = xpl_read("XPL_RESULT.xpl", &win, NULL);
     mtm_t *mtm = ldecision_memory(xpl, 1, 0, AVERAGE, 0, 0);
     mu_assert("ldecision failed", mtm != NULL);
     itv = lisi_memory(mtm, itv, 3, 5, 0, 0);
@@ -155,7 +155,7 @@ UTEST(test_applic_gg) {
     win_write("WIN.w", win);
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT_GG1.xpl", NULL));
-    xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win);
+    xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win, NULL);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
     mtm_write("mtm_gg1.mtm", mtm, win);
     dTree *gg = ltrainGG_memory(mtm);
@@ -193,7 +193,7 @@ UTEST(test_applic_gg_einstein) {
     win_write("WIN.w", win);
     printf("Collec\n");
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT_GG1.xpl", NULL));
-    xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win);
+    xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win, NULL);
     printf("Decision\n");
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
     dTree *bb = ltrainGG_memory(mtm);
@@ -225,7 +225,7 @@ UTEST(test_applic_gg_einstein_io) {
     }
     win_write("WIN.w", win);
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT_GG1.xpl", NULL));
-    xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win);
+    xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win, NULL);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
     dTree *bb = ltrainGG_memory(mtm);
     write_tree2("tree2", bb);

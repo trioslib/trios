@@ -321,7 +321,7 @@ int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_fo
         char *ext = malloc(sizeof(char) * (strlen(o1_fname) + 4 + 1));
         strcpy(ext, o1_fname);
         strcat(ext, ".xpl");
-        if (!xpl_write(ext, xpl, win)) {
+        if (!xpl_write(ext, xpl, win, NULL)) {
             imgset_free(imgset);
             win_free(win);
             free(offset);
