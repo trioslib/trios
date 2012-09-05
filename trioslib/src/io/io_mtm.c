@@ -11,7 +11,7 @@
     \return A mtm_t structure or NULL on failure.
 */
 
-mtm_t *mtm_read(char *fname, window_t ** win /*, apert_t  **apt */ )
+mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 {
 	FILE *fd;
 	mtm_t *mtm;
@@ -386,7 +386,7 @@ mtm_t *mtm_read(char *fname, window_t ** win /*, apert_t  **apt */ )
   \return 1 on success. 0 on failure.
 */
 
-int mtm_write(char *fname, mtm_t * mtm, window_t * win /*, apert_t *apt */ )
+int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 {
 	header_t mtmHeader = { "MINTERM ", "" };
 	FILE *fd;
@@ -435,9 +435,8 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win /*, apert_t *apt */ )
 	win_write_data(fd, win);
 
 	if ((type > 3) && (type < 10)) {
-		return trios_error(1, "Aperture operators not supported yet.");
-		/*fprintf(fd, "%s\n", ".A") ;
-		   apert_write_data(fd, apt); */
+        fprintf(fd, "%s\n", ".A") ;
+           apert_write_data(fd, apt);
 	}
 
 
@@ -517,16 +516,15 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win /*, apert_t *apt */ )
 	case WKF:
 	case WK3F:
 	case WK3C:
-		trios_error(MSG, "Operator not supported");
-		/*
-		   table_GX = (mtm_GX *)mtm->mtm_data ; 
 
-		   for (i = 0; i < nmtm; i++) {
-		   for (j = 0; j < wsize; j++) {
-		   fprintf(fd, "%d ", table_GX[i].wpat[j]);
-		   } 
-		   fprintf(fd, "%d %d\n", table_GX[i].label, table_GX[i].fq);
-		   } */
+        table_GX = (mtm_GX *)mtm->mtm_data ;
+
+        for (i = 0; i < nmtm; i++) {
+            for (j = 0; j < wsize; j++) {
+                fprintf(fd, "%d ", table_GX[i].wpat[j]);
+            }
+            fprintf(fd, "%d %d\n", table_GX[i].label, table_GX[i].fq);
+        }
 		break;
 
 	case WKGG2F:

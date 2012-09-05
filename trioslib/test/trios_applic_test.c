@@ -157,7 +157,7 @@ UTEST(test_applic_gg) {
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT_GG1.xpl", NULL));
     xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win, NULL);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
-    mtm_write("mtm_gg1.mtm", mtm, win);
+    mtm_write("mtm_gg1.mtm", mtm, win, NULL);
     dTree *gg = ltrainGG_memory(mtm);
     img_t *input = img_readPGM("./test_img/input1_GG.pnm");
     img_t *out = lapplyGG_memory(input, gg, win);

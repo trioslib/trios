@@ -54,7 +54,7 @@ UTEST(test_isi_memory) {
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
     mu_assert("ldecision failed", 1 == ldecision_disk("XPL_RESULT.xpl", 1, 0, AVERAGE, 0, 0, "DECISION_RESULT.mtm"));
-    mtm_t *mtm = mtm_read("DECISION_RESULT.mtm", win);
+    mtm_t *mtm = mtm_read("DECISION_RESULT.mtm", win, NULL);
     itv_t *final = lisi_memory(mtm, itv, 3, 5, 0, 0);
     mu_assert("lisi failed", NULL != final);
 
@@ -85,7 +85,7 @@ UTEST(test_train_gg1) {
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT_GG1.xpl", NULL));
     xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win, NULL);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
-    mtm_write("mtm_gg1.mtm", mtm, win);
+    mtm_write("mtm_gg1.mtm", mtm, win, NULL);
     ltrainGG_memory(mtm);
 
     win_free(win);

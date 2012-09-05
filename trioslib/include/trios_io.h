@@ -76,7 +76,7 @@ int itv_write(char *fname, itv_t *itv, window_t *win /*apert_t *apt*/);
     \return A mtm_t structure or NULL on failure.
 */
 
-mtm_t *mtm_read(char *fname, window_t **win/*, apert_t  **apt*/);
+mtm_t *mtm_read(char *fname, window_t **win, apert_t  **apt);
 
 /*!
     Writes a classified examples set to a file.
@@ -86,7 +86,7 @@ mtm_t *mtm_read(char *fname, window_t **win/*, apert_t  **apt*/);
     \param win Window used.
     \return 1 on success. 0 on failure.
 */
-int mtm_write(char *fname, mtm_t *mtm, window_t *win/*, apert_t *apt*/);
+int mtm_write(char *fname, mtm_t *mtm, window_t *win, apert_t *apt);
 
 /*!
     Read a window structure from a file.

@@ -7,7 +7,7 @@ opencv_interface/classifier_io.cpp
 )
 
 ADD_LIBRARY(trioscv ${TRIOS_CV_SRCS})
-target_link_libraries(trioslearn ${OpenCV_LIBS} m)
+target_link_libraries(trioscv ${OpenCV_LIBS} triosbasic m)
 
 
 INSTALL(TARGETS trioscv

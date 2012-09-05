@@ -4,6 +4,7 @@
 #include <trios_img.h>
 #include <trios_itv.h>
 #include <trios_misc.h>
+#include "trios_apert.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,6 +39,7 @@ img_t *lpapplic_memory(img_t *input, itv_t *op, window_t *win, img_t *mask, int 
 
 
 img_t *lapplyGG_memory(img_t *input, dTree *tree, window_t *win);
+img_t *lapplyWK_memory(img_t *input, dTree *tree, window_t *win, apert_t *apt);
 
 #ifdef __cplusplus
 }

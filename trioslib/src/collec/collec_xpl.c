@@ -12,7 +12,6 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
         return 0;
     }
     if (map_type == BB) {
-        printf("SDFSD\n\n");
         *img1 = img_convert_type(img, sz16BIT);
         img_free(img);
     } else {

@@ -18,6 +18,23 @@ xpl_t *            /*+ Purpose: builds an example's set from a pair of input-out
     int   vplace            /*+ In: vertical placement of the window            +*/
 );
 
+xpl_t *            /*+ Purpose: builds an example's set from a pair of input-output
+        images that represents a gray-scale-to-gray-scale transformation with gray-
+        level restriction for classification. The examples collecting process can be
+        gathered by a mask image. These three images are considered gray-scale ones.  +*/
+
+  collec_WKC(
+
+    unsigned char  *p1,     /*+ In: input image data                                  +*/
+    unsigned char  *p2,     /*+ Out: output image data                                +*/
+    unsigned char  *p3,     /*+ In: mask image data                                   +*/
+    int   *offset,          /*+ In: vector of offsets (contains window information)   +*/
+    int   wsize,            /*+ In: size of vector of offsets                         +*/
+    int   npixels,          /*+ In: number of pixels in the image                     +*/
+    int   ki,               /*+ In: the input graylevel range                         +*/
+    int   vplace            /*+ In: vertical placement of the window                  +*/
+);
+
 
 
 int				/*+ Purpose: collect examples from a set of images         + */
@@ -182,6 +199,7 @@ int				/*+ Purpose: collect examples from a set of images         + */
 		/* set vector of offsets */
 		offset_set(offset, win, width, 1);
 
+
         c1 = (unsigned char *) img_get_data(img1);
         c2 = (unsigned char *) img_get_data(img2);
         c3 = (unsigned char *) img_get_data(img3);
@@ -202,9 +220,9 @@ int				/*+ Purpose: collect examples from a set of images         + */
 		/*                            WK - Classifier                     */
 		/* -------------------------------------------------------------- */
 		else if (type == WKC) {
-            /*xpl_new =
+            xpl_new =
 			    collec_WKC(c1, c2, c3, offset, wsize, npixels, ki,
-                       vplace);*/
+                       vplace);
 			if (xpl_new == NULL) {
                 trios_error(MSG, "lcollec: collec_WKC() failed.");
 				goto END_lcollec;
@@ -235,7 +253,6 @@ int				/*+ Purpose: collect examples from a set of images         + */
 #ifdef _DEBUG_
     trios_debug("Before write");
 #endif
-printf("SADSDFDSFSDFS\n\n");
 	/* write contents of XPL to output file */
 	if (!xpl_write(o1_fname, xpl, win, apt)) {
         trios_error(MSG, "lcollec : xpl_write() failed.");
@@ -440,6 +457,167 @@ trios_debug("p2[%d]=%d\n", j, wklabel) ;
 #endif
 
       if((freqnode=freq_node_create(wklabel, 1))==NULL) {
+    free(wpat) ;
+    return (xpl_t *)trios_error(MSG, "collec_GG: freq_node_create() failed.") ;
+      }
+
+      /* insert new w-pattern into example's set */
+
+#ifdef _DEBUG_2_
+trios_debug("freqnode criado");
+trios_debug("label1=%d , freq1=%d\n", freqnode->label, freqnode->freq) ;
+#endif
+
+      st = xpl_GG_insert(xpl, (xpl_GG **)(&xpl->root), wpat, freqnode) ;
+
+      if(st == -1) {
+    xpl_free(xpl) ;
+    free(wpat) ;
+    return (xpl_t *)trios_error(MSG, "collec_GG: xpl_GG_insert() failed.") ;
+      }
+
+    }
+
+  }
+
+  free(wpat) ;
+  return(xpl) ;
+
+}
+
+
+xpl_t *            /*+ Purpose: builds an example's set from a pair of input-output
+        images that represents a gray-scale-to-gray-scale transformation with gray-
+        level restriction for classification. The examples collecting process can be
+        gathered by a mask image. These three images are considered gray-scale ones.  +*/
+
+  collec_WKC(
+
+    unsigned char  *p1,     /*+ In: input image data                                  +*/
+    unsigned char  *p2,     /*+ Out: output image data                                +*/
+    unsigned char  *p3,     /*+ In: mask image data                                   +*/
+    int   *offset,          /*+ In: vector of offsets (contains window information)   +*/
+    int   wsize,            /*+ In: size of vector of offsets                         +*/
+    int   npixels,          /*+ In: number of pixels in the image                     +*/
+    int   ki,               /*+ In: the input graylevel range                         +*/
+    int   vplace            /*+ In: vertical placement of the window                  +*/
+)
+                            /*+ Returns: an example's set on success, NULL on failure +*/
+{
+/*  author: Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br)  */
+/*  date: Mon Jul 26 1999                                       */
+
+  char  *wpat ;               /* w-pattern */
+
+  unsigned char *wpataux ;
+
+  int   i, j, k ;
+  int   wcenter, aux ;
+  int   wpattmp ;
+  int   st ;
+
+  xpl_t *xpl ;                /* XPL structure */
+
+  freq_node *freqnode ;       /* pointer to a frequency node */
+
+
+#ifdef _DEBUG_
+trios_debug("Entrei no collec_WKC") ;
+#endif
+#ifdef _DEBUG_2_
+for(i=0;i<wsize;i++) {
+trios_debug("offset[%d]=%d\n", i, offset[i]) ;
+}
+#endif
+
+  wcenter = 0 ;
+
+  wpat = (char *)malloc(sizeof(char)*wsize) ;
+  if(wpat == NULL) {
+    return (xpl_t *)trios_error(1,"Memory allocation failed.") ;
+  }
+
+  wpataux = (unsigned char *)malloc(sizeof(char)*wsize) ;
+  if(wpataux == NULL) {
+    return (xpl_t *)trios_error(1,"Memory allocation failed.") ;
+  }
+
+  if((xpl=xpl_create(wsize, WKC))==NULL) {
+    free(wpat) ;
+    return (xpl_t *)trios_error(MSG, "collec_GG: xpl_create() failed.") ;
+  }
+
+  /* shifts the window over all points of the image */
+
+  for(j = 0; j<npixels; j++) {
+
+    if(p3[j] != 0) {              /* mask condition satisfied */
+
+      for(i=0; i<xpl->wsize; i++) {
+    wpat[i] = 0 ;     /* blank w-pattern */
+    wpataux[i] = 0 ;
+      }
+
+      /* gets the w-pattern centered at the point j */
+
+      if (vplace == VP_Center) wcenter = p1[j] ;
+
+      else if (vplace == VP_Median) {
+
+    for(i=0; i<wsize; i++) {  /* for each point of the window...*/
+
+      k = j+offset[i] ;
+      aux = i ;
+
+      while ((p1[k] < wpataux[aux-1])&&(aux>=0)) {
+
+        wpataux[aux] = wpataux[aux-1] ;
+
+        aux = aux - 1 ;
+      }
+      wpataux[aux] = p1[k] ;
+    }
+
+    if (wsize%2) {
+      wcenter = wpataux[wsize/2] ;
+    }
+    else {
+      wcenter = (wpataux[wsize/2] + wpataux[(wsize/2 - 1)])/2 ;
+    }
+
+
+#ifdef _DEBUG_2_
+    trios_debug("Pattern coletado para achar a mediana");
+    for(i=0;i<wsize;i++) {
+      trios_debug("wpataux[%d]=%d\n", i, wpataux[i]) ;
+    }
+    trios_debug("p2[%d]=%d\n", wcenter, p2[j]) ;
+#endif
+
+      }
+
+      for(i=0; i<wsize; i++) {  /* for each point of the window...*/
+
+    k = j+offset[i] ;
+
+    wpat[i] = wpattmp = p1[k] - wcenter ;
+
+    if (wpattmp > ki) {
+      wpat[i] =  ki ;
+    }
+    else if (wpattmp < -ki) {
+      wpat[i] = -ki ;
+    }
+      }
+
+#ifdef _DEBUG_2_
+trios_debug("Pattern coletado");
+for(i=0;i<wsize;i++) {
+trios_debug("wpat[%d]=%d\n", i, wpat[i]) ;
+}
+#endif
+
+      if((freqnode=freq_node_create((int)p2[j], 1))==NULL) {
     free(wpat) ;
     return (xpl_t *)trios_error(MSG, "collec_GG: freq_node_create() failed.") ;
       }
