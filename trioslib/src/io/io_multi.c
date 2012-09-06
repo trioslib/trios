@@ -1,5 +1,7 @@
 #include "trios.h"
 
+window_t *multi_level_operator_joint_window(multi_level_operator_t *mop, int level, int op);
+
 int multi_architecture_write(char *filename, multi_architecture_t *arch) {
     int i, j, k;
     char window_name[1024];
@@ -61,9 +63,56 @@ multi_architecture_t * multi_architecture_read(char *filename) {
 }
 
 int multi_level_operator_write(char *filename, multi_level_operator_t *mop) {
-    return 0;
+    int i, j, k;
+    char temp_name[1024];
+    window_t *joint;
+    FILE *f = fopen(filename, "w");
+    if (f == NULL) {
+        return trios_error(MSG, "Failed to open %s.", filename);
+    }
+    fprintf(f, "%d\n", mop->nlevels);
+    for (k = 0; k < mop->nlevels; k++) {
+        fprintf(f, "%d ", mop->levels[k].noperators);
+    }
+    fprintf(f, "\n");
+    for (k = 0; k < mop->nlevels; k++) {
+        fprintf(f, "%d %d\n", mop->levels[k].ninputs, mop->levels[k].noperators);
+        for (i = 0; i < mop->levels[k].noperators; i++) {
+            for (j = 0; j < mop->levels[k].ninputs; j++) {
+                sprintf(temp_name, "%s_win%dx%dx%d", filename, k, i, j);
+                win_write(temp_name, mop->levels[k].windows[i][j]);
+
+                joint = multi_level_operator_joint_window(mop, k, i);
+                sprintf(temp_name, "%s_op%dx%dx%d", filename, k, i, j);
+                itv_write(temp_name, mop->levels[k].trained_operator[i], joint);
+                win_free(joint);
+            }
+        }
+    }
+
+    fclose(f);
+    return 1;
 }
 
 multi_level_operator_t *multi_level_operator_read(char *filename) {
-    return 0;
+    int i, j, k;
+    char temp_name[1024];
+    multi_level_operator_t *mop;
+    multi_architecture_t *arch;
+    window_t *joint;
+
+    arch = multi_architecture_read(filename);
+    mop = multi_level_operator_create(arch);
+
+
+    for (k = 0; k < mop->nlevels; k++) {
+        for (i = 0; i < mop->levels[k].noperators; i++) {
+            for (j = 0; j < mop->levels[k].ninputs; j++) {
+                sprintf(temp_name, "%s_op%dx%dx%d", filename, k, i, j);
+                mop->levels[k].trained_operator[i] = itv_read(temp_name, &joint);
+            }
+        }
+    }
+    multi_level_arch_free(arch);
+    return mop;
 }

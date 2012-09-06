@@ -288,5 +288,54 @@ TEST(ARCH_IO) {
     }
 } TEST_END
 
+TEST(OP_IO) {
+    int levels[] = {2, 1};
+    int i, j, k, l, m;
+    multi_architecture_t *arch = multi_level_arch_create(2, levels);
+    window_t *win1 = win_create(3, 3, 1);
+    for (i = 1; i < 3; i++) {
+        for (j = 1; j < 3; j++) {
+            win_set_point(i, j, 1, 1, win1);
+        }
+    }
+    multi_level_arch_set_window(arch, 0, 0, 0, win1);
+    window_t *win2 = win_create(3, 3, 1);
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 2; j++) {
+            win_set_point(i, j, 1, 1, win2);
+        }
+    }
+    multi_level_arch_set_window(arch, 0, 1, 0, win2);
+    window_t *win3 = win_create(1, 1, 1);
+    win_set_point(0, 0, 1, 1, win3);
+    multi_level_arch_set_window(arch, 1, 0, 0, win3);
+    multi_level_arch_set_window(arch, 1, 0, 1, win3);
+
+    imgset_t *set = imgset_create(1, 2);
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input1.pgm");
+    imgset_set_fname(set, 2, 1, "ideal1.pgm");
+
+    multi_level_operator_t *mop = multi_level_build(arch, set);
+    mu_assert("Write failed", 1 == multi_level_operator_write("mop1", mop));
+
+    multi_level_operator_t *read = multi_level_operator_read("mop1");
+
+    img_t *input = img_readPGM("test_img/input1.pgm");
+    img_t *result = multi_level_apply(mop, input);
+    img_t *result2 = multi_level_apply(read, input);
+
+    for (i = 0; i < img_get_height(result); i++) {
+        for (j = 0; j < img_get_width(result); j++) {
+            mu_assert("Result error",
+                      img_get_pixel(result, i, j, 0) ==
+                      img_get_pixel(result2, i, j, 0));
+        }
+    }
+
+} TEST_END
+
+
 #include "runner.h"
 
