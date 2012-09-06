@@ -32,15 +32,15 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
 
     itv_t *starting_interval;
 
-    trios_malloc(input_images, sizeof(img_t **) * imgset_get_ngroups(set), "Bad alloc");
+    trios_malloc(input_images, sizeof(img_t **) * imgset_get_ngroups(set), multi_level_operator_t *, "Bad alloc");
     for (i = 0; i < imgset_get_ngroups(set); i++) {
-        trios_malloc(input_images[i], sizeof(img_t *), "Bad alloc");
+        trios_malloc(input_images[i], sizeof(img_t *), multi_level_operator_t *, "Bad alloc");
     }
     if (mop->nlevels > 1) {
-        trios_malloc(new_input_images, sizeof(img_t **) * imgset_get_ngroups(set), "Bad alloc");
+        trios_malloc(new_input_images, sizeof(img_t **) * imgset_get_ngroups(set), multi_level_operator_t *, "Bad alloc");
     }
-    trios_malloc(mask_images, sizeof(img_t *) * imgset_get_ngroups(set), "Bad alloc");
-    trios_malloc(ideal_images, sizeof(img_t *) * imgset_get_ngroups(set), "Bad alloc");
+    trios_malloc(mask_images, sizeof(img_t *) * imgset_get_ngroups(set), multi_level_operator_t *, "Bad alloc");
+    trios_malloc(ideal_images, sizeof(img_t *) * imgset_get_ngroups(set), multi_level_operator_t *, "Bad alloc");
 
     for (i = 0; i < imgset_get_ngroups(set); i++) {
         get_setofimages(set, BB, NULL, i+1, &(input_images[i][0]), ideal_images + i, mask_images + i);
@@ -50,7 +50,7 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
         printf("Building level %d\n", i);
         if (i < mop->nlevels - 1) {
             for (j = 0; j < imgset_get_ngroups(set); j++) {
-                trios_malloc(new_input_images[j], sizeof(img_t *) * mop->levels[i].noperators, "Bad alloc");
+                trios_malloc(new_input_images[j], sizeof(img_t *) * mop->levels[i].noperators, multi_level_operator_t *, "Bad alloc");
             }
         }
 

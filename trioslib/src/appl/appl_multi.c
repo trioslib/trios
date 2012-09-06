@@ -22,8 +22,8 @@ img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, i
     }
 
     output = img_create(w, h, 1, img_get_pixel_size(inputs[0]));
-    trios_malloc(w_pattern, sizeof(int) * size_of_zpat(win_size), "Bad alloc");
-    trios_malloc(offset, sizeof(int) * win_size, "Bad alloc");
+    trios_malloc(w_pattern, sizeof(int) * size_of_zpat(win_size), img_t *, "Bad alloc");
+    trios_malloc(offset, sizeof(int) * win_size, img_t *, "Bad alloc");
 
     if (level == 1) {
         char fl[200];
@@ -65,7 +65,7 @@ img_t *multi_level_apply(multi_level_operator_t *mop, img_t *img) {
     img_t **input, **next, *result;
     int i, j, k;
     input = &img;
-    trios_malloc(next, sizeof(img_t *) * mop->levels[0].noperators, "Bad alloc");
+    trios_malloc(next, sizeof(img_t *) * mop->levels[0].noperators, img_t *, "Bad alloc");
     for (i = 0; i < mop->nlevels; i++) {
         for (j = 0; j < mop->levels[i].noperators; j++) {
             next[j] = multi_level_apply_level(mop, i, j, input);
@@ -78,7 +78,7 @@ img_t *multi_level_apply(multi_level_operator_t *mop, img_t *img) {
         }
         input = next;
         if (i < mop->nlevels - 1) {
-            trios_malloc(next, sizeof(img_t *) * mop->levels[i].noperators, "Bad alloc");
+            trios_malloc(next, sizeof(img_t *) * mop->levels[i].noperators, img_t *, "Bad alloc");
         }
     }
     result = input[0];

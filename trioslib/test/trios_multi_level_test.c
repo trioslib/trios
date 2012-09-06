@@ -229,5 +229,64 @@ TEST(APPLY1) {
     win_free(win2);
     win_free(win3);
 } TEST_END
+
+TEST(ARCH_IO) {
+    int levels[] = {2, 1};
+    int i, j, k, l, m;
+    multi_architecture_t *arch = multi_level_arch_create(2, levels);
+
+    window_t *win1 = win_create(3, 3, 1);
+    for (i = 1; i < 3; i++) {
+        for (j = 1; j < 3; j++) {
+            win_set_point(i, j, 1, 1, win1);
+        }
+    }
+    multi_level_arch_set_window(arch, 0, 0, 0, win1);
+
+    window_t *win2 = win_create(3, 3, 1);
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 2; j++) {
+            win_set_point(i, j, 1, 1, win2);
+        }
+    }
+    multi_level_arch_set_window(arch, 0, 1, 0, win2);
+
+    window_t *win3 = win_create(1, 1, 1);
+    win_set_point(0, 0, 1, 1, win3);
+
+
+    multi_level_arch_set_window(arch, 1, 0, 0, win3);
+    multi_level_arch_set_window(arch, 1, 0, 1, win3);
+
+    mu_assert("Write failed", 1==multi_architecture_write("march1", arch));
+    multi_architecture_t *read = multi_architecture_read("march1");
+
+    mu_assert("Read failed", read != NULL);
+
+    mu_assert("nlevels error", read->nlevels == arch->nlevels);
+    mu_assert("nlevels error", read->levels[0].ninputs == arch->levels[0].ninputs);
+    mu_assert("nlevels error", read->levels[0].noperators == arch->levels[0].noperators);
+    mu_assert("nlevels error", read->levels[1].ninputs == arch->levels[1].ninputs);
+    mu_assert("nlevels error", read->levels[1].noperators == arch->levels[1].noperators);
+    for (k = 0; k < read->nlevels; k++) {
+        for (i = 0; i < read->levels[k].noperators; i++) {
+            for (j = 0; j < read->levels[k].ninputs; j++) {
+                mu_assert("Win dimensions error",
+                          win_get_width(read->levels[k].windows[i][j]) == win_get_width(arch->levels[k].windows[i][j])
+                          && win_get_height(read->levels[k].windows[i][j]) == win_get_height(arch->levels[k].windows[i][j])
+                          );
+                for (l = 0; l < win_get_height(read->levels[k].windows[i][j]); l++) {
+                    for (m = 0; m < win_get_width(read->levels[k].windows[i][j]); m++) {
+                        mu_assert("Point error",
+                                  win_get_point(l, m, 1, read->levels[k].windows[i][j]) ==
+                                  win_get_point(l, m, 1, arch->levels[k].windows[i][j]));
+                    }
+                }
+
+            }
+        }
+    }
+} TEST_END
+
 #include "runner.h"
 

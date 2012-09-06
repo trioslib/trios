@@ -37,10 +37,10 @@ void trios_debug(const char* format, ...);
 /*!
  * Macro that expands to a malloc with error checking and on error behavior.
  */
-#define trios_malloc(var_name, sz, error_msg, ...) \
+#define trios_malloc(var_name, sz, ret_type, error_msg, ...) \
     var_name = malloc(sz);  \
     if (var_name == NULL) { \
-        return trios_error(MSG, error_msg, ##__VA_ARGS__); \
+        return (ret_type) trios_error(MSG, error_msg, ##__VA_ARGS__); \
     } \
 
 

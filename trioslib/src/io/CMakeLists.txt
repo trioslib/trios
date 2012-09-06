@@ -5,6 +5,7 @@ io/io_imgset.c
 io/io_img.c
 io/io_itv.c
 io/io_mtm.c
+io/io_multi.c
 io/io_win.c
 io/io_xpl.c
 io/io_xpl_swt.c
