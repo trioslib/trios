@@ -4,7 +4,7 @@ import QtQuick 1.1
 Item {
     id: app_root
     width: 640
-    height: 480
+    height: 580
     state: "welcome"
 
     Row {

@@ -11,6 +11,11 @@ TRIOS_to_QML::TRIOS_to_QML(QObject *parent) :
 {
 }
 
+QString TRIOS_to_QML::temp_path(QString path) {
+    QDir temp = QDir::tempPath();
+    return temp.absoluteFilePath(path);
+}
+
 QVariantMap TRIOS_to_QML::read_window(QString path) {
     QVariantMap m;
     window_t *win = win_read((char *)path.toStdString().c_str());
@@ -86,12 +91,13 @@ bool TRIOS_to_QML::write_imgset(QVariantMap imgset, QString path) {
     QString filename = path_dir.dirName();
     path_dir.cdUp();
     QString input_path(filename + "-input");
-    path_dir.mkdir(input_path);
     QString ideal_path(filename + "-ideal");
-    path_dir.mkdir(ideal_path);
 
     QDir input_dir(path_dir.filePath(input_path));
     QDir ideal_dir(path_dir.filePath(ideal_path));
+    input_dir.mkpath(input_dir.absolutePath());
+    input_dir.mkpath(ideal_dir.absolutePath());
+
 
     imgset_t *is = imgset_create(ngroups, grpsize);
     imgset_set_dname(is, 1, (char *)input_path.toStdString().c_str());
@@ -110,5 +116,6 @@ bool TRIOS_to_QML::write_imgset(QVariantMap imgset, QString path) {
 
     }
     int r = imgset_write((char *)path.toStdString().c_str(), is);
+    std::cout << "WORKS" << std::endl;
     return r == 1;
 }
