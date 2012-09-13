@@ -227,6 +227,7 @@ UTEST(test_applic_gg_einstein_io) {
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 0, 0, 0, "XPL_RESULT_GG1.xpl", NULL));
     xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win, NULL);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
+    mtm_write("gg.mtm", mtm, win, NULL);
     dTree *bb = ltrainGG_memory(mtm);
     write_tree2("tree2", bb);
     dTree *gg = read_tree2("tree2");

@@ -88,21 +88,21 @@ UTEST(test_apply_apert) {
     imgset_write("IMGSET.s", set);
     imgset_free(set);
 
-    window_t *win = win_create(4, 2, 1);
+    window_t *win = win_create(2, 2, 1);
     for (i = 0; i < 2; i++) {
         for (j = 0; j < 2; j++) {
             win_set_point(i, j, 1, 1, win);
         }
     }
     win_write("WIN.w", win);
-    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 255, 255, VP_Center, "wk.xpl", NULL));
+    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 3, 3, VP_Center, "wk.xpl", NULL));
     apert_t *apt;
     xpl_t *xpl = xpl_read("wk.xpl", &win, &apt);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
     mtm_write("apert.mtm", mtm, win, apt);
     dTree *bb = ltrainGG_memory(mtm);
 
-    img_t *in = img_readPGM("./test_img/input2-einstein.pnm");
+    img_t *in = img_readPGM("./test_img/input1-einstein.pnm");
     img_t *out = lapplyWK_memory(in, bb, win, apt);
     img_writePGM("apert.pgm", out);
 } TEST_END
