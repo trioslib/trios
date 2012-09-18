@@ -196,13 +196,13 @@ int win_get_point(int i, int j, int k, window_t *win)
 {
 
   if(i >= win->height) {
-    return trios_error(1,"Window point is out of its dimension.") ;
+    return trios_error(1,"Window point %d %d %d is out of its dimension %d %d %d.", i, j, k, win->height, win->width, win->nbands) ;
   }
   if(j >= win->width) {
-    return trios_error(1,"Window point is out of its dimension.") ;
+    return trios_error(1,"Window point %d %d %d is out of its dimension %d %d %d.", i, j, k, win->height, win->width, win->nbands) ;
   }
   if(k > win->nbands) {
-    return trios_error(1, "Window point is out of its dimension.") ;
+    return trios_error(1, "Window point %d %d %d is out of its dimension nb %d %d %d.", i, j, k, win->height, win->width, win->nbands) ;
   }
 
   return((int)win->windata[ (k-1)*win->width*win->height + i*win->width + j ]) ;

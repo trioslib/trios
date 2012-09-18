@@ -22,6 +22,7 @@ learn/dp_isi.c
 learn/decision.c
 learn/decision_bb.c
 learn/multi_level.c
+learn/mae.c
 #dp_isigray.c  
 #dp_mincover.c
 #dp_rank.c

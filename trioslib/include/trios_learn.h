@@ -72,6 +72,10 @@ int lisi_disk(char *fname_i1, char *fname_i2, int isi_type, int isi3_step, int m
 int lmincover(char *fname1, char *fname2, char *fname3);
 
 
+
+int computeMAE(itv_t *bb_operator, window_t *win, imgset_t *test, double *acc);
+
+
 #ifdef __cplusplus
 }
 #endif

@@ -73,7 +73,7 @@ img_t *validate_image_size(img_t *img_appl) {
             return trios_error(MSG,
                        "lpapplic: type conversion failed failed.");
         }
-        img_free(img_appl);
+        /*img_free(img_appl);*/
         return img_tmp;
     }
     return img_appl;
