@@ -120,7 +120,7 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
   int    j ;
 #endif
 
-  trios_debug("isi_basic");
+
 
   GLlog_step = log_step ;
   if(log_step) {

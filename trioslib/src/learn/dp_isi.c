@@ -5,7 +5,7 @@
 #include "paclearn_local.h"
 #include <stdio.h>
 
-#define _DEBUG_
+/*#define _DEBUG_*/
 
 
 int				/*+ Given a set of intervals and a set of classified

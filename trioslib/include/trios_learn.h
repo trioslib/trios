@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#include "trios_multi.h"
+
 /*!
  * Builds a classified examples table from a set of observed examples.
  *
@@ -73,7 +75,9 @@ int lmincover(char *fname1, char *fname2, char *fname3);
 
 
 
-int computeMAE(itv_t *bb_operator, window_t *win, imgset_t *test, double *acc);
+int computeMAEBB(itv_t *bb_operator, window_t *win, imgset_t *test, double *acc);
+
+int computeMAEBBmulti(multi_level_operator_t *bb_operator, imgset_t *test, double *acc);
 
 
 #ifdef __cplusplus

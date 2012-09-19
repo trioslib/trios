@@ -47,7 +47,7 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
     }
 
     for (i = 0; i < mop->nlevels; i++) {
-        printf("Building level %d\n", i);
+        /*printf("Building level %d\n", i);*/
         if (i < mop->nlevels - 1) {
             for (j = 0; j < imgset_get_ngroups(set); j++) {
                 trios_malloc(new_input_images[j], sizeof(img_t *) * mop->levels[i].noperators, multi_level_operator_t *, "Bad alloc");
@@ -55,7 +55,7 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
         }
 
         for (j = 0; j < mop->levels[i].noperators; j++) {
-            printf("Operator %d ninputs %d \n", j, mop->levels[i].ninputs);
+            /*printf("Operator %d ninputs %d \n", j, mop->levels[i].ninputs);*/
             /* faz collec em cada um dos operadores */
             xpl_t *op_collec = lcollec_multi_level(mop, i, j, input_images, mask_images, ideal_images, imgset_get_ngroups(set));
             /* decision em cada um dos operadores */
@@ -74,7 +74,7 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
             for (j = 0; j < mop->levels[i].noperators; j++) {
                 for(k = 0; k < imgset_get_ngroups(set); k++) {
                     /* aplica cada um dos operadores do nível e passa para o próximo nível treinar */
-                    printf("APPLY %d, %d input %d\n\n", i, j, k);
+                    /*printf("APPLY %d, %d input %d\n\n", i, j, k);*/
                     sprintf(filename, "l%dop%d.pgm", i, j);
                     new_input_images[k][j] = multi_level_apply_level(mop, i, j, input_images[k]);
                     img_writePGM(filename, new_input_images[k][j]);
