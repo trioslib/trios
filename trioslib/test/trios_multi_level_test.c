@@ -1,7 +1,7 @@
 #include "minunit.h"
 #include <trios.h>
 
-TEST(STRUCTURES_CREATION) {
+UTEST(STRUCTURES_CREATION) {
     int levels[] = {3, 1};
     multi_architecture_t *arch = multi_level_arch_create(2, levels);
 
@@ -20,7 +20,7 @@ TEST(STRUCTURES_CREATION) {
     win_free(win);
 } TEST_END
 
-TEST(STRUCTURES_CREATION2) {
+UTEST(STRUCTURES_CREATION2) {
     int levels[] = {3, 1};
     multi_architecture_t *arch = multi_level_arch_create(2, levels);
 
@@ -41,7 +41,7 @@ TEST(STRUCTURES_CREATION2) {
     win_free(win);
 } TEST_END
 
-TEST(COLLEC1) {
+UTEST(COLLEC1) {
     int levels[] = {1};
     int i, j;
     multi_architecture_t *arch = multi_level_arch_create(1, levels);
@@ -59,7 +59,7 @@ TEST(COLLEC1) {
     img_t *ideal = img_readPGM("./test_img/ideal1.pgm");
     xpl_t *xpl = collec_level_operator_bb_main(op, 0, 0, &input, NULL, ideal);
 
-    xpl_write("multi.xpl", xpl, win);
+    xpl_write("multi.xpl", xpl, win, NULL);
 
     multi_level_arch_free(arch);
     multi_level_operator_free(op);
@@ -69,7 +69,7 @@ TEST(COLLEC1) {
     win_free(win);
 } TEST_END
 
-TEST(COLLEC2) {
+UTEST(COLLEC2) {
     int levels[] = {2, 1};
     int i, j;
     multi_architecture_t *arch = multi_level_arch_create(2, levels);
@@ -97,7 +97,7 @@ TEST(COLLEC2) {
 
     xpl_t *xpl = collec_level_operator_bb_main(op, 1, 0, inputs, NULL, ideal);
 
-    xpl_write("multi2.xpl", xpl, win);
+    xpl_write("multi2.xpl", xpl, win, NULL);
 
     multi_level_arch_free(arch);
     multi_level_operator_free(op);
@@ -108,7 +108,7 @@ TEST(COLLEC2) {
     win_free(win);
 } TEST_END
 
-TEST(BUILD1) {
+UTEST(BUILD1) {
     int levels[] = {1};
     int i, j;
     multi_architecture_t *arch = multi_level_arch_create(1, levels);
@@ -136,7 +136,7 @@ TEST(BUILD1) {
 } TEST_END
 
 
-TEST(BUILD2) {
+UTEST(BUILD2) {
     int levels[] = {2, 1};
     int i, j;
     multi_architecture_t *arch = multi_level_arch_create(2, levels);
@@ -181,7 +181,7 @@ TEST(BUILD2) {
 } TEST_END
 
 
-TEST(APPLY1) {
+UTEST(APPLY1) {
     int levels[] = {2, 1};
     int i, j;
     multi_architecture_t *arch = multi_level_arch_create(2, levels);
@@ -230,7 +230,7 @@ TEST(APPLY1) {
     win_free(win3);
 } TEST_END
 
-TEST(ARCH_IO) {
+UTEST(ARCH_IO) {
     int levels[] = {2, 1};
     int i, j, k, l, m;
     multi_architecture_t *arch = multi_level_arch_create(2, levels);
@@ -288,7 +288,7 @@ TEST(ARCH_IO) {
     }
 } TEST_END
 
-TEST(OP_IO) {
+UTEST(OP_IO) {
     int levels[] = {2, 1};
     int i, j, k, l, m;
     multi_architecture_t *arch = multi_level_arch_create(2, levels);

@@ -5,6 +5,10 @@
 extern "C" {
 #endif
 
+/*!
+ * \brief Typedef for the decision tree implementation. It is choosen as a void pointer to allow any type of structure. Right now we use the implementation from OpenCV.
+ */
+typedef void dTree;
 
 #define  MSG     2    /*!< parameter for routine pac_error()
  0: does not print error message
@@ -29,6 +33,7 @@ extern "C" {
 
 
 #ifndef FLT_MAX
+
 #define FLT_MAX 3.40282347e+38F
 #endif
 
@@ -57,8 +62,8 @@ extern "C" {
 #define IR2 3791
 #define NTAB 32
 #define NDIV1 (1+IMM1/NTAB)
-#define EPS 1.2e-7
-#define RNMX (1.0-EPS)
+#define EPSILON 1.2e-7
+#define RNMX (1.0-EPSILON)
 #define NBINS 100
 #define NRAND 40000
 #define IA 16807

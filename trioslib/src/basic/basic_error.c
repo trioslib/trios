@@ -2,14 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/*!
-  Prints error messages. Works like printf.
 
-  \param type A flag 1 : print message; 0 : do not print message.
-  \param format The error message and the arguments.
-  \param va_list Arguments to the error message (like printf).
-  \return Always return 0.
-*/
 int trios_error(int type, const char* format, ...) {
    va_list     args;
 
@@ -30,13 +23,6 @@ int trios_error(int type, const char* format, ...) {
   return 0;
 }
 
-/*!
-  Prints fatal error messsages and exit. Works like printf.
-
-  \param type A flag 1 : print message; 0 : do not print message.
-  \param format The error message and the arguments.
-  \param va_list Arguments to the error message (like printf).
-*/
 void trios_fatal(const char* format, ...) {
   va_list     args;
 
@@ -49,14 +35,6 @@ void trios_fatal(const char* format, ...) {
   exit(1);
 }
 
-
-/*!
-  Prints debug messages. Works like printf.
-
-  \param type A flag 1 : print message; 0 : do not print message.
-  \param format The error message and the arguments.
-  \param va_list Arguments to the error message (like printf).
-*/
 void trios_debug(const char* format, ...) {
   va_list     args;
 
@@ -67,13 +45,6 @@ void trios_debug(const char* format, ...) {
   va_end( args );
 }
 
-/*!
-  Prints warning messages. Works like printf.
-
-  \param type A flag 1 : print message; 0 : do not print message.
-  \param format The error message and the arguments.
-  \param va_list Arguments to the error message (like printf).
-*/
 void trios_warning(const char* format, ...) {
   va_list     args;
 

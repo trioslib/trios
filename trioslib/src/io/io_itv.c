@@ -1,6 +1,6 @@
 #include <trios.h>
 #include "trios_io.h"
-#include "pacio_local.h"
+#include "io_local.h"
 
 /* #define _DEBUG_ */
 
@@ -108,7 +108,7 @@ itv_t *itv_read(char *fname, window_t **win/*, apert_t **apt*/) {
       /* Aperture: this is an optional information */
       /*if(NULL==(*apt = apert_read_data(fd))) {
 	fclose(fd) ;
-	return (itv_t *)pac_error(MSG, "mtm_read: apert_read_data() failed.") ;
+	return (itv_t *)trios_error(MSG, "mtm_read: apert_read_data() failed.") ;
       }*/
       break ;
 
@@ -331,7 +331,7 @@ int itv_write(char *fname, itv_t *itv, window_t *win /*apert_t *apt*/) {
   int      j ;
 
 #ifdef _DEBUG_
-pac_debug("Entering ITV_WRITE()") ;
+trios_debug("Entering ITV_WRITE()") ;
 #endif
 
   /* Open file */
@@ -410,7 +410,7 @@ pac_debug("Entering ITV_WRITE()") ;
       /*itv_GX *p ;
 
 #ifdef _DEBUG_
-pac_debug("Entering WKC or WKF") ;
+trios_debug("Entering WKC or WKF") ;
 #endif
 
       for(p = (itv_GX *)itv_get_head(itv); p; p=p->next) {

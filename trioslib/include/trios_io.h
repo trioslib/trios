@@ -10,6 +10,7 @@ extern "C" {
 #include <trios_img.h>
 #include "trios_mtm.h"
 #include "trios_itv.h"
+#include <trios_apert.h>
 
 /*!
   Read a PGM image.
@@ -75,7 +76,7 @@ int itv_write(char *fname, itv_t *itv, window_t *win /*apert_t *apt*/);
     \return A mtm_t structure or NULL on failure.
 */
 
-mtm_t *mtm_read(char *fname, window_t **win/*, apert_t  **apt*/);
+mtm_t *mtm_read(char *fname, window_t **win, apert_t  **apt);
 
 /*!
     Writes a classified examples set to a file.
@@ -85,7 +86,7 @@ mtm_t *mtm_read(char *fname, window_t **win/*, apert_t  **apt*/);
     \param win Window used.
     \return 1 on success. 0 on failure.
 */
-int mtm_write(char *fname, mtm_t *mtm, window_t *win/*, apert_t *apt*/);
+int mtm_write(char *fname, mtm_t *mtm, window_t *win, apert_t *apt);
 
 /*!
     Read a window structure from a file.
@@ -112,7 +113,7 @@ int win_write(char *fname, window_t *win);
     \param win Window structure.
     \return Pointer to the examples and window structure.
 */
-xpl_t *xpl_read(char *fname, window_t **win/*, apert_t **apt*/);
+xpl_t *xpl_read(char *fname, window_t **win, apert_t **apt);
 
 /*!
     Write the examples file.
@@ -122,7 +123,7 @@ xpl_t *xpl_read(char *fname, window_t **win/*, apert_t **apt*/);
     \param win Window structure.
     \return 1 on success. 0 on failure.
 */
-int xpl_write(char *fname, xpl_t *xpl, window_t *win/*, apert_t  *apt*/);
+int xpl_write(char *fname, xpl_t *xpl, window_t *win, apert_t  *apt);
 
 /*!
     Write a special examples file to use with stackfd.
@@ -132,6 +133,33 @@ int xpl_write(char *fname, xpl_t *xpl, window_t *win/*, apert_t  *apt*/);
     \param win Window used in the lcollec_threshold.
 */
 int swt_write(char *fname, xpl_t *xpl, window_t *win);
+
+/*!
+ * Reads a decision tree from a file.
+ * \param fname File name.
+ * \param type Operator's type.
+ * \param win Window.
+ * \param apt Aperture.
+ * \return  The read decision tree.
+ */
+int dt_read(char *fname, int *type, window_t **win, apert_t **apt);
+
+
+/*!
+ * Writes a decision tree to a file
+ * \param fname File name.
+ * \param type Type of the operator.
+ * \param win Window.
+ * \param apt Aperture.
+ * \return
+ */
+int dt_write(char *fname, int type, window_t *win, apert_t *apt);
+
+
+
+dTree *read_tree2(char *filename);
+
+void write_tree2(char *filename, dTree *tree);
 
 #ifdef __cplusplus
 }

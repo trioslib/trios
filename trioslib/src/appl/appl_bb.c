@@ -2,32 +2,6 @@
 
 #include <trios_img.h>
 
-/*!
-  Reads a mask from a file or creates a new image with all pixels set to 1 if there is no mask.
-
-  \param f_mask Path to the mask.
-  \param width Width of the mask.
-  \param height Height of the mask.
-  \param win Window to use the mask with.
-  \return Mask read from file or a new image with all pixels set to 1 if no file was given.
-  */
-img_t *set_mask(char *f_mask, int width, int height, window_t * win)
-{
-	if (f_mask == NULL) {
-		img_t *mask = img_create(width, height, 1, sz8BIT);
-		int i, j;
-		for (i = 0; i < height; i++) {
-			for (j = 0; j < width; j++) {
-				img_set_pixel(mask, i, j, 0, 1);
-			}
-		}
-		return mask;
-	} else {
-		return img_readPGM(f_mask);
-	}
-}
-
-
 img_t *alloc_out_image(itv_t *itv, int width, int height, int type, int on_value, unsigned char **ucpixels2, unsigned short **uspixels2) {
     /* creates output image : SHORT if type==BG and maximum label > 255 */
     img_t *img_out;
@@ -36,14 +10,14 @@ img_t *alloc_out_image(itv_t *itv, int width, int height, int type, int on_value
         if (itv_get_maxlabel(itv) > 255) {
             img_out = img_create(width, height, 1, sz16BIT);
             if (!(img_out)) {
-                return trios_error(MSG,
+                return (img_t *) trios_error(MSG,
                            "lpapplic: image creation failed.");
             }
             *uspixels2 = (unsigned short *) img_get_data(img_out);
         } else {
             img_out = img_create(width, height, 1, sz8BIT);
             if (!(img_out)) {
-                return trios_error(MSG,
+                return (img_t *) trios_error(MSG,
                            "lpapplic: mm_createimage() failed.");
             }
             *ucpixels2 = (unsigned char *) img_get_data(img_out);
@@ -51,13 +25,13 @@ img_t *alloc_out_image(itv_t *itv, int width, int height, int type, int on_value
     } else {
         img_out = img_create(width, height, 1, sz8BIT);
         if (!(img_out)) {
-            return trios_error(MSG,
+            return (img_t *) trios_error(MSG,
                        "lpapplic: mm_createimage() failed.");
         }
         *ucpixels2 = (unsigned char *) img_get_data(img_out);
         /* Change label of the intervals in the basis by "on_value" */
         if (!itv_label(itv, 1, on_value)) {
-            return trios_error(MSG,
+            return (img_t *) trios_error(MSG,
                        "lpapplic: itv_label() failed.");
         }
 
@@ -253,7 +227,8 @@ int lpapplic_disk(char *f_appl, char *f_basis, char *f_mask, int cv,
 				   img_free(img_appl) ;
 				   img_free(img_mask) ;
 				   img_free(img_out) ;
-                   trios_error(MSG, "lpapplic : hashapplic_short() failed.") ;
+
+				   trios_error(MSG, "lpapplic : hashapplic_short() failed.") ;
 				   } */
 			}
 		}
@@ -266,7 +241,9 @@ int lpapplic_disk(char *f_appl, char *f_basis, char *f_mask, int cv,
 	   img_free(img_appl) ;
 	   img_free(img_mask) ;
 	   img_free(img_out) ;
+
        trios_error(MSG, "lpapplic : mm_writeimage() failed.") ;
+
 	   } */
 
 	itv_free(itv);
@@ -318,7 +295,7 @@ int /*+ Purpose:                + */ papplic_bx(
 
 
 #ifdef _DEBUG_
-    trios_debug("Entering papplic_bx()");
+	trios_debug("Entering papplic_bx()");
 #endif
 
 	wsize = win_get_band_wsize(win, 1);

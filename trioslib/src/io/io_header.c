@@ -1,6 +1,6 @@
 #include <trios.h>
 #include <trios_io.h>
-#include "pacio_local.h"
+#include "io_local.h"
 
 /* #define _DEBUG_ */
 
@@ -97,7 +97,7 @@ int header_match(FILE *fd, const char *keyword) {
   }
   
 #ifdef _DEBUG_ 
-  pac_debug("header_read() done") ;  
+  trios_debug("header_read() done") ;  
 #endif
 
   result = !((int)strcmp(aHeader->fileType, keyword)) ;

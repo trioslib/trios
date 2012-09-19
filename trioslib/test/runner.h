@@ -39,7 +39,6 @@ void run_test(int t) {
 
 void test_runner()
 {
-    char *result;
     test test_func;
     for (test_counter = 0; test_counter < num_tests; test_counter++) {
         test_func = *(&test0 + test_counter);
@@ -56,8 +55,6 @@ void test_runner()
 
 void segfault_handler(int signum)
 {
-    test test_func;
-    int i;
     printf("\e[1;1m\e[1;41m\e[1;37mSEGMENTATION FAULT\e[0m " 
                "in %s:%s \n", __BASE_FILE__, test_name);
     exit(-1);

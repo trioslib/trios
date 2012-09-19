@@ -1,6 +1,6 @@
 #include <trios.h>
 #include "trios_io.h"
-#include "pacio_local.h"
+#include "io_local.h"
 
 /* #define _DEBUG_ */
 /* #define _DEBUG_1_ */
@@ -34,11 +34,11 @@ window_t *win_read(char *fname) {
   }
   
 #ifdef _DEBUG_ 
-  pac_debug("Leu header") ;  
+  trios_debug("Leu header") ;  
 #endif
 
 #ifdef _DEBUG_ 
-  pac_debug("vai entrar no read_win_data") ;  
+  trios_debug("vai entrar no read_win_data") ;  
 #endif
 
   if(NULL==(win = win_read_data(fd))) {
@@ -167,7 +167,7 @@ int win_write(char *fname, window_t *win) {
   FILE     *fd ;
 
 #ifdef _DEBUG_
-pac_debug("Entrei no win_write.");
+trios_debug("Entrei no win_write.");
 #endif
 
   /* open file */
@@ -177,7 +177,7 @@ pac_debug("Entrei no win_write.");
   }
   
 #ifdef _DEBUG_
-pac_debug("Passei pelo fopen().");
+trios_debug("Passei pelo fopen().");
 #endif
 
   /* writes file header */
@@ -210,7 +210,7 @@ void win_write_data(FILE *fd, window_t *win) {
   nbands = win_get_nbands(win) ;
 
 #ifdef _DEBUG_1_
-  pac_debug("%d %d %d\n", height, width, nbands) ;
+  trios_debug("%d %d %d\n", height, width, nbands) ;
 #endif
 
   fprintf(fd, "%s %d\n", ".h", height) ;

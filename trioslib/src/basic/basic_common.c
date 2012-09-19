@@ -446,6 +446,24 @@ int wpat_compare(unsigned int *wpat1, unsigned int *wpat2, int wzip) {
   return(0) ;
 }
 
+/*!
+ * Compares two XG W-patterns.
+ * \param wpat1 First W-pattern.
+ * \param wpat2 Second  W-pattern.
+ * \param wsize W-pattern size.
+ * \return 0 if they are equal, -1 if the first is less and 1 if the first is greater than the second.
+ */
+int wpat_compareXG(char *wpat1, char *wpat2, int wsize) {
+  int i ;
+
+  for(i=wsize-1; i>=0; i--) {
+    if(wpat1[i] > wpat2[i]) return(1) ;
+    if(wpat1[i] < wpat2[i]) return(-1) ;
+  }
+
+  return(0) ;
+}
+
 
 /*!
   Computes the Hamming distance between two binary w-patterns.
@@ -552,7 +570,7 @@ int set_freq(freq_node *freqlstin, freq_node **freqlist) {
 #ifdef _DEBUG_
 trios_debug("Entrou no xpl_set_freq com freqlist = null");
 trios_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
-#endif // _DEBUG_
+#endif
 
   }
 
@@ -561,7 +579,7 @@ trios_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
 #ifdef _DEBUG_
 trios_debug("Entrou no xpl_set_freq");
 trios_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
-#endif // _DEBUG_
+#endif
 
     qfreq = freqlstin ;
     pfreqprev = NULL ;
@@ -649,5 +667,445 @@ unsigned int freq_sum(freq_node *freqlist) {
   }
 
   return(sum) ;
+
+}
+
+
+/*
+     -------------------------------------------
+     FUNCTION: freq_moda
+     -------------------------------------------
+*/
+
+int             /*+ Purpose: Finds the moda of the labels                    +*/
+  freq_moda(
+    freq_node *pqfreq,     /*+ In: pointer to a frequency node               +*/
+    unsigned int sum,      /*+ In: Total number of examples                  +*/
+    double freqmin,         /*+ In: Minimal frequency to consider an example  +*/
+    int   undflabel,       /*+ In: Value assigned to undecidable cases       +*/
+    int   comptype,        /*+ In: Type of computation to be done for
+                       assigning the label of the undecidable
+                   pattern                                   +*/
+    int  *wpat_label,      /*+ Out: Moda                                     +*/
+    unsigned int *wpat_freq /*+ Out: The frequency of a pattern              +*/
+)
+/*+ Return: 1 on success, -1 on criteria not satisfied and 0 on failure      +*/
+{
+/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                   */
+/*  date: Wed Feb 16 2000                                                     */
+
+  unsigned int
+      maximum_freq,  /* an auxiliar variable to keep the maximum frequency   */
+      label_freq,    /* the frequency of a given label                       */
+      nmoda,         /* the number of conflicting labels                     */
+      label_sum ;    /* the total sum of conflicting labels                  */
+
+  int  most_frequent_label ;  /* the labels of a pattern                     */
+
+  float     verify ;    /* used to verify if the pattern was sufficiently
+               observed to be taken in consideration             */
+  freq_node *qfreq ;
+
+
+#ifdef _DEBUG_
+    trios_debug("Starting freq moda") ;
+#endif
+
+  qfreq = pqfreq  ;
+  *wpat_freq = 0 ;
+  maximum_freq = 0 ;
+  nmoda = 1 ;
+
+  /* scans the linked list and finds the most frequent label */
+
+  while(qfreq) {
+    most_frequent_label  = qfreq->label ;
+    label_freq  = qfreq->freq  ;
+
+    if (maximum_freq < label_freq) {
+      nmoda = 1 ;
+      *wpat_label = most_frequent_label ;
+      maximum_freq = label_freq ;
+    }
+    else if(maximum_freq == label_freq) {
+      nmoda++ ;
+    }
+
+    *wpat_freq = *wpat_freq + label_freq ;
+    qfreq = qfreq->next ;
+
+  }
+
+  verify = ((float)*wpat_freq / sum) * 100 ;
+
+  if(verify >= freqmin) {
+
+    if(nmoda > 1) {
+
+      switch(comptype) {
+
+      case 1:  /* Assign undflabel to most_frequent_label */
+    *wpat_label = undflabel ;
+    break ;
+
+      case 2: /* most_frequent_label will receive the mean of the
+         moda's labels                                      */
+    qfreq = pqfreq ;
+
+    /* scans the linked list again to compute the mean */
+
+    while(qfreq) {
+      most_frequent_label  = qfreq->label ;
+      label_freq  = qfreq->freq  ;
+      if (label_freq == maximum_freq) {
+        label_sum += *wpat_label ;
+      }
+
+      qfreq = qfreq->next ;
+
+    }
+
+    *wpat_label = (int) ((float)label_sum/nmoda) ;
+
+    break ;
+
+      case 3: { /* most_frequent_label will receive the median of the
+           moda's labels                                      */
+    int contador ;
+
+    qfreq = pqfreq ;
+
+    /* scans the linked list again to compute the mean */
+    contador = 0 ;
+    while((qfreq)&&(contador < nmoda/2)) {
+      *wpat_label  = qfreq->label ;
+      label_freq  = qfreq->freq  ;
+      if (label_freq == maximum_freq) {
+        contador++ ;
+      }
+
+      qfreq = qfreq->next ;
+
+    }
+
+    *wpat_label = most_frequent_label ;
+    break ;
+      }
+      default:
+    return(0) ;
+      }
+
+    }
+
+    return(1) ;
+  }
+
+  else return(-1) ; /* Criteria not satisfied (verify < freqmin) */
+
+}
+
+
+
+
+/*
+     -------------------------------------------
+     FUNCTION: freq_average
+     -------------------------------------------
+*/
+
+int             /*+ Purpose: Finds the average of the labels                 +*/
+  freq_average(
+    freq_node *qfreq,      /*+ In: pointer to a frequency node               +*/
+    unsigned int sum,      /*+ In: Total number of examples                  +*/
+    double freqmin,         /*+ In: Minimal frequency to consider an example  +*/
+    int   *wpat_label,      /*+ Out: Average                                 +*/
+    unsigned int *wpat_freq /*+ Out: The frequency of a pattern              +*/
+)
+/*+ Return: 1 on success, -1 on criteria not satisfied                       +*/
+{
+
+/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
+/*  date: Wed Feb 16 2000                                      */
+
+  int pre_average ;   /* the sum of the products of the labels times their */
+                      /* frequency                                         */
+
+  float verify ;        /* used to verify if the pattern was sufficiently */
+                        /* observed to be taken in consideration          */
+
+#ifdef _DEBUG_
+    trios_debug("Starting freq average") ;
+#endif
+
+  *wpat_freq = 0 ;
+  pre_average = 0 ;
+
+  /* scans the linked list and calculates some values  */
+
+  while(qfreq) {
+    pre_average += qfreq->label * qfreq->freq ;
+    *wpat_freq += qfreq->freq ;
+    qfreq = qfreq->next ;
+  }
+
+  verify = ((float)*wpat_freq / sum) * 100 ;
+
+  if(verify >= freqmin) {
+
+    /* Take the average and trunkate */
+
+    if (pre_average >= 0) {
+      *wpat_label = (int) ((float)pre_average/(*wpat_freq) + 0.5) ;
+    }
+    else *wpat_label = (int) ((float)pre_average/(*wpat_freq) - 0.5) ;
+
+    return (1) ;
+
+  }
+
+  return (-1) ;
+
+}
+
+/*
+     -------------------------------------------
+     FUNCTION: freq_median
+     -------------------------------------------
+*/
+
+int             /*+ Purpose: Finds the median of the labels                 +*/
+  freq_median(
+    freq_node *qfreq,     /*+ In: pointer to a frequency node               +*/
+    unsigned int sum,     /*+ In: Total number of examples                  +*/
+    double freqmin,        /*+ In: Minimal frequency to consider an example  +*/
+    int   *wpat_label,    /*+ Out: Average                                  +*/
+    unsigned int *wpat_freq  /*+ Out: The frequency of a pattern            +*/
+)
+/*+ Return: 1 on success, -1 on criteria not satisfied                      +*/
+{
+/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
+/*  date: Wed Feb 16 2000                                                    */
+
+  unsigned int wpat_sub_freq ;   /* the subtotal frequency of the pattern     */
+  int     wpat_freq_median ; /* the median of the frequencies of the pattern */
+
+  float verify ;
+
+  /* computes the total frequence of the w-pat and the mean */
+  *wpat_freq = freq_sum(qfreq) ;
+  wpat_freq_median = (int) ((float)*wpat_freq/2 + 0.5) ;
+
+  /* scans the linked list and computes the median  */
+
+  wpat_sub_freq = 0 ;
+
+  while(wpat_sub_freq < wpat_freq_median) {
+
+    *wpat_label = qfreq->label ;
+
+    wpat_sub_freq += qfreq->freq ;
+
+    qfreq = qfreq->next ;
+
+  }
+
+  verify = ((float)*wpat_freq / sum) * 100 ;
+
+  if(verify >= freqmin) return (1) ;
+
+  return(-1) ;
+
+}
+
+
+
+
+/*
+     -------------------------------------------
+     FUNCTION: freq_absolute
+     -------------------------------------------
+*/
+
+int              /*+ Purpose: Finds the non-conflicting labels               +*/
+  freq_absolute(
+    freq_node *pqfreq,     /*+ In: pointer to a frequency node               +*/
+    unsigned int sum,      /*+ In: Total number of examples                  +*/
+    double freqmin,         /*+ In: Minimal frequency to consider an example  +*/
+    int   undflabel,       /*+ In: Value assigned to undecidable cases       +*/
+    int   *wpat_label,      /*+ Out: Average                                 +*/
+    unsigned int *wpat_freq /*+ Out: The frequency of a pattern              +*/
+)
+/*+ Return: 1 on success, -1 on criteria not satisfied                       +*/
+{
+/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
+/*  date: Wed Feb 16 2000                                      */
+
+  float     verify ; /* used to verify if the pattern was sufficiently */
+                     /* observed to be taken in consideration          */
+  freq_node *qfreq ;
+
+
+  qfreq = pqfreq ;
+
+  *wpat_freq = 0 ;
+
+  /* scans the linked list and calculates some values  */
+
+  *wpat_label = qfreq->label ;
+  *wpat_freq  = qfreq->freq ;
+  qfreq = qfreq->next ;
+
+  if(qfreq) {
+    *wpat_label = undflabel ;
+    *wpat_freq = freq_sum(pqfreq) ;
+  }
+
+  verify = ((float)*wpat_freq / sum) * 100 ;
+
+  if(verify >= freqmin) {
+    return(1) ;
+  }
+
+  return(-1) ;
+
+}
+
+
+
+
+
+/*
+     -------------------------------------------
+     FUNCTION: freq_general
+     -------------------------------------------
+*/
+
+int             /*+ Purpose: Finds the moda of the labels and decides what to
+                     do based on the estimator                       +*/
+  freq_general(
+    freq_node *pqfreq,     /*+ In: pointer to a frequency node               +*/
+    unsigned int sum,      /*+ In: Total number of examples                  +*/
+    double freqmin,         /*+ In: Minimal frequency to consider an example  +*/
+    double estimator,       /*+ In: Decision Estimator                        +*/
+    int   undflabel,       /*+ In: Value assigned to undecidable cases       +*/
+    int   comptype,        /*+ In: Type of computation to be done for
+                       assigning the label of the undecidable
+                   pattern                                   +*/
+    int   *wpat_label,      /*+ Out: Moda                                    +*/
+    unsigned int *wpat_freq /*+ Out: The frequency of a pattern              +*/
+)
+/*+ Return: 1 on success, -1 on criteria not satisfied and 0 on failure      +*/
+{
+/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                   */
+/*  date: Wed Feb 16 2000                                                     */
+
+  unsigned int
+      maximum_freq,  /* an auxiliar variable to keep the maximum frequency   */
+      label_freq,    /* the frequency of a given label                       */
+      nmoda,         /* the number of conflicting labels                     */
+      label_sum ;    /* the total sum of conflicting labels                  */
+
+  int  most_frequent_label ;          /* the labels of a pattern                     */
+
+  float     verify ;    /* used to verify if the pattern was sufficiently
+               observed to be taken in consideration             */
+  freq_node *qfreq ;
+
+
+  qfreq = pqfreq  ;
+  *wpat_freq = 0 ;
+  maximum_freq = 0 ;
+  nmoda = 1 ;
+
+  /* scans the linked list and finds the most frequent label */
+
+  while(qfreq) {
+    most_frequent_label  = qfreq->label ;
+    label_freq  = qfreq->freq  ;
+
+    if (maximum_freq < label_freq) {
+      nmoda = 1 ;
+      *wpat_label = most_frequent_label ;
+      maximum_freq = label_freq ;
+    }
+    else if(maximum_freq == label_freq) {
+      nmoda++ ;
+    }
+
+    *wpat_freq = *wpat_freq + label_freq ;
+    qfreq = qfreq->next ;
+
+  }
+
+  verify = ((float)*wpat_freq / sum) * 100 ;
+
+  if(verify >= freqmin) {
+
+    if( ((float)maximum_freq / *wpat_freq) >= estimator ) {
+
+      if(nmoda > 1) {
+
+    switch(comptype) {
+
+    case 1:  /* Assign undflabel to most_frequent_label */
+      *wpat_label = undflabel ;
+      break ;
+
+    case 2: /* most_frequent_label will receive the mean of the
+         moda's labels                                      */
+      qfreq = pqfreq ;
+
+      /* scans the linked list again to compute the mean */
+
+      while(qfreq) {
+        most_frequent_label  = qfreq->label ;
+        label_freq  = qfreq->freq  ;
+        if (label_freq == maximum_freq) {
+          label_sum += *wpat_label ;
+        }
+
+        qfreq = qfreq->next ;
+
+      }
+
+      *wpat_label = (int) ((float)label_sum/nmoda) ;
+
+      break ;
+
+    case 3: { /* most_frequent_label will receive the median of the
+             moda's labels                                      */
+      int contador ;
+
+      qfreq = pqfreq ;
+
+      /* scans the linked list again to compute the mean */
+      contador = 0 ;
+      while((qfreq)&&(contador < nmoda/2)) {
+        most_frequent_label  = qfreq->label ;
+        label_freq  = qfreq->freq  ;
+        if (label_freq == maximum_freq) {
+          contador++ ;
+        }
+
+        qfreq = qfreq->next ;
+
+      }
+
+      *wpat_label = most_frequent_label ;
+      break ;
+    }
+    default:
+      return(0) ;
+    }
+
+      }
+
+    }
+
+    return(1) ;
+
+  }
+
+  else return(-1) ; /* Criteria not satisfied (verify < freqmin) */
 
 }

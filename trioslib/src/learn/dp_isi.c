@@ -170,7 +170,7 @@ int lisi_disk(char *fname_i1, char *fname_i2, int isi_type,	int isi3_step,
 	/* read classified examples */
 	/*
 	   if(!(mtm=mtm_read(fname_i1, &win1, &apt))) {
-	   return pac_error(MSG, "lisi: mtm_read() failed to read %s", fname_i1) ;
+	   return trios_error(MSG, "lisi: mtm_read() failed to read %s", fname_i1) ;
 	   }
 	   if(itv_consistency(itv, mtm)) {
 	   printf("Reultado consistente\n") ;

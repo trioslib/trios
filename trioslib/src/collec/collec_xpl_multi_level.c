@@ -70,7 +70,7 @@ xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int
             }
             curr_win_size += win_get_wsize(mop->levels[level].windows[op][i]);
         }
-        // insere na árvore.
+        /* insere na arvore. */
         if (ideal->data[k] == 0) {
             xpl_BB_insert(xpl, (xpl_BB **) &xpl->root, joint_wpat, 1, 0);
         } else {

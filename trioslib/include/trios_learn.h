@@ -18,7 +18,7 @@ extern "C" {
     \param undflabel Label to use in the undecidable cases, if comptype == 1.
  * \return The classified example set.
  */
-xpl_t *ldecision_memory(xpl_t *xpl, int comp_prob, double freqmin, double estim, int comptype, int undflabel);
+mtm_t *ldecision_memory(xpl_t *xpl, int comp_prob, double freqmin, double estim, int comptype, int undflabel);
 
 /*!
     Builds a classified examples table from a set of observed examples.
@@ -73,6 +73,7 @@ int lisi_disk(char *fname_i1, char *fname_i2, int isi_type, int isi3_step, int m
 
 int lmincover(char *fname1, char *fname2, char *fname3);
 
+dTree *ltrainGG_memory(mtm_t *mtm);
 
 
 int computeMAEBB(itv_t *bb_operator, window_t *win, imgset_t *test, double *acc);

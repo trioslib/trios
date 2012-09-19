@@ -26,6 +26,8 @@ extern "C" {
 #include <trios_learn.h>
 #include <trios_io.h>
 #include <trios_multi.h>
+#include <trios_apert.h>
+#include <trios_common.h>
 
 
 #ifdef __cplusplus
@@ -33,4 +35,4 @@ extern "C" {
 #endif
 
 
-#endif // TRIOS_H
+#endif

@@ -13,7 +13,7 @@ extern "C" {
 #include "trios_misc.h"
 
 /*!
-    Structure that holds a binary W-pattern in the extracted example set (represented by a tree).
+    Structure that holds a pair (binary W-pattern, binary result) in the extracted example set (represented by a tree).
  */
 typedef struct xpl_bb {
   unsigned int *wpat ;        /*!< pointer to w-pattern          */
@@ -23,6 +23,29 @@ typedef struct xpl_bb {
   struct xpl_bb *left ;       /*!< pointer to left child         */
   struct xpl_bb *right ;      /*!< pointer to right child        */
 } xpl_BB ;
+
+/*!
+    Structure that holds a pair (binary W-pattern, gray levels) in the extracted example set (represented by a tree).
+ */
+typedef struct xpl_bg {
+  unsigned int *wpat ;             /*!< pointer to w-pattern           */
+  struct freq_node *freqlist;      /*!< pointer to list of frequencies */
+  int    bal ;                     /*!< code to control balanced tree  */
+  struct xpl_bg *left ;            /*!< pointer to left child          */
+  struct xpl_bg *right ;           /*!< pointer to right child         */
+} xpl_BG ;
+
+/*!
+    Structure that holds a pair (gray W-pattern, gray levels) in the extracted example set (represented by a tree).
+ */
+typedef struct xpl_gg {
+  char   *wpat ;                   /*!< pointer to w-pattern           */
+  struct freq_node *freqlist;      /*!< pointer to list of frequencies */
+  int    bal ;                     /*!< code to control balanced tree  */
+  struct xpl_gg *left ;            /*!< pointer to left child          */
+  struct xpl_gg *right ;           /*!< pointer to right child         */
+} xpl_GG ;
+
 
 /*!
     Set with the patterns extracted from an imgset_t.
@@ -486,6 +509,201 @@ int                /*+ Purpose: insert a node in a BB XPL tree, balancing
     xpl_BB **pp                 /*+ In/Out: sorted XPL tree                +*/
   ) ;
 /*+ Return: >= 0 on success, -1 on failure                                 +*/
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_set_rootGG
+     -------------------------------------------
+*/
+
+int            /*+ Purpose: set a pointer to a XPL tree                    +*/
+  xpl_set_rootGG(
+    xpl_t *xpl,             /*+ In/Out: pointer to the XPL                 +*/
+    xpl_GG *root            /*+ In: pointer to the XPL tree                +*/
+  ) ;
+/*+ Return: 1 on success, 0 on failure                                     +*/
+
+
+/*
+     -------------------------------------------
+     FUNCTION: GG_leftrotate
+     -------------------------------------------
+*/
+
+void              /*+ Purpose: rotate a subtree to the left                +*/
+  GG_leftrotate(
+    xpl_GG **pp              /*+ In/Out: pointer to the subtree's root     +*/
+  ) ;
+/*+ Return: nothing                                                        +*/
+
+
+/*
+     -------------------------------------------
+     FUNCTION: GG_rightrotate
+     -------------------------------------------
+*/
+
+void             /*+ Purpose: rotate a subtree to the right                +*/
+  GG_rightrotate(
+    xpl_GG **pp                  /*+ In/Out: pointer to the subtree's root +*/
+  ) ;
+/*+ Return: nothing                                                        +*/
+
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_GG_create
+     -------------------------------------------
+*/
+
+xpl_GG *                /*+ Purpose: allocate a GG node                    +*/
+  xpl_GG_create(
+    int wsize                     /*+ In:  window size                     +*/
+  ) ;
+/*+ Return: a pointer to a node of GG type                                 +*/
+
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_GG_set_node
+     -------------------------------------------
+*/
+
+void                     /*+ Purpose: set the fields of a GG node          +*/
+  xpl_GG_set_node(
+    xpl_GG *p,               /*+ In/Out: pointer to the GG node            +*/
+    char   *wpat,            /*+ In: w-pattern                             +*/
+    int    wsize,            /*+ In: w-pattern size                        +*/
+    freq_node *freqlist      /*+ In: pointer to list of frequencies        +*/
+  ) ;
+/*+ Return: nothing                                                        +*/
+
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_GG_insert
+     -------------------------------------------
+*/
+
+int              /*+ Purpose: insert a node in a GG tree (recursively)        +*/
+  xpl_GG_insert(
+    xpl_t   *xpl,            /*+ In/Out: pointer to the XPL structure         +*/
+    xpl_GG  **pp,            /*+ In/Out: pointer to a subtree's root          +*/
+    char   *wpat,            /*+ In: w-pattern to be inserted                 +*/
+    freq_node *freqlist      /*+ In: w-pattern list of frequencies and labels +*/
+  ) ;
+/*+ Return: -1 on failure, >= 0  on success                                   +*/
+
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_GG_free
+     -------------------------------------------
+*/
+
+void         /*+ Purpose: free memory area used by a GG node               +*/
+  xpl_GG_free(
+    xpl_GG *p          /*+ In/Out: pointer to the GG node                  +*/
+  ) ;
+/*+ Return: nothing                                                        +*/
+
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_GG_free_tree
+     -------------------------------------------
+*/
+
+void                  /*+ Purpose: free memory area used by a GG tree      +*/
+  xpl_GG_free_tree(
+    xpl_GG *p                    /*+ In/Out: pointer to the GG tree        +*/
+  ) ;
+/*+ Return: nothing                                                        +*/
+
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_GG_merge
+     -------------------------------------------
+*/
+
+int             /*+ Purpose: merge two GG tree, recursively                +*/
+  xpl_GG_merge(
+    xpl_t *xpl,  /*+ In/Out: pointer to the XPL, containing the fisrt GG tree +*/
+    xpl_GG  *p   /*+ In: pointer to the second GG tree                        +*/
+  ) ;
+/*+ Return: 1 on success, 0 on failure                                     +*/
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_GG_add
+     -------------------------------------------
+*/
+
+int               /*+ Purpose: add a new node into a GG tree, recursively  +*/
+  xpl_GG_add(
+    xpl_t  *xpl,    /*+ In/Out: pointer to the XPL, containing the GG tree +*/
+    xpl_GG **p_cur,          /*+ In/Out: current node in the GG tree       +*/
+    xpl_GG *p_new            /*+ In: pointer to the node to be added       +*/
+  ) ;
+/*+ Return: -1 on failure, >= 0  on success                                +*/
+
+/*
+     -------------------------------------------
+     FUNCTION: tree2ll_GG_asc
+     -------------------------------------------
+*/
+
+int           /*+ Purpose: change GG tree structure to the linked list
+                           structure (ascendent ordering)                  +*/
+  tree2ll_GG_asc(
+    xpl_GG *p,           /*+ In: GG tree structure                         +*/
+    xpl_GG **pp          /*+ Out: linked list structure                    +*/
+  ) ;
+/*+ Return: 1 on success, 0 on failure                                     +*/
+
+/*
+     -------------------------------------------
+     FUNCTION: tree2ll_GG_desc
+     -------------------------------------------
+*/
+
+int           /*+ Purpose: change GG tree structure to the linked list
+                           structure (descendent ordering)                 +*/
+  tree2ll_GG_desc(
+    xpl_GG *p,              /*+ In: GG tree structure                      +*/
+    xpl_GG **pp             /*+ Out: linked list structure                 +*/
+  ) ;
+/*+ Return: 1 on success, 0 on failure                                     +*/
+
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_GG_sort
+     -------------------------------------------
+*/
+
+int                /*+ Purpose: sort GG XPL set                            +*/
+  xpl_GG_sort(
+    xpl_GG *p,            /*+ In: pointer to XPL tree to be sorted         +*/
+    xpl_GG **pp           /*+ Out: sorted XPL tree                         +*/
+  ) ;
+/*+ Return: 1 on success, 0 on failure                                     +*/
+
+/*
+     -------------------------------------------
+     FUNCTION: xpl_GG_sort_insert
+     -------------------------------------------
+*/
+
+int                /*+ Purpose: insert a node in a GG XPL tree, balancing
+                         it according to the frequency of examples         +*/
+  xpl_GG_sort_insert(
+    xpl_GG  *p,                 /*+ In: node to be inserted                +*/
+    xpl_GG **pp                 /*+ In/Out: sorted XPL tree                +*/
+  ) ;
+/*+ Return: >= 0 on success, -1 on failure                                 +*/
+
 
 
 #ifdef __cplusplus

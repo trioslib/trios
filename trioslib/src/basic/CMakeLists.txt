@@ -1,7 +1,8 @@
 
 PROJECT(TRIOS_BASIC)
-SET(CMAKE_BUILD_TYPE debug)
+#SET(CMAKE_BUILD_TYPE debug)
 SET(TRIOS_BASIC_SRCS
+basic/basic_apert.c
 basic/basic_cmp.c
 basic/basic_common.c
 basic/basic_error.c
@@ -12,7 +13,10 @@ basic/basic_mtm.c
 basic/basic_multi.c
 basic/basic_win.c
 basic/basic_xpl.c
-basic/basic_xplBB.c)
+basic/basic_xplBB.c
+basic/basic_xplGG.c
+basic/basic_math.c)
+
 ADD_LIBRARY(triosbasic ${TRIOS_BASIC_SRCS})
 
 INSTALL(TARGETS triosbasic

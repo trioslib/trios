@@ -1,7 +1,7 @@
 #include <trios.h>
 #include "minunit.h"
 
-TEST(test_pair1) {
+UTEST(test_pair1) {
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
     imgset_set_dname(set, 2, "./test_img/");

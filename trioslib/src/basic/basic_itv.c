@@ -318,7 +318,7 @@ itv_list_free(
 /*+ Return: nothing                                                        +*/
 {
 	itv_BX *local_head, *p;
-	/*itv_GX *local_head_gx, *q ; */
+	itv_GX *local_head_gx, *q;
 
 	if ((type == BB) || (type == BG)) {
 		local_head = (itv_BX *) head;
@@ -330,13 +330,12 @@ itv_list_free(
 	}
 
 	if (type == GG) {
-		return (itv_t *) trios_error(MSG, "Operator not supported");
-		/*local_head_gx = (itv_GX *)head ;
-		   while(local_head_gx) {
-		   q = local_head_gx->next ;
-		   itv_nodegx_free(local_head_gx) ;
-		   local_head_gx = q ;
-		   } */
+		local_head_gx = (itv_GX *) head;
+		while (local_head_gx) {
+			q = local_head_gx->next;
+			itv_nodegx_free(local_head_gx);
+			local_head_gx = q;
+		}
 	}
 
 }
@@ -360,12 +359,43 @@ itv_nodebx_free(
 
 
 
+itv_GX *			/*+ Purpose: create an interval of GX type              + */
+itv_nodegx_create(int wsize	/*+ In: size of a w-pattern                   + */
+    )
+/*+ Return: pointer to an interval of GX type                              +*/
+{
+/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
+/* date: Fri Jul 14 2000                                                    */
 
-/*
-     -------------------------------------------
-     FUNCTION: itv_nodebx_create
-     -------------------------------------------
-*/
+	itv_GX *p;
+
+	p = (itv_GX *) malloc(sizeof(itv_GX));
+	if (p == NULL) {
+		return (itv_GX *) trios_error(1, "Memory allocation failed.");
+	}
+
+	p->A = (char *) malloc(sizeof(char) * wsize);
+	if (p->A == NULL) {
+		free(p);
+		return (itv_GX *) trios_error(1, "Memory allocation failed.");
+	}
+
+	p->B = (char *) malloc(sizeof(char) * wsize);
+	if (p->B == NULL) {
+		free(p->A);
+		free(p);
+		return (itv_GX *) trios_error(1, "Memory allocation failed.");
+	}
+
+	p->plabels = NULL;
+	p->label = 0;
+	p->size = 0;		/* added on Oct 31, 2000 - Nina */
+	p->next = NULL;
+	p->nindexes = 0;
+	return (p);
+
+}
+
 
 itv_BX *			/*+ Purpose: create an interval of BX type              + */
 itv_nodebx_create(int wzip	/*+ In: compacted size of w-pattern           + */
@@ -399,6 +429,22 @@ itv_nodebx_create(int wzip	/*+ In: compacted size of w-pattern           + */
 
 }
 
+void /*+ Purpose: free memory area used by an interval of GX type     + */
+itv_nodegx_free(
+			      itv_GX * p	/*+ In: pointer to the interval               + */
+    )
+/*+ Return: nothing                                                        +*/
+{
+/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
+/* date: Fri Jul 14 2000                                                    */
+
+	free(p->A);
+	free(p->B);
+	if (p->plabels) {
+		free(p->plabels);
+	}
+	free(p);
+}
 
 
 
@@ -859,7 +905,60 @@ int				/*+ Purpose: check if some interval of a list contains a
 }
 
 
+void /*+ Purpose: set some data  of an interval                        + */
+itvgx_set(
+			itv_GX * p,	/*+ In/Out: pointer to the interval                 + */
+			char *A,	/*+ In: left extremity of the interval              + */
+			char *B,	/*+ In: right extremity of the interval             + */
+			int wsize,	/*+ In: compacted size of w-pattern                 + */
+			int label,	/*+ In: label assigned to the interval              + */
+			double size,	/*+ In: size of the interval                        + */
+			int nindexes,	/*+ In: number of indexes                           + */
+			int *plabels,	/*+ In: pointer to indexes                          + */
+			itv_GX * next	/*+ In: if the interval is linked in a list of
+					   intervals, this must be the pointer to the
+					   next interval                               + */
+    )
+/*+ Return: nothing                                                        +*/
+{
+/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
+/* date: Fri Jul 14 2000                                                    */
 
+	int i;
+
+	for (i = 0; i < wsize; i++) {
+		p->A[i] = A[i];
+		p->B[i] = B[i];
+	}
+
+	p->label = label;
+	p->size = size;		/* added on Oct 31, 2000 - Nina */
+	p->next = next;
+	p->nindexes = nindexes;
+	p->plabels = plabels;
+
+}
+
+double /*+ Purpose: compute the size of a gray-scale interval + */ itvgx_size(
+										     itv_GX * p,	/*+ In: the interval                                + */
+										     int wsize	/*+ In: w-pattern's size                            + */
+    )
+/*+ Return: an integer between 0 and maximum size. It assumes that input
+            interval is a valid one.                                       +*/
+{
+/* author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                  */
+/* date: Tue Oct 31 2000                                                    */
+
+	double size;
+	int i;
+
+	size = 1;
+	for (i = 0; i < wsize; i++) {
+		size = size * ((double) p->B[i] - (double) p->A[i] + 1.0);
+	}
+
+	return (size);
+}
 
 
 /*
@@ -882,11 +981,11 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 /*+ Return: Pointer to ITV structure on success, NULL on failure           +*/
 {
 	int wsize, wzip, i, cx, cy, count;
-	char *Ag, *Bg;
+    char *Ag, *Bg;
 	unsigned int *A, *B;
 	itv_t *itv;
 	itv_BX *p;
-	/*itv_GX    *pg ; */
+	itv_GX *pg;
 
 #ifdef _DEBUG_
 	trios_debug("itv_gen_itv: entered");
@@ -975,43 +1074,47 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 		break;
 
 	case GG:
-		return trios_error(MSG, "Operator not supported");
-		/* allocates space for the patterns of the interval [A,B]
-		   if((Ag = (char *)malloc(sizeof(char)*wsize)) == NULL) {
-		   return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
-		   }
-		   if((Bg = (char *)malloc(sizeof(char)*wsize)) == NULL) {
-		   return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
-		   }
+		/* allocates space for the patterns of the interval [A,B] */
+        if ((Ag = (char *) malloc(sizeof(char) * wsize)) == NULL) {
+			return (itv_t *) trios_error(1,
+						     "itv_gen_itv: memory allocation error.");
+		}
+        if ((Bg = (char *) malloc(sizeof(char) * wsize)) == NULL) {
+			return (itv_t *) trios_error(1,
+						     "itv_gen_itv: memory allocation error.");
+		}
 
-		   for(i=0; i<wsize; i++) {
-		   Ag[i] = 0 ;
-		   Bg[i] = 255 ;
-		   }
+		for (i = 0; i < wsize; i++) {
+			Ag[i] = 0;
+            Bg[i] = (char) 255;
+		}
 
-		   /* create structure to hold the interval *//*
-		   if(NULL==(itv = itv_create(wsize, map_type, def_label))) {
-		   win_free(win) ;
-		   return (itv_t *)trios_error(MSG, "itv_gen_itv: itv_create() failed.") ;
-		   }
+		/* create structure to hold the interval */
+		if (NULL == (itv = itv_create(wsize, map_type, def_label))) {
+			win_free(win);
+			return (itv_t *) trios_error(MSG,
+						     "itv_gen_itv: itv_create() failed.");
+		}
 
-		   /* the itv_t structure will contain, actually, just one interval *//*
-		   pg = itv_nodegx_create(wsize) ;
-		   itvgx_set(pg, Ag, Bg, wsize, label, 0, 0, NULL, (itv_GX *)(itv->head)) ;
-		   pg->size = itvgx_size(pg, wsize) ; /* added on Oct 31, 2000 - Nina
-		   itv->head = (int *)pg ;
-		   itv->nitv = 1 ;
+		/* the itv_t structure will contain, actually, just one interval */
+		pg = itv_nodegx_create(wsize);
+		itvgx_set(pg, Ag, Bg, wsize, label, 0, 0, NULL,
+			  (itv_GX *) (itv->head));
+		pg->size = itvgx_size(pg, wsize);	/* added on Oct 31, 2000 - Nina */
+		itv->head = (int *) pg;
+		itv->nitv = 1;
 
-		   free(Ag); free(Bg) ; */
+		free(Ag);
+		free(Bg);
 		break;
 
 	case WKC:
 	case WKF:
-		return trios_error(MSG, "Operator not supported");
+        return (itv_t *) trios_error(MSG, "Operator not supported");
 		/*
 		   #ifdef _DEBUG_
 		   trios_debug("itv_gen_itv: WKC or WKF entered") ;
-		   #endif
+           #endif*/
 		   /* allocates space for the patterns of the interval [A,B] *//*
 		   if((Ag = (char *)malloc(sizeof(char)*wsize)) == NULL) {
 		   return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
@@ -1029,19 +1132,19 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 		   for(i=0; i<wsize; i++) {
 		   trios_debug("Ag[%d] = %d, Bg[%d] = %d", i, Ag[i], i, Bg[i]) ;
 		   }
-		   #endif
+           #endif*/
 
 		   /* create structure to hold the interval *//*
 		   if(NULL==(itv = itv_create(wsize, map_type, def_label))) {
 		   win_free(win) ;
 		   return (itv_t *)trios_error(MSG, "itv_gen_itv: itv_create() failed.") ;
-		   }
+           }*/
 
-		   /* the itv_t structure will contain, actually, just one interval *//*
+           /* the itv_t structure will contain, actually, just one interval
 
 		   pg = itv_nodegx_create(wsize) ;
 		   itvgx_set(pg, Ag, Bg, wsize, label, 0, 0, NULL, (itv_GX *)(itv->head)) ;
-		   pg->size = itvgx_size(pg, wsize) ; /* added on Oct 31, 2000 - Nina *//*
+           pg->size = itvgx_size(pg, wsize) ;*/ /* added on Oct 31, 2000 - Nina */ /*
 		   itv->head = (int *)pg ;
 		   itv->nitv = 1 ;
 

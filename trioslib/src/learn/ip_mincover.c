@@ -105,7 +105,7 @@ int            /*+ Purpose: compute the minimun cover of a set of minterms.
 
 #ifdef _DEBUG_
   if(!all_covered2(itv, mx_head, mtm)) {
-    (void)pac_error(MSG, "p_cover after essential_sel : OOOPPSSSS !! ") ;
+    (void)trios_error(MSG, "p_cover after essential_sel : OOOPPSSSS !! ") ;
   }
 #endif
 
@@ -118,7 +118,7 @@ int            /*+ Purpose: compute the minimun cover of a set of minterms.
 
 #ifdef _DEBUG_
   if(!all_covered2(itv, mx_head, mtm)) {
-    (void)pac_error(MSG, "p_cover after del_dominated : OOOPPSSSS !! ") ;
+    (void)trios_error(MSG, "p_cover after del_dominated : OOOPPSSSS !! ") ;
   }
 #endif
 
@@ -158,7 +158,7 @@ int            /*+ Purpose: compute the minimun cover of a set of minterms.
 
 #ifdef _DEBUG_
   if(!all_covered(itv, mtm)) {
-    (void)pac_error(MSG, "p_cover After all : OOOPPSSSS !!") ;
+    (void)trios_error(MSG, "p_cover After all : OOOPPSSSS !!") ;
   }
 #endif
 
@@ -358,7 +358,7 @@ itv_BX *        /*+ Purpose: select essential intervals                    +*/
     if(counter == 1) {
 
 #ifdef _DEBUG_2_
-pac_debug("essen: interval selected A=%x B=%x", xp->I->A[0], xp->I->B[0]) ;
+trios_debug("essen: interval selected A=%x B=%x", xp->I->A[0], xp->I->B[0]) ;
 #endif
 
       if(xp==mp_head) {
@@ -783,7 +783,7 @@ itv_BX *        /*+ Purpose: select a cover by the greedy method           +*/
     }
 
 #ifdef _DEBUG_
-pac_debug("greedy_sel: interval selected A=%x B=%x", mp->I->A[0],mp->I->B[0]) ;
+trios_debug("greedy_sel: interval selected A=%x B=%x", mp->I->A[0],mp->I->B[0]) ;
 #endif
 
     mp->I->next = essen ;
