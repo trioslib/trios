@@ -9,6 +9,7 @@ learn/decision_gg.c
 learn/multi_level.c
 
 learn/mae.c
+learn/operator.c
 learn/train_gg.c
 
 )

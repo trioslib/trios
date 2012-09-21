@@ -41,6 +41,10 @@ add_executable(trios_apert_test trios_apert_test.c)
 target_link_libraries(trios_apert_test trios m)
 add_test(NAME ApertTest WORKING_DIRECTORY ${TRIOS_BINARY_DIR}/bin/ COMMAND ${TRIOS_BINARY_DIR}/bin/trios_apert_test )
 
+add_executable(trios_operator_test trios_operator_test.c)
+target_link_libraries(trios_operator_test trios m)
+add_test(NAME OperatorTest WORKING_DIRECTORY ${TRIOS_BINARY_DIR}/bin/ COMMAND ${TRIOS_BINARY_DIR}/bin/trios_operator_test )
+
 
 file(COPY test_read_win.txt DESTINATION  ${CMAKE_BINARY_DIR}/bin)
 file(COPY test_img DESTINATION  ${CMAKE_BINARY_DIR}/bin)

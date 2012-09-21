@@ -3,7 +3,8 @@
 
 #include <trios_img.h>
 #include <trios_itv.h>
-#include <trios_misc.h>
+#include <trios_learn.h>
+#include "trios_mtm.h"
 #include "trios_apert.h"
 
 #ifdef __cplusplus

@@ -11,6 +11,7 @@ extern "C" {
 #include "trios_mtm.h"
 #include "trios_itv.h"
 #include <trios_apert.h>
+#include "trios_learn.h"
 
 /*!
   Read a PGM image.

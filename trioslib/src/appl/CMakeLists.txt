@@ -7,6 +7,7 @@ appl/appl_bb.c
 appl/appl_gg.c
 appl/appl_wk.c
 appl/appl_multi.c
+appl/operator.c
 )
 ADD_LIBRARY(triosappl ${TRIOS_APPL_SRCS})
 

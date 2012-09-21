@@ -5,11 +5,6 @@
 extern "C" {
 #endif
 
-/*!
- * \brief Typedef for the decision tree implementation. It is choosen as a void pointer to allow any type of structure. Right now we use the implementation from OpenCV.
- */
-typedef void dTree;
-
 #define  MSG     2    /*!< parameter for routine pac_error()
  0: does not print error message
  1: print error message with "ERROR" in front of the message
