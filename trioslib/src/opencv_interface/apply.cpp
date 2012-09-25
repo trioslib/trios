@@ -27,14 +27,14 @@ img_t *apply(img_t *img, CvDTree *tr, window_t *win) {
         for (int j = 0; j < win_get_wsize(win); j++) {
             int l = k + offset[j];
             if (l >= 0 && l < n) {
-                wpat.at<float>(0, j) = (float) img_get_pixel(img, l / img->width, l % img->width, 0);
+                wpat.at<float>(0, j) = (unsigned char) img_get_pixel(img, l / img->width, l % img->width, 0);
             }
         }
         /* classifica */
         CvDTreeNode *node= tr->predict(wpat);
-        int val = node->value;
+        unsigned int val = (unsigned int) node->value;
         /* coloca na imagem */
-        img_set_pixel(output, k / img->width, k % img->width, 0, (unsigned char) val);
+        img_set_pixel(output, k / img->width, k % img->width, 0, val);
     }
     return output;
 }
