@@ -141,8 +141,8 @@ UTEST(test_applic_gg) {
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
     imgset_set_dname(set, 2, "./test_img/");
-    imgset_set_fname(set, 1, 1, "input1_GG.pnm");
-    imgset_set_fname(set, 2, 1, "ideal1_GG.pnm");
+    imgset_set_fname(set, 1, 1, "small.pgm");
+    imgset_set_fname(set, 2, 1, "small-ideal.pgm");
     imgset_write("IMGSET.s", set);
     imgset_free(set);
 
@@ -159,18 +159,14 @@ UTEST(test_applic_gg) {
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
     mtm_write("mtm_gg1.mtm", mtm, win, NULL);
     dTree *gg = ltrainGG_memory(mtm);
-    img_t *input = img_readPGM("./test_img/input1_GG.pnm");
+    img_t *input = img_readPGM("./test_img/small.pgm");
     img_t *out = lapplyGG_memory(input, gg, win);
-    img_writePGM("gg_res.pgm", out);
+    img_writePGM("small_gg_res.pgm", out);
     /*ltrainDT("mtm_gg1.mtm", 0, 0, 0, 0, NULL, "tree_gg1");
     printf("SDFSDFS\n\n\n");
     lapplicDT("./test_img/input1_GG.pnm", "tree_gg1", NULL, "gg_res.pgm");*/
     win_free(win);
 } TEST_END
-
-typedef void dTree;
-dTree *ltrainClassifier(mtm_t *mtm);
-img_t *lapplyClassifier(img_t *input, dTree *tree, window_t *win);
 
 UTEST(test_applic_gg_einstein) {
     int i, j;
@@ -184,9 +180,9 @@ UTEST(test_applic_gg_einstein) {
     imgset_write("IMGSET.s", set);
     imgset_free(set);
 
-    window_t *win = win_create(4, 4, 1);
-    for (i = 0; i < 4; i++) {
-        for (j = 0; j < 4; j++) {
+    window_t *win = win_create(5, 5, 1);
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
             win_set_point(i, j, 1, 1, win);
         }
     }
@@ -217,9 +213,9 @@ UTEST(test_applic_gg_einstein_io) {
     imgset_write("IMGSET.s", set);
     imgset_free(set);
 
-    window_t *win = win_create(4, 4, 1);
-    for (i = 0; i < 4; i++) {
-        for (j = 0; j < 4; j++) {
+    window_t *win = win_create(5, 5, 1);
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
             win_set_point(i, j, 1, 1, win);
         }
     }

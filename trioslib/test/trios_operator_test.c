@@ -77,10 +77,8 @@ UTEST(APPLY_GG) {
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
     imgset_set_dname(set, 2, "./test_img/");
-    imgset_set_fname(set, 1, 1, "input1-einstein.pnm");
-    /*imgset_set_fname(set, 1, 2, "input2-einstein.pnm");*/
+    imgset_set_fname(set, 1, 1, "input2-einstein.pnm");
     imgset_set_fname(set, 2, 1, "ideal-einstein.pnm");
-    /*imgset_set_fname(set, 2, 2, "ideal-einstein.pnm");*/
 
     window_t *w3x3 = win_create(5, 5, 1);
     for (i = 0; i < 5; i++) {
