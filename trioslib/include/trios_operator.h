@@ -36,7 +36,8 @@ image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, apert_t
 image_operator_t *image_operator_build_wkf(imgset_t *set, window_t *win, apert_t *apt);
 
 img_t *image_operator_apply(image_operator_t *iop, img_t *input);
-void operator_free(image_operator_t *iop);
+
+void image_operator_free(image_operator_t *iop);
 
 #ifdef __cplusplus
 }

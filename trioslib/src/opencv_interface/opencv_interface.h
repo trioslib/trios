@@ -14,7 +14,7 @@ img_t *apply_cv_tree(img_t *input, dTree *tree, window_t *win);
 img_t *apply_cv_treeWK(img_t *input, dTree *tree, window_t *win, apert_t *apt);
 
 dTree *read_cv_tree(char *filename);
-void write_cv_tree(char *filename, dTree *tree);
+int write_cv_tree(char *filename, dTree *tree);
 
 
 #ifdef __cplusplus

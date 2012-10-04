@@ -12,7 +12,8 @@ extern "C" dTree *read_cv_tree(char *filename) {
     return (dTree *)tree;
 }
 
-extern "C" void write_cv_tree(char *filename, dTree *tree) {
+extern "C" int write_cv_tree(char *filename, dTree *tree) {
     CvDTree *cv_tree = (CvDTree *)tree;
     cv_tree->save(filename);
+    return 1;
 }

@@ -14,10 +14,18 @@ image_operator_t *image_operator_build_bb(imgset_t *set, window_t *win) {
     win_write("win.build.bb", win);
     lcollec("set.build.bb", "win.build.bb", NULL, 1, 1, 0, "collec.build.bb", NULL);
     iop->collec = xpl_read("collec.build.bb", &(iop->win), NULL);
+    if (iop->collec == NULL) {
+        return (image_operator_t *) trios_error(MSG, "Error in collec");
+    }
     iop->decision = ldecision_memory(iop->collec, 1, 0, AVERAGE, 0, 0);
+    if (iop->decision == NULL) {
+        return (image_operator_t *) trios_error(MSG, "Error in decision");
+    }
 
     temp = itv_gen_itv(iop->win, 1, BB, 0, 1, 0);
+    mtm_write("before", iop->decision, iop->win, iop->apt);
     iop->bb = lisi_memory(iop->decision, temp, 3, 5, 0, 0);
+    mtm_write("after", iop->decision, iop->win, iop->apt);
     return iop;
 }
 
@@ -66,7 +74,7 @@ image_operator_t *image_operator_build_wkf(imgset_t *set, window_t *win, apert_t
     return iop;
 }
 
-void operator_free(image_operator_t *iop) {
+void image_operator_free(image_operator_t *iop) {
     if (iop->collec != NULL) {
         xpl_free(iop->collec);
     }
