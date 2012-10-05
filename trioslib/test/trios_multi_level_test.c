@@ -127,7 +127,7 @@ UTEST(BUILD1) {
     imgset_set_fname(set, 1, 1, "input1.pgm");
     imgset_set_fname(set, 2, 1, "ideal1.pgm");
 
-    multi_level_operator_t *op = multi_level_build(arch, set);
+    multi_level_operator_t *op = multi_level_build_single(arch, set);
 
     imgset_free(set);
     multi_level_arch_free(arch);
@@ -170,7 +170,7 @@ UTEST(BUILD2) {
     imgset_set_fname(set, 1, 1, "input1.pgm");
     imgset_set_fname(set, 2, 1, "ideal1.pgm");
 
-    multi_level_operator_t *op = multi_level_build(arch, set);
+    multi_level_operator_t *op = multi_level_build_single(arch, set);
 
     imgset_free(set);
     multi_level_arch_free(arch);
@@ -215,12 +215,70 @@ UTEST(APPLY1) {
     imgset_set_fname(set, 1, 1, "input1.pgm");
     imgset_set_fname(set, 2, 1, "ideal1.pgm");
 
-    multi_level_operator_t *op = multi_level_build(arch, set);
+    multi_level_operator_t *op = multi_level_build_single(arch, set);
     img_t *input = img_readPGM("test_img/input1.pgm");
     img_t *result = multi_level_apply(op, input);
     img_writePGM("result.pgm", result);
 
     imgset_free(set);
+    img_free(input);
+    img_free(result);
+    multi_level_arch_free(arch);
+    multi_level_operator_free(op);
+    win_free(win1);
+    win_free(win2);
+    win_free(win3);
+} TEST_END
+
+UTEST(APPLY2) {
+    int levels[] = {2, 1};
+    int i, j;
+    multi_architecture_t *arch = multi_level_arch_create(2, levels);
+
+    window_t *win1 = win_create(3, 3, 1);
+    for (i = 1; i < 3; i++) {
+        for (j = 1; j < 3; j++) {
+            win_set_point(i, j, 1, 1, win1);
+        }
+    }
+    multi_level_arch_set_window(arch, 0, 0, 0, win1);
+
+    window_t *win2 = win_create(3, 3, 1);
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 2; j++) {
+            win_set_point(i, j, 1, 1, win2);
+        }
+    }
+    multi_level_arch_set_window(arch, 0, 1, 0, win2);
+
+    window_t *win3 = win_create(1, 1, 1);
+    win_set_point(0, 0, 1, 1, win3);
+
+
+    multi_level_arch_set_window(arch, 1, 0, 0, win3);
+    multi_level_arch_set_window(arch, 1, 0, 1, win3);
+
+    imgset_t *set1 = imgset_create(1, 2);
+    imgset_set_dname(set1, 1, "./test_img/");
+    imgset_set_dname(set1, 2, "./test_img/");
+    imgset_set_fname(set1, 1, 1, "input1.pgm");
+    imgset_set_fname(set1, 2, 1, "ideal1.pgm");
+
+    imgset_t *set2 = imgset_create(1, 2);
+    imgset_set_dname(set2, 1, "./test_img/");
+    imgset_set_dname(set2, 2, "./test_img/");
+    imgset_set_fname(set2, 1, 1, "input2.pgm");
+    imgset_set_fname(set2, 2, 1, "ideal2.pgm");
+
+    imgset_t *sets[] = {set1, set2};
+
+    multi_level_operator_t *op = multi_level_build(arch, sets);
+    img_t *input = img_readPGM("test_img/input1.pgm");
+    img_t *result = multi_level_apply(op, input);
+    img_writePGM("result.pgm", result);
+
+    imgset_free(set1);
+    imgset_free(set2);
     img_free(input);
     img_free(result);
     multi_level_arch_free(arch);
@@ -317,7 +375,7 @@ UTEST(OP_IO) {
     imgset_set_fname(set, 1, 1, "input1.pgm");
     imgset_set_fname(set, 2, 1, "ideal1.pgm");
 
-    multi_level_operator_t *mop = multi_level_build(arch, set);
+    multi_level_operator_t *mop = multi_level_build_single(arch, set);
     mu_assert("Write failed", 1 == multi_level_operator_write("mop1", mop));
 
     multi_level_operator_t *read = multi_level_operator_read("mop1");
@@ -336,6 +394,70 @@ UTEST(OP_IO) {
 
 } TEST_END
 
+
+UTEST(BUILD_MULTI) {
+    int levels[] = {2, 2, 1};
+    int i, j;
+    multi_architecture_t *arch = multi_level_arch_create(3, levels);
+
+    window_t *win1 = win_create(3, 3, 1);
+    for (i = 1; i < 3; i++) {
+        for (j = 1; j < 3; j++) {
+            win_set_point(i, j, 1, 1, win1);
+        }
+    }
+    multi_level_arch_set_window(arch, 0, 0, 0, win1);
+
+    window_t *win2 = win_create(3, 3, 1);
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 2; j++) {
+            win_set_point(i, j, 1, 1, win2);
+        }
+    }
+    multi_level_arch_set_window(arch, 0, 1, 0, win2);
+
+    multi_level_arch_set_window(arch, 1, 0, 0, win1);
+    multi_level_arch_set_window(arch, 1, 0, 1, win2);
+
+    multi_level_arch_set_window(arch, 1, 1, 0, win2);
+    multi_level_arch_set_window(arch, 1, 1, 1, win1);
+
+
+    window_t *win3 = win_create(1, 1, 1);
+    win_set_point(0, 0, 1, 1, win3);
+
+
+    multi_level_arch_set_window(arch, 2, 0, 0, win3);
+    multi_level_arch_set_window(arch, 2, 0, 1, win3);
+
+    imgset_t *set1 = imgset_create(1, 2);
+    imgset_set_dname(set1, 1, "./test_img/");
+    imgset_set_dname(set1, 2, "./test_img/");
+    imgset_set_fname(set1, 1, 1, "input1.pgm");
+    imgset_set_fname(set1, 2, 1, "ideal1.pgm");
+
+    imgset_t *set2 = imgset_create(1, 2);
+    imgset_set_dname(set2, 1, "./test_img/");
+    imgset_set_dname(set2, 2, "./test_img/");
+    imgset_set_fname(set2, 1, 1, "input2.pgm");
+    imgset_set_fname(set2, 2, 1, "ideal2.pgm");
+
+    imgset_t *sets[] = {set1, set2, set1};
+
+    multi_level_operator_t *op = multi_level_build(arch, sets);
+
+    img_t *input = img_readPGM("test_img/input1.pgm");
+    img_t *result = multi_level_apply(op, input);
+    img_writePGM("multi_imgset.pgm", result);
+
+    imgset_free(set1);
+    imgset_free(set2);
+    multi_level_arch_free(arch);
+    multi_level_operator_free(op);
+    win_free(win1);
+    win_free(win2);
+    win_free(win3);
+} TEST_END
 
 #include "runner.h"
 
