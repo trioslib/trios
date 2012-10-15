@@ -87,6 +87,7 @@ int computeMAEBB(itv_t *bb_operator, window_t *win, imgset_t *test, double *acc)
 
 int computeMAEBBmulti(multi_level_operator_t *bb_operator, imgset_t *test, double *acc);
 
+int computeMSEGG(dTree *gg_operator, window_t *win, imgset_t *test);
 
 #ifdef __cplusplus
 }
