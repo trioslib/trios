@@ -68,16 +68,15 @@ int computeMAEBBmulti(multi_level_operator_t *bb_operator, imgset_t *test, doubl
     return MAE;
 }
 
-int computeMSEGG(dTree *gg_operator, window_t *win, imgset_t *test) {
+int computeMSEGG(dTree *gg_operator, window_t *win, imgset_t *test, double *acc) {
     int i, j, k;
     int n_images;
-    unsigned long long MSE = 0, n_pixels;
+    unsigned long long MSE = 0, n_pixels, wrong;
     img_t *input, *ideal, *mask, *result;
     char *filename;
 
     n_images = imgset_get_ngroups(test);
     n_pixels = 0;
-    printf("nimages %d\n", n_images);
     for (k = 0; k < n_images; k++) {
         get_setofimages(test, GG, win, k+1, &input, &ideal, &mask);
         result = lapplyGG_memory(input, gg_operator, win);
@@ -86,6 +85,9 @@ int computeMSEGG(dTree *gg_operator, window_t *win, imgset_t *test) {
         for (i = 0; i < img_get_height(input); i++) {
             for (j = 0; j < img_get_width(input); j++) {
                 MSE += pow(img_get_pixel(result, i, j, 0) - img_get_pixel(ideal, i, j, 0), 2);
+                if (img_get_pixel(result, i, j, 0) != img_get_pixel(ideal, i, j, 0)) {
+                    wrong++;
+                }
             }
         }
         n_pixels += img_get_height(input) * img_get_width(input);
@@ -94,6 +96,6 @@ int computeMSEGG(dTree *gg_operator, window_t *win, imgset_t *test) {
         img_free(mask);
         img_free(result);
     }
-
+    *acc = (double) wrong / n_pixels;
     return MSE;
 }
