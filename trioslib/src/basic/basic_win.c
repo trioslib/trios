@@ -171,11 +171,15 @@ int win_set_point(int i, int j, int k, int value, window_t *win) {
 trios_debug("nbands=%d k=%d i=%d j=%d pos=%d", nbands, k, i, j, (k-1)*win->width*win->height + i*win->width + j) ;
 #endif
 
-  win->windata[ (k-1)*win->width*win->height + i*win->width + j ] = (char)value ;
-  if(value==1) {
+
+  if(value==1 && win->windata[ (k-1)*win->width*win->height + i*win->width + j ] == 0) {
     (win->wsize[k-1])++ ;
     (win->wsize[nbands])++ ;
+  } else if (value==0 && win->windata[ (k-1)*win->width*win->height + i*win->width + j ] == 1) {
+      (win->wsize[k-1])-- ;
+      (win->wsize[nbands])-- ;
   }
+  win->windata[ (k-1)*win->width*win->height + i*win->width + j ] = (char)value ;
 
   return(1) ;
 

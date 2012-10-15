@@ -9,6 +9,7 @@
 
 #include "trios_misc.h"
 #include "trios_common.h"
+#include "trios_io.h"
 
 #include "stdio.h"
 
@@ -16,9 +17,12 @@ typedef void dTree;
 
 img_t *apply(img_t *img, CvDTree *tr, window_t *win) {
     img_t *output = img_create(img->width, img->height, img->nbands, img->pixel_size);
-    cv::Mat wpat(1, win->wsize, CV_32FC1);
+    cv::Mat wpat(1, win_get_wsize(win), CV_32FC1);
     int *offset = offset_create(win_get_wsize(win));
     offset_set(offset, win, img->width, 1);
+
+
+    printf("wsize %d cols %d \n", win_get_wsize(win), tr->get_data()->var_count);
 
     int n = img->width * img->height;
     for (int k = 0; k < n; k++) {
@@ -31,6 +35,7 @@ img_t *apply(img_t *img, CvDTree *tr, window_t *win) {
             }
         }
         /* classifica */
+
         CvDTreeNode *node= tr->predict(wpat);
         unsigned int val = (unsigned int) (node->value + 0.5);
         /* coloca na imagem */
