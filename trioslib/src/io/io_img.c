@@ -35,6 +35,7 @@ img_t *img_readPGM(char *filename) {
     /*TODO: ERRORS*/
     int w, h, val, maxval;
     int i, j, k;
+    double temp;
     char magic1, magic2;
     img_t *img;
     FILE *f = fopen(filename, "r");
@@ -50,7 +51,8 @@ img_t *img_readPGM(char *filename) {
         for (i = 0; i < h; i++) {
             for (j = 0; j < w; j++) {
                 val = fgetc(f);
-                img_set_pixel(img, i, j, 0, val);
+                temp = (1.0 * val / maxval) * 255;
+                img_set_pixel(img, i, j, 0, (int) temp);
             }
         }        
         fclose(f);
