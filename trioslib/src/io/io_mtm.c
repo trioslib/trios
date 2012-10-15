@@ -507,7 +507,7 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 				value = (unsigned char) table_GX[i].wpat[j];
 				fprintf(fd, "%d ", value);
 			}
-			fprintf(fd, "%d %d\n",
+            fprintf(fd, "%d %d\n",
 				table_GX[i].label, table_GX[i].fq);
 		}
 		break;

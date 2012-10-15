@@ -11,10 +11,10 @@
 #include <unistd.h>
 
 
-/*#define _DEBUG_
+/*#define _DEBUG_*/
 
 #define _DEBUG_1_
-#define _DEBUG_2_ */
+/*#define _DEBUG_2_*/
 
 
 /* #define _DEBUG_TIME_ */
@@ -164,6 +164,7 @@ int          /*+ Purpose: Perform ISI by points (binary case)              +*/
 
 #ifdef _DEBUG_1_
   trios_debug( "itv:wsize=%d  mtm:wsize=%d",wsize1, wsize2);
+  trios_debug( "itv:nitv=%d  mtm:nmtm=%d",itv_get_nitv(itv), mtm_get_nmtm(mtm));
 #endif
 
   if(wsize1 != wsize2) {

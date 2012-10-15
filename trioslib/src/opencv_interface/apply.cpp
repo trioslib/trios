@@ -32,7 +32,7 @@ img_t *apply(img_t *img, CvDTree *tr, window_t *win) {
         }
         /* classifica */
         CvDTreeNode *node= tr->predict(wpat);
-        unsigned int val = (unsigned int) node->value;
+        unsigned int val = (unsigned int) (node->value + 0.5);
         /* coloca na imagem */
         img_set_pixel(output, k / img->width, k % img->width, 0, val);
     }
