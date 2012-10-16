@@ -100,6 +100,19 @@ int image_operator_write(char *path, image_operator_t *iop) {
 }
 
 image_operator_t *image_operator_read(char *path) {
+    image_operator_t *iop;
+#ifdef WINDOWS
+    char separator = '\\';
+#else
+    char separator = '/';
+#endif
 
-    return NULL;
+
+    trios_malloc(iop, sizeof(image_operator_t), image_operator_t *, "Failed to alloc image operator");
+    iop->type = BB;
+    iop->win = win;
+    iop->apt = NULL;
+    iop->gg = NULL;
+
+    return iop;
 }

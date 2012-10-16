@@ -21,9 +21,6 @@ img_t *apply(img_t *img, CvDTree *tr, window_t *win) {
     int *offset = offset_create(win_get_wsize(win));
     offset_set(offset, win, img->width, 1);
 
-
-    printf("wsize %d cols %d \n", win_get_wsize(win), tr->get_data()->var_count);
-
     int n = img->width * img->height;
     for (int k = 0; k < n; k++) {
         for (int j = 0; j < win_get_wsize(win); j++) wpat.at<float>(0, j) = 0.0;
