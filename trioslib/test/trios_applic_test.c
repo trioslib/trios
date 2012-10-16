@@ -160,7 +160,7 @@ UTEST(test_applic_gg) {
     mtm_write("mtm_gg1.mtm", mtm, win, NULL);
     dTree *gg = ltrainGG_memory(mtm);
     img_t *input = img_readPGM("./test_img/small.pgm");
-    img_t *out = lapplyGG_memory(input, gg, win);
+    img_t *out = lapplyGG_memory(input, gg, win, NULL);
     img_writePGM("small_gg_res.pgm", out);
     /*ltrainDT("mtm_gg1.mtm", 0, 0, 0, 0, NULL, "tree_gg1");
     printf("SDFSDFS\n\n\n");
@@ -194,7 +194,7 @@ UTEST(test_applic_gg_einstein) {
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
     dTree *bb = ltrainGG_memory(mtm);
     img_t *in = img_readPGM("./test_img/input2-einstein.pnm");
-    img_t *out = lapplyGG_memory(in, bb, win);
+    img_t *out = lapplyGG_memory(in, bb, win, NULL);
     img_writePGM("gg_res_cv_einstein.pgm", out);
 
 
@@ -229,7 +229,7 @@ UTEST(test_applic_gg_einstein_io) {
     dTree *gg = read_tree2("tree2");
 
     img_t *in = img_readPGM("./test_img/input2-einstein.pnm");
-    img_t *out = lapplyGG_memory(in, gg, win);
+    img_t *out = lapplyGG_memory(in, gg, win, NULL);
     img_writePGM("gg_res_cv_einstein.pgm", out);
 
     win_free(win);

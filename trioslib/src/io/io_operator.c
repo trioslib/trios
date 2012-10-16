@@ -110,7 +110,7 @@ image_operator_t *image_operator_read(char *path) {
 
     trios_malloc(iop, sizeof(image_operator_t), image_operator_t *, "Failed to alloc image operator");
     iop->type = BB;
-    iop->win = win;
+    /*iop->win = win;*/
     iop->apt = NULL;
     iop->gg = NULL;
 

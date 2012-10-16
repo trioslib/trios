@@ -15,7 +15,7 @@
 
 typedef void dTree;
 
-img_t *apply(img_t *img, CvDTree *tr, window_t *win) {
+img_t *apply(img_t *img, CvDTree *tr, window_t *win, img_t *mask) {
     img_t *output = img_create(img->width, img->height, img->nbands, img->pixel_size);
     cv::Mat wpat(1, win_get_wsize(win), CV_32FC1);
     int *offset = offset_create(win_get_wsize(win));
@@ -23,6 +23,10 @@ img_t *apply(img_t *img, CvDTree *tr, window_t *win) {
 
     int n = img->width * img->height;
     for (int k = 0; k < n; k++) {
+        if (mask != NULL && img_get_pixel(mask, k / mask->width, k % mask->width, 0) == 0) {
+            img_set_pixel(output, k / img->width, k % img->width, 0, 0);
+            continue;
+        }
         for (int j = 0; j < win_get_wsize(win); j++) wpat.at<float>(0, j) = 0.0;
         /* monta padrao */
         for (int j = 0; j < win_get_wsize(win); j++) {
@@ -41,7 +45,7 @@ img_t *apply(img_t *img, CvDTree *tr, window_t *win) {
     return output;
 }
 
-img_t *applyWK(img_t *img, CvDTree *tr, window_t *win, apert_t *apt) {
+img_t *applyWK(img_t *img, CvDTree *tr, window_t *win, apert_t *apt, img_t *mask) {
     img_t *output = img_create(img->width, img->height, img->nbands, img->pixel_size);
     cv::Mat wpat(1, win->wsize, CV_32FC1);
     int *offset = offset_create(win_get_wsize(win));
@@ -53,6 +57,10 @@ img_t *applyWK(img_t *img, CvDTree *tr, window_t *win, apert_t *apt) {
 
     int n = img->width * img->height;
     for (int k = 0; k < n; k++) {
+        if (mask != NULL && img_get_pixel(mask, k / mask->width, k % mask->width, 0) == 0) {
+            img_set_pixel(output, k / img->width, k % img->width, 0, 0);
+            continue;
+        }
         for (int j = 0; j < win_get_wsize(win); j++) wpat.at<float>(0, j) = 0.0;
         /* monta padrao */
         for (int j = 0; j < win_get_wsize(win); j++) {
@@ -86,10 +94,10 @@ img_t *applyWK(img_t *img, CvDTree *tr, window_t *win, apert_t *apt) {
 }
 
 
-extern "C" img_t *apply_cv_tree(img_t *input, dTree *tree, window_t *win) {
-    return apply(input, (CvDTree *)tree, win);
+extern "C" img_t *apply_cv_tree(img_t *input, dTree *tree, window_t *win, img_t *mask) {
+    return apply(input, (CvDTree *)tree, win, mask);
 }
 
-extern "C" img_t *apply_cv_treeWK(img_t *input, dTree *tree, window_t *win, apert_t *apt) {
-    return applyWK(input, (CvDTree *)tree, win, apt);
+extern "C" img_t *apply_cv_treeWK(img_t *input, dTree *tree, window_t *win, apert_t *apt, img_t *mask) {
+    return applyWK(input, (CvDTree *)tree, win, apt, mask);
 }
