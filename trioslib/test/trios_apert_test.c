@@ -103,7 +103,7 @@ UTEST(test_apply_apert) {
     dTree *bb = ltrainGG_memory(mtm);
 
     img_t *in = img_readPGM("./test_img/input1-einstein.pnm");
-    img_t *out = lapplyWK_memory(in, bb, win, apt);
+    img_t *out = lapplyWK_memory(in, bb, win, apt, NULL);
     img_writePGM("apert.pgm", out);
 } TEST_END
 

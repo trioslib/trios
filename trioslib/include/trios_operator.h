@@ -35,7 +35,7 @@ image_operator_t *image_operator_build_gg(imgset_t *set, window_t *win);
 image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, apert_t *apt);
 image_operator_t *image_operator_build_wkf(imgset_t *set, window_t *win, apert_t *apt);
 
-img_t *image_operator_apply(image_operator_t *iop, img_t *input);
+img_t *image_operator_apply(image_operator_t *iop, img_t *input, img_t *mask);
 
 void image_operator_free(image_operator_t *iop);
 
