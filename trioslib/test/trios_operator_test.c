@@ -113,6 +113,8 @@ UTEST(IO_BB) {
     iop = image_operator_build_bb(set, w3x3);
 
     image_operator_write("iop_bb", iop);
+    image_operator_free(iop);
+    iop = image_operator_read("iop_bb");
 
     input = img_readPGM("./test_img/input3.pgm");
     output = image_operator_apply(iop, input, NULL);
@@ -139,10 +141,12 @@ UTEST(IO_GG) {
     iop = image_operator_build_gg(set, w3x3);
 
     image_operator_write("iop_gg", iop);
+    image_operator_free(iop);
+    iop = image_operator_read("iop_gg");
 
     input = img_readPGM("./test_img/input2-einstein.pnm");
     output = image_operator_apply(iop, input, NULL);
-    img_writePGM("operator_apply_GG.pgm", output);
+    img_writePGM("operator_apply_IO_GG.pgm", output);
 } TEST_END
 
 
