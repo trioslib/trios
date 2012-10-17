@@ -101,18 +101,61 @@ int image_operator_write(char *path, image_operator_t *iop) {
 
 image_operator_t *image_operator_read(char *path) {
     image_operator_t *iop;
+    char type[2];
+    char temp_string[2048];
 #ifdef WINDOWS
     char separator = '\\';
 #else
     char separator = '/';
 #endif
+    FILE *f;
+    window_t *win;
+    apert_t *apt;
 
-
+    f = fopen(path, "r");
+    if (f == NULL) {
+        return (image_operator_t *) trios_error(MSG, "Failed to open file %s.", path);
+    }
     trios_malloc(iop, sizeof(image_operator_t), image_operator_t *, "Failed to alloc image operator");
-    iop->type = BB;
-    iop->win = win;
-    iop->apt = NULL;
-    iop->gg = NULL;
+    fscanf(f, ".t\n%c%c\n", type, type+1);
+    if (type[0] == 'B' && type[1] == 'B') {
+        iop->type = BB;
+        sprintf(temp_string, "%s-files/window", path);
+        iop->win = win_read(temp_string);
+        if (iop->win == NULL) {
+            return (image_operator_t *) trios_error(MSG, "Failed to read window at %s.", temp_string);
+        }
 
+        sprintf(temp_string, "%s-files/collec", path);
+        iop->collec = xpl_read(temp_string, &win, NULL);
+        if (iop->collec == NULL) {
+            trios_error(MSG, "Failed to read xpl at %s. Continuing...", temp_string);
+        }
+        win_free(win);
+
+        sprintf(temp_string, "%s-files/decision", path);
+        iop->decision = mtm_read(temp_string, &win, NULL);
+        if (iop->decision == NULL) {
+            trios_error(MSG, "Failed to read mtm at %s. Continuing...", temp_string);
+        }
+        win_free(win);
+
+        sprintf(temp_string, "%s-files/operator", path);
+        iop->bb = itv_read(temp_string, &win);
+        if (iop->bb == NULL) {
+            return (image_operator_t *) trios_error(MSG, "Failed to read operator at %s.", temp_string);
+        }
+        win_free(win);
+
+        iop->apt = NULL;
+        iop->gg = NULL;
+    } else if (type[0] == 'G' && type[1] == 'G') {
+        iop->type = GG;
+
+        iop->bb = NULL;
+    } else {
+        return (image_operator_t *) trios_error(MSG, "Unknown operator type.", path);
+    }
     return iop;
 }
+
