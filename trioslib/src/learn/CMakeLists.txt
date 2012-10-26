@@ -11,6 +11,7 @@ learn/multi_level.c
 learn/accuracy.c
 learn/operator.c
 learn/train_gg.c
+learn/partition.c
 
 )
 ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})

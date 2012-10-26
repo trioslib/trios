@@ -89,6 +89,18 @@ int computeMAEBBmulti(multi_level_operator_t *bb_operator, imgset_t *test, doubl
 
 int computeMSEGG(dTree *gg_operator, window_t *win, imgset_t *test, double *acc);
 
+/*!
+ * \brief Partition an interval into disjoint intervals containing no more than "threshold" examples.
+ * \param fname_i Classified examples file.
+ * \param itv_type Interval type.
+ * \param threshold Maximum number of examples in each partition.
+ * \param mtm_pref Prefix of the output mtm_t files.
+ * \param itv_pref Prefix of the output itv_t files.
+ * \param n_itv Pointer to store the number of generated intervals.
+ * \return 1 on success. 0 on failure.
+ */
+int lpartition_disk(char *fname_i,int itv_type,int threshold, char *mtm_pref, char *itv_pref, int *n_itv);
+
 #ifdef __cplusplus
 }
 #endif
