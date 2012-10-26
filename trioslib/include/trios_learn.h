@@ -101,6 +101,19 @@ int computeMSEGG(dTree *gg_operator, window_t *win, imgset_t *test, double *acc)
  */
 int lpartition_disk(char *fname_i,int itv_type,int threshold, char *mtm_pref, char *itv_pref, int *n_itv);
 
+/*!
+ * \brief Partition an interval into disjoint intervals containing no more than "threshold" examples.
+ * \param win Window used.
+ * \param mtm Classified examples.
+ * \param itv_type Interval type.
+ * \param threshold Maximum number of examples in each partition.
+ * \param mtm_out Pointer to store the list of mtm_t generated.
+ * \param itv_out Pointer to store the list of itv_t generated.
+ * \param n_itv Pointer to the number of generated intervals.
+ * \return
+ */
+int lpartition_memory(window_t *win, mtm_t *mtm, int itv_type, int threshold, mtm_t ***mtm_out, itv_t ***itv_out, int *n_itv);
+
 #ifdef __cplusplus
 }
 #endif
