@@ -457,6 +457,22 @@ int lpartition_memory(window_t *win, mtm_t *mtm, int itv_type, int threshold, mt
 
 itv_t *lisi_partitioned(window_t *win, mtm_t *mtm, int threshold) {
     itv_t *acc = NULL;
+    mtm_t **part_m;
+    itv_t **part_i;
+    int i, n;
+
+    if (!lpartition_memory(win, mtm, 1, threshold, &part_m, &part_i, &n)) {
+        return (itv_t *) trios_error(MSG, "Error in partition!");
+    }
+
+    for (i = 0; i < n; i++) {
+        part_i[i] = lisi_memory(part_m[i], part_i[i], 3, 20, 0, 0);
+    }
+
+    acc = part_i[0];
+    for (i = 1; i < n; i++) {
+
+    }
 
     return NULL;
 }
