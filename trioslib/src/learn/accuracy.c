@@ -18,17 +18,20 @@ int computeMAEBB(itv_t *bb_operator, window_t *win, imgset_t *test, double *acc)
         /* compara result com ideal */
         for (i = 0; i < img_get_height(input); i++) {
             for (j = 0; j < img_get_width(input); j++) {
-                if (img_get_pixel(result, i, j, 0) != img_get_pixel(ideal, i, j, 0)) {
-                    MAE++;
+                if (img_get_pixel(mask, i, j, 0) != 0) {
+                    n_pixels++;
+                    if (img_get_pixel(result, i, j, 0) != img_get_pixel(ideal, i, j, 0)) {
+                        MAE++;
+                    }
                 }
             }
         }
-        n_pixels += img_get_height(input) * img_get_width(input);
         img_free(input);
         img_free(ideal);
         img_free(mask);
         img_free(result);
     }
+    printf("npixels %d MAE %d\n", n_pixels, MAE);
     if (acc != NULL) {
         *acc = 1.0 * MAE / n_pixels;
     }
@@ -51,12 +54,15 @@ int computeMAEBBmulti(multi_level_operator_t *bb_operator, imgset_t *test, doubl
         /* compara result com ideal */
         for (i = 0; i < img_get_height(input); i++) {
             for (j = 0; j < img_get_width(input); j++) {
-                if (img_get_pixel(result, i, j, 0) != img_get_pixel(ideal, i, j, 0)) {
-                    MAE++;
+                if (img_get_pixel(mask, i, j, 0) != 0) {
+                    n_pixels++;
+                    if (img_get_pixel(result, i, j, 0) != img_get_pixel(ideal, i, j, 0)) {
+                        MAE++;
+                    }
                 }
+
             }
         }
-        n_pixels += img_get_height(input) * img_get_width(input);
         img_free(input);
         img_free(ideal);
         img_free(mask);
@@ -91,13 +97,17 @@ int computeMSEGG(dTree *gg_operator, window_t *win, imgset_t *test, double *acc)
         /* compara result com ideal */
         for (i = 0; i < img_get_height(input); i++) {
             for (j = 0; j < img_get_width(input); j++) {
-                MSE += pow(img_get_pixel(result, i, j, 0) - img_get_pixel(ideal, i, j, 0), 2);
-                if (img_get_pixel(result, i, j, 0) != img_get_pixel(ideal, i, j, 0)) {
-                    wrong++;
+                /*MSE += pow(img_get_pixel(result, i, j, 0) - img_get_pixel(ideal, i, j, 0), 2);*/
+                /*MSE += (img_get_pixel(result, i, j, 0) == img_get_pixel(ideal, i, j, 0));*/
+                if (img_get_pixel(mask, i, j, 0) != 0) {
+                    n_pixels++;
+                    if (img_get_pixel(result, i, j, 0) != img_get_pixel(ideal, i, j, 0)) {
+                        wrong++;
+                        MSE++;
+                    }
                 }
             }
         }
-        n_pixels += img_get_height(input) * img_get_width(input);
         img_free(input);
         img_free(ideal);
         img_free(mask);
