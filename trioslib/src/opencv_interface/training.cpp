@@ -63,7 +63,7 @@ extern "C" void *train_cv_tree(mtm_t *mtm) {
     cv::Mat labels_mtm = build_classes_from_mtm(mtm);
     CvDTreeParams params;
     params.truncate_pruned_tree = false;
-    params.min_sample_count = 2;
+    params.min_sample_count = 1;
     params.cv_folds = 1;
     params.use_1se_rule = false;
     params.use_surrogates = false;

@@ -1,10 +1,52 @@
 #include <trios.h>
 #include <stdlib.h>
+#include "collec_private.h"
 
 xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int cv);
+xpl_t *collec_GG(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels);
+
+void put_border(window_t *win, img_t *img3)
+{
+    int top, left, bottom, right, i, j, w, h, img_w, img_h;
+    w = win_get_width(win);
+    h = win_get_height(win);
+    top = h/2;
+    left = w/2;
+    bottom = (h % 2 == 1)? h/2:h - h/2;
+    right = (w % 2 == 1)? w/2:w - w/2;
+
+    img_w = img_get_width(img3);
+    img_h = img_get_height(img3);
+
+    for (i = 0; i < top; i++) {
+        for (j = 0; j < img_w; j++) {
+            img_set_pixel(img3, i, j, 0, 0);
+        }
+    }
+
+    for (i = 0; i < bottom; i++) {
+        for (j = 0; j < img_w; j++) {
+            img_set_pixel(img3, img_h - i - 1, j, 0, 0);
+        }
+    }
+
+    for (i = 0; i < img_h; i++) {
+        for (j = 0; j < left; j++) {
+            img_set_pixel(img3, i, j, 0, 0);
+        }
+    }
+
+    for (i = 0; i < img_h; i++) {
+        for (j = 0; j < right; j++) {
+            img_set_pixel(img3, i, img_w - j - 1, 0, 0);
+        }
+    }
+}
 
 int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t **img1, img_t **img2, img_t **img3) {
     /* Read first image */
+    int top, bottom, left, right;
+    int i, j;
     char *filename = imgset_get_ffullname(imgset, 1, k);
     img_t *img = img_readPGM(filename);
     free(filename);
@@ -36,7 +78,6 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
         }
         *img3 = img;
     } else {
-        int i, j;
         *img3 = img_create(img_get_width(*img1), img_get_height(*img1), 1, sz8BIT);
         for (i = 0; i < img_get_height(*img1); i++) {
             for (j = 0; j < img_get_width(*img1); j++) {
@@ -44,6 +85,7 @@ int get_setofimages(imgset_t *imgset, int map_type, window_t *win, int k, img_t 
             }
         }
     }
+    put_border(win, *img3);
     return 1;
 }
 
