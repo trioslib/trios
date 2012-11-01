@@ -54,7 +54,7 @@ UTEST(test_isi_memory) {
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
     mu_assert("ldecision failed", 1 == ldecision_disk("XPL_RESULT.xpl", 1, 0, AVERAGE, 0, 0, "DECISION_RESULT.mtm"));
-    mtm_t *mtm = mtm_read("DECISION_RESULT.mtm", win, NULL);
+    mtm_t *mtm = mtm_read("DECISION_RESULT.mtm", &win, NULL);
     itv_t *final = lisi_memory(mtm, itv, 3, 5, 0, 0);
     mu_assert("lisi failed", NULL != final);
 
@@ -159,6 +159,40 @@ UTEST(test_partition_mem) {
     mu_assert("lpartition failed: n_itv <= 0", n_itv > 0);
     printf("Number of intervals %d\n", n_itv);
 
+} TEST_END
+
+UTEST(test_ISI_partition) {
+    int i, j, n_itv;
+    mtm_t **mlist;
+    itv_t **ilist;
+    imgset_t *set = imgset_create(1, 2);
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input1.pgm");
+    imgset_set_fname(set, 2, 1, "ideal1.pgm");
+    imgset_write("IMGSET.s", set);
+    imgset_free(set);
+
+    window_t *win = win_create(6, 6, 1);
+    for (i = 0; i < 6; i++) {
+        for (j = 0; j < 6; j++) {
+            win_set_point(i, j, 1, 1, win);
+        }
+    }
+    win_write("WIN.w", win);
+
+    itv_t *itv = itv_gen_itv(win, 1, BB, 0, 1, 0);
+
+    itv_write("ITV_TEST.itv", itv, win);
+    itv_free(itv);
+
+
+    mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
+    xpl_t *xpl = xpl_read("XPL_RESULT.xpl", &win, NULL);
+    mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
+
+    itv_t *parts = lisi_partitioned(win, mtm, 15000);
+    mu_assert("lisi_partitioned failed", parts != NULL);
 } TEST_END
 
 

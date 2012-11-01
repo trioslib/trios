@@ -1,5 +1,5 @@
 #include "trios.h"
-
+#include "paclearn_local.h"
 
 int            /*+ Purpose: given a set of examples (mtm) determines which
                              is the variable (direction) that most equatively
@@ -532,7 +532,7 @@ int                   /*+ Purpose: Read several interval files and join
         q = (itv_BX *)in_itv->head ;
         if(in_itv->nitv) {
           out_itv->nitv = out_itv->nitv + in_itv->nitv ;
-          /*Concatenate_lists(p, q) ;*/
+          Concatenate_lists(p, q) ;
           out_itv->head = (int *)p ;
           in_itv->head = NULL ;
         }
@@ -554,21 +554,59 @@ int                   /*+ Purpose: Read several interval files and join
   return(1) ;
 }
 
+typedef struct _partition_data {
+    mtm_t *part_m;
+    itv_t *part_i;
+    window_t *win;
+    int i;
+} partition_data;
+
+void solve_partition(void *p) {
+    partition_data *pd = (partition_data *) p;
+    mtm_t *part_m = pd->part_m;
+    itv_t *part_i = pd->part_i;
+    int i = pd->i;
+    char cmd[100];
+
+    part_i = lisi_memory(part_m, part_i, 3, 20, 0, 0);
+    sprintf(cmd, "part.temp%d.itv", i+1);
+    itv_write(cmd, part_i, pd->win);
+    mtm_free(part_m);
+    itv_free(part_i);
+}
 
 itv_t *lisi_partitioned(window_t *win, mtm_t *mtm, int threshold) {
     itv_t *acc = NULL;
+    partition_data *pd;
     mtm_t **part_m;
     itv_t **part_i;
+
     int i, n;
 
     if (!lpartition_memory(win, mtm, 1, threshold, &part_m, &part_i, &n)) {
         return (itv_t *) trios_error(MSG, "Error in partition!");
     }
 
+    trios_malloc(pd, sizeof(partition_data) * n, itv_t *, "Error allocating partition_data");
+
     for (i = 0; i < n; i++) {
-        part_i[i] = lisi_memory(part_m[i], part_i[i], 3, 20, 0, 0);
+        pd[i].i = i;
+        pd[i].part_i = part_i[i];
+        pd[i].part_m = part_m[i];
+        pd[i].win = win;
+        solve_partition((void *) (pd + i));
     }
 
+    free(part_m);
+    free(part_i);
+    free(pd);
 
-    return NULL;
+    if (litvconcat("part.temp", n, "final.temp") == 0) {
+        return (itv_t *) trios_error(MSG, "Error on itv concat");
+    }
+
+    acc = itv_read("final.temp", &win);
+    win_free(win);
+
+    return acc;
 }
