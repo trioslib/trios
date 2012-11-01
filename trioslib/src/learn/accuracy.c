@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <time.h>
 
+#define DEBUG
+
 int computeMAEBB(itv_t *bb_operator, window_t *win, imgset_t *test, double *acc) {
     int i, j, k;
     int n_images;
@@ -31,7 +33,6 @@ int computeMAEBB(itv_t *bb_operator, window_t *win, imgset_t *test, double *acc)
         img_free(mask);
         img_free(result);
     }
-    printf("npixels %d MAE %d\n", n_pixels, MAE);
     if (acc != NULL) {
         *acc = 1.0 * MAE / n_pixels;
     }
@@ -76,7 +77,7 @@ int computeMAEBBmulti(multi_level_operator_t *bb_operator, imgset_t *test, doubl
 }
 
 int computeMSEGG(dTree *gg_operator, window_t *win, imgset_t *test, double *acc) {
-    int i, j, k;
+    int i, j, k, l, m;
     int n_images;
     unsigned long long MSE = 0, n_pixels, wrong = 0;
     img_t *input, *ideal, *mask, *result;
@@ -104,6 +105,14 @@ int computeMSEGG(dTree *gg_operator, window_t *win, imgset_t *test, double *acc)
                     if (img_get_pixel(result, i, j, 0) != img_get_pixel(ideal, i, j, 0)) {
                         wrong++;
                         MSE++;
+#ifdef DEBUG
+                        /*printf("offset %p wsize %d\n", offset, win_get_wsize(win));*/
+                        /*for (k = 0; k < win_get_wsize(win); k++) {
+                            l = i * img_get_width(input) + j + k;
+                            printf("%d ", input->data[l]);
+                        }
+                        printf("\n");*/
+#endif
                     }
                 }
             }
