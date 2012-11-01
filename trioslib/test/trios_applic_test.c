@@ -160,7 +160,7 @@ UTEST(test_apply_partitioned_in_memory) {
     xpl_t *xpl = xpl_read("XPL_RESULT.xpl", &win, NULL);
     mtm_t *mtm = ldecision_memory(xpl, 1, 0, AVERAGE, 0, 0);
     mu_assert("ldecision failed", mtm != NULL);
-    itv = lisi_partitioned(win, mtm, 12000);
+    itv = lisi_partitioned(win, mtm, 10000);
     mu_assert("lisi failed", itv != NULL);
 
     img_t *input = img_readPGM("./test_img/input3.pgm");
