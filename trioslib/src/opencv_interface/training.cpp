@@ -35,6 +35,65 @@ cv::Mat build_samples_from_mtm(mtm_t *mtm) {
     return samples;
 }
 
+int build_samples_xpl_gg_R(xpl_t *xpl, xpl_GG *node, cv::Mat &samples, int i) {
+    int j, l;
+    freq_node *f;
+
+    if (node == NULL) return i;
+
+    for (f = node->freqlist; f != NULL; f = f->next) {
+        for (int j = 0; j < f->freq; j++, i++) {
+            for (int l = 0; l < xpl->wsize; l++) {
+                samples.at<float>(i, l) = (unsigned char) node->wpat[l];
+            }
+        }
+    }
+
+    i = build_samples_xpl_gg_R(xpl, node->left, samples, i);
+    i = build_samples_xpl_gg_R(xpl, node->right, samples, i);
+
+    return i;
+}
+
+int build_classes_xpl_gg_R(xpl_t *xpl, xpl_GG *node, cv::Mat &classes, int i) {
+    int j, l;
+    freq_node *f;
+
+    if (node == NULL) return i;
+
+    for (f = node->freqlist; f != NULL; f = f->next) {
+        for (int j = 0; j < f->freq; j++, i++) {
+            for (int l = 0; l < xpl->wsize; l++) {
+                classes.at<float>(i, 0) = f->label;
+            }
+        }
+    }
+
+    i = build_classes_xpl_gg_R(xpl, node->left, classes, i);
+    i = build_classes_xpl_gg_R(xpl, node->right, classes, i);
+
+    return i;
+}
+
+
+cv::Mat build_samples_from_xpl(xpl_t *xpl) {
+    int width = xpl->wsize;
+    int height = xpl->sum;
+    printf("Width %d height %d\n", width, height);
+    cv::Mat samples(height, width, CV_32FC1);
+    build_samples_xpl_gg_R(xpl, (xpl_GG *)xpl->root, samples, 0);
+    return samples;
+}
+
+cv::Mat build_classes_from_xpl(xpl_t *xpl) {
+    int width = 1;
+    int height = xpl->sum;
+    cv::Mat classes(height, width, CV_32FC1);
+    build_classes_xpl_gg_R(xpl, (xpl_GG *)xpl->root, classes, 0);
+    return classes;
+}
+
+
 void test_accuracy(CvDTree &tr, cv::Mat samples, cv::Mat labels) {
     cv::Mat wpat(1, samples.cols, CV_32FC1);
     unsigned long right, wrong, mse;
@@ -46,9 +105,8 @@ void test_accuracy(CvDTree &tr, cv::Mat samples, cv::Mat labels) {
         }
 
         CvDTreeNode *node = tr.predict(wpat);
-        //value = tr.predict(wpat);
         value = node->value;
-        if (value == labels.at<float>(i, 0)) {
+        if ((unsigned char) value == (unsigned char) labels.at<float>(i, 0)) {
             right++;
         } else {
             mse += pow(value - labels.at<float>(i, 0), 2);
@@ -63,7 +121,7 @@ extern "C" void *train_cv_tree(mtm_t *mtm) {
     cv::Mat labels_mtm = build_classes_from_mtm(mtm);
     CvDTreeParams params;
     params.truncate_pruned_tree = false;
-    params.min_sample_count = 2;
+    params.min_sample_count = 1;
     params.cv_folds = 1;
     params.use_1se_rule = false;
     params.use_surrogates = false;
@@ -77,5 +135,7 @@ extern "C" void *train_cv_tree(mtm_t *mtm) {
     tr_mtm->train(samples_mtm, CV_ROW_SAMPLE, labels_mtm, cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
     test_accuracy(*tr_mtm, samples_mtm, labels_mtm);
 
-    return (void *) tr_mtm;
+    void *ptr = (void *) tr_mtm;
+
+    return ptr;
 }

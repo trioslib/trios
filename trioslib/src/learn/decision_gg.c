@@ -214,8 +214,6 @@ decide_tree_gg_median(
 
 	int status;
 
-	printf("SDAFFSFDFSD\n\n");
-
 	if (p) {
 
 		if (!decide_tree_gg_median

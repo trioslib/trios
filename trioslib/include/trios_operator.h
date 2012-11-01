@@ -27,7 +27,7 @@ typedef struct {
 
     itv_t *bb; /*! < BB operator. NULL if the type is not BB */
     dTree *gg; /*! < GG or WC* operator. NULL if the type is BB. */
-    apert_t *apt; /*! < Aperture of the operator. NULL if the type is not WC* */
+    apert_t *apt; /*! < Aperture of the operator. NULL if the type is not WC*. */
 } image_operator_t;
 
 image_operator_t *image_operator_build_bb(imgset_t *set, window_t *win);
