@@ -1,6 +1,7 @@
 #include <trios.h>
 
 #include "local.h"
+#include "../collec/collec_private.h"
 
 /*!
   Reads a mask from a file or creates a new image with all pixels set to 1 if there is no mask.
@@ -13,17 +14,19 @@
   */
 img_t *set_mask(char *f_mask, int width, int height, window_t * win)
 {
+    img_t *mask;
     if (f_mask == NULL) {
-        img_t *mask = img_create(width, height, 1, sz8BIT);
+        mask = img_create(width, height, 1, sz8BIT);
         int i, j;
         for (i = 0; i < height; i++) {
             for (j = 0; j < width; j++) {
                 img_set_pixel(mask, i, j, 0, 1);
             }
         }
-        return mask;
     } else {
-        return img_readPGM(f_mask);
+        mask = img_readPGM(f_mask);
     }
+    put_border(win, mask);
+    return mask;
 }
 

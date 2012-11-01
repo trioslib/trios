@@ -135,6 +135,47 @@ UTEST(test_apply_in_memory) {
 
 } TEST_END
 
+UTEST(test_apply_partitioned_in_memory) {
+    int i, j;
+    imgset_t *set = imgset_create(1, 2);
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input3.pgm");
+    imgset_set_fname(set, 2, 1, "ideal3.pgm");
+    imgset_write("IMGSET.s", set);
+    imgset_free(set);
+
+    window_t *win = win_create(6, 6, 1);
+    for (i = 0; i < 6; i++) {
+        for (j = 0; j < 6; j++) {
+            win_set_point(i, j, 1, 1, win);
+        }
+    }
+    win_write("WIN.w", win);
+
+    itv_t *itv = itv_gen_itv(win, 1, BB, 0, 1, 0);
+    win_free(win);
+
+    mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
+    xpl_t *xpl = xpl_read("XPL_RESULT.xpl", &win, NULL);
+    mtm_t *mtm = ldecision_memory(xpl, 1, 0, AVERAGE, 0, 0);
+    mu_assert("ldecision failed", mtm != NULL);
+    itv = lisi_partitioned(win, mtm, 12000);
+    mu_assert("lisi failed", itv != NULL);
+
+    img_t *input = img_readPGM("./test_img/input3.pgm");
+    img_t *output = lpapplic_memory(input, itv, win, NULL, 0, 0, 255);
+    mu_assert("lpapplic_memory failed", NULL != output);
+
+    img_writePGM("partition.pgm", output);
+    img_free(output);
+
+    itv_free(itv);
+    win_free(win);
+
+} TEST_END
+
+
 
 UTEST(test_applic_gg) {
     int i, j;

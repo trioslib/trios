@@ -13,6 +13,8 @@
 
 #include "stdio.h"
 
+#include "../collec/collec_private.h"
+
 typedef void dTree;
 
 img_t *apply(img_t *img, CvDTree *tr, window_t *win, img_t *mask) {

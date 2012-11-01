@@ -1,5 +1,5 @@
 #include "trios.h"
-
+#include "paclearn_local.h"
 
 int            /*+ Purpose: given a set of examples (mtm) determines which
                              is the variable (direction) that most equatively
@@ -455,8 +455,158 @@ int lpartition_memory(window_t *win, mtm_t *mtm, int itv_type, int threshold, mt
     return 1;
 }
 
+int                   /*+ Purpose: Read several interval files and join
+                                   all intervals in one list and outputs to
+                                   the specified file                      +*/
+  litvconcat(
+    char *fname_i,    /*+ In: Path/Prefix of intervals files               +*/
+    int  nfiles,      /*+ In: Number of input files (must be numbered from
+                              1 to nfiles)                                 +*/
+    char *fname_o     /*+ Out: resulting intervals file                    +*/
+  )
+/*+ Return: 1 on success, 0 on failure                                     +*/
+{
+/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
+/*  date: Sun Apr 25 1999                                                   */
+
+  char     fname[512] ;
+  window_t *win ;
+  apert_t  *apt ;
+  itv_t    *out_itv, *in_itv ;
+  itv_BX   *p, *q ;
+  int      i ;
+
+
+  out_itv = NULL ;
+
+  /* input file names are assumed to be in the form fname1.itv, fname2.itv
+     fname3.itv, ... and so son                                            */
+
+  if(nfiles==1) {
+
+    sprintf(fname, "%s%d%s", fname_i, 1, ".itv") ;
+
+#ifdef _DEBUG_
+    trios_debug("File name is %s", fname) ;
+#endif
+
+    if(!(out_itv=itv_read(fname, &win))) {
+      win_free(win) ;
+      return trios_error(MSG, "litvconcat: itv_read() failed to read %s", fname) ;
+    }
+
+    if(!itv_write(fname_o, out_itv, win)) {
+      win_free(win) ;
+      itv_free(out_itv) ;
+      return trios_error(MSG, "litvconcat: itv_write() failed to write %s", fname_o) ;
+    }
+
+    win_free(win) ;
+    itv_free(out_itv) ;
+
+  }
+  else {
+
+    for(i=1; i<=nfiles; i++) {
+      sprintf(fname, "%s%d%s", fname_i, i, ".itv") ;
+
+#ifdef _DEBUG_
+    trios_debug("File name is %s", fname) ;
+#endif
+
+      if(i==1) {
+        if(!(out_itv=itv_read(fname, &win))) {
+          win_free(win) ;
+          return trios_error(MSG, "litvconcat: itv_read() failed to read %s", fname) ;
+        }
+      }
+      else {
+        win_free(win) ;
+        if(!(in_itv=itv_read(fname, &win))) {
+          win_free(win) ;
+          itv_free(out_itv) ;
+          return trios_error(MSG, "litvconcat: itv_read() failed to read %s", fname) ;
+        }
+
+        p = (itv_BX *)out_itv->head ;
+        q = (itv_BX *)in_itv->head ;
+        if(in_itv->nitv) {
+          out_itv->nitv = out_itv->nitv + in_itv->nitv ;
+          Concatenate_lists(p, q) ;
+          out_itv->head = (int *)p ;
+          in_itv->head = NULL ;
+        }
+        itv_free(in_itv) ;
+      }
+    }
+
+    if(!itv_write(fname_o, out_itv, win)) {
+      win_free(win) ;
+      itv_free(out_itv) ;
+      return trios_error(MSG, "litvconcat: itv_write() failed to write %s", fname_o) ;
+    }
+
+    win_free(win) ;
+    itv_free(out_itv) ;
+
+  }
+
+  return(1) ;
+}
+
+typedef struct _partition_data {
+    mtm_t *part_m;
+    itv_t *part_i;
+    window_t *win;
+    int i;
+} partition_data;
+
+void solve_partition(void *p) {
+    partition_data *pd = (partition_data *) p;
+    mtm_t *part_m = pd->part_m;
+    itv_t *part_i = pd->part_i;
+    int i = pd->i;
+    char cmd[100];
+
+    part_i = lisi_memory(part_m, part_i, 3, 20, 0, 0);
+    sprintf(cmd, "part.temp%d.itv", i+1);
+    itv_write(cmd, part_i, pd->win);
+    mtm_free(part_m);
+    itv_free(part_i);
+}
+
 itv_t *lisi_partitioned(window_t *win, mtm_t *mtm, int threshold) {
     itv_t *acc = NULL;
+    partition_data *pd;
+    mtm_t **part_m;
+    itv_t **part_i;
 
-    return NULL;
+    int i, n;
+
+    if (!lpartition_memory(win, mtm, 1, threshold, &part_m, &part_i, &n)) {
+        return (itv_t *) trios_error(MSG, "Error in partition!");
+    }
+
+    trios_malloc(pd, sizeof(partition_data) * n, itv_t *, "Error allocating partition_data");
+
+    for (i = 0; i < n; i++) {
+        pd[i].i = i;
+        pd[i].part_i = part_i[i];
+        pd[i].part_m = part_m[i];
+        pd[i].win = win;
+        solve_partition((void *) (pd + i));
+    }
+
+    free(part_m);
+    free(part_i);
+    free(pd);
+
+    if (litvconcat("part.temp", n, "final.temp") == 0) {
+        return (itv_t *) trios_error(MSG, "Error on itv concat");
+    }
+
+    acc = itv_read("final.temp", &win);
+    win_free(win);
+
+    return acc;
 }

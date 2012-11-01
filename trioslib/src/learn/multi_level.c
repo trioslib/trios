@@ -18,7 +18,25 @@ window_t *multi_level_operator_joint_window(multi_level_operator_t *mop, int lev
     return joint_win;
 }
 
-
+window_t *biggest_window(multi_architecture_t *m) {
+    window_t *big = NULL;
+    int max_h = -1, max_w = -1;
+    int i, j, k;
+    for (i = 0; i < m->nlevels; i++) {
+        for (j = 0; j < m->levels[i].noperators; j++) {
+            for (k = 0; k < m->levels[i].ninputs; k++) {
+                if (win_get_width(m->levels[i].windows[j][k]) > max_w) {
+                    max_w = win_get_width(m->levels[i].windows[j][k]);
+                }
+                if (win_get_height(m->levels[i].windows[j][k]) > max_h) {
+                    max_h = win_get_height(m->levels[i].windows[j][k]);
+                }
+            }
+        }
+    }
+    big = win_create(max_h, max_w, 1);
+    return big;
+}
 
 multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set) {
     int i, j, k;
@@ -31,6 +49,7 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
     img_t **ideal_images;
 
     itv_t *starting_interval;
+    window_t *big;
 
     trios_malloc(input_images, sizeof(img_t **) * imgset_get_ngroups(set), multi_level_operator_t *, "Bad alloc");
     for (i = 0; i < imgset_get_ngroups(set); i++) {
@@ -42,9 +61,11 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t *set
     trios_malloc(mask_images, sizeof(img_t *) * imgset_get_ngroups(set), multi_level_operator_t *, "Bad alloc");
     trios_malloc(ideal_images, sizeof(img_t *) * imgset_get_ngroups(set), multi_level_operator_t *, "Bad alloc");
 
+    big = biggest_window(m);
     for (i = 0; i < imgset_get_ngroups(set); i++) {
-        get_setofimages(set, BB, NULL, i+1, &(input_images[i][0]), ideal_images + i, mask_images + i);
+        get_setofimages(set, BB, big, i+1, &(input_images[i][0]), ideal_images + i, mask_images + i);
     }
+    win_free(big);
 
     for (i = 0; i < mop->nlevels; i++) {
         /*printf("Building level %d\n", i);*/
