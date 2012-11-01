@@ -1,6 +1,8 @@
 #include "trios.h"
 #include "paclearn_local.h"
 
+#include "omp.h"
+
 int            /*+ Purpose: given a set of examples (mtm) determines which
                              is the variable (direction) that most equatively
                              partitions the examples.                      +*/
@@ -559,47 +561,56 @@ typedef struct _partition_data {
     itv_t *part_i;
     window_t *win;
     int i;
+    pthread_cond_t signal;
 } partition_data;
 
-void solve_partition(void *p) {
-    partition_data *pd = (partition_data *) p;
-    mtm_t *part_m = pd->part_m;
-    itv_t *part_i = pd->part_i;
-    int i = pd->i;
+void solve_partition(mtm_t *part_m, itv_t *part_i, int i, window_t *win) {
     char cmd[100];
-
+#ifdef DEBUG
+    printf("Start %d\n", i);
+#endif
     part_i = lisi_memory(part_m, part_i, 3, 20, 0, 0);
     sprintf(cmd, "part.temp%d.itv", i+1);
-    itv_write(cmd, part_i, pd->win);
+    itv_write(cmd, part_i, win);
     mtm_free(part_m);
     itv_free(part_i);
+#ifdef DEBUG
+    printf("Finished %d\n", i);
+#endif
 }
 
 itv_t *lisi_partitioned(window_t *win, mtm_t *mtm, int threshold) {
     itv_t *acc = NULL;
-    partition_data *pd;
     mtm_t **part_m;
     itv_t **part_i;
-
     int i, n;
 
     if (!lpartition_memory(win, mtm, 1, threshold, &part_m, &part_i, &n)) {
         return (itv_t *) trios_error(MSG, "Error in partition!");
     }
 
-    trios_malloc(pd, sizeof(partition_data) * n, itv_t *, "Error allocating partition_data");
 
-    for (i = 0; i < n; i++) {
-        pd[i].i = i;
-        pd[i].part_i = part_i[i];
-        pd[i].part_m = part_m[i];
-        pd[i].win = win;
-        solve_partition((void *) (pd + i));
+#ifdef DEBUG
+    printf("Number of partitions %d\n", n);
+    printf("OMP NUM PROC %d threads %d\n", omp_get_num_procs(), omp_get_max_threads());
+#endif
+
+#pragma omp parallel private(i)
+    {
+
+#pragma omp for schedule(static, 1)
+        for (i = 0; i < n; i++) {
+            solve_partition(part_m[i], part_i[i], i, win);
+        }
     }
+
+
+#ifdef DEBUG
+    printf("Finished ISI\n");
+#endif
 
     free(part_m);
     free(part_i);
-    free(pd);
 
     if (litvconcat("part.temp", n, "final.temp") == 0) {
         return (itv_t *) trios_error(MSG, "Error on itv concat");

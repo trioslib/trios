@@ -173,9 +173,9 @@ UTEST(test_ISI_partition) {
     imgset_write("IMGSET.s", set);
     imgset_free(set);
 
-    window_t *win = win_create(6, 6, 1);
-    for (i = 0; i < 6; i++) {
-        for (j = 0; j < 6; j++) {
+    window_t *win = win_create(7, 7, 1);
+    for (i = 0; i < 7; i++) {
+        for (j = 0; j < 7; j++) {
             win_set_point(i, j, 1, 1, win);
         }
     }
@@ -191,7 +191,7 @@ UTEST(test_ISI_partition) {
     xpl_t *xpl = xpl_read("XPL_RESULT.xpl", &win, NULL);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
 
-    itv_t *parts = lisi_partitioned(win, mtm, 15000);
+    itv_t *parts = lisi_partitioned(win, mtm, 10000);
     mu_assert("lisi_partitioned failed", parts != NULL);
 } TEST_END
 
