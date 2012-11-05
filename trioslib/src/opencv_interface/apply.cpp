@@ -1,6 +1,5 @@
 
 #include "opencv2/ml/ml.hpp"
-#include "opencv2/opencv.hpp"
 
 #include "trios_img.h"
 #include "trios_apert.h"
