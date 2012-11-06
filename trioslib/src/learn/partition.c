@@ -419,40 +419,42 @@ int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 int lpartition_memory(window_t * win, mtm_t * mtm, int itv_type, int threshold,
 		      mtm_t *** _mtm_out, itv_t *** _itv_out, int *n_itv)
 {
-	int r;
-	int i;
-	char temp[100];
-	window_t *tt;
-	mtm_t **mtm_out;
-	itv_t **itv_out;
-	mtm_write("partition_temp___.mtm", mtm, win, NULL);
-	r = lpartition_disk("partition_temp___.mtm", itv_type, threshold,
-			    "partition_mtm_temp__", "partition_itv_temp__",
-			    n_itv);
-	if (r == 0)
-		return 0;
+    int r;
+    int i, noper;
+    char temp[100];
+    window_t *tt;
+    mtm_t **mtm_out;
+    itv_t **itv_out, *start_itv;
 
-	trios_malloc(mtm_out, sizeof(mtm_t *) * (*n_itv), int,
-		     "Failed to alloc mtm_t list");
-	trios_malloc(itv_out, sizeof(itv_t *) * (*n_itv), int,
-		     "Failed to alloc itv_t list");
+    trios_malloc(mtm_out, sizeof(mtm_t *) * (256), int,
+             "Failed to alloc mtm_t list");
+    trios_malloc(itv_out, sizeof(itv_t *) * (256), int,
+             "Failed to alloc itv_t list");
 
-	for (i = 0; i < *n_itv; i++) {
-		sprintf(temp, "partition_mtm_temp__%d.mtm", i + 1);
-		mtm_out[i] = mtm_read(temp, &tt, NULL);
-		win_free(tt);
-		sprintf(temp, "partition_itv_temp__%d.itv", i + 1);
-		itv_out[i] = itv_read(temp, &tt);
-		win_free(tt);
-		sprintf(temp,
-			"rm partition_mtm_temp__%d.mtm partition_itv_temp__%d.itv",
-			i + 1, i + 1);
-		r = system(temp);
-	}
+    start_itv = itv_gen_itv(win, itv_type, BB, 0, 1, 0);
+    if (start_itv == NULL) {
+        return trios_error(MSG, "lpartition: itv_gen_itv() failed.");
+    }
 
-	*_mtm_out = mtm_out;
-	*_itv_out = itv_out;
-	return 1;
+    noper = 0;
+    for (i = 0; i < 256; i++) {
+        mtm_out[i] = NULL;
+        itv_out[i] = NULL;
+    }
+
+    /* Divide examples and compute the respective partitions (intervals) */
+    /* The memory space used both by mtm and by start_itv aren't released   */
+    if (!mtm_part(mtm, start_itv, threshold, mtm_out, itv_out, &noper)) {
+        win_free(win);
+        mtm_free(mtm);
+        return trios_error(MSG, "lpartition: sep_mtm() failed.");
+    }
+
+
+    *_mtm_out = mtm_out;
+    *_itv_out = itv_out;
+    *n_itv = noper;
+    return 1;
 }
 
 int				/*+ Purpose: Read several interval files and join
