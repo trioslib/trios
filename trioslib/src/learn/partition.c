@@ -3,6 +3,11 @@
 
 #include "omp.h"
 
+#ifdef __linux__
+
+    #include <unistd.h>
+#endif
+
 int            /*+ Purpose: given a set of examples (mtm) determines which
                              is the variable (direction) that most equatively
                              partitions the examples.                      +*/
@@ -566,11 +571,15 @@ typedef struct _partition_data {
 
 void solve_partition(mtm_t *part_m, itv_t *part_i, int i, window_t *win) {
     char cmd[100];
+    int pid = 0;
 #ifdef DEBUG
     printf("Start %d\n", i);
 #endif
+#ifdef __linux__
+    pid = getpid();
+#endif
     part_i = lisi_memory(part_m, part_i, 3, 20, 0, 0);
-    sprintf(cmd, "part.temp%d.itv", i+1);
+    sprintf(cmd, "part.temp%d-%d.itv", pid, i+1);
     itv_write(cmd, part_i, win);
     mtm_free(part_m);
     itv_free(part_i);
