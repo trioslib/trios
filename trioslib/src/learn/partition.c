@@ -8,6 +8,7 @@
 #include <unistd.h>
 #endif
 
+
 /*!
  * Given a set of examples (mtm) determines which is the variable (direction) that most equatively partitions the examples.
  * \param mtm Set of classified examples.
@@ -98,7 +99,7 @@ int	mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,	itv_t ** ITV
 			return trios_error(MSG,
 					   "mtm_part: call to sep_mtm() failed.");
 		}
-		mtm_free(mtm);
+        mtm_free(mtm);
 
 		if (!mtm_part(mtm0, itv0, threshold, MTM, ITV, noper)) {
 			return trios_error(MSG,
@@ -153,14 +154,14 @@ int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1) {
 
 	/* create subsets for the examples */
 	*mtm0 = *mtm1 = NULL;
-	if (nmtm - count != 0) {
+    if (nmtm - count > 0) {
 		*mtm0 = mtm_create(wsize, BB, nmtm - count);
 		if (*mtm0 == NULL) {
 			return (0);
 		}
 		q0 = (mtm_BX *) (*mtm0)->mtm_data;
 	}
-	if (count != 0) {
+    if (count > 0) {
 		*mtm1 = mtm_create(wsize, BB, count);
 		if (*mtm1 == NULL) {
 			return trios_error(MSG, "mtm_sep: mtm_create() failed");
@@ -191,6 +192,8 @@ int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1) {
 			}
 			q1[j1].wpat = q[j].wpat;
 			q1[j1].label = q[j].label;
+            q1[j1].fq = q[j].fq;
+            q1[j1].fq1 = q[j].fq1;
 			q[j].wpat = NULL;
 			j1++;
 		} else {
@@ -200,6 +203,8 @@ int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1) {
 			}
 			q0[j0].wpat = q[j].wpat;
 			q0[j0].label = q[j].label;
+            q0[j0].fq = q[j].fq;
+            q0[j0].fq1 = q[j].fq1;
 			q[j].wpat = NULL;
 			j0++;
 		}
@@ -360,7 +365,7 @@ int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 	trios_debug("Separating examples: done.");
 
 	for (i = 0; i < noper; i++) {
-		p = (itv_BX *) itv_list[i]->head;
+        itv_BX *p = (itv_BX *) itv_list[i]->head;
 		trios_debug("itv_list[%d]=[%x,%x]\n", i, p->A[0], p->B[0]);
 	}
 #endif
