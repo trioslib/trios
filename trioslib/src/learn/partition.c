@@ -52,23 +52,19 @@ int which_var(mtm_t * mtm, int LIMIT) {
 	return (var);
 }
 
-
-int				/*+ Purpose: to partition the set of examples recursively
-				   until each of the partitions has no more
-				   then "threshold" examples                    + */ mtm_part(
-												     mtm_t * mtm,	/*+ In: classified examples                         + */
-												     itv_t * itv,	/*+ In: interval                                    + */
-												     int threshold,	/*+ In: Maximun number of examples in each partition+ */
-												     mtm_t ** MTM,	/*+ In/Out: vector of examples subsets              + */
-												     itv_t ** ITV,	/*+ In/Out: vector of intervals                     + */
-												     int *noper	/*+ In/Out: next partition to be built              + */
-    )
-/*+ Return: 1 on success, 0 on failure                                     +*/
-{
-
+/*!
+ * Partitions the set of examples recursively until each of the partitions has no more than "threshold" examples.
+ * \param mtm Classified examples' set.
+ * \param itv Interval to partition.
+ * \param threshold Maximum number of examples.
+ * \param MTM List of mtm in each partition.
+ * \param ITV List of itv in each partition
+ * \param noper Next partition to be built (at the end this contains the total number of partitions).
+ * \return 1 on success, 0 on failure.
+ */
+int	mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,	itv_t ** ITV, int *noper) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Tue Apr 20 1999                                                   */
-
 	itv_t *itv0, *itv1;
 	mtm_t *mtm0, *mtm1;
 	int var;
@@ -119,22 +115,17 @@ int				/*+ Purpose: to partition the set of examples recursively
 
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: sep_mtm
-     -------------------------------------------
-*/
 
-int				/*+ Purpose: separate the set of classified examples in
-				   disjoint subsets, according to the decomposition variable  + */ sep_mtm(
-														  mtm_t * mtm,	/*+ In: classified examples                         + */
-														  itv_t * itv,	/*+ In: interval                                    + */
-														  int var,	/*+ In: Which direction the partition will be made ?+ */
-														  mtm_t ** mtm0,	/*+ Out: examples with value(var)=0                 + */
-														  mtm_t ** mtm1	/*+ Out: examples with value(var)=1                 + */
-    )
-/*+ Return: 1 on succes, 0 on failure                                      +*/
-{
+/*!
+ * Separates the set of classified examples in disjoint subsets, according to the decomposition variable.
+ * \param mtm Set of classified examples.
+ * \param itv Interval list.
+ * \param var Direction to partition.
+ * \param mtm0 Examples with var=0.
+ * \param mtm1 Examples with var=1.
+ * \return 1 on success, 0 on failure.
+ */
+int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Wed Jul  8 1998                                                   */
 
@@ -221,21 +212,15 @@ int				/*+ Purpose: separate the set of classified examples in
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: itv_setvar
-     -------------------------------------------
-*/
-
-int				/*+ Purpose: Given an interval, set the indicated variable
-				   as a constant (thus creating two subintervals)         + */ itv_setvar(
-														 itv_t * itv,	/*+ In: input interval                              + */
-														 int var,	/*+ In: variable index                              + */
-														 itv_t ** itv0,	/*+ Out: first output interval                      + */
-														 itv_t ** itv1	/*+ Out: second output interval                     + */
-    )
-/*+ Return: 1 on success, 0 on failure                                     +*/
-{
+/*!
+ * Given an interval, set the indicated variable as a constant (thus creating two subintervals).
+ * \param itv Input interval.
+ * \param var Variable index.
+ * \param itv0 First output interval.
+ * \param itv1 Second output interval.
+ * \return 1 on success, 0 on failure.
+ */
+int itv_setvar(itv_t * itv,	int var, itv_t ** itv0,	itv_t ** itv1) {
 
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Wed Jul  8 1998                                      */
@@ -304,12 +289,6 @@ int				/*+ Purpose: Given an interval, set the indicated variable
 }
 
 
-
-/*
-     -------------------------------------------
-     FUNCTION: lpartition
-     -------------------------------------------
-*/
 
 int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 		    char *itv_pref, int *n_itv)
@@ -578,14 +557,13 @@ int				/*+ Purpose: Read several interval files and join
 	return (1);
 }
 
-typedef struct _partition_data {
-	mtm_t *part_m;
-	itv_t *part_i;
-	window_t *win;
-	int i;
-	pthread_cond_t signal;
-} partition_data;
-
+/*!
+ * Runs ISI on a partition of the original interval.
+ * \param part_m Partition of the set of classified examples.
+ * \param part_i Partition that contains the part_m examples.
+ * \param i Number of the partition.
+ * \param win Operator window.
+ */
 void solve_partition(mtm_t * part_m, itv_t * part_i, int i, window_t * win)
 {
 	char cmd[100];
@@ -605,6 +583,7 @@ void solve_partition(mtm_t * part_m, itv_t * part_i, int i, window_t * win)
 	printf("Finished %d\n", i);
 #endif
 }
+
 
 itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 {
