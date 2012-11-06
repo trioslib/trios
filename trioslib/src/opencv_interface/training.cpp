@@ -1,6 +1,5 @@
 #include <cstdio>
 
-#include "opencv2/opencv.hpp"
 #include "opencv2/ml/ml.hpp"
 #include "trios_mtm.h"
 #include "trios_io.h"

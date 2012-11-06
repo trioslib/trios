@@ -2,7 +2,6 @@
 
 #include "opencv_interface.h"
 
-#include "opencv2/opencv.hpp"
 #include "opencv2/ml/ml.hpp"
 
 

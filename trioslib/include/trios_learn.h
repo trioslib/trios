@@ -114,6 +114,15 @@ int lpartition_disk(char *fname_i,int itv_type,int threshold, char *mtm_pref, ch
  */
 int lpartition_memory(window_t *win, mtm_t *mtm, int itv_type, int threshold, mtm_t ***mtm_out, itv_t ***itv_out, int *n_itv);
 
+/*!
+ * Partitions the complete interval into several partitions of size threshold, executes ISI on each partition and concatenate the results. A lot faster than ISI on the complete interval.
+ * \param win Operator's window.
+ * \param mtm Classified examples set.
+ * \param threshold Number of elements per interval.
+ * \return The trained operator.
+ */
+itv_t *lisi_partitioned(window_t *win, mtm_t *mtm, int threshold);
+
 #ifdef __cplusplus
 }
 #endif
