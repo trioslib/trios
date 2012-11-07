@@ -612,7 +612,7 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 	mtm_t **part_m;
 	itv_t **part_i;
 	int i, n, pid = 0;
-	char cmd[100];
+    char cmd[100], cmd2[100];
 #ifdef __linux__
 	pid = getpid();
 #endif
@@ -644,6 +644,7 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 	free(part_m);
 	free(part_i);
     sprintf(cmd, "part.temp%d-", pid);
+    sprintf(cmd2, "final-%d.temp", pid);
 	if (litvconcat(cmd, n, "final.temp") == 0) {
 		return (itv_t *) trios_error(MSG, "Error on itv concat");
 	}
