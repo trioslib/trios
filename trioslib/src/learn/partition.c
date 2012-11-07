@@ -8,6 +8,7 @@
 #include <unistd.h>
 #endif
 
+
 /*!
  * Given a set of examples (mtm) determines which is the variable (direction) that most equatively partitions the examples.
  * \param mtm Set of classified examples.
@@ -52,23 +53,19 @@ int which_var(mtm_t * mtm, int LIMIT) {
 	return (var);
 }
 
-
-int				/*+ Purpose: to partition the set of examples recursively
-				   until each of the partitions has no more
-				   then "threshold" examples                    + */ mtm_part(
-												     mtm_t * mtm,	/*+ In: classified examples                         + */
-												     itv_t * itv,	/*+ In: interval                                    + */
-												     int threshold,	/*+ In: Maximun number of examples in each partition+ */
-												     mtm_t ** MTM,	/*+ In/Out: vector of examples subsets              + */
-												     itv_t ** ITV,	/*+ In/Out: vector of intervals                     + */
-												     int *noper	/*+ In/Out: next partition to be built              + */
-    )
-/*+ Return: 1 on success, 0 on failure                                     +*/
-{
-
+/*!
+ * Partitions the set of examples recursively until each of the partitions has no more than "threshold" examples.
+ * \param mtm Classified examples' set.
+ * \param itv Interval to partition.
+ * \param threshold Maximum number of examples.
+ * \param MTM List of mtm in each partition.
+ * \param ITV List of itv in each partition
+ * \param noper Next partition to be built (at the end this contains the total number of partitions).
+ * \return 1 on success, 0 on failure.
+ */
+int	mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,	itv_t ** ITV, int *noper) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Tue Apr 20 1999                                                   */
-
 	itv_t *itv0, *itv1;
 	mtm_t *mtm0, *mtm1;
 	int var;
@@ -102,7 +99,7 @@ int				/*+ Purpose: to partition the set of examples recursively
 			return trios_error(MSG,
 					   "mtm_part: call to sep_mtm() failed.");
 		}
-		mtm_free(mtm);
+        mtm_free(mtm);
 
 		if (!mtm_part(mtm0, itv0, threshold, MTM, ITV, noper)) {
 			return trios_error(MSG,
@@ -119,22 +116,17 @@ int				/*+ Purpose: to partition the set of examples recursively
 
 }
 
-/*
-     -------------------------------------------
-     FUNCTION: sep_mtm
-     -------------------------------------------
-*/
 
-int				/*+ Purpose: separate the set of classified examples in
-				   disjoint subsets, according to the decomposition variable  + */ sep_mtm(
-														  mtm_t * mtm,	/*+ In: classified examples                         + */
-														  itv_t * itv,	/*+ In: interval                                    + */
-														  int var,	/*+ In: Which direction the partition will be made ?+ */
-														  mtm_t ** mtm0,	/*+ Out: examples with value(var)=0                 + */
-														  mtm_t ** mtm1	/*+ Out: examples with value(var)=1                 + */
-    )
-/*+ Return: 1 on succes, 0 on failure                                      +*/
-{
+/*!
+ * Separates the set of classified examples in disjoint subsets, according to the decomposition variable.
+ * \param mtm Set of classified examples.
+ * \param itv Interval list.
+ * \param var Direction to partition.
+ * \param mtm0 Examples with var=0.
+ * \param mtm1 Examples with var=1.
+ * \return 1 on success, 0 on failure.
+ */
+int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Wed Jul  8 1998                                                   */
 
@@ -162,14 +154,14 @@ int				/*+ Purpose: separate the set of classified examples in
 
 	/* create subsets for the examples */
 	*mtm0 = *mtm1 = NULL;
-	if (nmtm - count != 0) {
+    if (nmtm - count > 0) {
 		*mtm0 = mtm_create(wsize, BB, nmtm - count);
 		if (*mtm0 == NULL) {
 			return (0);
 		}
 		q0 = (mtm_BX *) (*mtm0)->mtm_data;
 	}
-	if (count != 0) {
+    if (count > 0) {
 		*mtm1 = mtm_create(wsize, BB, count);
 		if (*mtm1 == NULL) {
 			return trios_error(MSG, "mtm_sep: mtm_create() failed");
@@ -200,6 +192,8 @@ int				/*+ Purpose: separate the set of classified examples in
 			}
 			q1[j1].wpat = q[j].wpat;
 			q1[j1].label = q[j].label;
+            q1[j1].fq = q[j].fq;
+            q1[j1].fq1 = q[j].fq1;
 			q[j].wpat = NULL;
 			j1++;
 		} else {
@@ -209,6 +203,8 @@ int				/*+ Purpose: separate the set of classified examples in
 			}
 			q0[j0].wpat = q[j].wpat;
 			q0[j0].label = q[j].label;
+            q0[j0].fq = q[j].fq;
+            q0[j0].fq1 = q[j].fq1;
 			q[j].wpat = NULL;
 			j0++;
 		}
@@ -221,21 +217,15 @@ int				/*+ Purpose: separate the set of classified examples in
 }
 
 
-/*
-     -------------------------------------------
-     FUNCTION: itv_setvar
-     -------------------------------------------
-*/
-
-int				/*+ Purpose: Given an interval, set the indicated variable
-				   as a constant (thus creating two subintervals)         + */ itv_setvar(
-														 itv_t * itv,	/*+ In: input interval                              + */
-														 int var,	/*+ In: variable index                              + */
-														 itv_t ** itv0,	/*+ Out: first output interval                      + */
-														 itv_t ** itv1	/*+ Out: second output interval                     + */
-    )
-/*+ Return: 1 on success, 0 on failure                                     +*/
-{
+/*!
+ * Given an interval, set the indicated variable as a constant (thus creating two subintervals).
+ * \param itv Input interval.
+ * \param var Variable index.
+ * \param itv0 First output interval.
+ * \param itv1 Second output interval.
+ * \return 1 on success, 0 on failure.
+ */
+int itv_setvar(itv_t * itv,	int var, itv_t ** itv0,	itv_t ** itv1) {
 
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Wed Jul  8 1998                                      */
@@ -304,12 +294,6 @@ int				/*+ Purpose: Given an interval, set the indicated variable
 }
 
 
-
-/*
-     -------------------------------------------
-     FUNCTION: lpartition
-     -------------------------------------------
-*/
 
 int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 		    char *itv_pref, int *n_itv)
@@ -381,7 +365,7 @@ int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 	trios_debug("Separating examples: done.");
 
 	for (i = 0; i < noper; i++) {
-		p = (itv_BX *) itv_list[i]->head;
+        itv_BX *p = (itv_BX *) itv_list[i]->head;
 		trios_debug("itv_list[%d]=[%x,%x]\n", i, p->A[0], p->B[0]);
 	}
 #endif
@@ -435,40 +419,42 @@ int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 int lpartition_memory(window_t * win, mtm_t * mtm, int itv_type, int threshold,
 		      mtm_t *** _mtm_out, itv_t *** _itv_out, int *n_itv)
 {
-	int r;
-	int i;
-	char temp[100];
-	window_t *tt;
-	mtm_t **mtm_out;
-	itv_t **itv_out;
-	mtm_write("partition_temp___.mtm", mtm, win, NULL);
-	r = lpartition_disk("partition_temp___.mtm", itv_type, threshold,
-			    "partition_mtm_temp__", "partition_itv_temp__",
-			    n_itv);
-	if (r == 0)
-		return 0;
+    int r;
+    int i, noper;
+    char temp[100];
+    window_t *tt;
+    mtm_t **mtm_out;
+    itv_t **itv_out, *start_itv;
 
-	trios_malloc(mtm_out, sizeof(mtm_t *) * (*n_itv), int,
-		     "Failed to alloc mtm_t list");
-	trios_malloc(itv_out, sizeof(itv_t *) * (*n_itv), int,
-		     "Failed to alloc itv_t list");
+    trios_malloc(mtm_out, sizeof(mtm_t *) * (256), int,
+             "Failed to alloc mtm_t list");
+    trios_malloc(itv_out, sizeof(itv_t *) * (256), int,
+             "Failed to alloc itv_t list");
 
-	for (i = 0; i < *n_itv; i++) {
-		sprintf(temp, "partition_mtm_temp__%d.mtm", i + 1);
-		mtm_out[i] = mtm_read(temp, &tt, NULL);
-		win_free(tt);
-		sprintf(temp, "partition_itv_temp__%d.itv", i + 1);
-		itv_out[i] = itv_read(temp, &tt);
-		win_free(tt);
-		sprintf(temp,
-			"rm partition_mtm_temp__%d.mtm partition_itv_temp__%d.itv",
-			i + 1, i + 1);
-		r = system(temp);
-	}
+    start_itv = itv_gen_itv(win, itv_type, BB, 0, 1, 0);
+    if (start_itv == NULL) {
+        return trios_error(MSG, "lpartition: itv_gen_itv() failed.");
+    }
 
-	*_mtm_out = mtm_out;
-	*_itv_out = itv_out;
-	return 1;
+    noper = 0;
+    for (i = 0; i < 256; i++) {
+        mtm_out[i] = NULL;
+        itv_out[i] = NULL;
+    }
+
+    /* Divide examples and compute the respective partitions (intervals) */
+    /* The memory space used both by mtm and by start_itv aren't released   */
+    if (!mtm_part(mtm, start_itv, threshold, mtm_out, itv_out, &noper)) {
+        win_free(win);
+        mtm_free(mtm);
+        return trios_error(MSG, "lpartition: sep_mtm() failed.");
+    }
+
+
+    *_mtm_out = mtm_out;
+    *_itv_out = itv_out;
+    *n_itv = noper;
+    return 1;
 }
 
 int				/*+ Purpose: Read several interval files and join
@@ -578,14 +564,13 @@ int				/*+ Purpose: Read several interval files and join
 	return (1);
 }
 
-typedef struct _partition_data {
-	mtm_t *part_m;
-	itv_t *part_i;
-	window_t *win;
-	int i;
-	pthread_cond_t signal;
-} partition_data;
-
+/*!
+ * Runs ISI on a partition of the original interval.
+ * \param part_m Partition of the set of classified examples.
+ * \param part_i Partition that contains the part_m examples.
+ * \param i Number of the partition.
+ * \param win Operator window.
+ */
 void solve_partition(mtm_t * part_m, itv_t * part_i, int i, window_t * win)
 {
 	char cmd[100];
@@ -605,6 +590,7 @@ void solve_partition(mtm_t * part_m, itv_t * part_i, int i, window_t * win)
 	printf("Finished %d\n", i);
 #endif
 }
+
 
 itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 {

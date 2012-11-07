@@ -2,7 +2,6 @@
 #include "trios_io.h"
 #include "io_local.h"
 
-/* #define _DEBUG_ */
 /*!
     Reads a classified examples set from a file.
 
@@ -478,21 +477,19 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 	case BG:
 
 		table_BX = (mtm_BX *) mtm->mtm_data;
-
 		if (!comp_prob) {
 			for (i = 0; i < nmtm; i++) {
-				for (j = 0; j < wzip; j++)
+                for (j = 0; j < wzip; j++) {
 					fprintf(fd, "%x ", table_BX[i].wpat[j]);
-				fprintf(fd, "%d %d\n",
-					table_BX[i].label, table_BX[i].fq);
+                }
+                fprintf(fd, "%d %d\n", table_BX[i].label, table_BX[i].fq);
 			}
 		} else {
 			for (i = 0; i < nmtm; i++) {
-				for (j = 0; j < wzip; j++)
+                for (j = 0; j < wzip; j++) {
 					fprintf(fd, "%x ", table_BX[i].wpat[j]);
-				fprintf(fd, "%d %d %d\n",
-					table_BX[i].label,
-					table_BX[i].fq, table_BX[i].fq1);
+                }
+                fprintf(fd, "%d %d %d\n", table_BX[i].label, table_BX[i].fq, table_BX[i].fq1);
 			}
 		}
 		break;

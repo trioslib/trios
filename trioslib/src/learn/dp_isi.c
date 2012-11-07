@@ -31,7 +31,7 @@ itv_t *lisi_memory(mtm_t *__mtm, itv_t *itv, int isi_type, int isi3_step,
         ((mtm_BX *)mtm->mtm_data)[i].fq1 = ((mtm_BX *)__mtm->mtm_data)[i].fq1;
         ((mtm_BX *)mtm->mtm_data)[i].label = ((mtm_BX *)__mtm->mtm_data)[i].label;
         mtm->comp_prob = __mtm->comp_prob;
-        trios_malloc(((mtm_BX *)mtm->mtm_data)[i].wpat, itv->wzip * sizeof(unsigned char), itv_t *, "Error copying mtm");
+        trios_malloc(((mtm_BX *)mtm->mtm_data)[i].wpat, itv->wzip * sizeof(unsigned int), itv_t *, "Error copying mtm");
         for (j = 0; j < itv->wzip; j++) {
             ((mtm_BX *)mtm->mtm_data)[i].wpat[j] = ((mtm_BX *)__mtm->mtm_data)[i].wpat[j];
         }
