@@ -416,15 +416,29 @@ int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 	return (1);
 }
 
-int lpartition_memory(window_t * win, mtm_t * mtm, int itv_type, int threshold,
+int lpartition_memory(window_t * win, mtm_t * __mtm, int itv_type, int threshold,
 		      mtm_t *** _mtm_out, itv_t *** _itv_out, int *n_itv)
 {
     int r;
-    int i, noper;
+    int i, j, noper, wzip;
     char temp[100];
     window_t *tt;
-    mtm_t **mtm_out;
+    mtm_t **mtm_out, *mtm;
     itv_t **itv_out, *start_itv;
+
+    mtm = mtm_create(__mtm->wsize, __mtm->type, __mtm->nmtm);
+    mtm->nsum = __mtm->nsum;
+    for (i = 0; i < mtm->nmtm; i++) {
+        ((mtm_BX *)mtm->mtm_data)[i].fq = ((mtm_BX *)__mtm->mtm_data)[i].fq;
+        ((mtm_BX *)mtm->mtm_data)[i].fq1 = ((mtm_BX *)__mtm->mtm_data)[i].fq1;
+        ((mtm_BX *)mtm->mtm_data)[i].label = ((mtm_BX *)__mtm->mtm_data)[i].label;
+        mtm->comp_prob = __mtm->comp_prob;
+        wzip = size_of_zpat(mtm_get_wsize(__mtm));
+        trios_malloc(((mtm_BX *)mtm->mtm_data)[i].wpat, wzip * sizeof(unsigned int), int, "Error copying mtm");
+        for (j = 0; j < wzip; j++) {
+            ((mtm_BX *)mtm->mtm_data)[i].wpat[j] = ((mtm_BX *)__mtm->mtm_data)[i].wpat[j];
+        }
+    }
 
     trios_malloc(mtm_out, sizeof(mtm_t *) * (256), int,
              "Failed to alloc mtm_t list");
@@ -631,12 +645,12 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 	free(part_i);
     sprintf(cmd, "part.temp%d-", pid);
     sprintf(cmd2, "final-%d.temp", pid);
-	if (litvconcat(cmd, n, "final.temp") == 0) {
+    if (litvconcat(cmd, n, cmd2) == 0) {
 		return (itv_t *) trios_error(MSG, "Error on itv concat");
 	}
 
-	acc = itv_read("final.temp", &win);
-	win_free(win);
+    acc = itv_read(cmd2, &win);
+    win_free(win);
 
 	return acc;
 }
