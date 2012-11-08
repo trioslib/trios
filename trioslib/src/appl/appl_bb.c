@@ -67,7 +67,7 @@ img_t *lpapplic_memory(img_t * img_appl, itv_t * itv, window_t *win, img_t * img
     unsigned char *ucpixels1;	/*  Mask image                          */
     unsigned char *ucpixels2;	/*  resulting output image (byte)       */
     unsigned short *uspixels2;	/*  resulting output image (short)      */
-    int free_appl, free_mask;
+    int free_appl = 0, free_mask = 0;
 
     img_appl = validate_image_size(img_appl, &free_appl);
     width = img_get_width(img_appl);
