@@ -12,9 +12,10 @@
   \param win Window to use the mask with.
   \return Mask read from file or a new image with all pixels set to 1 if no file was given.
   */
-img_t *set_mask(char *f_mask, int width, int height, window_t * win)
+img_t *set_mask(char *f_mask, int width, int height, window_t * win, int *alloc_mask)
 {
     img_t *mask;
+    *alloc_mask = 0;
     if (f_mask == NULL) {
         mask = img_create(width, height, 1, sz8BIT);
         int i, j;
@@ -23,6 +24,7 @@ img_t *set_mask(char *f_mask, int width, int height, window_t * win)
                 img_set_pixel(mask, i, j, 0, 1);
             }
         }
+        *alloc_mask = 1;
     } else {
         mask = img_readPGM(f_mask);
     }

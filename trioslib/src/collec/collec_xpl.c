@@ -192,7 +192,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
         trios_debug("Writing XPL: done") ;
     #endif
     /* free allocated memory */
-    imgset_free(imgset) ;
+    imgset_free(imgset);
     win_free(win) ;
     xpl_free(xpl) ;
     return 1;

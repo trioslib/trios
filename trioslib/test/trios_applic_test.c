@@ -137,6 +137,7 @@ UTEST(test_apply_in_memory) {
 
 UTEST(test_apply_partitioned_in_memory) {
     int i, j;
+    itv_t *itv;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
     imgset_set_dname(set, 2, "./test_img/");
@@ -152,8 +153,6 @@ UTEST(test_apply_partitioned_in_memory) {
         }
     }
     win_write("WIN.w", win);
-
-    itv_t *itv = itv_gen_itv(win, 1, BB, 0, 1, 0);
     win_free(win);
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
@@ -168,10 +167,14 @@ UTEST(test_apply_partitioned_in_memory) {
     mu_assert("lpapplic_memory failed", NULL != output);
 
     img_writePGM("partition.pgm", output);
+
     img_free(output);
+    img_free(input);
 
     itv_free(itv);
     win_free(win);
+    xpl_free(xpl);
+    mtm_free(mtm);
 
 } TEST_END
 

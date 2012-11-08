@@ -212,7 +212,6 @@ UTEST(test_ISI_partition_memory_test) {
     mtm_t **mlist;
     itv_t **ilist;
     char cmd[100];
-    FILE *f;
 
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
@@ -229,11 +228,7 @@ UTEST(test_ISI_partition_memory_test) {
         }
     }
     win_write("WIN.w", win);
-
-    itv_t *itv = itv_gen_itv(win, 1, BB, 0, 1, 0);
-
-    itv_write("ITV_TEST.itv", itv, win);
-    itv_free(itv);
+    win_free(win);
 
 
     mu_assert("lcollec failed.", 1 == lcollec("IMGSET.s", "WIN.w", NULL, 1, 1, 0, "XPL_RESULT.xpl", NULL));
@@ -259,7 +254,15 @@ UTEST(test_ISI_partition_memory_test) {
         mu_assert("Diff between itv", check_diff_result() == 1);
 
         system("rm mtm_test.mtm itv_test.itv");
+        mtm_free(mlist[i]);
+        itv_free(ilist[i]);
     }
+
+    win_free(win);
+    xpl_free(xpl);
+    mtm_free(mtm);
+    free(mlist);
+    free(ilist);
 } TEST_END
 
 
