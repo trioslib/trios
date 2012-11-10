@@ -7,7 +7,7 @@ SET(CMAKE_BUILD_TYPE debug)
 find_package(OpenCV)
 find_package(OpenMP)
 
-SUBDIRS(include src test)
+SUBDIRS(include src test tools)
 
 
 #-----------------------------------------------------------------------------

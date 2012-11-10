@@ -22,10 +22,11 @@ image_operator_t *image_operator_build_bb(imgset_t *set, window_t *win) {
         return (image_operator_t *) trios_error(MSG, "Error in decision");
     }
 
-    temp = itv_gen_itv(iop->win, 1, BB, 0, 1, 0);
-    mtm_write("before", iop->decision, iop->win, iop->apt);
-    iop->bb = lisi_memory(iop->decision, temp, 3, 5, 0, 0);
-    mtm_write("after", iop->decision, iop->win, iop->apt);
+    iop->bb = lisi_partitioned(iop->win, iop->decision, 13000);
+    if (iop->bb == NULL) {
+        return (image_operator_t *) trios_error(MSG, "Error in lisi_partitioned");
+    }
+
     return iop;
 }
 
