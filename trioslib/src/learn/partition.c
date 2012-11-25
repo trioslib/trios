@@ -617,6 +617,11 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 	pid = getpid();
 #endif
 
+    if (mtm->nmtm <= threshold) {
+        itv_t * starting_interval = itv_gen_itv(win, 1, BB, 0, 1, 0);
+        return lisi_memory(mtm, starting_interval, 3, 5, 0, 0);
+    }
+
 	if (!lpartition_memory(win, mtm, 1, threshold, &part_m, &part_i, &n)) {
 		return (itv_t *) trios_error(MSG, "Error in partition!");
 	}

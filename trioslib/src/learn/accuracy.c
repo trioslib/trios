@@ -16,6 +16,7 @@ int computeMAEBB(itv_t *bb_operator, window_t *win, imgset_t *test, double *acc)
     n_pixels = 0;
     for (k = 0; k < n_images; k++) {
         get_setofimages(test, BB, win, k+1, &input, &ideal, &mask);
+        img_writePGM("mask_s.pgm", mask);
         result = lpapplic_memory(input, bb_operator, win, mask, 0, 0, 255);
         /* compara result com ideal */
         for (i = 0; i < img_get_height(input); i++) {
@@ -50,8 +51,9 @@ int computeMAEBBmulti(multi_level_operator_t *bb_operator, imgset_t *test, doubl
     n_images = imgset_get_ngroups(test);
     n_pixels = 0;
     for (k = 0; k < n_images; k++) {
-        get_setofimages(test, BB, NULL, k+1, &input, &ideal, &mask);
-        result = multi_level_apply(bb_operator, input);
+        get_setofimages(test, BB, bb_operator->levels[0].windows[0][0], k+1, &input, &ideal, &mask);
+        img_writePGM("mask_m.pgm", mask);
+        result = multi_level_apply(bb_operator, input, mask);
         /* compara result com ideal */
         for (i = 0; i < img_get_height(input); i++) {
             for (j = 0; j < img_get_width(input); j++) {

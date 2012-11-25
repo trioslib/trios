@@ -87,12 +87,12 @@ int image_operator_write(char *path, image_operator_t *iop) {
     if (!write_window(iop, operator_file, path, file_name_idx, temp_string)) {
         return 0;
     }
-    if (!write_collec(iop, operator_file, path, file_name_idx, temp_string)) {
+    /*if (!write_collec(iop, operator_file, path, file_name_idx, temp_string)) {
         return 0;
     }
     if (!write_decision(iop, operator_file, path, file_name_idx, temp_string)) {
         return 0;
-    }
+    }*/
     if (!write_operator(iop, operator_file, path, file_name_idx, temp_string)) {
         return 0;
     }
@@ -133,22 +133,25 @@ image_operator_t *image_operator_read(char *path) {
         iop->collec = xpl_read(temp_string, &win, NULL);
         if (iop->collec == NULL) {
             trios_error(MSG, "Failed to read xpl at %s. Continuing...", temp_string);
+        } else {
+            win_free(win);
         }
-        win_free(win);
 
         sprintf(temp_string, "%s-files/decision", path);
         iop->decision = mtm_read(temp_string, &win, NULL);
         if (iop->decision == NULL) {
             trios_error(MSG, "Failed to read mtm at %s. Continuing...", temp_string);
+        } else {
+            win_free(win);
         }
-        win_free(win);
 
         sprintf(temp_string, "%s-files/operator", path);
         iop->bb = itv_read(temp_string, &win);
         if (iop->bb == NULL) {
             return (image_operator_t *) trios_error(MSG, "Failed to read operator at %s.", temp_string);
+        } else {
+            win_free(win);
         }
-        win_free(win);
 
         iop->apt = NULL;
         iop->gg = NULL;

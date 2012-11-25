@@ -1,7 +1,8 @@
 #include <trios.h>
 
 int main(int argc, char *argv[]) {
-    image_operator_t *op;
+    image_operator_t *op = NULL;
+    multi_level_operator_t *mop = NULL;
     img_t *input, *output;
 
     if (argc < 4) {
@@ -12,8 +13,12 @@ int main(int argc, char *argv[]) {
 
     op = image_operator_read(argv[1]);
     if (op == NULL) {
-        printf("Error reading operator.\n");
-        return -1;
+        printf("Error reading operator Trying to read as multi-level operator.\n");
+        mop = multi_level_operator_read(argv[1]);
+        if (mop == NULL) {
+            printf("Invalid operator!\n");
+            return -1;
+        }
     }
 
     input = img_readPGM(argv[2]);
@@ -22,7 +27,11 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    output = image_operator_apply(op, input, NULL);
+    if (op != NULL) {
+        output = image_operator_apply(op, input, NULL);
+    } else {
+        output = multi_level_apply(mop, input, NULL);
+    }
 
     if (output == NULL) {
         printf("Error applying operator.\n");

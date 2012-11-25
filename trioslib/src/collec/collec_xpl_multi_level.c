@@ -38,7 +38,6 @@ xpl_t *lcollec_multi_level(multi_level_operator_t *mop, int level, int op, img_t
 }
 
 xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask, img_t *ideal) {
-    window_t *joint_win = NULL;
     int i, j, k, l, npixels, win_size = 0;
 
     for (i = 0; i < mop->levels[level].ninputs; i++) {
@@ -56,6 +55,10 @@ xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int
             joint_wpat[l] = 0;
         }
         int curr_win_size = 0; /* number of points of the previous windows. */
+        /* mask condition */
+        if (mask != NULL && img_get_pixel(mask, k / mask->width, k % mask->width, 0) == 0) {
+            continue;
+        }
         for (i = 0; i < mop->levels[level].ninputs; i++) {
             offset_set(offset, multi_level_operator_get_window(mop, level, op, i), img_get_width(inputs[i]), 1);
             for (j = 0; j < win_get_wsize(mop->levels[level].windows[op][i]); j++) {
