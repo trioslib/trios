@@ -3,7 +3,8 @@
 
 #include <trios_img.h>
 #include <trios_itv.h>
-#include <trios_misc.h>
+#include <trios_learn.h>
+#include "trios_mtm.h"
 #include "trios_apert.h"
 
 #ifdef __cplusplus
@@ -38,8 +39,8 @@ int  lpapplic_disk(char *f_appl, char *f_basis, char *f_mask,  int  cv, int  has
 img_t *lpapplic_memory(img_t *input, itv_t *op, window_t *win, img_t *mask, int cv, int hash, int on_value);
 
 
-img_t *lapplyGG_memory(img_t *input, dTree *tree, window_t *win);
-img_t *lapplyWK_memory(img_t *input, dTree *tree, window_t *win, apert_t *apt);
+img_t *lapplyGG_memory(img_t *input, dTree *tree, window_t *win, img_t *mask);
+img_t *lapplyWK_memory(img_t *input, dTree *tree, window_t *win, apert_t *apt, img_t *mask);
 
 #ifdef __cplusplus
 }

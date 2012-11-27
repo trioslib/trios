@@ -129,10 +129,11 @@ window_t *multi_level_operator_get_window(multi_level_operator_t *mop, int level
 /*!
  * Applies a multi-level operator to an image.
  * \param op Trained multi-level operator.
- * \param img Image to apply the operator
+ * \param img Image to apply the operator.
+ * \param mask Application mask.
  * \return Result image.
  */
-img_t *multi_level_apply(multi_level_operator_t *op, img_t *img);
+img_t *multi_level_apply(multi_level_operator_t *op, img_t *img, img_t *mask);
 
 /*!
  * Apply an operator of a level of a multi-level operator.
@@ -140,9 +141,11 @@ img_t *multi_level_apply(multi_level_operator_t *op, img_t *img);
  * \param level Level number.
  * \param op Operator number.
  * \param inputs Array of input images.
+ * \param mask Application mask.
  * \return The output of this operator.
+ *
  */
-img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, img_t **inputs);
+img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask);
 
 #ifdef __cplusplus
 }

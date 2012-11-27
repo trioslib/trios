@@ -3,7 +3,9 @@
 #include <trios_io.h>
 #include <stdlib.h>
 
-img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, img_t **inputs) {
+#include "../collec/collec_private.h"
+
+img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask) {
     img_t *output;
     int i, j, k, l, m;
     int w, h, win_size = 0, curr_off;
@@ -34,6 +36,9 @@ img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, i
     }
 
     for (k = 0; k < npixels; k++) {
+        if (mask != NULL && img_get_pixel(mask, k / mask->width, k % mask->width, 0) == 0) {
+            continue;
+        }
         for (l = 0; l < size_of_zpat(win_size); l++) {
             w_pattern[l] = 0;
         }
@@ -61,14 +66,15 @@ img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, i
     return output;
 }
 
-img_t *multi_level_apply(multi_level_operator_t *mop, img_t *img) {
+img_t *multi_level_apply(multi_level_operator_t *mop, img_t *img, img_t *mask) {
     img_t **input, **next, *result;
     int i, j, k;
     input = &img;
+
     trios_malloc(next, sizeof(img_t *) * mop->levels[0].noperators, img_t *, "Bad alloc");
     for (i = 0; i < mop->nlevels; i++) {
         for (j = 0; j < mop->levels[i].noperators; j++) {
-            next[j] = multi_level_apply_level(mop, i, j, input);
+            next[j] = multi_level_apply_level(mop, i, j, input, mask);
         }
         if (i > 0) {
             for (j = 0; j < mop->levels[i].ninputs; j++) {

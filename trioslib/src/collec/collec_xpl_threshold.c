@@ -5,6 +5,10 @@
 #include "trios_io.h"
 #include "trios_collec.h"
 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 /*
  * ------------------------------------------- FUNCTION: colthresh_BB
  * ------------------------------------------- 

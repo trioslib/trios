@@ -94,7 +94,7 @@ xpl_t *xpl_read(char *fname, window_t ** win , apert_t **apt)
 
 			/* read window information ---------------------------------------- */
 		case 'W':
-			if (NULL == (*win = win_read_data(fd))) {
+            if (win != NULL && NULL == (*win = win_read_data(fd))) {
 				fclose(fd);
 				return (xpl_t *) trios_error(MSG,
 							     "xpl_read: win_read_data() failed.");

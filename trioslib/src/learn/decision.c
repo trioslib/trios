@@ -48,6 +48,7 @@ int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim,
 		mtm_free(mtm);
 		return trios_error(MSG, "mtm_write failed.");
 	}
+
 #ifdef _DEBUG_
 	trios_debug("Antes dos frees finais");
 #endif
@@ -55,7 +56,7 @@ int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim,
 #ifdef _DEBUG_
 	trios_debug("DEpois dos free win");
 #endif
-/* xpl_free(xpl) ; */
+    xpl_free(xpl) ;
 #ifdef _DEBUG_
 	trios_debug("DEpois dos free xpl");
 #endif

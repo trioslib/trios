@@ -27,14 +27,12 @@ char *get_dir_name(char *path, char *read_dir_name) {
     for (i = strlen(path) - 1; path[i] != separator && i >= 0; i--) ;
     if (i < 0) {
         /* only the filename was provided. */
-        /*trios_malloc(result, sizeof(char) * 2, "Bad alloc");*
-        result = malloc(sizeof(char) * (3 + dir_name_len));
+        trios_malloc(result, sizeof(char) * (3 + dir_name_len), char *, "Bad alloc");
         result[0] = '.';
         result[1] = '/';
         result[2] = '\0';
     } else {
-        /*trios_malloc(result, sizeof(char) * (i + 2), "Bad alloc");*/
-        result = malloc(sizeof(char) * (i + 2 + dir_name_len));
+        trios_malloc(result, sizeof(char) * (i + 2 + dir_name_len), char *, "Bad alloc");
         strncpy(result, path, i+1);
         result[i+1] = '\0';
     }
@@ -142,13 +140,13 @@ trios_debug("ngroups=%d  grpsize=%d", ngroups, grpsize);
       trios_fatal("Unexpected data or end of file") ;
     } 
     if(strcmp(name, "\"\"") == 0) name[0]='\0';
-    dir_name = get_dir_name(fname, name);
-    /*printf("AA%s\n", dir_name);*/
 
+    dir_name = get_dir_name(fname, name);
     if(!imgset_set_dname(imgset, i, dir_name)) {
-      return
-      (imgset_t *)trios_error(MSG, "imgset_read: imgset_set_dname() failed.") ;
+      return (imgset_t *)trios_error(MSG, "imgset_read: imgset_set_dname() failed.") ;
     }     
+    free(dir_name);
+
   }
   
   for(k=1; k<=ngroups; k++) {

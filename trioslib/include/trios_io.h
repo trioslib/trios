@@ -11,6 +11,8 @@ extern "C" {
 #include "trios_mtm.h"
 #include "trios_itv.h"
 #include <trios_apert.h>
+#include "trios_learn.h"
+#include "trios_operator.h"
 
 /*!
   Read a PGM image.
@@ -159,7 +161,11 @@ int dt_write(char *fname, int type, window_t *win, apert_t *apt);
 
 dTree *read_tree2(char *filename);
 
-void write_tree2(char *filename, dTree *tree);
+int write_tree2(char *filename, dTree *tree);
+
+
+int image_operator_write(char *path, image_operator_t *iop);
+image_operator_t *image_operator_read(char *path);
 
 #ifdef __cplusplus
 }

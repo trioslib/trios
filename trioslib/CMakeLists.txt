@@ -5,8 +5,9 @@ INCLUDE_DIRECTORIES(${TRIOSLIB_INCLUDE_DIR} )
 SET(CMAKE_BUILD_TYPE debug)
 
 find_package(OpenCV)
+find_package(OpenMP)
 
-SUBDIRS(include src test)
+SUBDIRS(include src test tools)
 
 
 #-----------------------------------------------------------------------------
@@ -63,6 +64,6 @@ message("SRC ${TRIOS_BASIC_SRCS}")
 # Add compiler flags TRIOS needs to work on this platform.  This must be
 # done AFTER the call to CMAKE_EXPORT_BUILD_SETTINGS.
 
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${TRIOS_REQUIRED_C_FLAGS}")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${TRIOS_REQUIRED_C_FLAGS} ${OpenMP_C_FLAGS} -fopenmp")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TRIOS_REQUIRED_CXX_FLAGS}")
-SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${TRIOS_REQUIRED_EXE_LINKER_FLAGS}")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${TRIOS_REQUIRED_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS} -fopenmp")

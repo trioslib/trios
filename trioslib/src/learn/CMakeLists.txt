@@ -8,8 +8,10 @@ learn/decision_bb.c
 learn/decision_gg.c
 learn/multi_level.c
 
-learn/mae.c
+learn/accuracy.c
+learn/operator.c
 learn/train_gg.c
+learn/partition.c
 
 )
 ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})

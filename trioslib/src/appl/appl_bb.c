@@ -2,6 +2,8 @@
 
 #include <trios_img.h>
 
+#include "local.h"
+
 img_t *alloc_out_image(itv_t *itv, int width, int height, int type, int on_value, unsigned char **ucpixels2, unsigned short **uspixels2) {
     /* creates output image : SHORT if type==BG and maximum label > 255 */
     img_t *img_out;
@@ -39,15 +41,16 @@ img_t *alloc_out_image(itv_t *itv, int width, int height, int type, int on_value
     return img_out;
 }
 
-img_t *validate_image_size(img_t *img_appl) {
+img_t *validate_image_size(img_t *img_appl, int *free_original) {
     img_t *img_tmp;
+    *free_original = 0;
     if (img_get_pixel_size(img_appl) != sz16BIT) {
         img_tmp = img_convert_type(img_appl, sz16BIT);
         if (!img_tmp) {
             return trios_error(MSG,
                        "lpapplic: type conversion failed failed.");
         }
-        /*img_free(img_appl);*/
+        *free_original = 1;
         return img_tmp;
     }
     return img_appl;
@@ -64,13 +67,14 @@ img_t *lpapplic_memory(img_t * img_appl, itv_t * itv, window_t *win, img_t * img
     unsigned char *ucpixels1;	/*  Mask image                          */
     unsigned char *ucpixels2;	/*  resulting output image (byte)       */
     unsigned short *uspixels2;	/*  resulting output image (short)      */
+    int free_appl = 0, free_mask = 0;
 
-    img_appl = validate_image_size(img_appl);
+    img_appl = validate_image_size(img_appl, &free_appl);
     width = img_get_width(img_appl);
     height = img_get_height(img_appl);
 
     if (img_mask == NULL) {
-        img_mask = set_mask(NULL, width, height, win);
+        img_mask = set_mask(NULL, width, height, win, &free_mask);
     }
 
     uspixels = (unsigned short *) img_get_data(img_appl);
@@ -135,6 +139,12 @@ img_t *lpapplic_memory(img_t * img_appl, itv_t * itv, window_t *win, img_t * img
     default:
         trios_error(1, "Types GG or WK. See routine lapplicDT().");
     }
+    if (free_appl) {
+        img_free(img_appl);
+    }
+    if (free_mask) {
+        img_free(img_mask);
+    }
 
     return img_out;
 }
@@ -155,6 +165,7 @@ int lpapplic_disk(char *f_appl, char *f_basis, char *f_mask, int cv,
 	window_t *win;
 	/*apert_t  *apt ; */
 	itv_t *itv;
+    int free_appl, free_mask;
 	/* read input image file */
 	img_appl = img_readPGM(f_appl);
 	if (!img_appl) {
@@ -162,13 +173,17 @@ int lpapplic_disk(char *f_appl, char *f_basis, char *f_mask, int cv,
 	}
 	width = img_get_width(img_appl);
 	height = img_get_height(img_appl);
-    img_appl = validate_image_size(img_appl);
+    img_tmp = validate_image_size(img_appl, &free_appl);
+    if (free_appl) {
+        img_free(img_appl);
+    }
+    img_appl = img_tmp;
 	if ((itv = itv_read(f_basis, &win /*, &apt */ )) == NULL) {
 		img_free(img_appl);
 		return trios_error(MSG, "lpapplic: itv_read() failed.");
 	}
 	/* read or create and set mask image border to Zero */
-	if (!(img_mask = set_mask(f_mask, width, height, win))) {
+    if (!(img_mask = set_mask(f_mask, width, height, win, &free_mask))) {
 		img_free(img_appl);
 		return trios_error(MSG, "lpapplic: set_mask() failed.");
 	}

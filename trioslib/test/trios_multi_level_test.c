@@ -217,7 +217,7 @@ UTEST(APPLY1) {
 
     multi_level_operator_t *op = multi_level_build_single(arch, set);
     img_t *input = img_readPGM("test_img/input1.pgm");
-    img_t *result = multi_level_apply(op, input);
+    img_t *result = multi_level_apply(op, input, NULL);
     img_writePGM("result.pgm", result);
 
     imgset_free(set);
@@ -274,7 +274,7 @@ UTEST(APPLY2) {
 
     multi_level_operator_t *op = multi_level_build(arch, sets);
     img_t *input = img_readPGM("test_img/input1.pgm");
-    img_t *result = multi_level_apply(op, input);
+    img_t *result = multi_level_apply(op, input, NULL);
     img_writePGM("result.pgm", result);
 
     imgset_free(set1);
@@ -381,8 +381,8 @@ UTEST(OP_IO) {
     multi_level_operator_t *read = multi_level_operator_read("mop1");
 
     img_t *input = img_readPGM("test_img/input1.pgm");
-    img_t *result = multi_level_apply(mop, input);
-    img_t *result2 = multi_level_apply(read, input);
+    img_t *result = multi_level_apply(mop, input, NULL);
+    img_t *result2 = multi_level_apply(read, input, NULL);
 
     for (i = 0; i < img_get_height(result); i++) {
         for (j = 0; j < img_get_width(result); j++) {
@@ -447,7 +447,7 @@ UTEST(BUILD_MULTI) {
     multi_level_operator_t *op = multi_level_build(arch, sets);
 
     img_t *input = img_readPGM("test_img/input1.pgm");
-    img_t *result = multi_level_apply(op, input);
+    img_t *result = multi_level_apply(op, input, NULL);
     img_writePGM("multi_imgset.pgm", result);
 
     imgset_free(set1);
