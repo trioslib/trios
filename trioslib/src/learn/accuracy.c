@@ -66,11 +66,14 @@ int computeMAEBBmulti(multi_level_operator_t *bb_operator, imgset_t *test, doubl
 
             }
         }
+        /*n_pixels += (img_get_width(input) - win_get_width(bb_operator->levels[0].windows[0][0]) - 1) *
+                    (img_get_height(input) - win_get_height(bb_operator->levels[0].windows[0][0]) - 1);*/
         img_free(input);
         img_free(ideal);
         img_free(mask);
         img_free(result);
     }
+    printf("Test pixels %d\n", n_pixels);
     if (acc != NULL) {
         *acc = 1.0 * MAE / n_pixels;
     }
