@@ -151,7 +151,7 @@ multi_level_operator_t *multi_level_build_single(multi_architecture_t *m, imgset
     return mop;
 }
 
-static int apply_until_level_images(multi_level_operator_t *mop, int level, img_t *img, img_t ***__next) {
+static int apply_until_level_images(multi_level_operator_t *mop, int level, img_t *img, img_t *mask, img_t ***__next) {
     img_t **input, **next;
     char cmd[1024];
     int i, j, k;
@@ -159,7 +159,7 @@ static int apply_until_level_images(multi_level_operator_t *mop, int level, img_
     trios_malloc(next, sizeof(img_t *) * mop->levels[0].noperators, int, "Bad alloc");
     for (i = 0; i <= level; i++) {
         for (j = 0; j < mop->levels[i].noperators; j++) {
-            next[j] = multi_level_apply_level(mop, i, j, input, NULL);
+            next[j] = multi_level_apply_level(mop, i, j, input, mask);
             sprintf(cmd, "l%dop%d.pgm", i, j);
             img_writePGM(cmd, next[j]);
         }
@@ -179,6 +179,48 @@ static int apply_until_level_images(multi_level_operator_t *mop, int level, img_
     return 1;
 }
 
+multi_level_operator_t *multi_level_combine_itv(itv_t **operators, window_t **windows, int nops, imgset_t *level2) {
+    multi_architecture_t *arch;
+    multi_level_operator_t *mop;
+    window_t *two_level;
+    img_t ***input_images;
+    img_t ***lv2_images;
+    img_t **mask_images;
+    img_t **ideal_images;
+    int i;
+    int levels[] = {0, 1};
+    levels[0] = nops;
+    arch = multi_level_arch_create(2, levels);
+    two_level = win_create(1, 1, 1);
+    win_set_point(0, 0, 1, 1, two_level);
+    for (i = 0; i < nops; i++) {
+        multi_level_arch_set_window(arch, 0, i, 0, windows[i]);
+        multi_level_arch_set_window(arch, 1, 0, i, two_level);
+    }
+    mop = multi_level_operator_create(arch);
+    for (i = 0; i < nops-1; i++) {
+        mop->levels[0].trained_operator[i] = operators[i];
+    }
+
+    /* carrega imagens */
+
+    load_image_set(&input_images, &ideal_images, &mask_images, &level2, 0, mop, arch);
+
+    /*trios_malloc(new_input_images, sizeof(img_t **) * imgset_get_ngroups(level2), multi_level_operator_t *, "Bad alloc");
+    for (j = 0; j < imgset_get_ngroups(set[i+1]); j++) {
+        trios_malloc(new_input_images[j], sizeof(img_t *) * mop->levels[i].noperators, multi_level_operator_t *, "Bad alloc");
+    }
+    /* aplico o operador até o nível i */
+    /*for (j = 0; j < imgset_get_ngroups(set[i+1]); j++) {
+        apply_until_level_images(mop, i, input_images[j][0], &(new_input_images[j]));
+    }
+
+
+
+    /* treina operator nivel 1 e guarda */
+
+    return mop;
+}
 
 multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t **set) {
     int i, j, k;
@@ -206,7 +248,7 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t **se
             }
             /* aplico o operador até o nível i */
             for (j = 0; j < imgset_get_ngroups(set[i+1]); j++) {
-                apply_until_level_images(mop, i, input_images[j][0], &(new_input_images[j]));
+                apply_until_level_images(mop, i, input_images[j][0], mask_images[j], &(new_input_images[j]));
             }
             /* coloca o ponteiro input_images como o resultado da aplicação acima */
             input_images = new_input_images;
