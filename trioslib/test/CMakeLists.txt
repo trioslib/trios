@@ -48,3 +48,4 @@ add_test(NAME OperatorTest WORKING_DIRECTORY ${TRIOS_BINARY_DIR}/bin/ COMMAND ${
 
 file(COPY test_read_win.txt DESTINATION  ${CMAKE_BINARY_DIR}/bin)
 file(COPY test_img DESTINATION  ${CMAKE_BINARY_DIR}/bin)
+file(COPY jung9x7 DESTINATION  ${CMAKE_BINARY_DIR}/bin)

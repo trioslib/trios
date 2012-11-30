@@ -86,6 +86,7 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
            win_free(joint_window);
         }
         xpl_free(op_collec);
+        mtm_free(op_dec);
         mop->levels[level].trained_operator[j] = level_op;
     }
 }
@@ -156,7 +157,7 @@ static int apply_until_level_images(multi_level_operator_t *mop, int level, img_
     char cmd[1024];
     int i, j, k;
     input = &img;
-    trios_malloc(next, sizeof(img_t *) * mop->levels[0].noperators, int, "Bad alloc");
+    trios_malloc(next, sizeof(img_t *) * mop->levels[level].noperators, int, "Bad alloc");
     for (i = 0; i <= level; i++) {
         for (j = 0; j < mop->levels[i].noperators; j++) {
             next[j] = multi_level_apply_level(mop, i, j, input, mask);
@@ -187,7 +188,7 @@ multi_level_operator_t *multi_level_combine_itv(itv_t **operators, window_t **wi
     img_t ***lv2_images;
     img_t **mask_images;
     img_t **ideal_images;
-    int i;
+    int i, j;
     int levels[] = {0, 1};
     levels[0] = nops;
     arch = multi_level_arch_create(2, levels);
@@ -198,7 +199,7 @@ multi_level_operator_t *multi_level_combine_itv(itv_t **operators, window_t **wi
         multi_level_arch_set_window(arch, 1, 0, i, two_level);
     }
     mop = multi_level_operator_create(arch);
-    for (i = 0; i < nops-1; i++) {
+    for (i = 0; i < nops; i++) {
         mop->levels[0].trained_operator[i] = operators[i];
     }
 
@@ -206,19 +207,17 @@ multi_level_operator_t *multi_level_combine_itv(itv_t **operators, window_t **wi
 
     load_image_set(&input_images, &ideal_images, &mask_images, &level2, 0, mop, arch);
 
-    /*trios_malloc(new_input_images, sizeof(img_t **) * imgset_get_ngroups(level2), multi_level_operator_t *, "Bad alloc");
-    for (j = 0; j < imgset_get_ngroups(set[i+1]); j++) {
-        trios_malloc(new_input_images[j], sizeof(img_t *) * mop->levels[i].noperators, multi_level_operator_t *, "Bad alloc");
+    trios_malloc(lv2_images, sizeof(img_t **) * imgset_get_ngroups(level2), multi_level_operator_t *, "Bad alloc");
+    for (j = 0; j < imgset_get_ngroups(level2); j++) {
+        trios_malloc(lv2_images[j], sizeof(img_t *) * mop->levels[0].noperators, multi_level_operator_t *, "Bad alloc");
     }
     /* aplico o operador até o nível i */
-    /*for (j = 0; j < imgset_get_ngroups(set[i+1]); j++) {
-        apply_until_level_images(mop, i, input_images[j][0], &(new_input_images[j]));
+    /* TODO: consetar isto. So funciona para 2 niveis */
+    for (j = 0; j < imgset_get_ngroups(level2); j++) {
+        apply_until_level_images(mop, 0, input_images[j][0], mask_images[j], &(lv2_images[j]));
     }
 
-
-
-    /* treina operator nivel 1 e guarda */
-
+    build_level(mop, 1, &level2, 0, lv2_images, ideal_images, mask_images);
     return mop;
 }
 
