@@ -216,8 +216,17 @@ multi_level_operator_t *multi_level_combine_itv(itv_t **operators, window_t **wi
     for (j = 0; j < imgset_get_ngroups(level2); j++) {
         apply_until_level_images(mop, 0, input_images[j][0], mask_images[j], &(lv2_images[j]));
     }
-
     build_level(mop, 1, &level2, 0, lv2_images, ideal_images, mask_images);
+
+    free_images(input_images, ideal_images, mask_images, &level2, 0, mop, 0, 1);
+    for (j = 0; j < imgset_get_ngroups(level2); j++) {
+        for (i = 0; i < nops; i++) {
+            img_free(lv2_images[j][i]);
+        }
+        free(lv2_images[j]);
+    }
+    free(lv2_images);
+    multi_level_arch_free(arch);
     return mop;
 }
 

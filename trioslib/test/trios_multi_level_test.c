@@ -477,6 +477,19 @@ UTEST(TEST_COMBINE) {
 
     system("cat jung9x7/test.itv jung9x7/base.bas");
 
+    multi_level_operator_free(mop);
+    /*itv_free(itvs[0]);
+    itv_free(itvs[1]);
+    itv_free(itvs[2]);
+    itv_free(itvs[3]);
+    itv_free(itvs[4]);*/
+    win_free(wins[0]);
+    win_free(wins[1]);
+    win_free(wins[2]);
+    win_free(wins[3]);
+    win_free(wins[4]);
+    imgset_free(set);
+
 } TEST_END
 
 #include "runner.h"
