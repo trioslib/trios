@@ -453,7 +453,7 @@ int wpat_compare(unsigned int *wpat1, unsigned int *wpat2, int wzip) {
  * \param wsize W-pattern size.
  * \return 0 if they are equal, -1 if the first is less and 1 if the first is greater than the second.
  */
-int wpat_compareXG(char *wpat1, char *wpat2, int wsize) {
+int wpat_compareXG(int *wpat1, int *wpat2, int wsize) {
   int i ;
 
   for(i=wsize-1; i>=0; i--) {

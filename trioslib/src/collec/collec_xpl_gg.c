@@ -15,7 +15,7 @@
  */
 xpl_t *collec_GG(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels) {
 	int i, j, k;
-	char *wpat;		/* w-pattern */
+    int *wpat;		/* w-pattern */
 	int st;
 	xpl_t *xpl;		/* XPL structure */
 	freq_node *freqnode;	/* pointer to a frequency node */
@@ -28,7 +28,7 @@ xpl_t *collec_GG(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *o
 	}
 #endif
 
-	wpat = (char *) malloc(sizeof(char) * wsize);
+    wpat = (int *) malloc(sizeof(int) * wsize);
 	if (wpat == NULL) {
 		return (xpl_t *) trios_error(1, "Memory allocation failed.");
 	}

@@ -34,7 +34,7 @@ xpl_t *xpl_read(char *fname, window_t ** win , apert_t **apt)
 	unsigned int n_nodes, sum, freq, fq0, fq1;
 	int type, wsize, wzip, label;
 
-	char *wpat;
+    int *wpat;
 	unsigned int *bwpat, x;
 
 
@@ -319,7 +319,7 @@ xpl_t *xpl_read(char *fname, window_t ** win , apert_t **apt)
                                        return (xpl_t *)trios_error(MSG, "xpl_read: xpl_create() failed.") ;
 									   }
 
-									   if((wpat = (char *)malloc(sizeof(char)*wsize)) == NULL) {
+                                       if((wpat = (int *)malloc(sizeof(int)*wsize)) == NULL) {
 									   fclose(fd) ;
 									   return 
                                        (xpl_t *)trios_error(MSG, "Memory allocation error.") ;

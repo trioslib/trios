@@ -39,7 +39,7 @@ typedef struct xpl_bg {
     Structure that holds a pair (gray W-pattern, gray levels) in the extracted example set (represented by a tree).
  */
 typedef struct xpl_gg {
-  char   *wpat ;                   /*!< pointer to w-pattern           */
+  int   *wpat ;                   /*!< pointer to w-pattern           */
   struct freq_node *freqlist;      /*!< pointer to list of frequencies */
   int    bal ;                     /*!< code to control balanced tree  */
   struct xpl_gg *left ;            /*!< pointer to left child          */
@@ -572,7 +572,7 @@ xpl_GG *                /*+ Purpose: allocate a GG node                    +*/
 void                     /*+ Purpose: set the fields of a GG node          +*/
   xpl_GG_set_node(
     xpl_GG *p,               /*+ In/Out: pointer to the GG node            +*/
-    char   *wpat,            /*+ In: w-pattern                             +*/
+    int   *wpat,            /*+ In: w-pattern                             +*/
     int    wsize,            /*+ In: w-pattern size                        +*/
     freq_node *freqlist      /*+ In: pointer to list of frequencies        +*/
   ) ;
@@ -589,7 +589,7 @@ int              /*+ Purpose: insert a node in a GG tree (recursively)        +*
   xpl_GG_insert(
     xpl_t   *xpl,            /*+ In/Out: pointer to the XPL structure         +*/
     xpl_GG  **pp,            /*+ In/Out: pointer to a subtree's root          +*/
-    char   *wpat,            /*+ In: w-pattern to be inserted                 +*/
+    int   *wpat,            /*+ In: w-pattern to be inserted                 +*/
     freq_node *freqlist      /*+ In: w-pattern list of frequencies and labels +*/
   ) ;
 /*+ Return: -1 on failure, >= 0  on success                                   +*/

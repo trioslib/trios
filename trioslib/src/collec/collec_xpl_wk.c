@@ -336,7 +336,7 @@ xpl_t *            /*+ Purpose: builds an example's set from a pair of input-out
 /*  Date: Fri Feb 18 2000                                                   */
 /*  Mod: Adjusted to graylevel ranges instead of amplitudes                 */
 
-  char  *wpat ;               /* w-pattern */
+  int *wpat ;               /* w-pattern */
 
   unsigned char *wpataux ;
 
@@ -361,7 +361,7 @@ trios_debug("offset[%d]=%d\n", i, offset[i]) ;
 
   wcenter = 0 ;
 
-  wpat = (char *)malloc(sizeof(char)*wsize) ;
+  wpat = (int *)malloc(sizeof(int)*wsize) ;
   if(wpat == NULL) {
     return (xpl_t *)trios_error(1,"Memory allocation failed.") ;
   }
@@ -507,7 +507,7 @@ xpl_t *            /*+ Purpose: builds an example's set from a pair of input-out
 /*  author: Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br)  */
 /*  date: Mon Jul 26 1999                                       */
 
-  char  *wpat ;               /* w-pattern */
+  int *wpat ;               /* w-pattern */
 
   unsigned char *wpataux ;
 
@@ -532,7 +532,7 @@ trios_debug("offset[%d]=%d\n", i, offset[i]) ;
 
   wcenter = 0 ;
 
-  wpat = (char *)malloc(sizeof(char)*wsize) ;
+  wpat = (int *)malloc(sizeof(int)*wsize) ;
   if(wpat == NULL) {
     return (xpl_t *)trios_error(1,"Memory allocation failed.") ;
   }

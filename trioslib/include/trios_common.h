@@ -115,8 +115,8 @@ int             /*+ Purpose: compare two w-patterns (taken as integers)    +*/
  
 int             /*+ Purpose: compare two XG w-patterns                     +*/
   wpat_compareXG(                                                             
-    char  *wpat1,      /*+ In: first w-pattern                             +*/
-    char  *wpat2,      /*+ In: second w-pattern                            +*/
+    int  *wpat1,      /*+ In: first w-pattern                             +*/
+    int  *wpat2,      /*+ In: second w-pattern                            +*/
     int  wsize         /*+ In: w-pattern size                              +*/
 ) ;
 /*+ Return: 0 if they are equal, -1 if the first is less and 1 if the first
