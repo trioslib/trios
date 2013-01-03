@@ -471,112 +471,144 @@ int lpartition_memory(window_t * win, mtm_t * __mtm, int itv_type, int threshold
     return 1;
 }
 
-int				/*+ Purpose: Read several interval files and join
-				   all intervals in one list and outputs to
-				   the specified file                      + */ litvconcat(
-												  char *fname_i,	/*+ In: Path/Prefix of intervals files               + */
-												  int nfiles,	/*+ In: Number of input files (must be numbered from
-														   1 to nfiles)                                 + */
-												  char *fname_o	/*+ Out: resulting intervals file                    + */
-    )
-/*+ Return: 1 on success, 0 on failure                                     +*/
-{
+/*!
+ * Read several interval files and join all intervals in one list and outputs to the specified file.
+ * \param fname_i Prefix of the interval files.
+ * \param nfiles Number of intervals.
+ * \param fname_o Output path.
+ * \return 1 on success. 0 on failure.
+ */
+int litvconcat(char *fname_i, int nfiles, char *fname_o) {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Sun Apr 25 1999                                                   */
 
-	char fname[512];
-	window_t *win;
-	apert_t *apt;
-	itv_t *out_itv, *in_itv;
-	itv_BX *p, *q;
-	int i;
+    char fname[512];
+    window_t *win;
+    apert_t *apt;
+    itv_t *out_itv, *in_itv;
+    itv_BX *p, *q;
+    int i;
 
 
-	out_itv = NULL;
+    out_itv = NULL;
 
-	/* input file names are assumed to be in the form fname1.itv, fname2.itv
-	   fname3.itv, ... and so son                                            */
+    /* input file names are assumed to be in the form fname1.itv, fname2.itv
+       fname3.itv, ... and so son                                            */
 
-	if (nfiles == 1) {
+    if (nfiles == 1) {
 
-		sprintf(fname, "%s%d%s", fname_i, 1, ".itv");
-
-#ifdef _DEBUG_
-		trios_debug("File name is %s", fname);
-#endif
-
-		if (!(out_itv = itv_read(fname, &win))) {
-			win_free(win);
-			return trios_error(MSG,
-					   "litvconcat: itv_read() failed to read %s",
-					   fname);
-		}
-
-		if (!itv_write(fname_o, out_itv, win)) {
-			win_free(win);
-			itv_free(out_itv);
-			return trios_error(MSG,
-					   "litvconcat: itv_write() failed to write %s",
-					   fname_o);
-		}
-
-		win_free(win);
-		itv_free(out_itv);
-
-	} else {
-
-		for (i = 1; i <= nfiles; i++) {
-			sprintf(fname, "%s%d%s", fname_i, i, ".itv");
+        sprintf(fname, "%s%d%s", fname_i, 1, ".itv");
 
 #ifdef _DEBUG_
-			trios_debug("File name is %s", fname);
+        trios_debug("File name is %s", fname);
 #endif
 
-			if (i == 1) {
-				if (!(out_itv = itv_read(fname, &win))) {
-					win_free(win);
-					return trios_error(MSG,
-							   "litvconcat: itv_read() failed to read %s",
-							   fname);
-				}
-			} else {
-				win_free(win);
-				if (!(in_itv = itv_read(fname, &win))) {
-					win_free(win);
-					itv_free(out_itv);
-					return trios_error(MSG,
-							   "litvconcat: itv_read() failed to read %s",
-							   fname);
-				}
+        if (!(out_itv = itv_read(fname, &win))) {
+            win_free(win);
+            return trios_error(MSG,
+                       "litvconcat: itv_read() failed to read %s",
+                       fname);
+        }
 
-				p = (itv_BX *) out_itv->head;
-				q = (itv_BX *) in_itv->head;
-				if (in_itv->nitv) {
-					out_itv->nitv =
-					    out_itv->nitv + in_itv->nitv;
-					Concatenate_lists(p, q);
-					out_itv->head = (int *) p;
-					in_itv->head = NULL;
-				}
-				itv_free(in_itv);
-			}
-		}
+        if (!itv_write(fname_o, out_itv, win)) {
+            win_free(win);
+            itv_free(out_itv);
+            return trios_error(MSG,
+                       "litvconcat: itv_write() failed to write %s",
+                       fname_o);
+        }
 
-		if (!itv_write(fname_o, out_itv, win)) {
-			win_free(win);
-			itv_free(out_itv);
-			return trios_error(MSG,
-					   "litvconcat: itv_write() failed to write %s",
-					   fname_o);
-		}
+        win_free(win);
+        itv_free(out_itv);
 
-		win_free(win);
-		itv_free(out_itv);
+    } else {
 
-	}
+        for (i = 1; i <= nfiles; i++) {
+            sprintf(fname, "%s%d%s", fname_i, i, ".itv");
 
-	return (1);
+#ifdef _DEBUG_
+            trios_debug("File name is %s", fname);
+#endif
+
+            if (i == 1) {
+                if (!(out_itv = itv_read(fname, &win))) {
+                    win_free(win);
+                    return trios_error(MSG,
+                               "litvconcat: itv_read() failed to read %s",
+                               fname);
+                }
+            } else {
+                win_free(win);
+                if (!(in_itv = itv_read(fname, &win))) {
+                    win_free(win);
+                    itv_free(out_itv);
+                    return trios_error(MSG,
+                               "litvconcat: itv_read() failed to read %s",
+                               fname);
+                }
+
+                p = (itv_BX *) out_itv->head;
+                q = (itv_BX *) in_itv->head;
+                if (in_itv->nitv) {
+                    out_itv->nitv =
+                        out_itv->nitv + in_itv->nitv;
+                    Concatenate_lists(p, q);
+                    out_itv->head = (int *) p;
+                    in_itv->head = NULL;
+                }
+                itv_free(in_itv);
+            }
+        }
+
+        if (!itv_write(fname_o, out_itv, win)) {
+            win_free(win);
+            itv_free(out_itv);
+            return trios_error(MSG,
+                       "litvconcat: itv_write() failed to write %s",
+                       fname_o);
+        }
+
+        win_free(win);
+        itv_free(out_itv);
+
+    }
+
+    return (1);
 }
+
+/*!
+ * Joins a set of intervals, freeing their memory in the process.
+ * \param in Interval set.
+ * \param n Number of intervals.
+ * \return The new interval.
+ */
+itv_t *litvconcat_memory(itv_t **in, int n) {
+/*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
+/*  date: Sun Apr 25 1999                                                   */
+
+    itv_t *out_itv, *in_itv;
+    itv_BX *p, *q;
+    int i;
+
+    out_itv = in[0];
+
+    for (i = 1; i < n; i++) {
+        in_itv = in[i];
+        p = (itv_BX *) out_itv->head;
+        q = (itv_BX *) in_itv->head;
+        if (in_itv->nitv > 0) {
+            out_itv->nitv =
+                out_itv->nitv + in_itv->nitv;
+            Concatenate_lists(p, q);
+            out_itv->head = (int *) p;
+            in_itv->head = NULL;
+        }
+        itv_free(in_itv);
+    }
+
+    return out_itv;
+}
+
 
 /*!
  * Runs ISI on a partition of the original interval.
@@ -585,7 +617,7 @@ int				/*+ Purpose: Read several interval files and join
  * \param i Number of the partition.
  * \param win Operator window.
  */
-void solve_partition(mtm_t * part_m, itv_t * part_i, int i, window_t * win)
+itv_t *solve_partition(mtm_t * part_m, itv_t * part_i, int i, window_t * win)
 {
 	char cmd[100];
 	int pid = 0;
@@ -599,10 +631,11 @@ void solve_partition(mtm_t * part_m, itv_t * part_i, int i, window_t * win)
 	sprintf(cmd, "part.temp%d-%d.itv", pid, i + 1);
 	itv_write(cmd, part_i, win);
 	mtm_free(part_m);
-	itv_free(part_i);
+    /*itv_free(part_i);*/
 #ifdef DEBUG
 	printf("Finished %d\n", i);
 #endif
+    return part_i;
 }
 
 
@@ -637,7 +670,7 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 
 #pragma omp for schedule(static, 1)
 		for (i = 0; i < n; i++) {
-			solve_partition(part_m[i], part_i[i], i, win);
+            part_i[i] = solve_partition(part_m[i], part_i[i], i, win);
 		}
 	}
 
@@ -646,16 +679,19 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 	printf("Finished ISI\n");
 #endif
 
-	free(part_m);
-	free(part_i);
+
     sprintf(cmd, "part.temp%d-", pid);
     sprintf(cmd2, "final-%d.temp", pid);
-    if (litvconcat(cmd, n, cmd2) == 0) {
+    /*if (litvconcat(cmd, n, cmd2) == 0) {
 		return (itv_t *) trios_error(MSG, "Error on itv concat");
-	}
+    }*/
+    acc = litvconcat_memory(part_i, n);
 
-    acc = itv_read(cmd2, &win);
-    win_free(win);
+    free(part_m);
+    free(part_i);
+
+    /*acc = itv_read(cmd2, &win);
+    win_free(win);*/
 
 	return acc;
 }
