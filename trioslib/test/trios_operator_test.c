@@ -150,5 +150,53 @@ UTEST(IO_GG) {
 } TEST_END
 
 
+UTEST(TEST_MAE) {
+    image_operator_t *iop;
+    img_t *output, *input;
+    int i, j;
+    double ac1, ac2;
+    imgset_t *set = imgset_create(1, 2);
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input3.pgm");
+    imgset_set_fname(set, 2, 1, "ideal3.pgm");
+
+    window_t *w3x3 = win_create(10, 4, 1);
+    for (i = 0; i < 10; i++) {
+        for (j = 0; j < 4; j++) {
+            win_set_point(i, j, 1, 1, w3x3);
+        }
+    }
+
+    iop = image_operator_build_bb(set, w3x3);
+
+    mu_assert("MAE different", image_operator_mae(iop, set, &ac1) == computeMAEBB(iop->bb, iop->win, set, &ac2));
+    mu_assert("Acc different", ac1 == ac2);
+} TEST_END
+
+UTEST(TEST_MSE) {
+    image_operator_t *iop;
+    img_t *output, *input;
+    int i, j;
+    double *acc;
+    imgset_t *set = imgset_create(1, 2);
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input2-einstein.pnm");
+    imgset_set_fname(set, 2, 1, "ideal-einstein.pnm");
+
+    window_t *w3x3 = win_create(5, 5, 1);
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            win_set_point(i, j, 1, 1, w3x3);
+        }
+    }
+
+    iop = image_operator_build_gg(set, w3x3);
+
+    mu_assert("MSE different", image_operator_mse(iop, set) == computeMSEGG(iop->gg, iop->win, set, acc));
+
+} TEST_END
+
 #include "runner.h"
 

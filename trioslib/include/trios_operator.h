@@ -37,6 +37,9 @@ image_operator_t *image_operator_build_wkf(imgset_t *set, window_t *win, apert_t
 
 img_t *image_operator_apply(image_operator_t *iop, img_t *input, img_t *mask);
 
+unsigned long image_operator_mae(image_operator_t *iop, imgset_t *test, double *acc);
+unsigned long image_operator_mse(image_operator_t *iop, imgset_t *test);
+
 void image_operator_free(image_operator_t *iop);
 
 #ifdef __cplusplus
