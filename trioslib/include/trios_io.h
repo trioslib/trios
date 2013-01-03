@@ -167,6 +167,10 @@ int write_tree2(char *filename, dTree *tree);
 int image_operator_write(char *path, image_operator_t *iop);
 image_operator_t *image_operator_read(char *path);
 
+
+multi_level_operator_t *multi_level_operator_read(char *f);
+
+multi_architecture_t *multi_architecture_read(char *f);
 #ifdef __cplusplus
 }
 #endif

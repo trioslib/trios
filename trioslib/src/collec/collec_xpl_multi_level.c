@@ -10,13 +10,13 @@ xpl_t *lcollec_multi_level(multi_level_operator_t *mop, int level, int op, img_t
     xpl_t *xpl = NULL, *xpl_new = NULL;
     int i;
     if (mop == NULL) {
-        return trios_error(MSG, "Operator pointer is null");
+        return (xpl_t *) trios_error(MSG, "Operator pointer is null");
     }
     if (level >= mop->nlevels) {
-        return trios_error(MSG, "Operator has less than %d levels", level);
+        return (xpl_t *) trios_error(MSG, "Operator has less than %d levels", level);
     }
     if (op >= mop->levels[level].noperators) {
-        return trios_error(MSG, "Level %d contains less than %d operators.", op);
+        return (xpl_t *) trios_error(MSG, "Level %d contains less than %d operators.", op);
     }
 
     for (i = 0; i < n_images; i++) {
@@ -26,7 +26,7 @@ xpl_t *lcollec_multi_level(multi_level_operator_t *mop, int level, int op, img_t
             xpl_new = NULL;
         } else if (xpl_new != NULL) {
             if (!xpl_merge(xpl_new, xpl)) {
-                return trios_error(MSG, "multi-level collec: merge error");
+                return (xpl_t *) trios_error(MSG, "multi-level collec: merge error");
             }
             xpl_free(xpl);
             xpl = xpl_new;

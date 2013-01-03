@@ -16,7 +16,7 @@ img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, i
     npixels = w * h;
 
     if (!itv_label(mop->levels[level].trained_operator[op], 1, 255)) {
-        return trios_error(MSG, "lpapplic: itv_label() failed.");
+        return (img_t *) trios_error(MSG, "lpapplic: itv_label() failed.");
     }
 
     for (i = 0; i < mop->levels[level].ninputs; i++) {

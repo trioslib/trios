@@ -47,7 +47,7 @@ img_t *validate_image_size(img_t *img_appl, int *free_original) {
     if (img_get_pixel_size(img_appl) != sz16BIT) {
         img_tmp = img_convert_type(img_appl, sz16BIT);
         if (!img_tmp) {
-            return trios_error(MSG,
+            return (img_t *) trios_error(MSG,
                        "lpapplic: type conversion failed failed.");
         }
         *free_original = 1;
@@ -86,7 +86,7 @@ img_t *lpapplic_memory(img_t * img_appl, itv_t * itv, window_t *win, img_t * img
     if (!img_out) {
         img_free(img_appl);
         img_free(img_mask);
-        return trios_error(MSG, "lpapplic: failed to create output image");
+        return (img_t *) trios_error(MSG, "lpapplic: failed to create output image");
     }
 
     switch (type) {

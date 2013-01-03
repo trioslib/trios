@@ -41,6 +41,8 @@ UTEST(STRUCTURES_CREATION2) {
     win_free(win);
 } TEST_END
 
+xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask, img_t *ideal);
+
 UTEST(COLLEC1) {
     int levels[] = {1};
     int i, j;

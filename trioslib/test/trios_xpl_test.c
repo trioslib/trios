@@ -21,8 +21,8 @@ UTEST(create_insert_write_xpl_GG)
 
     xpl_t *x = xpl_create(9, GG);
     xpl_set_wzip(x, 9);
-    xpl_GG_insert(x, (xpl_BB **) &(x->root), wpat1, l1);
-    xpl_GG_insert(x, (xpl_BB **) &(x->root), wpat2, l2);
+    xpl_GG_insert(x, (xpl_GG **) &(x->root), wpat1, l1);
+    xpl_GG_insert(x, (xpl_GG **) &(x->root), wpat2, l2);
     xpl_free(x);
 TEST_END
 

@@ -93,7 +93,7 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 
 			/* read aperture information -------------------------------------- */
 		case 'A':{
-				return trios_error(1,
+                return (mtm_t *) trios_error(1,
 						   "Aperture operators not supported yet.");
 				/*if(NULL==(*apt = apert_read_data(fd))) {
 				   fclose(fd) ;

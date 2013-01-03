@@ -147,6 +147,7 @@ img_t *multi_level_apply(multi_level_operator_t *op, img_t *img, img_t *mask);
  */
 img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask);
 
+window_t *multi_level_operator_joint_window(multi_level_operator_t *mop, int level, int op);
 
 multi_level_operator_t *multi_level_combine_itv(itv_t **operators, window_t **windows, int nops, imgset_t *level2);
 

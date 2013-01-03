@@ -6,6 +6,14 @@
 /* #define _DEBUG_1_ */
 /* #define _DEBUG_2_ */
 
+
+void xpl_WK_write_tree(FILE *fd, xpl_GG *p, int wsize);
+void xpl_BB_write_tree(FILE * fd, xpl_BB * p, int wzip);
+void xpl_GG_write_tree(FILE * fd, xpl_GG * p, int wsize);
+void xpl_WKGG_write_tree(FILE *fd, xpl_GG *p, int wsize1, int wsize);
+void xpl_WKGG_write_tree(FILE *fd, xpl_GG *p, int wsize1,int wsize);
+
+
 /*!
     Read an examples file.
 

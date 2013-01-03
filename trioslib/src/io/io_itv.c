@@ -359,7 +359,7 @@ trios_debug("Entering ITV_WRITE()") ;
 
   if((type > 3) && (type < 10)) {
     fprintf(fd, "%s\n", ".A") ;
-    return (itv_t *)trios_error(MSG, "itv_write: Aperture operators are not supported yet.") ;
+    return trios_error(MSG, "itv_write: Aperture operators are not supported yet.") ;
     /*apert_write_data(fd, apt);*/
   }
 
@@ -387,7 +387,7 @@ trios_debug("Entering ITV_WRITE()") ;
 
     case GB:
     case GG: {
-      return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
+      return trios_error(MSG, "itv_read: type GG not implemented yet") ;
       /*
       itv_GX *p ;
 
@@ -406,7 +406,7 @@ trios_debug("Entering ITV_WRITE()") ;
 
     case WKC:
     case WKF: {
-        return (itv_t *)trios_error(MSG, "itv_read: type GG not implemented yet") ;
+        return trios_error(MSG, "itv_read: type GG not implemented yet") ;
       /*itv_GX *p ;
 
 #ifdef _DEBUG_

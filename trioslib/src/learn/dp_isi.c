@@ -1,6 +1,7 @@
 #include "trios_win.h"
 #include "trios_itv.h"
 #include "trios_mtm.h"
+#include "trios_io.h"
 #include <trios_xpl.h>
 #include "paclearn_local.h"
 #include "trios_error.h"
@@ -81,7 +82,7 @@ itv_t *lisi_memory(mtm_t *__mtm, itv_t *itv, int isi_type, int isi3_step,
 int lisi_disk(char *fname_i1, char *fname_i2, int isi_type,	int isi3_step,
               int multi, int group_flag, char *fname_o, int log_step, char *log_file, char *tmp_bas_file) {
     window_t *win1, *win2;
-	/*apert_t  *apt, *apt2 ; */
+    apert_t  *apt, *apt2 ;
 	mtm_t *mtm;
 	itv_t *itv;
 	int nmtm, zeros = 0, ones = 0, ngrouped;
@@ -107,7 +108,7 @@ int lisi_disk(char *fname_i1, char *fname_i2, int isi_type,	int isi3_step,
 
 	/* read classified examples */
 
-	if (!(mtm = mtm_read(fname_i1, &win1 /*, &apt */ ))) {
+    if (!(mtm = mtm_read(fname_i1, &win1, &apt))) {
 		return trios_error(MSG, "lisi: mtm_read() failed to read %s",
 				   fname_i1);
 	}
@@ -167,7 +168,7 @@ int lisi_disk(char *fname_i1, char *fname_i2, int isi_type,	int isi3_step,
 
 
 	/* write resulting intervals to the output file */
-	if (!itv_write(fname_o, itv, win1 /*, apt */ )) {
+    if (!itv_write(fname_o, itv, win1/*, apt*/)) {
 		win_free(win1);
 		win_free(win2);
 		itv_free(itv);
@@ -190,7 +191,7 @@ int lisi_disk(char *fname_i1, char *fname_i2, int isi_type,	int isi3_step,
 		fprintf(fd, "Zeros=%d\n", zeros);
 		if (group_flag) {
 			fprintf(fd, "Grouped Zeros=%d\n", ngrouped);
-			fprintf(fd, "gtime=%d+%d\n", time_usr, time_sys);
+            fprintf(fd, "gtime=%lu+%lu\n", time_usr, time_sys);
 		}
 		fprintf(fd, "basesize=%d\n", itv->nitv);
 	}

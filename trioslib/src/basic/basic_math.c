@@ -257,6 +257,9 @@ float *vector(long nl, long nh)
   return v-nl+NR_END;
 }
 
+void free_vector(float *v, long nl, long nh);
+void free_fvector(float *v, int nl, int nh);
+
 void polint(float xa[], float ya[], int n, double x, float *y, float *dy)
 {
   int   i, m, ns=1;
@@ -326,8 +329,6 @@ void free_fvector(float *v, int nl, int nh)
 {
   free((char*)(v+nl));
 }
-
-
 
 void free_vector(float *v, long nl, long nh)
 /* free a float vector allocated with vector() */
