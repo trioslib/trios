@@ -198,6 +198,24 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
     return 1;
 }
 
+/*!
+ * In memory version of lcollec.
+ * \param imgset Training set.
+ * \param win Window.
+ * \param type Type: BB or GG.
+ * \return The collected samples xpl_t.
+ * \sa xpl_t
+ */
+xpl_t *lcollec_memory(imgset_t *imgset, window_t *win, int type) {
+    xpl_t *xpl;
+    xpl = xpl_create(win_get_wsize(win), type);
+    if (lcollec_main(imgset, win, xpl, type, 0, NULL) == 0) {
+        xpl_free(xpl);
+        return NULL;
+    }
+    return xpl;
+}
+
 
 /**
     Collects examples from a set of images.
@@ -205,7 +223,7 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
     \param imgset IMGSET containing the pairs to be collected.
     \param win Window of the operator.
     \param xpl A pre allocated xpl structure.
-    \param map_type Mapping type. Only Binary-to-Binary(BB) supported.
+    \param map_type Mapping type.
     \param cv_flag Flag to indicate if all pixels that form a w-pattern must have the same value as the pixel under the central point of the window. This is useful to collect w-patterns ignoring neighboring objects.
     \param log_file Optional name for log file.
     \return 1 on succes. 0 on failure.

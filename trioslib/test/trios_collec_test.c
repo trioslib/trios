@@ -83,4 +83,24 @@ UTEST(test_pair1_GG) {
 } TEST_END
 
 
+UTEST(test_memory) {
+    imgset_t *set = imgset_create(1, 2);
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input2.pgm");
+    imgset_set_fname(set, 2, 1, "ideal2.pgm");
+
+    window_t *win = win_create(2, 2, 1);
+    win_set_point(0, 0, 1, 1, win);
+    win_set_point(0, 1, 1, 1, win);
+    win_set_point(1, 0, 1, 1, win);
+    win_set_point(1, 1, 1, 1, win);
+
+    mu_assert("lcollec failed.", NULL != lcollec_memory(set, win, BB));
+
+    win_free(win);
+    imgset_free(set);
+
+} TEST_END
+
 #include "runner.h"
