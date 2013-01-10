@@ -17,7 +17,9 @@ char *get_dir_name(char *path, char *read_dir_name) {
 
     if (read_dir_name[0] == '/') {
         /* absolute path provided */
-        return read_dir_name;
+        result = malloc(sizeof(char) * (strlen(read_dir_name) + 2));
+        strcpy(result, read_dir_name);
+        return result;
     } else if (read_dir_name[0] == '.' && read_dir_name[1] == separator) {
         read_dir_name += 2;
     }
@@ -146,7 +148,6 @@ trios_debug("ngroups=%d  grpsize=%d", ngroups, grpsize);
       return (imgset_t *)trios_error(MSG, "imgset_read: imgset_set_dname() failed.") ;
     }     
     free(dir_name);
-
   }
   
   for(k=1; k<=ngroups; k++) {
