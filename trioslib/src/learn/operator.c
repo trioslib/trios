@@ -10,10 +10,7 @@ image_operator_t *image_operator_build_bb(imgset_t *set, window_t *win) {
     iop->apt = NULL;
     iop->gg = NULL;
 
-    imgset_write("set.build.bb", set);
-    win_write("win.build.bb", win);
-    lcollec("set.build.bb", "win.build.bb", NULL, 1, 1, 0, "collec.build.bb", NULL);
-    iop->collec = xpl_read("collec.build.bb", &(iop->win), NULL);
+    iop->collec = lcollec_memory(set, win, BB);
     if (iop->collec == NULL) {
         return (image_operator_t *) trios_error(MSG, "Error in collec");
     }

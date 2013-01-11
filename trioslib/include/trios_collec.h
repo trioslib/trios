@@ -53,6 +53,14 @@ int lcollec(char *fname_i1, char *fname_i2, char *fname_i3, int  input_type, int
  */
 int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_format, char *o1_fname);
 
+/*!
+ * In memory version of lcollec. Collect examples from a set of images.
+ * \param imgset Image set.
+ * \param win Window.
+ * \param type Type of the operation. BB, GG, WKC or WKF.
+ * \return The example set.
+ */
+xpl_t *lcollec_memory(imgset_t *imgset, window_t *win, int type);
 
 #ifdef __cplusplus
 }
