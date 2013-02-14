@@ -628,8 +628,8 @@ itv_t *solve_partition(mtm_t * part_m, itv_t * part_i, int i, window_t * win)
 	pid = getpid();
 #endif
 	part_i = lisi_memory(part_m, part_i, 3, 20, 0, 0);
-	sprintf(cmd, "part.temp%d-%d.itv", pid, i + 1);
-	itv_write(cmd, part_i, win);
+    /*sprintf(cmd, "part.temp%d-%d.itv", pid, i + 1);
+    itv_write(cmd, part_i, win);*/
 	mtm_free(part_m);
     /*itv_free(part_i);*/
 #ifdef DEBUG
