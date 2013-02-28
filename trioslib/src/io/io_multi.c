@@ -102,6 +102,10 @@ multi_level_operator_t *multi_level_operator_read(char *filename) {
     window_t *joint;
 
     arch = multi_architecture_read(filename);
+    if (arch == NULL) {
+        trios_error(MSG, "Invalid architecture file.");
+        return NULL;
+    }
     mop = multi_level_operator_create(arch);
 
 
@@ -116,3 +120,4 @@ multi_level_operator_t *multi_level_operator_read(char *filename) {
     multi_level_arch_free(arch);
     return mop;
 }
+
