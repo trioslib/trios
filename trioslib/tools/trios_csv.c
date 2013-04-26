@@ -18,11 +18,8 @@ void export_mtm_BB(mtm_t *mtm, FILE *dest) {
     mtm_BX *bx = (mtm_BX *) mtm->mtm_data;
 
     for (i = 0; i < mtm->nmtm; i++) {
-        for (j = 0; j < bx[i].fq; j++) {
-            print_compacted_wpatt(dest, bx[i].wpat, mtm->wsize, 0);
-        }
-        for (j = 0; j < bx[i].fq1; j++) {
-            print_compacted_wpatt(dest, bx[i].wpat, mtm->wsize, 1);
+        for (j = 0; j < bx[i].fq + bx[i].fq1; j++) {
+            print_compacted_wpatt(dest, bx[i].wpat, mtm->wsize, bx[i].label);
         }
     }
 }
