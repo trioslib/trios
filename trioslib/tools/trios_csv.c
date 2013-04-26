@@ -7,14 +7,14 @@ void print_compacted_wpatt(FILE *dest, unsigned int *wpat, int wsize, int label)
     for (k = 0; k < wsize; k++) {
         bit = k % NB;
         offset = k / NB;
-        fprintf(dest, "%d, ", (wpat[offset] & (1 << bit) != 0 ));
+        fprintf(dest, "%d, ", (wpat[offset] & (1 << bit)) != 0 );
     }
     fprintf(dest, "%d\n", label);
 
 }
 
 void export_mtm_BB(mtm_t *mtm, FILE *dest) {
-    int i, j, k, sf, bit;
+    int i, j;
     mtm_BX *bx = (mtm_BX *) mtm->mtm_data;
 
     for (i = 0; i < mtm->nmtm; i++) {
