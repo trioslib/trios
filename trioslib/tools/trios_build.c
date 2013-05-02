@@ -1,5 +1,12 @@
 #include <trios.h>
 
+void print_usage() {
+    printf("Usage: trios_build [single|two-level] [BB|GG] window(s) training_set [level2_training_set] result_path\n\n");
+    printf("This tools executes the training process to learn image operators from a set of samples.\n");
+    printf("In the case of two-level image operators, one can also pass single level operators in the place of the images. This avoids the first level training phase.\n");
+}
+
+
 int main(int argc, char *argv[]) {
     image_operator_t *op;
     window_t *win;
@@ -7,9 +14,7 @@ int main(int argc, char *argv[]) {
     imgset_t *training, *training2l[2];
 
     if (argc < 5) {
-        printf("TRIOS tools: build\n");
-        printf("Usage: $trios-build type window(s) image_set path_to_write \n");
-        printf("Usage: $trios-build two-level-old bases path_to_write \n");
+        print_usage();
         return -1;
     }
 

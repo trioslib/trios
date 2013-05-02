@@ -1,5 +1,10 @@
 #include <trios.h>
 
+void print_usage() {
+    printf("Usage: trios_apply operator_path image_path result_path mask_path\n\n"
+           "This tool applies an existing image operator in an image. The mask image is optional.\n");
+}
+
 int main(int argc, char *argv[]) {
     image_operator_t *op = NULL;
     multi_level_operator_t *mop = NULL;
@@ -8,8 +13,7 @@ int main(int argc, char *argv[]) {
     img_t *input, *output, *mask = NULL;
 
     if (argc < 4) {
-        printf("TRIOS tools: apply\n");
-        printf("Usage: $trios-apply path_to_operator path_to_image path_to_result optional_mask\n");
+        print_usage();
         return -1;
     }
 
