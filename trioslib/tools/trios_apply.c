@@ -19,14 +19,14 @@ int main(int argc, char *argv[]) {
 
     op = image_operator_read(argv[1]);
     if (op == NULL) {
-
         printf("Trying to read as itv...\n");
         old_operator = itv_read(argv[1], &old_window);
         if (old_operator == NULL) {
             printf("Trying to read as multi-level operator...\n");
             mop = multi_level_operator_read(argv[1]);
             if (mop == NULL) {
-                printf("Invalid operator!\n");
+                printf("Invalid operator!\n\n");
+                print_usage();
                 return -1;
             }
         }
@@ -34,12 +34,18 @@ int main(int argc, char *argv[]) {
 
     input = img_readPGM(argv[2]);
     if (input == NULL) {
-        printf("Error reading image. Only PGM images are supported.\n");
+        printf("Error reading image. Only PGM images are supported.\n\n");
+        print_usage();
         return -1;
     }
 
     if (argc == 5) {
         mask = img_readPGM(argv[4]);
+        if (mask == NULL) {
+            printf("Error reading image. Only PGM images are supported.\n\n");
+            print_usage();
+            return -1;
+        }
     }
 
     if (op != NULL) {
@@ -51,11 +57,11 @@ int main(int argc, char *argv[]) {
     }
 
     if (output == NULL) {
-        printf("Error applying operator.\n");
+        printf("Error applying operator.\n\n");
+        print_usage();
         return -1;
     }
 
     img_writePGM(argv[3], output);
-
     return 0;
 }
