@@ -121,6 +121,9 @@ multi_level_operator_t *multi_level_build_single(multi_architecture_t *m, imgset
     itv_t *level_op;
     window_t *big;
 
+    /* TODO: determinar tipo de outra maneira */
+    mop->type = BB;
+
     if (mop->nlevels > 1) {
         trios_malloc(new_input_images, sizeof(img_t **) * imgset_get_ngroups(set), multi_level_operator_t *, "Bad alloc");
     }
@@ -246,6 +249,9 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t **se
     img_t ***new_input_images;
     img_t **mask_images;
     img_t **ideal_images;
+
+    /* TODO: determinar tipo de outra maneira */
+    mop->type = BB;
 
     load_image_set(&input_images, &ideal_images, &mask_images, set, 0, mop, m);
 
