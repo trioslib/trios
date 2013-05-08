@@ -7,8 +7,6 @@
 
 #include <stdlib.h>
 
-#include "../collec/collec_private.h"
-
 window_t *multi_level_operator_joint_window(multi_level_operator_t *mop, int level, int op)
 {
     int win_size = 0, i;
@@ -180,7 +178,7 @@ static int apply_until_level_images(multi_level_operator_t *mop, int level, img_
     return 1;
 }
 
-multi_level_operator_t *multi_level_combine_itv(itv_t **operators, window_t **windows, int nops, imgset_t *level2) {
+multi_level_operator_t *multi_level_combine_operators(image_operator_t **ops, int nops, imgset_t *level2) {
     multi_architecture_t *arch;
     multi_level_operator_t *mop;
     window_t *two_level;
@@ -195,12 +193,12 @@ multi_level_operator_t *multi_level_combine_itv(itv_t **operators, window_t **wi
     two_level = win_create(1, 1, 1);
     win_set_point(0, 0, 1, 1, two_level);
     for (i = 0; i < nops; i++) {
-        multi_level_arch_set_window(arch, 0, i, 0, windows[i]);
+        multi_level_arch_set_window(arch, 0, i, 0, ops[i]->win);
         multi_level_arch_set_window(arch, 1, 0, i, two_level);
     }
     mop = multi_level_operator_create(arch);
     for (i = 0; i < nops; i++) {
-        mop->levels[0].trained_operator[i] = operators[i];
+        mop->levels[0].trained_operator[i] = ops[i]->bb;
     }
 
     /* carrega imagens */
@@ -211,8 +209,7 @@ multi_level_operator_t *multi_level_combine_itv(itv_t **operators, window_t **wi
     for (j = 0; j < imgset_get_ngroups(level2); j++) {
         trios_malloc(lv2_images[j], sizeof(img_t *) * mop->levels[0].noperators, multi_level_operator_t *, "Bad alloc");
     }
-    /* aplico o operador até o nível i */
-    /* TODO: consetar isto. So funciona para 2 niveis */
+
     for (j = 0; j < imgset_get_ngroups(level2); j++) {
         apply_until_level_images(mop, 0, input_images[j][0], mask_images[j], &(lv2_images[j]));
     }

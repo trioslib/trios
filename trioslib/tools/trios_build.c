@@ -2,9 +2,9 @@
 
 void print_usage() {
     printf("Usage: trios_build [single|two-level] [BB|GG] window(s) training_set [level2_training_set] result_path\n");
-    printf("       trios_build join operator list level2_training_set result_path\n\n");
+    printf("       trios_build combine operator list level2_training_set result_path\n\n");
     printf("This tools executes the training process to learn image operators from a set of samples.\n");
-    printf("The join option skips the first level training step and builds a two-level operator from trained single operators.\n");
+    printf("The combine option skips the first level training step and builds a two-level operator from trained single operators.\n");
 }
 
 
@@ -82,8 +82,24 @@ void train_two_level(int argc, char *argv[]) {
     }
 }
 
-void join_two_level(int argc, char *argv[]) {
-    trios_fatal("Operation not implemented.");
+int join_two_level(int argc, char *argv[]) {
+    multi_level_operator_t *mop;
+    image_operator_t **ops;
+    imgset_t *training;
+    int i;
+    int nops = argc - 4;
+
+    trios_malloc(ops, sizeof(image_operator_t *) * nops, int, "Error allocating image_operator_t array.");
+    for (i = 2; i < argc - 2; i++) {
+        printf("read %s\n", argv[i]);
+        ops[i] = image_operator_read(argv[i]);
+    }
+    training = imgset_read(argv[argc-2]);
+
+    mop = multi_level_combine_operators(ops, nops, training);
+    multi_level_operator_write(argv[argc-1], mop);
+
+    return 1;
 }
 
 int main(int argc, char *argv[]) {
@@ -101,7 +117,7 @@ int main(int argc, char *argv[]) {
         train_single_level(argc, argv);
     } else if (strcmp(argv[1], "two-level") == 0) {
         train_two_level(argc, argv);
-    } else if (strcmp(argv[1], "join") == 0) {
+    } else if (strcmp(argv[1], "combine") == 0) {
         join_two_level(argc, argv);
     } else {
         print_usage();

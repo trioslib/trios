@@ -7,11 +7,8 @@ extern "C" {
 
 #include "trios_multi.h"
 #include "trios_mtm.h"
+#include "trios_operator.h"
 
-/*!
- * \brief Typedef for the decision tree implementation. It is choosen as a void pointer to allow any type of structure. Right now we use the implementation from OpenCV.
- */
-typedef void dTree;
 
 
 /*!

@@ -464,17 +464,23 @@ UTEST(BUILD_MULTI) {
 UTEST(TEST_COMBINE) {
     itv_t *itvs[5];
     window_t *wins[5];
+    image_operator_t *ops[5];
     imgset_t *set;
     multi_level_operator_t *mop;
+    int i;
+
     itvs[0] = itv_read("jung9x7/bas1.1.bas", wins);
     itvs[1] = itv_read("jung9x7/bas1.2.bas", wins+1);
     itvs[2] = itv_read("jung9x7/bas1.3.bas", wins+2);
     itvs[3] = itv_read("jung9x7/bas1.4.bas", wins+3);
     itvs[4] = itv_read("jung9x7/bas1.5.bas", wins+4);
 
+    for (i = 0; i < 5; i++)
+        ops[i] = image_operator_itv(itvs[i], wins[i]);
+
     set = imgset_read("jung9x7/level2.set");
 
-    mop = multi_level_combine_itv(itvs, wins, 5, set);
+    mop = multi_level_combine_operators(ops, 5, set);
     itv_write("jung9x7/test.itv", mop->levels[1].trained_operator[0], multi_level_operator_joint_window(mop, 1, 0));
 
     system("cat jung9x7/test.itv jung9x7/base.bas");

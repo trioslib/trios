@@ -1,6 +1,17 @@
 #include "trios.h"
 #include "trios_operator.h"
 
+image_operator_t *image_operator_itv(itv_t *itv, window_t *win) {
+    image_operator_t *iop;
+    trios_malloc(iop, sizeof(image_operator_t), image_operator_t *, "Failed to alloc image operator");
+    iop->type = BB;
+    iop->win = win;
+    iop->apt = NULL;
+    iop->gg = NULL;
+    iop->bb = itv;
+    return iop;
+}
+
 image_operator_t *image_operator_build_bb(imgset_t *set, window_t *win) {
     image_operator_t *iop;
     itv_t *temp;

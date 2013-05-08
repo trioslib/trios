@@ -10,6 +10,8 @@ extern "C" {
 #include <trios_collec.h>
 #include <trios_error.h>
 #include <trios_itv.h>
+#include "trios_operator.h"
+
 
 
 /*!
@@ -54,6 +56,7 @@ typedef struct {
  * A multi-level operator that contains "nlevels" levels.
  */
 typedef struct {
+    int type; /*!< Type of the operator: BB or GG. */
     int nlevels; /*!< Number of levels of the operator. */
     multi_level_operator_level_t *levels; /*!< Array of operator levels. */
 } multi_level_operator_t;
@@ -149,7 +152,14 @@ img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, i
 
 window_t *multi_level_operator_joint_window(multi_level_operator_t *mop, int level, int op);
 
-multi_level_operator_t *multi_level_combine_itv(itv_t **operators, window_t **windows, int nops, imgset_t *level2);
+/*!
+ * \brief Combine the input operators using a multi-level approach.The returned operator shares data with the operators in ops.
+ * \param ops List of image operators to combine.
+ * \param nops Number of operators to combine.
+ * \param level2 Training set for level 2.
+ * \return A two-level operator that combines the input operators.
+ */
+multi_level_operator_t *multi_level_combine_operators(image_operator_t **ops, int nops, imgset_t *level2);
 
 #ifdef __cplusplus
 }

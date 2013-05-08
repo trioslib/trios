@@ -236,6 +236,7 @@ UTEST(test_applic_gg_einstein) {
     xpl_t *xpl = xpl_read("XPL_RESULT_GG1.xpl", &win, NULL);
     printf("Decision\n");
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
+    mtm_write("shark.mtm", mtm, win, NULL);
     dTree *bb = ltrainGG_memory(mtm);
     img_t *in = img_readPGM("./test_img/input2-einstein.pnm");
     img_t *out = lapplyGG_memory(in, bb, win, NULL);

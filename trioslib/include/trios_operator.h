@@ -11,8 +11,12 @@ extern "C" {
 #include "trios_xpl.h"
 #include "trios_mtm.h"
 #include "trios_apert.h"
-#include "trios_learn.h"
 #include "trios_img.h"
+
+/*!
+ * \brief Typedef for the decision tree implementation. It is choosen as a void pointer to allow any type of structure. Right now we use the implementation from OpenCV.
+ */
+typedef void dTree;
 
 /*!
  * \brief Structure that holds an image operator.
@@ -29,6 +33,14 @@ typedef struct {
     dTree *gg; /*! < GG or WC* operator. NULL if the type is BB. */
     apert_t *apt; /*! < Aperture of the operator. NULL if the type is not WC*. */
 } image_operator_t;
+
+/*!
+ * \brief Wraps an interval structure and window in a BB image operator.
+ * \param itv BB Interval.
+ * \param win Window.
+ * \return An image operator that applies the input interval using the input window.
+ */
+image_operator_t *image_operator_itv(itv_t *itv, window_t *win);
 
 image_operator_t *image_operator_build_bb(imgset_t *set, window_t *win);
 image_operator_t *image_operator_build_gg(imgset_t *set, window_t *win);
