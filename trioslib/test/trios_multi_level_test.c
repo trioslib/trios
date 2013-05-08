@@ -481,7 +481,7 @@ UTEST(TEST_COMBINE) {
     set = imgset_read("jung9x7/level2.set");
 
     mop = multi_level_combine_operators(ops, 5, set);
-    itv_write("jung9x7/test.itv", mop->levels[1].trained_operator[0], multi_level_operator_joint_window(mop, 1, 0));
+    itv_write("jung9x7/test.itv", (itv_t *) mop->levels[1].trained_operator[0], multi_level_operator_joint_window(mop, 1, 0));
 
     system("cat jung9x7/test.itv jung9x7/base.bas");
 

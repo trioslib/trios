@@ -12,6 +12,10 @@ extern "C" {
 #include <trios_itv.h>
 #include "trios_operator.h"
 
+/*!
+ * \brief Type that holds either a dTree or a itv_t. Used in multi-level operators.
+ */
+typedef char classifier_t;
 
 
 /*!
@@ -49,7 +53,7 @@ typedef struct {
     int ninputs; /*!< Number of operators in the previous level. It is also the number of inputs that each operator in this level takes. */
     int noperators; /*!< Number of operators in this level. */
     window_t ***windows; /*!< Matrix of windows. The (i, j) element contains the j-th window of the i-th operator. */
-    itv_t **trained_operator; /*!< Array of the trained operators. */
+    classifier_t **trained_operator; /*!< Array of the trained operators. */
 } multi_level_operator_level_t;
 
 /*!
@@ -148,7 +152,7 @@ img_t *multi_level_apply(multi_level_operator_t *op, img_t *img, img_t *mask);
  * \return The output of this operator.
  *
  */
-img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask);
+img_t *multi_level_apply_level_bb(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask);
 
 window_t *multi_level_operator_joint_window(multi_level_operator_t *mop, int level, int op);
 

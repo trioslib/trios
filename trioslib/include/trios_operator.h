@@ -18,6 +18,7 @@ extern "C" {
  */
 typedef void dTree;
 
+
 /*!
  * \brief Structure that holds an image operator.
  *

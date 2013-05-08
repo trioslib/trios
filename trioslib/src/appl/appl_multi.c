@@ -5,7 +5,7 @@
 
 #include "../collec/collec_private.h"
 
-img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask) {
+img_t *multi_level_apply_level_bb(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask) {
     img_t *output;
     int i, j, k, l, m;
     int w, h, win_size = 0, curr_off;
@@ -15,7 +15,7 @@ img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, i
     h = img_get_height(inputs[0]);
     npixels = w * h;
 
-    if (!itv_label(mop->levels[level].trained_operator[op], 1, 255)) {
+    if (!itv_label((itv_t *) mop->levels[level].trained_operator[op], 1, 255)) {
         return (img_t *) trios_error(MSG, "lpapplic: itv_label() failed.");
     }
 
@@ -57,7 +57,7 @@ img_t *multi_level_apply_level(multi_level_operator_t *mop, int level, int op, i
             curr_off += win_get_wsize(mop->levels[level].windows[op][i]);
         }
         /* look for w_pattern in intervals */
-        int label = itv_list_contain(mop->levels[level].trained_operator[op], w_pattern, size_of_zpat(win_size));
+        int label = itv_list_contain((itv_t *)mop->levels[level].trained_operator[op], w_pattern, size_of_zpat(win_size));
         img_set_pixel(output, k / output->width, k % output->width, 0, (unsigned char) label);
     }
 
@@ -74,7 +74,7 @@ img_t *multi_level_apply(multi_level_operator_t *mop, img_t *img, img_t *mask) {
     trios_malloc(next, sizeof(img_t *) * mop->levels[0].noperators, img_t *, "Bad alloc");
     for (i = 0; i < mop->nlevels; i++) {
         for (j = 0; j < mop->levels[i].noperators; j++) {
-            next[j] = multi_level_apply_level(mop, i, j, input, mask);
+            next[j] = multi_level_apply_level_bb(mop, i, j, input, mask);
         }
         if (i > 0) {
             for (j = 0; j < mop->levels[i].ninputs; j++) {

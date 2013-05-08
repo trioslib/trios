@@ -158,7 +158,9 @@ void multi_level_operator_free(multi_level_operator_t *op) {
                 win_free(op->levels[i].windows[j][k]);
             }
             free(op->levels[i].windows[j]);
-            itv_free(op->levels[i].trained_operator[j]);
+            if (op->type == BB) {
+                itv_free((itv_t *) op->levels[i].trained_operator[j]);
+            }
         }
         free(op->levels[i].trained_operator);
         free(op->levels[i].windows);

@@ -85,7 +85,7 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
         }
         xpl_free(op_collec);
         mtm_free(op_dec);
-        mop->levels[level].trained_operator[j] = level_op;
+        mop->levels[level].trained_operator[j] = (classifier_t *) level_op;
     }
 }
 
@@ -135,7 +135,7 @@ multi_level_operator_t *multi_level_build_single(multi_architecture_t *m, imgset
             for (j = 0; j < mop->levels[i].noperators; j++) {
                 for(k = 0; k < imgset_get_ngroups(set); k++) {
                     sprintf(filename, "l%dop%d.pgm", i, j);
-                    new_input_images[k][j] = multi_level_apply_level(mop, i, j, input_images[k], mask_images[k]);
+                    new_input_images[k][j] = multi_level_apply_level_bb(mop, i, j, input_images[k], mask_images[k]);
                     img_writePGM(filename, new_input_images[k][j]);
                 }
             }
@@ -158,7 +158,7 @@ static int apply_until_level_images(multi_level_operator_t *mop, int level, img_
     trios_malloc(next, sizeof(img_t *) * mop->levels[level].noperators, int, "Bad alloc");
     for (i = 0; i <= level; i++) {
         for (j = 0; j < mop->levels[i].noperators; j++) {
-            next[j] = multi_level_apply_level(mop, i, j, input, mask);
+            next[j] = multi_level_apply_level_bb(mop, i, j, input, mask);
             sprintf(cmd, "l%dop%d.pgm", i, j);
             img_writePGM(cmd, next[j]);
         }
@@ -198,7 +198,7 @@ multi_level_operator_t *multi_level_combine_operators(image_operator_t **ops, in
     }
     mop = multi_level_operator_create(arch);
     for (i = 0; i < nops; i++) {
-        mop->levels[0].trained_operator[i] = ops[i]->bb;
+        mop->levels[0].trained_operator[i] = (classifier_t *) ops[i]->bb;
     }
 
     /* carrega imagens */
