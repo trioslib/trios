@@ -84,7 +84,9 @@ int multi_level_operator_write(char *filename, multi_level_operator_t *mop) {
 
                 joint = multi_level_operator_joint_window(mop, k, i);
                 sprintf(temp_name, "%s_op%dx%dx%d", filename, k, i, j);
-                itv_write(temp_name, (itv_t *) mop->levels[k].trained_operator[i], joint);
+                if (mop->type == BB) {
+                    itv_write(temp_name, (itv_t *) mop->levels[k].trained_operator[i], joint);
+                }
                 win_free(joint);
             }
         }
@@ -113,7 +115,9 @@ multi_level_operator_t *multi_level_operator_read(char *filename) {
         for (i = 0; i < mop->levels[k].noperators; i++) {
             for (j = 0; j < mop->levels[k].ninputs; j++) {
                 sprintf(temp_name, "%s_op%dx%dx%d", filename, k, i, j);
-                mop->levels[k].trained_operator[i] = (classifier_t *) itv_read(temp_name, &joint);
+                if  (mop->type == BB) {
+                    mop->levels[k].trained_operator[i] = (classifier_t *) itv_read(temp_name, &joint);
+                }
             }
         }
     }

@@ -74,7 +74,9 @@ img_t *multi_level_apply(multi_level_operator_t *mop, img_t *img, img_t *mask) {
     trios_malloc(next, sizeof(img_t *) * mop->levels[0].noperators, img_t *, "Bad alloc");
     for (i = 0; i < mop->nlevels; i++) {
         for (j = 0; j < mop->levels[i].noperators; j++) {
-            next[j] = multi_level_apply_level_bb(mop, i, j, input, mask);
+            if (mop->type == BB) {
+                next[j] = multi_level_apply_level_bb(mop, i, j, input, mask);
+            }
         }
         if (i > 0) {
             for (j = 0; j < mop->levels[i].ninputs; j++) {

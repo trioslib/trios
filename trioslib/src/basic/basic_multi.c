@@ -97,6 +97,7 @@ multi_level_operator_t *multi_level_operator_create(multi_architecture_t *m) {
     if (op == NULL) {
         return (multi_level_operator_t *) trios_error(MSG, "Bad alloc");
     }
+    /* TODO: set type */
     op->nlevels = m->nlevels;
     op->levels = malloc(sizeof(multi_level_operator_level_t) * op->nlevels);
     if (op->levels == NULL) {
