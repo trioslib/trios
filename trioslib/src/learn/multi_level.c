@@ -241,6 +241,10 @@ multi_level_operator_t *multi_level_build_bb(multi_architecture_t *m, imgset_t *
     return multi_level_build(m, set, BB);
 }
 
+multi_level_operator_t *multi_level_build_gg(multi_architecture_t *m, imgset_t **set) {
+    return multi_level_build(m, set, GG);
+}
+
 multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t **set, int type) {
     int i, j, k;
     multi_level_operator_t *mop = multi_level_operator_create(m, type);
@@ -249,9 +253,6 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t **se
     img_t ***new_input_images;
     img_t **mask_images;
     img_t **ideal_images;
-
-    /* TODO: determinar tipo de outra maneira */
-    mop->type = type;
 
     load_image_set(&input_images, &ideal_images, &mask_images, set, 0, mop, m);
 

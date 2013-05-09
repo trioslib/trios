@@ -2,9 +2,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "trios_common.h"
 
 
 xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask, img_t *ideal);
+xpl_t *collec_level_operator_gg_main(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask, img_t *ideal);
 
 xpl_t *lcollec_multi_level(multi_level_operator_t *mop, int level, int op, img_t ***input, img_t **mask, img_t **ideal, int n_images) {
     xpl_t *xpl = NULL, *xpl_new = NULL;
@@ -22,6 +24,8 @@ xpl_t *lcollec_multi_level(multi_level_operator_t *mop, int level, int op, img_t
     for (i = 0; i < n_images; i++) {
         if (mop->type == BB) {
             xpl_new = collec_level_operator_bb_main(mop, level, op, input[i], mask[i], ideal[i]);
+        } else {
+            xpl_new = collec_level_operator_gg_main(mop, level, op, input[i], mask[i], ideal[i]);
         }
         if (xpl == NULL) {
             xpl = xpl_new;
@@ -84,5 +88,49 @@ xpl_t *collec_level_operator_bb_main(multi_level_operator_t *mop, int level, int
     }
     free(offset);
     free(joint_wpat);
+    return xpl;
+}
+
+
+xpl_t *collec_level_operator_gg_main(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask, img_t *ideal) {
+    int i, j, k, l, npixels, w, h, win_size = 0, *joint_wpat, *offset, win_offset;
+    xpl_t *xpl;
+    freq_node *freq;
+
+    for (i = 0; i < mop->levels[level].ninputs; i++) {
+        win_size += win_get_wsize(mop->levels[level].windows[op][i]);
+    }
+    xpl = xpl_create(win_size, GG);
+    joint_wpat = malloc(sizeof(int) * win_size);
+    offset = malloc(sizeof(int) * win_size);
+
+    w = img_get_width(inputs[0]);
+    h = img_get_height(inputs[0]);
+    npixels = w * h;
+
+    for (k = 0; k < npixels; k++) {
+
+        win_offset = 0;
+
+        if (mask != NULL && img_get_pixel(mask, k / mask->width, k % mask->width, 0) == 0) {
+            continue;
+        }
+
+        for (i = 0; i < mop->levels[level].ninputs; i++) {
+            for (j = 0; j < win_get_wsize(mop->levels[level].windows[op][i]); j++) {
+                l = offset[j] + k;
+                joint_wpat[win_offset] = img_get_pixel(inputs[i], l / w, l % w, 0);
+                win_offset++;
+            }
+        }
+        /* cria freq node */
+        freq = freq_node_create(img_get_pixel(ideal, k / w, k % w, 0), 1);
+        /* adiciona na arvore */
+        xpl_GG_insert(xpl, (xpl_GG **) &xpl->root, joint_wpat, freq);
+    }
+
+    free(offset);
+    free(joint_wpat);
+
     return xpl;
 }

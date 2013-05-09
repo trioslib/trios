@@ -124,6 +124,16 @@ multi_level_operator_t *multi_level_build_single(multi_architecture_t *m, imgset
 multi_level_operator_t *multi_level_build_bb(multi_architecture_t *m, imgset_t **set);
 
 /*!
+ * Build a GG multi-level operator using a given multi-level architecture using samples from an array of image sets.
+ * \param m Multi-level architecture of the operator.
+ * \param set Array of Image sets to extract examples from containing one element for each level.
+ * \return The trained multi-level operator.
+ * \sa multi_architecture_t, imgset_t
+ */
+multi_level_operator_t *multi_level_build_gg(multi_architecture_t *m, imgset_t **set);
+
+
+/*!
  * Build a multi-level (BB or GG) operator using a given multi-level architecture using samples from an array of image sets.
  * \param m Multi-level architecture of the operator.
  * \param set Array of Image sets to extract examples from containing one element for each level.
