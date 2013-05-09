@@ -110,7 +110,7 @@ static int free_images(img_t ***input_images, img_t **ideal_images, img_t **mask
 multi_level_operator_t *multi_level_build_single(multi_architecture_t *m, imgset_t *set) {
     int i, j, k;
     char filename[200];
-    multi_level_operator_t *mop = multi_level_operator_create(m);
+    multi_level_operator_t *mop = multi_level_operator_create(m, BB);
 
     img_t ***input_images;
     img_t ***new_input_images;
@@ -120,9 +120,6 @@ multi_level_operator_t *multi_level_build_single(multi_architecture_t *m, imgset
     /*itv_t *starting_interval;*/
     itv_t *level_op;
     window_t *big;
-
-    /* TODO: determinar tipo de outra maneira */
-    mop->type = BB;
 
     if (mop->nlevels > 1) {
         trios_malloc(new_input_images, sizeof(img_t **) * imgset_get_ngroups(set), multi_level_operator_t *, "Bad alloc");
@@ -205,8 +202,7 @@ multi_level_operator_t *multi_level_combine_operators(image_operator_t **ops, in
         multi_level_arch_set_window(arch, 0, i, 0, ops[i]->win);
         multi_level_arch_set_window(arch, 1, 0, i, two_level);
     }
-    mop = multi_level_operator_create(arch);
-    mop->type = ops[0]->type;
+    mop = multi_level_operator_create(arch, ops[0]->type);
     for (i = 0; i < nops; i++) {
         if (mop->type == BB) {
             mop->levels[0].trained_operator[i] = (classifier_t *) ops[i]->bb;
@@ -241,9 +237,13 @@ multi_level_operator_t *multi_level_combine_operators(image_operator_t **ops, in
     return mop;
 }
 
-multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t **set) {
+multi_level_operator_t *multi_level_build_bb(multi_architecture_t *m, imgset_t **set) {
+    return multi_level_build(m, set, BB);
+}
+
+multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t **set, int type) {
     int i, j, k;
-    multi_level_operator_t *mop = multi_level_operator_create(m);
+    multi_level_operator_t *mop = multi_level_operator_create(m, type);
 
     img_t ***input_images;
     img_t ***new_input_images;
@@ -251,7 +251,7 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t **se
     img_t **ideal_images;
 
     /* TODO: determinar tipo de outra maneira */
-    mop->type = BB;
+    mop->type = type;
 
     load_image_set(&input_images, &ideal_images, &mask_images, set, 0, mop, m);
 

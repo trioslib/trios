@@ -94,9 +94,10 @@ void multi_level_arch_free(multi_architecture_t *m);
 /*!
  * Creates a multi-level operator based on a given architecture.
  * \param m Multi-level architecture.
+ * \param type BB or GG.
  * \return The created operator.
  */
-multi_level_operator_t *multi_level_operator_create(multi_architecture_t *m);
+multi_level_operator_t *multi_level_operator_create(multi_architecture_t *m, int type);
 
 /*!
  * Frees the memory used by a multi-level operator.
@@ -114,14 +115,23 @@ void multi_level_operator_free(multi_level_operator_t *op);
 multi_level_operator_t *multi_level_build_single(multi_architecture_t *m, imgset_t *set);
 
 /*!
- * Build a multi-level operator using a given multi-level architecture using samples from an array of image sets.
+ * Build a BB multi-level operator using a given multi-level architecture using samples from an array of image sets.
  * \param m Multi-level architecture of the operator.
  * \param set Array of Image sets to extract examples from containing one element for each level.
  * \return The trained multi-level operator.
  * \sa multi_architecture_t, imgset_t
  */
-multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t **set);
+multi_level_operator_t *multi_level_build_bb(multi_architecture_t *m, imgset_t **set);
 
+/*!
+ * Build a multi-level (BB or GG) operator using a given multi-level architecture using samples from an array of image sets.
+ * \param m Multi-level architecture of the operator.
+ * \param set Array of Image sets to extract examples from containing one element for each level.
+ * \param type BB or GG.
+ * \return The trained multi-level operator.
+ * \sa multi_architecture_t, imgset_t
+ */
+multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t **set, int type);
 
 /*!
  * Returns the window used in the input-th input of the op-th operator in the "level"-th level.

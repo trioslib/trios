@@ -34,7 +34,7 @@ UTEST(STRUCTURES_CREATION2) {
     multi_level_arch_set_window(arch, 1, 0, 1, win);
     multi_level_arch_set_window(arch, 1, 0, 2, win);
 
-    multi_level_operator_t *op = multi_level_operator_create(arch);
+    multi_level_operator_t *op = multi_level_operator_create(arch, BB);
 
     multi_level_arch_free(arch);
     multi_level_operator_free(op);
@@ -56,7 +56,7 @@ UTEST(COLLEC1) {
     }
     multi_level_arch_set_window(arch, 0, 0, 0, win);
 
-    multi_level_operator_t *op = multi_level_operator_create(arch);
+    multi_level_operator_t *op = multi_level_operator_create(arch, BB);
     img_t *input = img_readPGM("./test_img/input1.pgm");
     img_t *ideal = img_readPGM("./test_img/ideal1.pgm");
     xpl_t *xpl = collec_level_operator_bb_main(op, 0, 0, &input, NULL, ideal);
@@ -90,7 +90,7 @@ UTEST(COLLEC2) {
     multi_level_arch_set_window(arch, 1, 0, 0, win);
     multi_level_arch_set_window(arch, 1, 0, 1, win);
 
-    multi_level_operator_t *op = multi_level_operator_create(arch);
+    multi_level_operator_t *op = multi_level_operator_create(arch, BB);
     img_t *ideal = img_readPGM("./test_img/ideal1.pgm");
 
     img_t *inputs[2];
@@ -274,7 +274,7 @@ UTEST(APPLY2) {
 
     imgset_t *sets[] = {set1, set2};
 
-    multi_level_operator_t *op = multi_level_build(arch, sets);
+    multi_level_operator_t *op = multi_level_build_bb(arch, sets);
     img_t *input = img_readPGM("test_img/input1.pgm");
     img_t *result = multi_level_apply(op, input, NULL);
     img_writePGM("result.pgm", result);
@@ -446,7 +446,7 @@ UTEST(BUILD_MULTI) {
 
     imgset_t *sets[] = {set1, set2, set1};
 
-    multi_level_operator_t *op = multi_level_build(arch, sets);
+    multi_level_operator_t *op = multi_level_build_bb(arch, sets);
 
     img_t *input = img_readPGM("test_img/input1.pgm");
     img_t *result = multi_level_apply(op, input, NULL);

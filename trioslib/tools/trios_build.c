@@ -75,7 +75,7 @@ void train_two_level(int argc, char *argv[]) {
     if (training[0] == NULL) trios_fatal("Error reading training set: %s.", argv[argc-3]);
     if (training[1] == NULL) trios_fatal("Error reading training set: %s.", argv[argc-2]);
 
-    mop = multi_level_build(arch, training);
+    mop = multi_level_build_bb(arch, training);
     if (mop == NULL) trios_fatal("Error building multi-level operator.");
     if (multi_level_operator_write(argv[argc-1]) == 0) {
         trios_fatal("Error writing operator %s.", argv[argc-1]);

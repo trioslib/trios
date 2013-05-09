@@ -91,13 +91,13 @@ int multi_level_arch_set_window(multi_architecture_t *m, int level, int op, int 
 }
 
 
-multi_level_operator_t *multi_level_operator_create(multi_architecture_t *m) {
+multi_level_operator_t *multi_level_operator_create(multi_architecture_t *m, int type) {
     int i, j, k;
     multi_level_operator_t *op = malloc(sizeof(multi_level_operator_t));
     if (op == NULL) {
         return (multi_level_operator_t *) trios_error(MSG, "Bad alloc");
     }
-    /* TODO: set type */
+    op->type = type;
     op->nlevels = m->nlevels;
     op->levels = malloc(sizeof(multi_level_operator_level_t) * op->nlevels);
     if (op->levels == NULL) {

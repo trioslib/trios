@@ -108,7 +108,7 @@ multi_level_operator_t *multi_level_operator_read(char *filename) {
         trios_error(MSG, "Invalid architecture file.");
         return NULL;
     }
-    mop = multi_level_operator_create(arch);
+    mop = multi_level_operator_create(arch, BB);
 
 
     for (k = 0; k < mop->nlevels; k++) {
