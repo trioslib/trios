@@ -237,17 +237,17 @@ UTEST(APPLY2) {
     int i, j;
     multi_architecture_t *arch = multi_level_arch_create(2, levels);
 
-    window_t *win1 = win_create(3, 3, 1);
-    for (i = 1; i < 3; i++) {
-        for (j = 1; j < 3; j++) {
+    window_t *win1 = win_create(5, 5, 1);
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 5; j++) {
             win_set_point(i, j, 1, 1, win1);
         }
     }
     multi_level_arch_set_window(arch, 0, 0, 0, win1);
 
-    window_t *win2 = win_create(3, 3, 1);
-    for (i = 0; i < 2; i++) {
-        for (j = 0; j < 2; j++) {
+    window_t *win2 = win_create(5, 5, 1);
+    for (i = 1; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
             win_set_point(i, j, 1, 1, win2);
         }
     }
@@ -269,8 +269,8 @@ UTEST(APPLY2) {
     imgset_t *set2 = imgset_create(1, 2);
     imgset_set_dname(set2, 1, "./test_img/");
     imgset_set_dname(set2, 2, "./test_img/");
-    imgset_set_fname(set2, 1, 1, "input2.pgm");
-    imgset_set_fname(set2, 2, 1, "ideal2.pgm");
+    imgset_set_fname(set2, 1, 1, "input1.pgm");
+    imgset_set_fname(set2, 2, 1, "ideal1.pgm");
 
     imgset_t *sets[] = {set1, set2};
 

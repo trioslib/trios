@@ -75,10 +75,10 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
         /* faz collec em cada um dos operadores */
         joint_window = multi_level_operator_joint_window(mop, level, j);
         op_collec = lcollec_multi_level(mop, level, j, input_images, mask_images, ideal_images, imgset_get_ngroups(set[set_idx]));
-        xpl_write("GG.xp", op_collec, joint_window, NULL);
+        xpl_write("BB.xp", op_collec, joint_window, NULL);
         /* decision em cada um dos operadores */
-        op_dec = ldecision_memory(op_collec, mop->type == BB, 0, AVERAGE, 0, 0);
-        mtm_write("GG.mtm", op_dec, joint_window, NULL);
+        op_dec = ldecision_memory(op_collec, mop->type == BB, 0, MEDIAN, 0, 0);
+        mtm_write("BB.mtm", op_dec, joint_window, NULL);
         /* isi em cada um dos operadores = wait forever */
 
         if (level == 0) {
