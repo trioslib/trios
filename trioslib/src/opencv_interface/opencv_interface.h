@@ -11,6 +11,7 @@ extern "C" {
 
 dTree *train_cv_tree(mtm_t *mtm);
 img_t *apply_cv_tree(img_t *input, dTree *tree, window_t *win, img_t *mask);
+int apply_cv_tree_wpat(dTree *, int *wpat, int n);
 img_t *apply_cv_treeWK(img_t *input, dTree *tree, window_t *win, apert_t *apt, img_t *mask);
 
 dTree *read_cv_tree(char *filename);

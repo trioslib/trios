@@ -79,11 +79,15 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
         if (level == 0) {
             if (mop->type == BB) {
                 level_op = (classifier_t *) lisi_partitioned(mop->levels[0].windows[j][0], op_dec, 13000);
+            } else if (mop->type == GG) {
+                level_op = (classifier_t *) ltrainGG_memory(op_dec);
             }
         } else {
             window_t *joint_window = multi_level_operator_joint_window(mop, level, j);
             if (mop->type == BB) {
                 level_op = (classifier_t *) lisi_partitioned(joint_window, op_dec, 13000);
+            } else if (mop->type == GG) {
+                level_op = (classifier_t *) ltrainGG_memory(op_dec);
             }
             win_free(joint_window);
         }

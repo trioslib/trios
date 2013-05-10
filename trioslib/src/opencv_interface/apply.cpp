@@ -106,3 +106,7 @@ extern "C" img_t *apply_cv_tree(img_t *input, dTree *tree, window_t *win, img_t 
 extern "C" img_t *apply_cv_treeWK(img_t *input, dTree *tree, window_t *win, apert_t *apt, img_t *mask) {
     return applyWK(input, (CvDTree *)tree, win, apt, mask);
 }
+
+extern "C" int apply_cv_tree_wpat(dTree *dt, int *wpat, int n) {
+    return 0;
+}

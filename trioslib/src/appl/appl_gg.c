@@ -28,3 +28,7 @@ img_t *lapplyGG_memory(img_t *input, dTree *tree, window_t *win, img_t *mask) {
     }
     return res;
 }
+
+int lapplyGG_wpat(dTree *tree, int *wpat, int n) {
+    return apply_cv_tree_wpat(tree, wpat, n);
+}
