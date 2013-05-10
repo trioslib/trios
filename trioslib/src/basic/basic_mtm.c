@@ -256,7 +256,7 @@ int                       /*+ Purpose: inserts a minterm in the table      +*/
     mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/
     int index1,            /*+ In: insert position                          +*/
     int wsize,            /*+ In: wpat size in bytes                       +*/
-    char *wpat,           /*+ In: w-pattern                                +*/
+    int *wpat,           /*+ In: w-pattern                                +*/
     int label,            /*+ In: label of the inserted minterm            +*/
     unsigned int fq       /*+ In: frequency of wpat                        +*/
 )
@@ -281,7 +281,7 @@ int                       /*+ Purpose: inserts a minterm in the table      +*/
 
   freqlist = (freq_node *) mtm->mtm_freq ;
 
-  p[index1].wpat = (char *)malloc(sizeof(char)*wsize) ;
+  p[index1].wpat = (int *)malloc(sizeof(int)*wsize) ;
   if(!p[index1].wpat) {
     return trios_error(1, "Memory allocation failed.") ;
   }
@@ -296,7 +296,7 @@ trios_debug("with label = %d", label) ;
 #endif
 
   for ( j = 0; j < wsize; j++)
-    p[index1].wpat[j] = (char)wpat[j] ;
+    p[index1].wpat[j] = wpat[j] ;
 
   p[index1].label = label ;  /* Here we removed a cast to char */
   p[index1].fq = fq ;        /* Aug 19, 1999 */
@@ -319,7 +319,7 @@ trios_debug("with label = %d", label) ;
      -------------------------------------------
 */
 
-char *          /*+ Purpose: Get a pattern from the table                  +*/
+int *          /*+ Purpose: Get a pattern from the table                  +*/
   mtm_GX_get_pattern(
     mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/
     int index1             /*+ In: pattern position                         +*/

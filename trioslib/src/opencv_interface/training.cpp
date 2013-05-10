@@ -27,7 +27,7 @@ cv::Mat build_samples_from_mtm(mtm_t *mtm) {
         mtm_GX *m = (mtm_GX *) mtm->mtm_data + i;
         for (int j = 0; j < m->fq; j++, k++) {
             for (int l = 0; l < mtm->wsize; l++) {
-                samples.at<float>(k, l) = ((unsigned char *) m->wpat)[l];
+                samples.at<float>(k, l) = m->wpat[l];
             }
         }
     }
@@ -43,7 +43,7 @@ int build_samples_xpl_gg_R(xpl_t *xpl, xpl_GG *node, cv::Mat &samples, int i) {
     for (f = node->freqlist; f != NULL; f = f->next) {
         for (int j = 0; j < f->freq; j++, i++) {
             for (int l = 0; l < xpl->wsize; l++) {
-                samples.at<float>(i, l) = (unsigned char) node->wpat[l];
+                samples.at<float>(i, l) = node->wpat[l];
             }
         }
     }

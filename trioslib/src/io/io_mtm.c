@@ -15,7 +15,7 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 	FILE *fd;
 	mtm_t *mtm;
 	unsigned int *bwpat;
-	char *wpat;
+    int *wpat;
 	unsigned int nmtm, freq, fq, fq1;
 	int value, type, wsize, wzip, label, i, j;
 	char tag, dot;
@@ -307,7 +307,7 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 
 		mtm_set_comp_prob(mtm, comp_prob);
 
-		if ((wpat = (char *) malloc(sizeof(char) * wsize)) == NULL) {
+        if ((wpat = (int *) malloc(sizeof(int) * wsize)) == NULL) {
 			fclose(fd);
 			win_free(*win);
 			mtm_free(mtm);
@@ -335,7 +335,7 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 					trios_fatal
 					    ("Unexpected data or end of file");
 				}
-				wpat[j] = (char) value;
+                wpat[j] = value;
 			}
 
 			if (2 != fscanf(fd, "%d %d", &label, &fq)) {
@@ -395,7 +395,7 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 	unsigned int nmtm;
 	int type, wzip, wsize, wsize1, freqsize;
 	int i, j, comp_prob;
-	unsigned char value;
+    int value;
 
 
 #ifdef _DEBUG_
@@ -501,7 +501,7 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 
 		for (i = 0; i < nmtm; i++) {
 			for (j = 0; j < wsize; j++) {
-				value = (unsigned char) table_GX[i].wpat[j];
+                value = table_GX[i].wpat[j];
 				fprintf(fd, "%d ", value);
 			}
             fprintf(fd, "%d %d\n",

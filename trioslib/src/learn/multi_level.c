@@ -68,15 +68,18 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
     classifier_t *level_op = NULL;
     xpl_t *op_collec;
     mtm_t *op_dec;
+    window_t *joint_window;
 
     for (j = 0; j < mop->levels[level].noperators; j++) {
         /*printf("Operator %d ninputs %d \n", j, mop->levels[i].ninputs);*/
         /* faz collec em cada um dos operadores */
+        joint_window = multi_level_operator_joint_window(mop, level, j);
         op_collec = lcollec_multi_level(mop, level, j, input_images, mask_images, ideal_images, imgset_get_ngroups(set[set_idx]));
+        xpl_write("GG.xp", op_collec, joint_window, NULL);
         /* decision em cada um dos operadores */
         op_dec = ldecision_memory(op_collec, mop->type == BB, 0, AVERAGE, 0, 0);
+        mtm_write("GG.mtm", op_dec, joint_window, NULL);
         /* isi em cada um dos operadores = wait forever */
-        window_t *joint_window = multi_level_operator_joint_window(mop, level, j);
 
         if (level == 0) {
             if (mop->type == BB) {
@@ -85,7 +88,6 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
                 level_op = (classifier_t *) ltrainGG_memory(op_dec);
             }
         } else {
-            window_t *joint_window = multi_level_operator_joint_window(mop, level, j);
             if (mop->type == BB) {
                 level_op = (classifier_t *) lisi_partitioned(joint_window, op_dec, 13000);
             } else if (mop->type == GG) {

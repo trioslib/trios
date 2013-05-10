@@ -48,7 +48,7 @@ extern "C" {
     Structure that holds a classified example for operators with gray-level input.
  */
 typedef struct mtm_gx {
-  char  *wpat ;             /*!< pointer to w-pattern             */
+  int *wpat ;             /*!< pointer to w-pattern             */
   int   label ;             /*!< label attributed to the pattern  */
   unsigned int fq ;         /*!< frequency of the w-pattern       */
 } mtm_GX ;

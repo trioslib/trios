@@ -332,8 +332,6 @@ UTEST(BUILD_GG) {
 
     imgset_t *sets[] = {set1, set2};
 
-    image_operator_t *opGG = image_operator_build_gg(set1, win1);
-    printf("AS\n");
     multi_level_operator_t *op = multi_level_build_gg(arch, sets);
     img_t *input = img_readPGM("test_img/input1.pgm");
     img_t *result = multi_level_apply(op, input, NULL);
