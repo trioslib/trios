@@ -290,6 +290,66 @@ UTEST(APPLY2) {
     win_free(win3);
 } TEST_END
 
+UTEST(BUILD_GG) {
+    int levels[] = {2, 1};
+    int i, j;
+    multi_architecture_t *arch = multi_level_arch_create(2, levels);
+
+    window_t *win1 = win_create(5, 5, 1);
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < 5; j++) {
+            win_set_point(i, j, 1, 1, win1);
+        }
+    }
+    multi_level_arch_set_window(arch, 0, 0, 0, win1);
+
+    window_t *win2 = win_create(5, 5, 1);
+    for (i = 1; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            win_set_point(i, j, 1, 1, win2);
+        }
+    }
+    multi_level_arch_set_window(arch, 0, 1, 0, win2);
+
+    window_t *win3 = win_create(5, 5, 1);
+    win_set_point(0, 0, 1, 1, win3);
+
+
+    multi_level_arch_set_window(arch, 1, 0, 0, win3);
+    multi_level_arch_set_window(arch, 1, 0, 1, win3);
+
+    imgset_t *set1 = imgset_create(1, 2);
+    imgset_set_dname(set1, 1, "./test_img/");
+    imgset_set_dname(set1, 2, "./test_img/");
+    imgset_set_fname(set1, 1, 1, "input1.pgm");
+    imgset_set_fname(set1, 2, 1, "ideal1.pgm");
+
+    imgset_t *set2 = imgset_create(1, 2);
+    imgset_set_dname(set2, 1, "./test_img/");
+    imgset_set_dname(set2, 2, "./test_img/");
+    imgset_set_fname(set2, 1, 1, "input2.pgm");
+    imgset_set_fname(set2, 2, 1, "ideal2.pgm");
+
+    imgset_t *sets[] = {set1, set2};
+
+    image_operator_t *opGG = image_operator_build_gg(set1, win1);
+    printf("AS\n");
+    multi_level_operator_t *op = multi_level_build_gg(arch, sets);
+    img_t *input = img_readPGM("test_img/input1.pgm");
+    img_t *result = multi_level_apply(op, input, NULL);
+    img_writePGM("result.pgm", result);
+
+    imgset_free(set1);
+    imgset_free(set2);
+    img_free(input);
+    img_free(result);
+    multi_level_arch_free(arch);
+    multi_level_operator_free(op);
+    win_free(win1);
+    win_free(win2);
+    win_free(win3);
+} TEST_END
+
 UTEST(ARCH_IO) {
     int levels[] = {2, 1};
     int i, j, k, l, m;
@@ -460,6 +520,7 @@ UTEST(BUILD_MULTI) {
     win_free(win2);
     win_free(win3);
 } TEST_END
+
 
 UTEST(TEST_COMBINE) {
     itv_t *itvs[5];

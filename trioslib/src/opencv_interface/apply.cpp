@@ -16,6 +16,17 @@
 
 typedef void dTree;
 
+int apply_wpat(CvDTree *tr, int *w_pat, int n) {
+    int i;
+    CvDTreeNode *res;
+    cv::Mat wpat(1, n, CV_32FC1);
+    for (i = 0; i < n; i++) {
+        wpat.at<float>(0, i) = w_pat[i];
+    }
+    res = tr->predict(wpat);
+    return (int) (res->value + 0.5);
+}
+
 img_t *apply(img_t *img, CvDTree *tr, window_t *win, img_t *mask) {
     img_t *output = img_create(img->width, img->height, img->nbands, img->pixel_size);
     cv::Mat wpat(1, win_get_wsize(win), CV_32FC1);
@@ -108,5 +119,5 @@ extern "C" img_t *apply_cv_treeWK(img_t *input, dTree *tree, window_t *win, aper
 }
 
 extern "C" int apply_cv_tree_wpat(dTree *dt, int *wpat, int n) {
-    return 0;
+    return apply_wpat((CvDTree *) dt, wpat, n);
 }

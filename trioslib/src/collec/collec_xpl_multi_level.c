@@ -117,6 +117,7 @@ xpl_t *collec_level_operator_gg_main(multi_level_operator_t *mop, int level, int
         }
 
         for (i = 0; i < mop->levels[level].ninputs; i++) {
+            offset_set(offset, mop->levels[level].windows[op][i], w, 1);
             for (j = 0; j < win_get_wsize(mop->levels[level].windows[op][i]); j++) {
                 l = offset[j] + k;
                 joint_wpat[win_offset] = img_get_pixel(inputs[i], l / w, l % w, 0);

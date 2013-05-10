@@ -66,13 +66,15 @@ static int load_image_set(img_t ****__input_images, img_t ***__ideal_images, img
 static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, int set_idx, img_t ***input_images, img_t **ideal_images, img_t **mask_images) {
     int j;
     classifier_t *level_op = NULL;
+    xpl_t *op_collec;
+    mtm_t *op_dec;
 
     for (j = 0; j < mop->levels[level].noperators; j++) {
         /*printf("Operator %d ninputs %d \n", j, mop->levels[i].ninputs);*/
         /* faz collec em cada um dos operadores */
-        xpl_t *op_collec = lcollec_multi_level(mop, level, j, input_images, mask_images, ideal_images, imgset_get_ngroups(set[set_idx]));
+        op_collec = lcollec_multi_level(mop, level, j, input_images, mask_images, ideal_images, imgset_get_ngroups(set[set_idx]));
         /* decision em cada um dos operadores */
-        mtm_t *op_dec = ldecision_memory(op_collec, 1, 0, AVERAGE, 0, 0);
+        op_dec = ldecision_memory(op_collec, mop->type == BB, 0, AVERAGE, 0, 0);
         /* isi em cada um dos operadores = wait forever */
         window_t *joint_window = multi_level_operator_joint_window(mop, level, j);
 
@@ -168,6 +170,8 @@ static int apply_until_level_images(multi_level_operator_t *mop, int level, img_
         for (j = 0; j < mop->levels[i].noperators; j++) {
             if (mop->type == BB) {
                 next[j] = multi_level_apply_level_bb(mop, i, j, input, mask);
+            } else if (mop->type == GG) {
+                next[j] = multi_level_apply_level_gg(mop, i, j, input, mask);
             }
             sprintf(cmd, "l%dop%d.pgm", i, j);
             img_writePGM(cmd, next[j]);
