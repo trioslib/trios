@@ -2,13 +2,10 @@
 
 window_t *multi_level_operator_joint_window(multi_level_operator_t *mop, int level, int op);
 
-int multi_architecture_write(char *filename, multi_architecture_t *arch) {
+int write_multi_architecture_data(FILE *f, char *filename, multi_architecture_t *arch) {
     int i, j, k;
-    char window_name[1024];
-    FILE *f = fopen(filename, "w");
-    if (f == NULL) {
-        return trios_error(MSG, "Failed to open %s.", filename);
-    }
+    char window_name[1024], cmd[1024];
+
     fprintf(f, "%d\n", arch->nlevels);
     for (k = 0; k < arch->nlevels; k++) {
         fprintf(f, "%d ", arch->levels[k].noperators);
@@ -18,26 +15,61 @@ int multi_architecture_write(char *filename, multi_architecture_t *arch) {
         fprintf(f, "%d %d\n", arch->levels[k].ninputs, arch->levels[k].noperators);
         for (i = 0; i < arch->levels[k].noperators; i++) {
             for (j = 0; j < arch->levels[k].ninputs; j++) {
-                sprintf(window_name, "%s_win%dx%dx%d", filename, k, i, j);
+                sprintf(cmd, "mkdir -p %s-files/level%d/operator%d", filename, k, i);
+                system(cmd);
+
+                sprintf(window_name, "%s-files/level%d/operator%d/window%d", filename, k, i, j);
                 win_write(window_name, arch->levels[k].windows[i][j]);
                 /*fprintf(f, "%s\n", window_name);*/
             }
         }
     }
-
-    fclose(f);
     return 1;
 }
 
-multi_architecture_t * multi_architecture_read(char *filename) {
+int write_multi_architecture_data2(FILE *f, char *filename, multi_level_operator_t *op) {
+    int i, j, k;
+    char window_name[1024], cmd[1024];
+
+    fprintf(f, "%d\n", op->nlevels);
+    for (k = 0; k < op->nlevels; k++) {
+        fprintf(f, "%d ", op->levels[k].noperators);
+    }
+    fprintf(f, "\n");
+    for (k = 0; k < op->nlevels; k++) {
+        fprintf(f, "%d %d\n", op->levels[k].ninputs, op->levels[k].noperators);
+        for (i = 0; i < op->levels[k].noperators; i++) {
+            for (j = 0; j < op->levels[k].ninputs; j++) {
+                sprintf(cmd, "mkdir -p %s-files/level%d/operator%d", filename, k, i);
+                system(cmd);
+
+                sprintf(window_name, "%s-files/level%d/operator%d/window%d", filename, k, i, j);
+                win_write(window_name, op->levels[k].windows[i][j]);
+                /*fprintf(f, "%s\n", window_name);*/
+            }
+        }
+    }
+    return 1;
+}
+
+
+int multi_architecture_write(char *filename, multi_architecture_t *arch) {
+    FILE *f = fopen(filename, "w");
+    int r;
+    if (f == NULL) {
+        return trios_error(MSG, "Failed to open %s.", filename);
+    }
+    r = write_multi_architecture_data(f,filename, arch);
+    fclose(f);
+    return r;
+}
+
+multi_architecture_t *read_multi_architecture_data(FILE *f, char *filename) {
     int i, j, k;
     char window_name[1024];
-    multi_architecture_t *march;
     int nlevels, *ops;
-    FILE *f = fopen(filename, "r");
-    if (f == NULL) {
-        return (multi_architecture_t *) trios_error(MSG, "Failed to open %s.", filename);
-    }
+    multi_architecture_t *march;
+
     if (fscanf(f, "%d\n", &nlevels) != 1) {
         return (multi_architecture_t *) trios_error(MSG, "Invalid multi_architecture file: %s nlevels", filename);
     }
@@ -54,7 +86,7 @@ multi_architecture_t * multi_architecture_read(char *filename) {
         }
         for (i = 0; i < march->levels[k].noperators; i++) {
             for (j = 0; j < march->levels[k].ninputs; j++) {
-                sprintf(window_name, "%s_win%dx%dx%d", filename, k, i, j);
+                sprintf(window_name, "%s-files/level%d/operator%d/window%d", filename, k, i, j);
                 march->levels[k].windows[i][j] = win_read(window_name);
             }
         }
@@ -62,32 +94,43 @@ multi_architecture_t * multi_architecture_read(char *filename) {
     return march;
 }
 
+multi_architecture_t * multi_architecture_read(char *filename) {
+    multi_architecture_t *march;
+    FILE *f = fopen(filename, "r");
+    if (f == NULL) {
+        return (multi_architecture_t *) trios_error(MSG, "Failed to open %s.", filename);
+    }
+    march = read_multi_architecture_data(f, filename);
+    return march;
+}
+
 int multi_level_operator_write(char *filename, multi_level_operator_t *mop) {
     int i, j, k;
-    char temp_name[1024];
+    char temp_name[1024], cmd[1024];
     window_t *joint;
     FILE *f = fopen(filename, "w");
     if (f == NULL) {
         return trios_error(MSG, "Failed to open %s.", filename);
     }
-    fprintf(f, "%d\n", mop->nlevels);
-    for (k = 0; k < mop->nlevels; k++) {
-        fprintf(f, "%d ", mop->levels[k].noperators);
+    if (mop->type == BB) {
+        fprintf(f, "BB\n");
+    } else if (mop->type == GG) {
+        fprintf(f, "GG\n");
     }
-    fprintf(f, "\n");
+
+    write_multi_architecture_data2(f, filename, mop);
+
     for (k = 0; k < mop->nlevels; k++) {
-        fprintf(f, "%d %d\n", mop->levels[k].ninputs, mop->levels[k].noperators);
         for (i = 0; i < mop->levels[k].noperators; i++) {
             for (j = 0; j < mop->levels[k].ninputs; j++) {
-                sprintf(temp_name, "%s_win%dx%dx%d", filename, k, i, j);
-                win_write(temp_name, mop->levels[k].windows[i][j]);
-
-                joint = multi_level_operator_joint_window(mop, k, i);
-                sprintf(temp_name, "%s_op%dx%dx%d", filename, k, i, j);
+                sprintf(temp_name, "%s-files/level%d/operator%d/operator", filename, k, i, j);
                 if (mop->type == BB) {
+                    joint = multi_level_operator_joint_window(mop, k, i);
                     itv_write(temp_name, (itv_t *) mop->levels[k].trained_operator[i], joint);
+                    win_free(joint);
+                } else if (mop->type == GG) {
+                    // escreve GG
                 }
-                win_free(joint);
             }
         }
     }
@@ -97,18 +140,32 @@ int multi_level_operator_write(char *filename, multi_level_operator_t *mop) {
 }
 
 multi_level_operator_t *multi_level_operator_read(char *filename) {
-    int i, j, k;
+    int i, j, k, type;
     char temp_name[1024];
     multi_level_operator_t *mop;
     multi_architecture_t *arch;
     window_t *joint;
+    FILE *f;
 
-    arch = multi_architecture_read(filename);
+    f = fopen(filename, "r");
+    if (f == NULL) {
+        return (multi_level_operator_t *) trios_error(MSG, "Failed to open %s.", filename);
+    }
+    fscanf(f, "%s", temp_name);
+    if (strcmp(temp_name, "BB") == 0) {
+        type = BB;
+    } else if (strcmp(temp_name, "GG") == 0) {
+        type = GG;
+    } else {
+        return (multi_level_operator_t *) trios_error(MSG, "Unknown operator type: %s.", temp_name);
+    }
+
+    arch = read_multi_architecture_data(f, filename);
     if (arch == NULL) {
         trios_error(MSG, "Invalid architecture file.");
         return NULL;
     }
-    mop = multi_level_operator_create(arch, BB);
+    mop = multi_level_operator_create(arch, type);
 
 
     for (k = 0; k < mop->nlevels; k++) {
