@@ -592,7 +592,7 @@ trios_debug("label1=%d , freq1=%d\n", freqlstin->label, freqlstin->freq) ;
 
       qfreqnext = qfreq->next ;
 
-      while( (pfreq) && (pfreq->label > label) ) {
+      while( (pfreq) && (pfreq->label < label) ) {
 	pfreqprev = pfreq ;
 	pfreq = pfreq->next ;
       }
@@ -893,20 +893,17 @@ int             /*+ Purpose: Finds the median of the labels                 +*/
 
   /* computes the total frequence of the w-pat and the mean */
   *wpat_freq = freq_sum(qfreq) ;
-  wpat_freq_median = (int) ((float)*wpat_freq/2 + 0.5) ;
-
+  wpat_freq_median = (int) ((float)*wpat_freq/2 + 0.5);
   /* scans the linked list and computes the median  */
 
   wpat_sub_freq = 0 ;
 
-  while(wpat_sub_freq < wpat_freq_median) {
-
+  while (wpat_sub_freq < wpat_freq_median) {
     *wpat_label = qfreq->label ;
 
     wpat_sub_freq += qfreq->freq ;
 
     qfreq = qfreq->next ;
-
   }
 
   verify = ((float)*wpat_freq / sum) * 100 ;
