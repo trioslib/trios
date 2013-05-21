@@ -104,8 +104,6 @@ xpl_t *collec_level_operator_gg_main(multi_level_operator_t *mop, int level, int
     joint_wpat = malloc(sizeof(int) * win_size);
     offset = malloc(sizeof(int) * win_size);
 
-    printf("Level %d\nwin size %d\n", level, win_size);
-
     w = img_get_width(inputs[0]);
     h = img_get_height(inputs[0]);
     npixels = w * h;

@@ -117,7 +117,7 @@ void test_accuracy(CvDTree &tr, cv::Mat samples, cv::Mat labels) {
             printf("\n");*/
         }
     }
-    fprintf(stderr, "Acc %f wrong %lu prop %lu/%lu MSE %lu\n", 1.0 * right/(right + wrong), wrong, right, right + wrong, mse);
+    fprintf(stderr, "MTM Acc %f wrong %lu prop %lu/%lu MSE %lu\n", 1.0 * right/(right + wrong), wrong, right, right + wrong, mse);
 }
 
 extern "C" void *train_cv_tree(mtm_t *mtm) {
@@ -133,7 +133,7 @@ extern "C" void *train_cv_tree(mtm_t *mtm) {
     params.max_categories = INT_MAX;
     cv::Mat var_type(1, mtm->wsize + 1, CV_8UC1);
     for (int i = 0; i < mtm->wsize + 1; i++) {
-        var_type.at<unsigned char>(0, i) = CV_VAR_ORDERED;
+        var_type.at<unsigned char>(0, i) = CV_VAR_NUMERICAL;
     }
     CvDTree *tr_mtm = new CvDTree();
     tr_mtm->pruned_tree_idx = -INT_MAX;

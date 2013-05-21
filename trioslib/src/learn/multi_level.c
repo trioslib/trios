@@ -69,17 +69,20 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
     xpl_t *op_collec;
     mtm_t *op_dec;
     window_t *joint_window;
+    char temp[1024];
+
 
     for (j = 0; j < mop->levels[level].noperators; j++) {
         /*printf("Operator %d ninputs %d \n", j, mop->levels[i].ninputs);*/
         /* faz collec em cada um dos operadores */
         joint_window = multi_level_operator_joint_window(mop, level, j);
         op_collec = lcollec_multi_level(mop, level, j, input_images, mask_images, ideal_images, imgset_get_ngroups(set[set_idx]));
-        xpl_write("BB.xp", op_collec, joint_window, NULL);
+        sprintf(temp, "GG-lv%d-op%d.xp", level, j);
+        xpl_write(temp, op_collec, joint_window, NULL);
         /* decision em cada um dos operadores */
         op_dec = ldecision_memory(op_collec, mop->type == BB, 0, MEDIAN, 0, 0);
-        mtm_write("BB.mtm", op_dec, joint_window, NULL);
-        /* isi em cada um dos operadores = wait forever */
+        sprintf(temp, "GG-lv%d-op%d.mtm", level, j);
+        mtm_write(temp, op_dec, joint_window, NULL);
 
         if (level == 0) {
             if (mop->type == BB) {

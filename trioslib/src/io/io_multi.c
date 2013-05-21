@@ -171,7 +171,7 @@ multi_level_operator_t *multi_level_operator_read(char *filename) {
     for (k = 0; k < mop->nlevels; k++) {
         for (i = 0; i < mop->levels[k].noperators; i++) {
             for (j = 0; j < mop->levels[k].ninputs; j++) {
-                sprintf(temp_name, "%s_op%dx%dx%d", filename, k, i, j);
+                sprintf(temp_name, "%s-files/level%d/operator%d/operator", filename, k, i, j);
                 if  (mop->type == BB) {
                     mop->levels[k].trained_operator[i] = (classifier_t *) itv_read(temp_name, &joint);
                 }
