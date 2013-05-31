@@ -13,4 +13,8 @@
   */
 img_t *set_mask(char *f_mask, int width, int height, window_t * win, int *alloc_mask);
 
+img_t *multi_level_apply_level_bb(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask);
+
+img_t *multi_level_apply_level_gg(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask);
+
 #endif

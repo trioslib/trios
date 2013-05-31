@@ -311,7 +311,7 @@ UTEST(BUILD_GG) {
     }
     multi_level_arch_set_window(arch, 0, 1, 0, win2);
 
-    window_t *win3 = win_create(5, 5, 1);
+    window_t *win3 = win_create(1, 1, 1);
     win_set_point(0, 0, 1, 1, win3);
 
 
@@ -331,17 +331,11 @@ UTEST(BUILD_GG) {
     imgset_set_fname(set2, 2, 1, "ideal2.pgm");
 
     imgset_t *sets[] = {set1, set1};
-/*
-    image_operator_t *o = image_operator_build_gg(set1, win1);
-    printf("%d\n", image_operator_mae(o, set1, NULL));
 
-    o = image_operator_build_bb(set1, win1);
-    printf("%d\n", image_operator_mae(o, set1, NULL));
-*/
     multi_level_operator_t *op = multi_level_build_gg(arch, sets);
     img_t *input = img_readPGM("test_img/input1.pgm");
     img_t *result = multi_level_apply(op, input, NULL);
-    img_writePGM("result.pgm", result);
+    img_writePGM("resultGG.pgm", result);
 
     imgset_free(set1);
     imgset_free(set2);

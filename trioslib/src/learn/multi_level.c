@@ -4,6 +4,7 @@
 #include <trios.h>
 
 #include "../collec/collec_private.h"
+#include "../appl/local.h"
 
 #include <stdlib.h>
 
@@ -77,12 +78,22 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
         /* faz collec em cada um dos operadores */
         joint_window = multi_level_operator_joint_window(mop, level, j);
         op_collec = lcollec_multi_level(mop, level, j, input_images, mask_images, ideal_images, imgset_get_ngroups(set[set_idx]));
-        sprintf(temp, "GG-lv%d-op%d.xp", level, j);
-        xpl_write(temp, op_collec, joint_window, NULL);
         /* decision em cada um dos operadores */
         op_dec = ldecision_memory(op_collec, mop->type == BB, 0, MEDIAN, 0, 0);
-        sprintf(temp, "GG-lv%d-op%d.mtm", level, j);
-        mtm_write(temp, op_dec, joint_window, NULL);
+
+#ifdef DEBUG
+        if (mop->type == GG) {
+            sprintf(temp, "GG-lv%d-op%d.xp", level, j);
+            xpl_write(temp, op_collec, joint_window, NULL);
+            sprintf(temp, "GG-lv%d-op%d.mtm", level, j);
+            mtm_write(temp, op_dec, joint_window, NULL);
+        } else {
+            sprintf(temp, "BB-lv%d-op%d.xp", level, j);
+            xpl_write(temp, op_collec, joint_window, NULL);
+            sprintf(temp, "BB-lv%d-op%d.mtm", level, j);
+            mtm_write(temp, op_dec, joint_window, NULL);
+        }
+#endif
 
         if (level == 0) {
             if (mop->type == BB) {
