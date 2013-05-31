@@ -269,13 +269,13 @@ UTEST(APPLY2) {
     imgset_t *set2 = imgset_create(1, 2);
     imgset_set_dname(set2, 1, "./test_img/");
     imgset_set_dname(set2, 2, "./test_img/");
-    imgset_set_fname(set2, 1, 1, "input1.pgm");
-    imgset_set_fname(set2, 2, 1, "ideal1.pgm");
+    imgset_set_fname(set2, 1, 1, "input2.pgm");
+    imgset_set_fname(set2, 2, 1, "ideal2.pgm");
 
-    imgset_t *sets[] = {set1, set1};
+    imgset_t *sets[] = {set1, set2};
 
     multi_level_operator_t *op = multi_level_build_bb(arch, sets);
-    img_t *input = img_readPGM("test_img/input1.pgm");
+    img_t *input = img_readPGM("test_img/input2.pgm");
     img_t *result = multi_level_apply(op, input, NULL);
     img_writePGM("result.pgm", result);
 
@@ -330,10 +330,10 @@ UTEST(BUILD_GG) {
     imgset_set_fname(set2, 1, 1, "input2.pgm");
     imgset_set_fname(set2, 2, 1, "ideal2.pgm");
 
-    imgset_t *sets[] = {set1, set1};
+    imgset_t *sets[] = {set1, set2};
 
     multi_level_operator_t *op = multi_level_build_gg(arch, sets);
-    img_t *input = img_readPGM("test_img/input1.pgm");
+    img_t *input = img_readPGM("test_img/input2.pgm");
     img_t *result = multi_level_apply(op, input, NULL);
     img_writePGM("resultGG.pgm", result);
 
