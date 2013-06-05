@@ -501,8 +501,7 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 
 		for (i = 0; i < nmtm; i++) {
 			for (j = 0; j < wsize; j++) {
-                value = table_GX[i].wpat[j];
-				fprintf(fd, "%d ", value);
+                fprintf(fd, "%d ", table_GX[i].wpat[j]);
 			}
             fprintf(fd, "%d %d\n",
 				table_GX[i].label, table_GX[i].fq);

@@ -136,7 +136,7 @@ decide_tree_gg_average(
 	unsigned int wpat_freq;	/* the total frequency of the pattern */
 	int wpat_label;		/* the labels of a pattern            */
 
-	int status;
+    int status;
 
 
 #ifdef _DEBUG_
@@ -158,7 +158,6 @@ decide_tree_gg_average(
 #endif
 
 		if (status == 1) {
-
 			if (!mtm_GX_insert
 			    (mtm, (int) mtm->nmtm, wsize, p->wpat, wpat_label,
 			     wpat_freq)) {

@@ -295,8 +295,9 @@ for (j=0;j<wsize;j++) {
 trios_debug("with label = %d", label) ;
 #endif
 
-  for ( j = 0; j < wsize; j++)
+  for ( j = 0; j < wsize; j++) {
     p[index1].wpat[j] = wpat[j] ;
+  }
 
   p[index1].label = label ;  /* Here we removed a cast to char */
   p[index1].fq = fq ;        /* Aug 19, 1999 */

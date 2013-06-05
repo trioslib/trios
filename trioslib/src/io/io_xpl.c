@@ -334,7 +334,7 @@ xpl_t *xpl_read(char *fname, window_t ** win , apert_t **apt)
 		   fclose(fd) ;
            trios_fatal("Unexpected data or end of file") ;
 		   }
-		   wpat[j] = (char) x ;
+           wpat[j] = x ;
 		   }
 
 		   freqlist = NULL ;
@@ -556,7 +556,7 @@ void xpl_GG_write_tree(FILE * fd, xpl_GG * p, int wsize) {
 
 		for (i = 0; i < wsize; i++) {
 			wpat = (unsigned char) p->wpat[i];
-			fprintf(fd, "%d ", (int) wpat);
+            fprintf(fd, "%d ", p->wpat[i]);
 		}
 
 		freqlist = p->freqlist;
