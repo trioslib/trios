@@ -95,7 +95,7 @@ UTEST(test_apply_apert) {
         }
     }
     win_write("WIN.w", win);
-    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 3, 3, VP_Center, "wk.xpl", NULL));
+    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 5, 5, VP_Center, "wk.xpl", NULL));
     apert_t *apt;
     xpl_t *xpl = xpl_read("wk.xpl", &win, &apt);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);

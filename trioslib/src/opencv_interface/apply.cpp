@@ -96,11 +96,16 @@ img_t *applyWK(img_t *img, CvDTree *tr, window_t *win, apert_t *apt, img_t *mask
         /* classifica */
         CvDTreeNode *node= tr->predict(wpat);
         int val = node->value;
+        /*std::cout << wpat;
+        printf(" %d\n", val);*/
         if (apt->ko != 0) {
             if (vplace == VP_Center) {
                 val += img_get_pixel(img, k / img->width, k % img->width, 0);
             }
         }
+
+        if (val > 255) val = 255;
+        if (val < 0) val = 0;
         /* coloca na imagem */
         img_set_pixel(output, k / img->width, k % img->width, 0, (unsigned char) val);
     }

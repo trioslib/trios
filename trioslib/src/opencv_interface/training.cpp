@@ -1,5 +1,4 @@
 #include <cstdio>
-
 #include "opencv2/ml/ml.hpp"
 #include "trios_mtm.h"
 #include "trios_io.h"
@@ -96,16 +95,18 @@ cv::Mat build_classes_from_xpl(xpl_t *xpl) {
 void test_accuracy(CvDTree &tr, cv::Mat samples, cv::Mat labels) {
     cv::Mat wpat(1, samples.cols, CV_32FC1);
     unsigned long right, wrong, mse;
-    unsigned char value, label;
+    int value, label;
     right = wrong = mse = 0;
     for (int i = 0; i < samples.rows; i++) {
         for (int j = 0; j < samples.cols; j++) {
             wpat.at<float>(0, j) = samples.at<float>(i, j);
-        }
+        }        
 
         CvDTreeNode *node = tr.predict(wpat);
         value = (int) node->value;
         label = (int) labels.at<float>(i, 0);
+        /*std::cout << wpat;
+        printf(" %d real %d\n", value, label);*/
         if (value == label) {
             right++;
         } else {
@@ -132,8 +133,14 @@ extern "C" void *train_cv_tree(mtm_t *mtm) {
     params.use_surrogates = false;
     params.max_categories = INT_MAX;
     cv::Mat var_type(1, mtm->wsize + 1, CV_8UC1);
-    for (int i = 0; i < mtm->wsize + 1; i++) {
-        var_type.at<unsigned char>(0, i) = CV_VAR_NUMERICAL;
+    if (mtm->type == BB || mtm->type == GG || mtm->type == GB) {
+        for (int i = 0; i < mtm->wsize + 1; i++) {
+            var_type.at<unsigned char>(0, i) = CV_VAR_NUMERICAL;
+        }
+    } else if (mtm->type == WKF || mtm->type == WKC) {
+        for (int i = 0; i < mtm->wsize + 1; i++) {
+            var_type.at<unsigned char>(0, i) = CV_VAR_CATEGORICAL;
+        }
     }
     CvDTree *tr_mtm = new CvDTree();
     tr_mtm->pruned_tree_idx = -INT_MAX;
