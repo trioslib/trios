@@ -39,22 +39,31 @@ image_operator_t *image_operator_build_bb(imgset_t *set, window_t *win) {
 }
 
 
-image_operator_t *image_operator_build_gg(imgset_t *set, window_t *win) {
+static image_operator_t *build_with_tree(imgset_t *set, window_t *win, int type, int decision) {
     image_operator_t *iop;
     trios_malloc(iop, sizeof(image_operator_t), image_operator_t *, "Failed to alloc image operator");
-    iop->type = GG;
+    iop->type = type;
     iop->win = win;
     iop->apt = NULL;
     iop->bb = NULL;
 
-    imgset_write("set.build.gg", set);
+    /*imgset_write("set.build.gg", set);
     win_write("win.build.gg", win);
     lcollec("set.build.gg", "win.build.gg", NULL, 0, 0, 0, "collec.build.gg", NULL);
-    iop->collec = xpl_read("collec.build.gg", &(iop->win), NULL);
-    iop->decision = ldecision_memory(iop->collec, 0, 0, AVERAGE, 0, 0);
+    iop->collec = xpl_read("collec.build.gg", &(iop->win), NULL);*/
+    iop->collec = lcollec_memory(set, win, type);
+    iop->decision = ldecision_memory(iop->collec, 0, 0, decision, 0, 0);
 
     iop->gg = ltrainGG_memory(iop->decision);
     return iop;
+}
+
+image_operator_t *image_operator_build_gb(imgset_t *set, window_t *win) {
+    return build_with_tree(set, win, GB, MEDIAN);
+}
+
+image_operator_t *image_operator_build_gg(imgset_t *set, window_t *win) {
+    return build_with_tree(set, win, GG, AVERAGE);
 }
 
 image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, apert_t *apt) {
@@ -97,7 +106,7 @@ void image_operator_free(image_operator_t *iop) {
         if (iop->bb != NULL) {
             itv_free(iop->bb);
         }
-    } else if (iop->type == GG) {
+    } else if (iop->type == GG || iop->type == GB) {
         if (iop->gg != NULL) {
 
         }

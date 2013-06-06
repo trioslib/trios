@@ -281,7 +281,7 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
             }
         } else if(map_type==BG) {
             return trios_error(1, "BG Mapping not supported yet.");
-        } else if(map_type==GG) {
+        } else if(map_type==GG || map_type == GB) {
             /* read images and convert them to the appropriate format */
             /* i.e, input is short, output is byte and mask is byte */
             if(!get_setofimages(imgset, GG, win, k, &img1, &img2, &img3)) {

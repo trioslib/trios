@@ -45,6 +45,8 @@ image_operator_t *image_operator_itv(itv_t *itv, window_t *win);
 
 image_operator_t *image_operator_build_bb(imgset_t *set, window_t *win);
 image_operator_t *image_operator_build_gg(imgset_t *set, window_t *win);
+image_operator_t *image_operator_build_gb(imgset_t *set, window_t *win);
+
 image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, apert_t *apt);
 image_operator_t *image_operator_build_wkf(imgset_t *set, window_t *win, apert_t *apt);
 
