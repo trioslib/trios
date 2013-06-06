@@ -13,7 +13,7 @@
  * \param npixels Number of pixels in the images.
  * \return An example's set on success, NULL on failure.
  */
-xpl_t *collec_GG(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels) {
+xpl_t *collec_GX(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int type) {
 	int i, j, k;
     int *wpat;		/* w-pattern */
 	int st;
@@ -33,7 +33,7 @@ xpl_t *collec_GG(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *o
 		return (xpl_t *) trios_error(1, "Memory allocation failed.");
 	}
 
-	if ((xpl = xpl_create(wsize, GG)) == NULL) {
+    if ((xpl = xpl_create(wsize, type)) == NULL) {
 		free(wpat);
 		return (xpl_t *) trios_error(MSG,
 					     "collec_GG: xpl_create() failed.");

@@ -79,7 +79,9 @@ unsigned long image_operator_mse(image_operator_t *iop, imgset_t *test) {
         mse_images[k] = 0;
         for (i = 0; i < img_get_height(input); i++) {
             for (j = 0; j < img_get_width(input); j++) {
-                mse_images[k] += pow(img_get_pixel(result, i, j, 0) - img_get_pixel(ideal, i, j, 0), 2);
+                if (img_get_pixel(mask, i, j, 0) != 0) {
+                    mse_images[k] += pow((int)img_get_pixel(result, i, j, 0) - (int)img_get_pixel(ideal, i, j, 0), 2);
+                }
             }
         }
 
@@ -194,8 +196,8 @@ int computeMSEGG(dTree *gg_operator, window_t *win, imgset_t *test, double *acc)
                     n_pixels++;
                     if (img_get_pixel(result, i, j, 0) != img_get_pixel(ideal, i, j, 0)) {
                         wrong++;
-                        MSE += pow(img_get_pixel(result, i, j, 0) - img_get_pixel(ideal, i, j, 0), 2);
                     }
+                    MSE += pow((int)img_get_pixel(result, i, j, 0) - (int)img_get_pixel(ideal, i, j, 0), 2);
                 }
             }
         }

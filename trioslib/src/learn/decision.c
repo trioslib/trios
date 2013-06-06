@@ -184,6 +184,7 @@ mtm_t *mtm_decide(xpl_t * xpl, int comp_prob, double freqmin, double estimator,
 			break;
 		}
 
+    case GB:
 	case GG:
 	case WKC:
 	case WKF:
@@ -238,13 +239,6 @@ mtm_t *mtm_decide(xpl_t * xpl, int comp_prob, double freqmin, double estimator,
 			}
 		}
 		break;
-
-	default:{
-			mtm_free(mtm);
-			return (mtm_t *) trios_error(1,
-						     "mtm_decide: type GB not implemented yet.");
-			break;
-		}
 	}
 	return (mtm);
 }

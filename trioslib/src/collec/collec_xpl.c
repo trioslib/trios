@@ -3,7 +3,7 @@
 #include "collec_private.h"
 
 xpl_t *collec_BB(unsigned short *s1, unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int cv);
-xpl_t *collec_GG(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels);
+xpl_t *collec_GX(unsigned char *p1,	unsigned char *p2, unsigned char *p3, int *offset, int wsize, int npixels, int type);
 
 void put_border(window_t *win, img_t *img3)
 {
@@ -296,7 +296,7 @@ int lcollec_main(imgset_t *imgset, window_t *win, xpl_t *xpl, int map_type, int 
             c1 = (unsigned char *)img_get_data(img1) ;
             c2 = (unsigned char *)img_get_data(img2) ;
             c3 = (unsigned char *)img_get_data(img3) ;
-            xpl_new = collec_GG(c1, c2, c3, offset, wsize, npixels) ;
+            xpl_new = collec_GX(c1, c2, c3, offset, wsize, npixels, xpl->type) ;
             if(xpl_new==NULL) {
                 trios_error(MSG, "lcollec_main: collec_GG() failed.") ;
                 goto END_lcollec_main ;

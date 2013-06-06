@@ -66,8 +66,6 @@ UTEST(BUILD_GG) {
     }
 
     iop = image_operator_build_gg(set, w3x3);
-
-
 } TEST_END
 
 UTEST(APPLY_GG) {
@@ -91,6 +89,29 @@ UTEST(APPLY_GG) {
     input = img_readPGM("./test_img/input2-einstein.pnm");
     output = image_operator_apply(iop, input, NULL);
     img_writePGM("operator_apply_GG.pgm", output);
+} TEST_END
+
+UTEST(APPLY_GB) {
+    image_operator_t *iop;
+    img_t *output, *input;
+    int i, j;
+    imgset_t *set = imgset_create(1, 2);
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input3.pgm");
+    imgset_set_fname(set, 2, 1, "ideal3.pgm");
+
+    window_t *w3x3 = win_create(5, 5, 1);
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            win_set_point(i, j, 1, 1, w3x3);
+        }
+    }
+
+    iop = image_operator_build_gb(set, w3x3);
+    input = img_readPGM("./test_img/input3.pgm");
+    output = image_operator_apply(iop, input, NULL);
+    img_writePGM("operator_apply_GB.pgm", output);
 } TEST_END
 
 UTEST(IO_BB) {
@@ -178,7 +199,8 @@ UTEST(TEST_MSE) {
     image_operator_t *iop;
     img_t *output, *input;
     int i, j;
-    double *acc;
+    double acc;
+    unsigned long err1, err2;
     imgset_t *set = imgset_create(1, 2);
     imgset_set_dname(set, 1, "./test_img/");
     imgset_set_dname(set, 2, "./test_img/");
@@ -193,8 +215,10 @@ UTEST(TEST_MSE) {
     }
 
     iop = image_operator_build_gg(set, w3x3);
-
-    mu_assert("MSE different", image_operator_mse(iop, set) == computeMSEGG(iop->gg, iop->win, set, acc));
+    err1 = image_operator_mse(iop, set);
+    err2 = computeMSEGG(iop->gg, iop->win, set, &acc);
+    fprintf(stderr, "err1 %ld == err2 %ld\n", err1, err2);
+    mu_assert("MSE different", err1 == err2);
 
 } TEST_END
 
