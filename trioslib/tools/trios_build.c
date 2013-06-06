@@ -1,7 +1,7 @@
 #include <trios.h>
 
 void print_usage() {
-    printf("Usage: trios_build [single|two-level] [BB|GG] window(s) training_set [level2_training_set] result_path\n");
+    printf("Usage: trios_build [single|two-level] [BB|GG|GB] window(s) training_set [level2_training_set] result_path\n");
     printf("       trios_build combine operator list level2_training_set result_path\n\n");
     printf("This tools executes the training process to learn image operators from a set of samples.\n");
     printf("The combine option skips the first level training step and builds a two-level operator from trained single operators.\n");
