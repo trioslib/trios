@@ -32,6 +32,8 @@ void train_single_level(int argc, char *argv[]) {
         op = image_operator_build_bb(training, win);
     } else if (strcmp(argv[2], "GG") == 0) {
         op = image_operator_build_gg(training, win);
+    } else if (strcmp(argv[2], "GB") == 0) {
+        op = image_operator_build_gb(training, win);
     } else {
         trios_fatal("Unknown operator type.");
     }
