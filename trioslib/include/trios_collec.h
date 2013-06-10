@@ -62,6 +62,23 @@ int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_fo
  */
 xpl_t *lcollec_memory(imgset_t *imgset, window_t *win, int type);
 
+
+/*!
+ * Collect examples for a WK operator from a set of images.
+ * \param fname_i1 Image set path.
+ * \param fname_i2 Window path.
+ * \param fname_i3 Optional input xpl path. Pass NULL if not used.
+ * \param ki Input range.
+ * \param ko Output range.
+ * \param vplace Vertical placement of the window. 
+ * \param o1_fname Output xpl path.
+ * \param o2_fname Optional log file.
+ * \return 1 on success. 0 on failure.
+ */ 
+int lcollecWK(char *fname_i1, char *fname_i2, char *fname_i3, int ki, int ko, int vplace, char *o1_fname, char *o2_fname);
+
+
+
 #ifdef __cplusplus
 }
 #endif
