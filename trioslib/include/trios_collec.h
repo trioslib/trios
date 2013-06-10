@@ -1,6 +1,7 @@
 #include <trios_img.h>
 #include "trios_win.h"
 #include "trios_imgset.h"
+#include "trios_apert.h" 
 
 #ifdef __cplusplus
 extern "C" {
@@ -76,7 +77,15 @@ xpl_t *lcollec_memory(imgset_t *imgset, window_t *win, int type);
  */ 
 int lcollecWK(char *fname_i1, char *fname_i2, char *fname_i3, int ki, int ko, int vplace, char *o1_fname);
 
-
+/*!
+ * Collect examples for a WK operator from a set of images.
+ * \param imgset Image set.
+ * \param win Window.
+ * \param xpl Starting xpl file.
+ * \param apt Aperture configuration.
+ * \return The collected examples.
+ */
+xpl_t *lcollecWK_memory(imgset_t *imgset, window_t *win, xpl_t *xpl, apert_t *apt);
 
 #ifdef __cplusplus
 }
