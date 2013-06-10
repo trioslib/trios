@@ -72,10 +72,9 @@ xpl_t *lcollec_memory(imgset_t *imgset, window_t *win, int type);
  * \param ko Output range.
  * \param vplace Vertical placement of the window. 
  * \param o1_fname Output xpl path.
- * \param o2_fname Optional log file.
  * \return 1 on success. 0 on failure.
  */ 
-int lcollecWK(char *fname_i1, char *fname_i2, char *fname_i3, int ki, int ko, int vplace, char *o1_fname, char *o2_fname);
+int lcollecWK(char *fname_i1, char *fname_i2, char *fname_i3, int ki, int ko, int vplace, char *o1_fname);
 
 
 

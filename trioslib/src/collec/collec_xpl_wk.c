@@ -41,8 +41,7 @@ xpl_t *collec_WKC(unsigned char *p1, unsigned char *p2, unsigned char *p3,
 
 
 int lcollecWK(char *fname_i1, char *fname_i2, char *fname_i3, int ki, int ko,
-	      int vplace, char *o1_fname, char *o2_fname)
-{
+	      int vplace, char *o1_fname) {
 /* author: Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br)               */
 /* date: Mon Oct 21 1996                                                    */
 
@@ -275,6 +274,161 @@ int lcollecWK(char *fname_i1, char *fname_i2, char *fname_i3, int ki, int ko,
 	return (0);
 
 }
+
+
+
+xpl_t *lcollecWK_memory(imgset_t *imgset, window_t *win, xpl_t *xpl, apert_t *apt) {
+	unsigned char *c1, *c2, *c3;
+    int k;
+    int ko, ki, vplace;
+	int type;
+	int *offset;
+	int width, wsize, npixels;
+	xpl_t *xpl_new = NULL;
+	img_t *img1 = NULL, *img2 = NULL, *img3 = NULL;
+
+	/* check if image group size is greater than or equal to 2 */
+	/* Only the first three images of each set will be used    */
+	/*  Fisrt image is the image before transformation         */
+	/*  Second image is the image after transformation         */
+	/*  Third image is the mask image (indicates which points  */
+	/*   of the first image should be scanned)                 */
+	/*  If third image is absent, then the whole first image   */
+	/*  will be scanned.                                       */
+	if (imgset_get_grpsize(imgset) < 2) {
+		imgset_free(imgset);
+		return (xpl_t *)trios_error(1,
+				   "Each image group must contain at leat two image files.");
+	}
+
+    /* If window has multiple bands, force it to ONE band only */
+	/* Users will be warned about this fact                    */
+	if (win_get_nbands(win) > 1) {
+		trios_warning("Window has %d bands.", win_get_nbands(win));
+		trios_warning("Only the first one will be used.");
+		wsize = win_get_band_wsize(win, 1);
+		win_set_nbands(win, 1);
+		win_set_wsize(win, wsize);
+	}
+
+	/* create aperture */
+	if (apert_get_nbands(apt) > 1) {
+		apert_set_nbands(apt, 1);
+	}
+	ko = apert_get_band_ko(apt, 1);
+	ki = apert_get_band_ki(apt, 1);
+	vplace = apert_get_band_vplace(apt, 1);
+
+	if (ko == 0)
+		type = WKC;
+	else
+		type = WKF;
+
+	/* allocate vector of offsets */
+	wsize = win_get_band_wsize(win, 1);
+
+	offset = (int *)malloc(sizeof(int) * wsize);
+	if (offset == NULL) {
+		return (xpl_t *) trios_error(MSG, "lcollec: offset_create() failed.");
+	}
+
+	/* if input example collection is specified then read it;
+	   otherwise create an empty example collection structure */
+
+	if (xpl != NULL) {
+		xpl = xpl_create(wsize, type);
+	}
+
+	/* ---------------------------------------------------------------- */
+	/* Begin : Process each group of images */
+	for (k = 1; k <= imgset_get_ngroups(imgset); k++) {
+
+		img1 = img2 = img3 = NULL;
+
+		/* read images and convert them to the appropriate format */
+		/* i.e, input is short, output is byte and mask is byte */
+		if (!get_setofimages(imgset, GG, win, k, &img1, &img2, &img3)) {
+			trios_error(MSG, "lcollec: get_images() failed.");
+			goto END_lcollec;
+		}
+
+		width = img_get_width(img1);
+		npixels = img_get_height(img1) * width;
+
+		/* set vector of offsets */
+		offset_set(offset, win, width, 1);
+
+		c1 = (unsigned char *)img_get_data(img1);
+		c2 = (unsigned char *)img_get_data(img2);
+		c3 = (unsigned char *)img_get_data(img3);
+
+		/* -------------------------------------------------------------- */
+		/*                            WK - Filter                         */
+		/* -------------------------------------------------------------- */
+		if (type == WKF) {
+			xpl_new = collec_WKF(c1, c2, c3, offset, wsize,
+					     npixels, ki, ko, vplace);
+			if (xpl_new == NULL) {
+				trios_error(MSG,
+					    "lcollec: collec_WKF() failed.");
+				goto END_lcollec;
+			}
+		}
+
+		/* -------------------------------------------------------------- */
+		/*                            WK - Classifier                     */
+		/* -------------------------------------------------------------- */
+		else if (type == WKC) {
+			xpl_new =
+			    collec_WKC(c1, c2, c3, offset, wsize, npixels, ki,
+				       vplace);
+			if (xpl_new == NULL) {
+				trios_error(MSG,
+					    "lcollec: collec_WKC() failed.");
+				goto END_lcollec;
+			}
+		}
+
+		/* Release memory used by the images */
+		img_free(img1);
+		img1 = NULL;
+		img_free(img2);
+		img2 = NULL;
+		img_free(img3);
+		img3 = NULL;
+
+		/* merge xpl_new into xpl */
+		if (!xpl_merge(xpl, xpl_new)) {
+			trios_error(MSG, "lcollec: xpl_merge() failed.");
+			goto END_lcollec;
+		}
+		xpl_new = NULL;
+
+	}
+
+	/* --------------------------------------------------------------------- */
+
+	free(offset);
+	
+	return xpl;
+
+ END_lcollec:
+	if (img1)
+		img_free(img1);
+	if (img2)
+		img_free(img2);
+	if (img3)
+		img_free(img3);
+	if (offset)
+		free(offset);
+	if (xpl_new)
+		xpl_free(xpl_new);
+	if (apt)
+		apert_free(apt);
+	return NULL;
+
+}
+
 
 xpl_t *collec_WKF(unsigned char *p1, unsigned char *p2, unsigned char *p3,
 		  int *offset, int wsize, int npixels, int ki, int ko,

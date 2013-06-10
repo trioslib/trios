@@ -21,7 +21,7 @@ UTEST(test_collec_apert) {
         }
     }
     win_write("WIN.w", win);
-    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 10, 10, 1, "wk.xpl", NULL));
+    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 10, 10, 1, "wk.xpl"));
 } TEST_END
 
 UTEST(test_deiciosion_apert) {
@@ -43,7 +43,7 @@ UTEST(test_deiciosion_apert) {
         }
     }
     win_write("WIN.w", win);
-    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 10, 10, 1, "wk.xpl", NULL));
+    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 10, 10, 1, "wk.xpl"));
     apert_t *apt;
     xpl_t *xpl = xpl_read("wk.xpl", &win, &apt);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
@@ -68,7 +68,7 @@ UTEST(test_train_apert) {
         }
     }
     win_write("WIN.w", win);
-    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 10, 10, 1, "wk.xpl", NULL));
+    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 10, 10, 1, "wk.xpl"));
     apert_t *apt;
     xpl_t *xpl = xpl_read("wk.xpl", &win, &apt);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
@@ -95,7 +95,7 @@ UTEST(test_apply_apert) {
         }
     }
     win_write("WIN.w", win);
-    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 5, 5, VP_Center, "wk.xpl", NULL));
+    mu_assert("lcollecWK failed", 1 == lcollecWK("IMGSET.s", "WIN.w", NULL, 5, 5, VP_Center, "wk.xpl"));
     apert_t *apt;
     xpl_t *xpl = xpl_read("wk.xpl", &win, &apt);
     mtm_t *mtm = ldecision_memory(xpl, 0, 0, AVERAGE, 0, 0);
