@@ -47,14 +47,18 @@ static image_operator_t *build_with_tree(imgset_t *set, window_t *win, int type,
     iop->apt = NULL;
     iop->bb = NULL;
 
-    /*imgset_write("set.build.gg", set);
-    win_write("win.build.gg", win);
-    lcollec("set.build.gg", "win.build.gg", NULL, 0, 0, 0, "collec.build.gg", NULL);
-    iop->collec = xpl_read("collec.build.gg", &(iop->win), NULL);*/
     iop->collec = lcollec_memory(set, win, type);
+    if (iop->collec == NULL) {
+		return (image_operator_t *) trios_error(MSG, "Error in collec.");
+	}
     iop->decision = ldecision_memory(iop->collec, 0, 0, decision, 0, 0);
-
+	if (iop->decision == NULL) {
+		return (image_operator_t *) trios_error(MSG, "Error in decision.");
+	}
     iop->gg = ltrainGG_memory(iop->decision);
+    if (iop->gg == NULL) {
+		return (image_operator_t *) trios_error(MSG, "Error in tree training.");
+	}
     return iop;
 }
 
@@ -74,6 +78,7 @@ image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, apert_t
     iop->apt = apt;
     iop->bb = NULL;
 
+	/*iop->collec = lcollecWK*/
 
 
     return iop;
