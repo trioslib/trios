@@ -89,26 +89,31 @@ image_operator_t *train_wk(image_operator_t *iop, imgset_t *set, window_t *win) 
 }
 
 image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, int ki, int vplace) {
-    image_operator_t *iop;
-    trios_malloc(iop, sizeof(image_operator_t), image_operator_t *, "Failed to alloc image operator");
-    iop->type = WKC;
-    iop->win = win;
-    iop->apt = apert_create(1);
-    apert_set_band_ki(iop->apt, 1, ki);
-    apert_set_band_ko(iop->apt, 1, 0);
-    apert_set_band_vplace(iop->apt, 1, vplace);
-    return train_wk(iop, set, win);
+    apert_t *apt = apert_create(1);
+    apert_set_band_ki(apt, 1, ki);
+    apert_set_band_ko(apt, 1, 0);
+    apert_set_band_vplace(apt, 1, vplace);
+    return image_operator_build_wk(set, win, apt);
 }
 
 image_operator_t *image_operator_build_wkf(imgset_t *set, window_t *win, int ki, int ko, int vplace) {
+    apert_t *apt = apert_create(1);
+    apert_set_band_ki(apt, 1, ki);
+    apert_set_band_ko(apt, 1, ko);
+    apert_set_band_vplace(apt, 1, vplace);
+    return image_operator_build_wk(set, win, apt);
+}
+
+image_operator_t *image_operator_build_wk(imgset_t *set, window_t *win, apert_t *apt) {
     image_operator_t *iop;
     trios_malloc(iop, sizeof(image_operator_t), image_operator_t *, "Failed to alloc image operator");
-    iop->type = WKF;
+    if (apert_get_band_ko(apt, 1) == 0) {
+        iop->type = WKC;
+    } else {
+        iop->type = WKF;
+    }
     iop->win = win;
-    iop->apt = apert_create(1);
-    apert_set_band_ki(iop->apt, 1, ki);
-    apert_set_band_ko(iop->apt, 1, ko);
-    apert_set_band_vplace(iop->apt, 1, vplace);
+    iop->apt = apt;
     return train_wk(iop, set, win);
 }
 
@@ -126,7 +131,8 @@ void image_operator_free(image_operator_t *iop) {
         if (iop->bb != NULL) {
             itv_free(iop->bb);
         }
-    } else if (iop->type == GG || iop->type == GB) {
+    } else if (iop->type == GG || iop->type == GB ||
+			   iop->type == WKF || iop->type == WKC) {
         if (iop->gg != NULL) {
 
         }

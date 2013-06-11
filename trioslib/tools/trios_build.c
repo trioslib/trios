@@ -2,6 +2,7 @@
 
 void print_usage() {
     printf("Usage: trios_build [single|two-level] [BB|GG|GB] window(s) training_set [level2_training_set] result_path\n");
+    printf("       trios_build  single WK window aperture training_set result_path\n\n");
     printf("       trios_build combine operator list level2_training_set result_path\n\n");
     printf("This tools executes the training process to learn image operators from a set of samples.\n");
     printf("The combine option skips the first level training step and builds a two-level operator from trained single operators.\n");
@@ -11,7 +12,9 @@ void print_usage() {
 void train_single_level(int argc, char *argv[]) {
     window_t *win;
     imgset_t *training;
+    apert_t *apt;
     image_operator_t *op;
+    int tr_set_index = 4;
 
     if (argc < 6) {
         print_usage();
@@ -22,10 +25,12 @@ void train_single_level(int argc, char *argv[]) {
     if (!win) {
         trios_fatal("Invalid window %s.\n", argv[3]);
     }
+    
+    if (strcmp(argv[2], "WK") == 0) tr_set_index = 5;
 
-    training = imgset_read(argv[4]);
+    training = imgset_read(argv[tr_set_index]);
     if (!training) {
-        trios_fatal("Invalid image set %s.\n", argv[4]);
+        trios_fatal("Invalid image set %s.\n", argv[tr_set_index]);
     }
 
     if (strcmp(argv[2], "BB") == 0) {
@@ -34,6 +39,9 @@ void train_single_level(int argc, char *argv[]) {
         op = image_operator_build_gg(training, win);
     } else if (strcmp(argv[2], "GB") == 0) {
         op = image_operator_build_gb(training, win);
+    } else if (strcmp(argv[2], "WK") == 0) {
+        apt = apert_read(argv[4]);
+        op = image_operator_build_wk(training, win, apt);
     } else {
         trios_fatal("Unknown operator type.");
     }

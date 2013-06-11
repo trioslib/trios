@@ -89,6 +89,15 @@ image_operator_t *image_operator_build_wkf(imgset_t *set, window_t *win, int ki,
 image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, int ki, int vplace);
 
 /*!
+ * \brief Builds a WKC or WKF image operator.
+ * \param set Training set.
+ * \param win Window.
+ * \param apt Aperture configuration.
+ * \return Trained WKC image operator.
+ */
+image_operator_t *image_operator_build_wk(imgset_t *set, window_t *win, apert_t *apt);
+
+/*!
  * \brief Transforms an image using an image operator.
  * \param iop Image operator.
  * \param input Input image.
