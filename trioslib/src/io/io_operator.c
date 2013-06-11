@@ -43,17 +43,29 @@ static int write_operator(image_operator_t *iop, FILE *operator_file, char *path
         }
         sprintf(temp_string, "%s-files/operator", path + file_name_idx);
         fprintf(operator_file, ".bb\n%s\n", temp_string);
-    } else if (iop->type == GG || iop->type == GB) {
+    } else if (iop->type == GG || iop->type == GB || iop->type == WKC || iop->type == WKF) {
         if (!write_tree2(temp_string, iop->gg)) {
             return trios_error(MSG, "Error writing tree at %s", temp_string);
         }
         sprintf(temp_string, "%s-files/operator", path + file_name_idx);
-        fprintf(operator_file, ".gx\n%s\n", temp_string);
+        fprintf(operator_file, ".tree\n%s\n", temp_string);
     } else {
         return trios_error(MSG, "Operator not supported");
     }
     return 1;
 }
+
+static int write_apert(image_operator_t *iop, FILE *operator_file, char *path, int file_name_idx, char temp_string[]) {
+    if (iop->apt == NULL) return 1;
+    sprintf(temp_string, "%s-files/apert", path);
+    if (!apert_write(temp_string, iop->apt)) {
+        return trios_error(MSG, "Error writing apert at %s", temp_string);
+    }
+    sprintf(temp_string, "%s-files/apert", path + file_name_idx);
+    fprintf(operator_file, ".apert\n%s\n", temp_string);
+    return 1;
+}
+
 
 
 int image_operator_write(char *path, image_operator_t *iop) {
@@ -75,6 +87,10 @@ int image_operator_write(char *path, image_operator_t *iop) {
         fprintf(operator_file, ".t\nGG\n");
     } else if (iop->type == GB) {
         fprintf(operator_file, ".t\nGB\n");
+    } else if (iop->type == WKC) {
+        fprintf(operator_file, ".t\nWKC\n");
+    } else if (iop->type == WKF) {
+        fprintf(operator_file, ".t\nWKF\n");
     }
 
     sprintf(temp_string, "mkdir %s-files", path);
@@ -95,6 +111,9 @@ int image_operator_write(char *path, image_operator_t *iop) {
         return 0;
     }*/
     if (!write_operator(iop, operator_file, path, file_name_idx, temp_string)) {
+        return 0;
+    }
+    if (!write_apert(iop, operator_file, path, file_name_idx, temp_string)) {
         return 0;
     }
     fclose(operator_file);
@@ -192,6 +211,49 @@ image_operator_t *image_operator_read(char *path) {
 
         iop->apt = NULL;
         iop->bb = NULL;
+    } else if (temp_string[0] == 'W' && temp_string[1] == 'K') {
+        if (temp_string[2] == 'F') {
+            iop->type = WKF;
+        } else if (temp_string[2] == 'C') {
+            iop->type = WKC;
+        }
+        sprintf(temp_string, "%s-files/window", path);
+        iop->win = win_read(temp_string);
+        if (iop->win == NULL) {
+            return (image_operator_t *) trios_error(MSG, "Failed to read window at %s.", temp_string);
+        }
+
+        sprintf(temp_string, "%s-files/collec", path);
+        iop->collec = xpl_read(temp_string, &win, NULL);
+        if (iop->collec == NULL) {
+            trios_error(MSG, "Failed to read xpl at %s. Continuing...", temp_string);
+        } else {
+            win_free(win);
+        }
+
+        sprintf(temp_string, "%s-files/decision", path);
+        iop->decision = mtm_read(temp_string, &win, NULL);
+        if (iop->decision == NULL) {
+            trios_error(MSG, "Failed to read mtm at %s. Continuing...", temp_string);
+        } else {
+            win_free(win);
+        }
+
+        sprintf(temp_string, "%s-files/operator", path);
+        iop->gg = read_tree2(temp_string);
+        if (iop->gg == NULL) {
+            return (image_operator_t *) trios_error(MSG, "Failed to read operator at %s.", temp_string);
+        }
+
+        sprintf(temp_string, "%s-files/apert", path);
+        iop->apt = apert_read(temp_string);
+        if (iop->apt == NULL) {
+            return (image_operator_t *) trios_error(MSG, "Failed to read aperture at %s.", temp_string);
+        }
+
+        iop->bb = NULL;
+    
+    
     } else {
         return (image_operator_t *) trios_error(MSG, "Unknown operator type.", path);
     }

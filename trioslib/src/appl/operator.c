@@ -24,6 +24,14 @@ img_t *image_operator_apply(image_operator_t *iop, img_t *input, img_t *mask) {
             output = lapplyGG_memory(input, iop->gg, iop->win, mask);
             break;
         }
+        case WKF:
+        case WKC: {
+            if (iop->gg == NULL || iop->win == NULL || iop->apt == NULL) {
+                return (img_t *) trios_error(MSG, "Operator not trained");
+            }
+            output = lapplyWK_memory(input, iop->gg, iop->win, iop->apt, mask);
+            break;
+        }
     }
     return output;
 }

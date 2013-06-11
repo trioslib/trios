@@ -85,6 +85,7 @@ image_operator_t *train_wk(image_operator_t *iop, imgset_t *set, window_t *win) 
 	if (iop->gg == NULL) {
 		return (image_operator_t *) trios_error(MSG, "Error in tree training.");
 	}
+	return iop;
 }
 
 image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, int ki, int vplace) {

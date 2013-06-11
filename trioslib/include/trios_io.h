@@ -158,6 +158,10 @@ int dt_read(char *fname, int *type, window_t **win, apert_t **apt);
 int dt_write(char *fname, int type, window_t *win, apert_t *apt);
 
 
+apert_t *apert_read(char *fname);
+int apert_write(char *fname, apert_t *apt);
+
+
 
 dTree *read_tree2(char *filename);
 
