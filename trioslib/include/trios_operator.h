@@ -68,22 +68,25 @@ image_operator_t *image_operator_build_gg(imgset_t *set, window_t *win);
 image_operator_t *image_operator_build_gb(imgset_t *set, window_t *win);
 
 /*!
- * \brief Builds a WKC image operator. This operation is not implemented yet.
+ * \brief Builds a WKF image operator.
  * \param set Training set.
  * \param win Window.
- * \param apt Aperture configuration.
- * \return Trained WKC image operator.
- */
-image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, apert_t *apt);
-
-/*!
- * \brief Builds a WKF image operator. This operation is not implemented yet.
- * \param set Training set.
- * \param win Window.
- * \param apt Aperture configuration.
+ * \param ki Input range.
+ * \param ko Output range.
+ * \param vplace Vertical placement of the window.
  * \return Trained WKF image operator.
  */
-image_operator_t *image_operator_build_wkf(imgset_t *set, window_t *win, apert_t *apt);
+image_operator_t *image_operator_build_wkf(imgset_t *set, window_t *win, int ki, int ko, int vplace);
+
+/*!
+ * \brief Builds a WKC image operator.
+ * \param set Training set.
+ * \param win Window.
+ * \param ki Input range.
+ * \param vplace Vertical placement of the window.
+ * \return Trained WKC image operator.
+ */
+image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, int ki, int vplace);
 
 /*!
  * \brief Transforms an image using an image operator.

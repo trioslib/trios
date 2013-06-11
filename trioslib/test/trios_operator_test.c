@@ -91,6 +91,52 @@ UTEST(APPLY_GG) {
     img_writePGM("operator_apply_GG.pgm", output);
 } TEST_END
 
+UTEST(APPLY_WKF) {
+    image_operator_t *iop;
+    img_t *output, *input;
+    int i, j;
+    imgset_t *set = imgset_create(1, 2);
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input2-einstein.pnm");
+    imgset_set_fname(set, 2, 1, "ideal-einstein.pnm");
+
+    window_t *w3x3 = win_create(3, 3, 1);
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            win_set_point(i, j, 1, 1, w3x3);
+        }
+    }
+
+    iop = image_operator_build_wkf(set, w3x3, 5, 5, VP_Center);
+    input = img_readPGM("./test_img/input2-einstein.pnm");
+    output = image_operator_apply(iop, input, NULL);
+    img_writePGM("operator_apply_WKF.pgm", output);
+} TEST_END
+
+UTEST(APPLY_WKC) {
+    image_operator_t *iop;
+    img_t *output, *input;
+    int i, j;
+    imgset_t *set = imgset_create(1, 2);
+    imgset_set_dname(set, 1, "./test_img/");
+    imgset_set_dname(set, 2, "./test_img/");
+    imgset_set_fname(set, 1, 1, "input2-einstein.pnm");
+    imgset_set_fname(set, 2, 1, "ideal-einstein.pnm");
+
+    window_t *w3x3 = win_create(3, 3, 1);
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            win_set_point(i, j, 1, 1, w3x3);
+        }
+    }
+
+    iop = image_operator_build_wkc(set, w3x3, 5, VP_Center);
+    input = img_readPGM("./test_img/input2-einstein.pnm");
+    output = image_operator_apply(iop, input, NULL);
+    img_writePGM("operator_apply_WKC.pgm", output);
+} TEST_END
+
 UTEST(APPLY_GB) {
     image_operator_t *iop;
     img_t *output, *input;

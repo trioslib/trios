@@ -70,31 +70,45 @@ image_operator_t *image_operator_build_gg(imgset_t *set, window_t *win) {
     return build_with_tree(set, win, GG, AVERAGE);
 }
 
-image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, apert_t *apt) {
+image_operator_t *train_wk(image_operator_t *iop, imgset_t *set, window_t *win) {
+	iop->bb = NULL;
+
+	iop->collec = lcollecWK_memory(set, win, NULL, iop->apt);
+	if (iop->collec == NULL) {
+		return (image_operator_t *) trios_error(MSG, "Error in collec.");
+	}
+	iop->decision = ldecision_memory(iop->collec, 0, 0, AVERAGE, 0, 0);
+	if (iop->decision == NULL) {
+		return (image_operator_t *) trios_error(MSG, "Error in decision.");
+	}
+	iop->gg = ltrainGG_memory(iop->decision);
+	if (iop->gg == NULL) {
+		return (image_operator_t *) trios_error(MSG, "Error in tree training.");
+	}
+}
+
+image_operator_t *image_operator_build_wkc(imgset_t *set, window_t *win, int ki, int vplace) {
     image_operator_t *iop;
     trios_malloc(iop, sizeof(image_operator_t), image_operator_t *, "Failed to alloc image operator");
     iop->type = WKC;
     iop->win = win;
-    iop->apt = apt;
-    iop->bb = NULL;
-
-	/*iop->collec = lcollecWK*/
-
-
-    return iop;
+    iop->apt = apert_create(1);
+    apert_set_band_ki(iop->apt, 1, ki);
+    apert_set_band_ko(iop->apt, 1, 0);
+    apert_set_band_vplace(iop->apt, 1, vplace);
+    return train_wk(iop, set, win);
 }
 
-image_operator_t *image_operator_build_wkf(imgset_t *set, window_t *win, apert_t *apt) {
+image_operator_t *image_operator_build_wkf(imgset_t *set, window_t *win, int ki, int ko, int vplace) {
     image_operator_t *iop;
     trios_malloc(iop, sizeof(image_operator_t), image_operator_t *, "Failed to alloc image operator");
     iop->type = WKF;
     iop->win = win;
-    iop->apt = apt;
-    iop->bb = NULL;
-
-
-
-    return iop;
+    iop->apt = apert_create(1);
+    apert_set_band_ki(iop->apt, 1, ki);
+    apert_set_band_ko(iop->apt, 1, ko);
+    apert_set_band_vplace(iop->apt, 1, vplace);
+    return train_wk(iop, set, win);
 }
 
 void image_operator_free(image_operator_t *iop) {
