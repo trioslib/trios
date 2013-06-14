@@ -12,3 +12,9 @@ class Aperture:
 			self.vplace = VP_Center
 		else:
 			self.vplace = vplace
+			
+	def write(self, fname):
+		pass
+
+def read(fname):
+	pass
