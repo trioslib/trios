@@ -96,6 +96,8 @@ int join_two_level(int argc, char *argv[]) {
     multi_level_operator_t *mop;
     image_operator_t **ops;
     imgset_t *training;
+    window_t *wold;
+    itv_t *iold;
     int i;
     int nops = argc - 4;
 
@@ -103,6 +105,13 @@ int join_two_level(int argc, char *argv[]) {
     for (i = 2; i < argc - 2; i++) {
         printf("read %s\n", argv[i]);
         ops[i-2] = image_operator_read(argv[i]);
+        if (ops[i-2] == NULL) {
+            iold = itv_read(argv[i], &wold);
+            if (iold == NULL) {
+                trios_fatal("Could not read %s.", argv[i]);
+            }
+            ops[i-2] = image_operator_itv(iold, wold);
+        }
     }
     training = imgset_read(argv[argc-2]);
 
