@@ -102,7 +102,7 @@ int join_two_level(int argc, char *argv[]) {
     trios_malloc(ops, sizeof(image_operator_t *) * nops, int, "Error allocating image_operator_t array.");
     for (i = 2; i < argc - 2; i++) {
         printf("read %s\n", argv[i]);
-        ops[i] = image_operator_read(argv[i]);
+        ops[i-2] = image_operator_read(argv[i]);
     }
     training = imgset_read(argv[argc-2]);
 
