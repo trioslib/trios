@@ -85,8 +85,8 @@ class Imageset(list):
 			f.write('\n\n')
 		
 		f.close()
-
-		
+		#Show?
+	
 
 
 def read(fname):

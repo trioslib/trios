@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 
 
 class Window(np.ndarray):
-	
 	def __new__(cls, h, w):
 		obj = np.ndarray.__new__(cls, shape=(h, w), dtype=bool)
 		return obj
@@ -18,9 +17,9 @@ class Window(np.ndarray):
 	def write(self, name):
 		f = open(name, 'w')
 		f.write("""WINSPEC ########################################################
-	.h %d
-	.w %d
-	.d
+.h %d
+.w %d
+.d
 	""" % self.shape)
 		h, w = self.shape
 		for i in range(h):

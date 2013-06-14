@@ -9,6 +9,20 @@ from aperture import *
 
 from Image import Image, open
 
+"""
+nao treinar o operador logo de cara?
+eh interessante olhar os xpl, mtm antes de rodar o treinamento. (ou rodar em background e liberar o terminal).
+
+valeria a pena carregar o xpl, mtm como array do numpy.
+
+colocar algumas "analises" simples.
+
+futuramente: rodar remoto.
+
+pode ser interesante ter as etapas separadas. 
+
+"""
+
 class ImageOperator:
 	def __init__(self):
 		self.fname = ''

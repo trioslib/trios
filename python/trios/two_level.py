@@ -14,7 +14,7 @@ class MultiLevelOperator(ImageOperator):
 		pass
 		
 	def __init__(self):
-		pass
+		self.fname = ''
 
 def combine(*args):
 	return MultiLevelOperator.combine(*args)
