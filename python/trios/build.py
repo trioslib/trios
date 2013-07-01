@@ -9,6 +9,10 @@ from aperture import *
 
 from Image import Image, open
 
+import os
+import sys
+import detect
+
 """
 nao treinar o operador logo de cara?
 eh interessante olhar os xpl, mtm antes de rodar o treinamento. (ou rodar em background e liberar o terminal).
@@ -24,35 +28,63 @@ pode ser interesante ter as etapas separadas.
 """
 
 class ImageOperator:
-	def __init__(self):
-		self.fname = ''
-		
-	def apply(self, img):
-		if type(img) == str:
-			pass
-			#chama direto
-		elif type(img) == Image:
-			pass
-			#salva imagem e chama apply.
-			#isto permite usar imagens em formato diferente de PGM!
-		
-	def mae(self, test_set):
-		return 0
-		
-	def mse(self, test_set):
-		return 0
+    def __init__(self, imgset, win, tp):
+        self.fname = ''
+        self.imgset = imgset
+        self.win = win
+        self.built = False
+        self.type = tp
+        
+    def collec():
+        # faz collec e devolve como array do numpy
+        pass
+    
+    def decide():
+        # faz decisao e devolve como array do numpy
+        pass
+        
+    def build(self):
+        #call trios_build, libera terminal ate que esteja treinado
+        r = detect.call('trios_build single %s %s %s res'%(self.type, self.win, self.imgset))
+        if r >= 0:
+            self.built = True
+        else:
+            self.built = False
+            sys.stderr.write('Build failed')
+        
+    def apply(self, img):
+        if not self.built:
+            sys.stderr.write('Operator not built.')
+            return None
+            
+        if type(img) == str:
+            pass
+            #chama direto, le resultado e devolve
+        elif type(img) == Image:
+            pass
+            #salva imagem e chama apply.
+            #isto permite usar imagens em formato diferente de PGM!
+        
+    def mae(self, test_set):
+        return 0
+        
+    def mse(self, test_set):
+        return 0
 
 def bb(imgset, win):
-    return ImageOperator()
+    return ImageOperator(imgset, win, 'BB')
     
 def gg(imgset, win):
-    return ImageOperator()
+    return ImageOperator(imgset, win, 'GG')
+    
+def gb(imgset, win):
+    return ImageOperator(imgset, win, 'GB')
     
 def wk(imgset, win, apt):
-    return ImageOperator()
+    return ImageOperator(imgset, win)
 
 def wkf(imgset, win, ki, ko, vplace):
-    return ImageOperator()
+    return ImageOperator(imgset, win)
     
 def wkc(imgset, win, ki, vplace):
-    return ImageOperator()
+    return ImageOperator(imgset, win)
