@@ -23,7 +23,7 @@ class Window(np.ndarray):
 .h %d
 .w %d
 .d
-    """ % self.shape)
+""" % self.shape)
         h, w = self.shape
         for i in range(h):
             for j in range(w):

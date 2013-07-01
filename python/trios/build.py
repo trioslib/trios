@@ -11,6 +11,7 @@ from Image import Image, open
 
 import os
 import sys
+import tempfile
 import detect
 
 """
@@ -26,6 +27,13 @@ futuramente: rodar remoto.
 pode ser interesante ter as etapas separadas. 
 
 """
+
+def save_temporary(obj):
+    f = tempfile.NamedTemporaryFile(delete=False)
+    fname = f.name
+    f.close()
+    obj.write(fname)
+    return fname
 
 class ImageOperator:
     def __init__(self, imgset, win, tp):
@@ -45,7 +53,9 @@ class ImageOperator:
         
     def build(self):
         #call trios_build, libera terminal ate que esteja treinado
-        r = detect.call('trios_build single %s %s %s res'%(self.type, self.win, self.imgset))
+        win = save_temporary(self.win)
+        imgset = save_temporary(self.imgset)
+        r = detect.call('trios_build single %s %s %s res'%(self.type, win, imgset))
         if r >= 0:
             self.built = True
         else:
