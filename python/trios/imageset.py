@@ -28,6 +28,9 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
     
     @classmethod
     def read(cls, fname):
+        """
+        Reads Imageset from disk.
+        """
         f = open(fname, 'r')
         imgset = Imageset()
         
@@ -74,7 +77,7 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
         
     def append(self, example):
         """
-        Adds an example to the 
+        Adds an example to the Imageset. All examples must have the same number of images.
         """
         if len(example) != 2 and len(example) != 3:
             return 
@@ -108,5 +111,8 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
 
 
 def read(fname):
+    """
+    Reads Imageset from disk.
+    """
     return Imageset.read(fname)
     
