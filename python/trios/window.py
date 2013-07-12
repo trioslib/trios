@@ -1,5 +1,5 @@
 """
-Windows are boolean Numpy arrays extended with two new methods for writing a window to the disk and displaying it using matplotlib.
+Contains window related functions.
 """
 import numpy as np
 import matplotlib
