@@ -1,7 +1,6 @@
-
-
-
-
+"""
+Contains training related code for single-level operators.
+"""
 from window import *
 from image import *
 from imageset import *
@@ -13,6 +12,7 @@ import os
 import sys
 import tempfile
 import detect
+import imageset
 
 """
 nao treinar o operador logo de cara?
@@ -29,6 +29,11 @@ pode ser interesante ter as etapas separadas.
 """
 
 def save_temporary(obj):
+    """
+    Saves an object (window or imageset) with a temporary name. If the object passed is a string it is returned as is.
+    """
+    if type(obj) == str:
+        return obj
     f = tempfile.NamedTemporaryFile(delete=False)
     fname = f.name
     f.close()
@@ -36,31 +41,42 @@ def save_temporary(obj):
     return fname
 
 class ImageOperator:
-    def __init__(self, imgset, win, tp):
-        self.fname = ''
+    """
+    Holds references to all the objects needed to build and apply an image operator. 
+    Since an image operator is a complex object, it is not mantained in memory. The 'fname' parameter contains the path to the saved image operator. 
+    Nothing is written to disk until one of 'build', 'collec' or 'decide' is called.
+    
+    
+    Operators built using this class are compatible with the command line tools.
+    """
+    
+    def __init__(self, fname, imgset, win, tp):
+        self.fname = fname
         self.imgset = imgset
         self.win = win
         self.built = False
         self.type = tp
         
-    def collec():
+    def collec(self):
         # faz collec e devolve como array do numpy
         pass
     
-    def decide():
+    def decide(self):
         # faz decisao e devolve como array do numpy
         pass
         
     def build(self):
         #call trios_build, libera terminal ate que esteja treinado
         win = save_temporary(self.win)
+        if type(self.imgset) == list:
+            self.imgset = Imageset(self.imgset)
         imgset = save_temporary(self.imgset)
-        r = detect.call('trios_build single %s %s %s res'%(self.type, win, imgset))
-        if r >= 0:
+        r = detect.call('trios_build single %s %s %s %s'%(self.type, win, imgset, self.fname))
+        if r != 0:
             self.built = True
         else:
             self.built = False
-            sys.stderr.write('Build failed')
+            raise Exception('Build failed')
         
     def apply(self, img):
         if not self.built:
@@ -69,7 +85,6 @@ class ImageOperator:
             
         if type(img) == str:
             pass
-            #chama direto, le resultado e devolve
         elif type(img) == Image:
             pass
             #salva imagem e chama apply.
@@ -81,20 +96,20 @@ class ImageOperator:
     def mse(self, test_set):
         return 0
 
-def bb(imgset, win):
-    return ImageOperator(imgset, win, 'BB')
+def bb(fname, imgset, win):
+    return ImageOperator(fname, imgset, win, 'BB')
     
-def gg(imgset, win):
-    return ImageOperator(imgset, win, 'GG')
+def gg(fname, imgset, win):
+    return ImageOperator(fname, imgset, win, 'GG')
     
-def gb(imgset, win):
-    return ImageOperator(imgset, win, 'GB')
+def gb(fname, imgset, win):
+    return ImageOperator(fname, imgset, win, 'GB')
     
-def wk(imgset, win, apt):
-    return ImageOperator(imgset, win)
+def wk(fname, imgset, win, apt):
+    return ImageOperator(fname, imgset, win)
 
-def wkf(imgset, win, ki, ko, vplace):
-    return ImageOperator(imgset, win)
+def wkf(fname, imgset, win, ki, ko, vplace):
+    return ImageOperator(fname, imgset, win)
     
-def wkc(imgset, win, ki, vplace):
-    return ImageOperator(imgset, win)
+def wkc(fname, imgset, win, ki, vplace):
+    return ImageOperator(fname, imgset, win)

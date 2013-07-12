@@ -1,6 +1,5 @@
 """
-TRIOS takes binary Numpy arrays as windows. The read_window and write_window 
-functions are used to read a WIN file into a numpy array.
+Contains window related functions.
 """
 import numpy as np
 import matplotlib
@@ -10,14 +9,22 @@ import matplotlib.pyplot as plt
 
 
 class Window(np.ndarray):
+    """
+    A Window is a mask that represents the local neighborhood used in the training process. Each point in the window correspond to a feature.
+    """
+    
     def __new__(cls, h, w):
         obj = np.ndarray.__new__(cls, shape=(h, w), dtype=bool)
         for i in range(h):
-			for j in range(w):
-				obj[i, j] = False
+            for j in range(w):
+                obj[i, j] = False
         return obj
         
     def write(self, name):
+        """
+        Writes a window to the disk.
+        """
+        
         f = open(name, 'w')
         f.write("""WINSPEC ########################################################
 .h %d
@@ -35,6 +42,10 @@ class Window(np.ndarray):
         f.close()
         
     def show(self):
+        """
+        Shows a window using matplotlib. Useful to visualize local structure.
+        """
+        
         fig = plt.figure()
         ax = fig.add_subplot(111)
         h, w = self.shape
@@ -58,6 +69,10 @@ class Window(np.ndarray):
 
 
 def read(f_name):
+    """
+    Reads a Window from disk.
+    """
+    
     f = open(f_name)
     s = f.read()
     f.close()
