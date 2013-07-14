@@ -34,7 +34,7 @@ def save_temporary(obj):
     """
     if type(obj) == str:
         return obj
-    f = tempfile.NamedTemporaryFile(delete=False)
+    f = tempfile.NamedTemporaryFile(delete=False, prefix='./')
     fname = f.name
     f.close()
     obj.write(fname)
@@ -72,7 +72,7 @@ class ImageOperator:
             self.imgset = Imageset(self.imgset)
         imgset = save_temporary(self.imgset)
         r = detect.call('trios_build single %s %s %s %s'%(self.type, win, imgset, self.fname))
-        if r != 0:
+        if r == 0:
             self.built = True
         else:
             self.built = False
@@ -80,11 +80,12 @@ class ImageOperator:
         
     def apply(self, img):
         if not self.built:
-            sys.stderr.write('Operator not built.')
-            return None
+            raise Exception('Operator not built.')
             
         if type(img) == str:
-            pass
+            r = detect.call('trios_apply %s %s'%(self.fname, img))
+            if r != 0:
+                raise Exception('Apply failed')
         elif type(img) == Image:
             pass
             #salva imagem e chama apply.

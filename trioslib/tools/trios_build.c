@@ -1,11 +1,12 @@
 #include <trios.h>
+#include <stdio.h>
 
 void print_usage() {
-    printf("Usage: trios_build [single|two-level] [BB|GG|GB] window(s) training_set [level2_training_set] result_path\n");
-    printf("       trios_build  single WK window aperture training_set result_path\n\n");
-    printf("       trios_build combine operator list level2_training_set result_path\n\n");
-    printf("This tools executes the training process to learn image operators from a set of samples.\n");
-    printf("The combine option skips the first level training step and builds a two-level operator from trained single operators.\n");
+    fprintf(stderr, "Usage: trios_build [single|two-level] [BB|GG|GB] window(s) training_set [level2_training_set] result_path\n");
+    fprintf(stderr, "       trios_build  single WK window aperture training_set result_path\n\n");
+    fprintf(stderr, "       trios_build combine operator list level2_training_set result_path\n\n");
+    fprintf(stderr, "This tools executes the training process to learn image operators from a set of samples.\n");
+    fprintf(stderr, "The combine option skips the first level training step and builds a two-level operator from trained single operators.\n");
 }
 
 
@@ -120,7 +121,7 @@ int main(int argc, char *argv[]) {
 
     if (argc < 2) {
         print_usage();
-        return -1;
+        return 0;
     }
 
     if (strcmp(argv[1], "single") == 0) {
@@ -131,51 +132,8 @@ int main(int argc, char *argv[]) {
         join_two_level(argc, argv);
     } else {
         print_usage();
-        return -1;
+        return 0;
     }
-    /*
-    } else if (strcmp(argv[1], "two-level-old") == 0) {
-        multi_architecture_t *arch;
-        multi_level_operator_t *mop;
-        window_t *two_level;
-        int levels[] = {0, 1};
-        int nops = argc - 3;
-        levels[0] = nops - 1;
-        arch = multi_level_arch_create(2, levels);
-        two_level = win_create(1, 1, 1);
-        win_set_point(0, 0, 1, 1, two_level);
-        for (i = 2; i < argc - 2; i++) {
-            printf("Set fake window %d: %s %d\n", i-2, argv[i], nops-1);
-            multi_level_arch_set_window(arch, 0, i-2, 0, two_level);
-            multi_level_arch_set_window(arch, 1, 0, i-2, two_level);
-        }
-        printf("Create\n");
-        mop = multi_level_operator_create(arch);
-        for (i = 0; i < nops-1; i++) {
-            mop->levels[0].trained_operator[i] = itv_read(argv[i+2], &win);
-            mop->levels[0].windows[i][0] = win;
-        }
-        mop->levels[1].trained_operator[0] = itv_read(argv[i+2], &win);
-
-        multi_level_operator_write(argv[argc-1], mop);
-    } else if (strcmp(argv[1], "two-level-merge-itv") == 0) {
-        multi_level_operator_t *mop;
-        window_t **wins;
-        itv_t **itvs;
-        int nops = argc - 4;
-
-        trios_malloc(itvs, sizeof(itv_t *) * nops, int, "Error allocating itv_t array.");
-        trios_malloc(wins, sizeof(window_t *) * nops, int, "Error allocating window_t array.");
-        for (i = 0; i < nops; i++) {
-            printf("read %s\n", argv[i+2]);
-            itvs[i] = itv_read(argv[i+2], wins+i);
-        }
-        training = imgset_read(argv[argc-2]);
-
-        mop = multi_level_combine_itv(itvs, wins, nops, training);
-
-        multi_level_operator_write(argv[argc-1], mop);
-    }*/
 
     return 0;
 }
