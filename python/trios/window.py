@@ -102,18 +102,24 @@ def square(size, displacement=(0, 0)):
     """
     Creates a square window. The displacement argument moves the window through the domain.
     Size must be odd.
+    """
+    return rect(size, size, displacement)
+
+def rect(w, h, displacement=(0, 0)):
+    """
+    Creates a rectangular window. The displacement argument moves the window through the domain.
     """    
-    w = size + 2 * abs(displacement[0])
-    h = size + 2 * abs(displacement[1])
-    win = Window(h, w)
-    for i in range(size):
-        for j in range(size):
+    w_r = w + 2 * abs(displacement[0])
+    h_r = h + 2 * abs(displacement[1])
+    win = Window(h_r, w_r)
+    for i in range(h):
+        for j in range(w):
             idj = j
             if displacement[0] > 0:
-                idj -= size
+                idj -= w
             idi = i
             if displacement[1] < 0:
-                idi -= size
+                idi -= h
             win[idi, idj] = True
     return win
 
