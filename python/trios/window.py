@@ -19,6 +19,30 @@ class Window(np.ndarray):
             for j in range(w):
                 obj[i, j] = False
         return obj
+    
+    @classmethod
+    def read(cls, f_name):
+        """
+        Reads a Window from disk.
+        """
+        f = open(f_name)
+        s = f.read()
+        f.close()
+
+        lines = s.split('\n')
+
+        h = int(lines[1][3:])
+        w = int(lines[2][3:])
+        # le janela
+        win = Window(h, w)
+
+        for i in range(h):
+            l = lines[i+4].split(' ')[:w]
+            for j in range(w):
+                print l[j], l[j] != '0'
+                if l[j] != '0':
+                    win[i, j] = True
+        return win
         
     def write(self, name):
         """
@@ -72,22 +96,25 @@ def read(f_name):
     """
     Reads a Window from disk.
     """
-    
-    f = open(f_name)
-    s = f.read()
-    f.close()
-    
-    lines = s.split('\n')
-    
-    h = int(lines[1][3:])
-    w = int(lines[2][3:])
-    # le janela
+    Window.read(f_name)
+
+def square(size, displacement=(0, 0)):
+    """
+    Creates a square window. The displacement argument moves the window through the domain.
+    Size must be odd.
+    """    
+    w = size + 2 * abs(displacement[0])
+    h = size + 2 * abs(displacement[1])
     win = Window(h, w)
-    
-    for i in range(h):
-        l = lines[i+4].split(' ')[:w]
-        for j in range(w):
-            print l[j], l[j] != '0'
-            if l[j] != '0':
-                win[i, j] = True
+    for i in range(size):
+        for j in range(size):
+            idj = j
+            if displacement[0] > 0:
+                idj -= size
+            idi = i
+            if displacement[1] < 0:
+                idi -= size
+            win[idi, idj] = True
     return win
+
+
