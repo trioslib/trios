@@ -6,7 +6,7 @@ from image import *
 from imageset import *
 from aperture import *
 
-from Image import Image, open
+import Image
 
 import os
 import sys
@@ -38,6 +38,15 @@ def save_temporary(obj):
     fname = f.name
     f.close()
     obj.write(fname)
+    return fname
+
+def temporary_name():
+    """
+    Returns an unique temporary file name.
+    """
+    f = tempfile.NamedTemporaryFile(delete=False, dir='./')
+    fname = f.name
+    f.close()
     return fname
 
 class ImageOperator:
@@ -72,6 +81,8 @@ class ImageOperator:
             self.imgset = Imageset(self.imgset)
         imgset = save_temporary(self.imgset)
         r = detect.call('trios_build single %s %s %s %s'%(self.type, win, imgset, self.fname))
+        os.remove(win)
+        os.remove(imgset)
         if r == 0:
             self.built = True
         else:
@@ -81,15 +92,19 @@ class ImageOperator:
     def apply(self, img):
         if not self.built:
             raise Exception('Operator not built.')
-            
-        if type(img) == str:
-            r = detect.call('trios_apply %s %s'%(self.fname, img))
-            if r != 0:
-                raise Exception('Apply failed')
-        elif type(img) == Image:
+        
+        resname = temporary_name()
+        if isinstance(img, Image.Image):
             pass
             #salva imagem e chama apply.
             #isto permite usar imagens em formato diferente de PGM!
+            
+        r = detect.call('trios_apply %s %s %s'%(self.fname, img, resname))
+        if r != 0:
+            raise Exception('Apply failed')
+        res = Image.open(resname)
+        os.remove(resname)
+        return res
         
     def mae(self, test_set):
         return 0
