@@ -34,7 +34,7 @@ def save_temporary(obj):
     """
     if type(obj) == str:
         return obj
-    f = tempfile.NamedTemporaryFile(delete=False, prefix='./')
+    f = tempfile.NamedTemporaryFile(delete=False, dir='./')
     fname = f.name
     f.close()
     obj.write(fname)
