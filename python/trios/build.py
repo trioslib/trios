@@ -94,12 +94,14 @@ class ImageOperator:
             raise Exception('Operator not built.')
         
         resname = temporary_name()
+        imgname = img
         if isinstance(img, Image.Image):
-            pass
-            #salva imagem e chama apply.
-            #isto permite usar imagens em formato diferente de PGM!
+            imgname = temporary_name() + '.pgm'
+            img.save(imgname)
             
-        r = detect.call('trios_apply %s %s %s'%(self.fname, img, resname))
+        r = detect.call('trios_apply %s %s %s'%(self.fname, imgname, resname))
+        if isinstance(img, Image.Image):
+            os.remove(imgname)
         if r != 0:
             raise Exception('Apply failed')
         res = Image.open(resname)
