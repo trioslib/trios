@@ -39,7 +39,6 @@ class Window(np.ndarray):
         for i in range(h):
             l = lines[i+4].split(' ')[:w]
             for j in range(w):
-                print l[j], l[j] != '0'
                 if l[j] != '0':
                     win[i, j] = True
         return win

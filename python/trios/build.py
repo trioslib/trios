@@ -57,14 +57,24 @@ class ImageOperator:
     Operators built using this class are compatible with the command line tools.
     """
     
-    def __init__(self, fname, imgset, win, tp):
+    def __init__(self, fname, win, tp):
         self.fname = fname
-        self.imgset = imgset
-        self.win = win
+        
+        if isinstance(win, str):
+            self.win = Window.read(win)
+        else:
+            self.win = win
         self.built = False
         self.type = tp
         
-    #TODO: criar metodo read
+    @staticmethod
+    def read(fname):
+        with open(fname, 'r') as fop:
+            lines = fop.readlines()
+            tp = lines[1].strip()
+            win = lines[3].strip()
+        op = ImageOperator(fname, win, tp)
+        return op
         
     def collec(self):
         # faz collec e devolve como array do numpy
@@ -74,12 +84,13 @@ class ImageOperator:
         # faz decisao e devolve como array do numpy
         raise Exception('Not implemented yet')
         
-    def build(self):
-        #call trios_build, libera terminal ate que esteja treinado
+    def build(self, imgset):
+        if self.built:
+            raise Exception('Operator already built.')
         win = save_temporary(self.win)
-        if type(self.imgset) == list:
-            self.imgset = Imageset(self.imgset)
-        imgset = save_temporary(self.imgset)
+        if type(imgset) == list:
+            imgset = Imageset(self.imgset)
+        imgset = save_temporary(imgset)
         r = detect.call('trios_build single %s %s %s %s'%(self.type, win, imgset, self.fname))
         os.remove(win)
         os.remove(imgset)
@@ -132,4 +143,4 @@ class ImageOperator:
         return mae_err, acc
         
     def mse(self, test_set):
-        return 0
+        raise Exception('Not implemented yet')
