@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#define DEBUG
 
 unsigned long image_operator_mae(image_operator_t *iop, imgset_t *test, double *acc) {
     int i, j, k;
@@ -167,7 +166,7 @@ int computeMAEBBmulti(multi_level_operator_t *bb_operator, imgset_t *test, doubl
         img_free(mask);
         img_free(result);
     }
-    printf("Test pixels %d\n", n_pixels);
+    /*printf("Test pixels %d\n", n_pixels);*/
     if (acc != NULL) {
         *acc = 1.0 * MAE / n_pixels;
     }

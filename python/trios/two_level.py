@@ -1,24 +1,34 @@
 
 
-from build import ImageOperator
+from build import ImageOperator, save_temporary, temporary_name
+from imageset import Imageset
+import detect
+import os
 
-class MultiLevelOperator(ImageOperator):
+class TwoLevelOperator(ImageOperator):
     
     @classmethod
-    def combine(cls, *args):
+    def read(self, fname):
         pass
-        # combine many ImageOperator 
-
-    @classmethod
-    def build(cls, windows, imageset1, imageset2):
-        pass
+    
+    def __init__(self, fname, *args):
+        self.fname = fname
+        self.built = False
+        self.operators = list(args)
         
-    def __init__(self):
-        self.fname = ''
-
-def combine(*args):
-    return MultiLevelOperator.combine(*args)
-
-
-def build(windows, imageset1, imageset2):
-    return MultiLevelOperator.build(imageset1, imageset2)
+    def build(self, imgset):
+        print 'aaaa'
+        if self.built:
+            raise Exception('Operator already built.')
+    
+        if isinstance(imgset, list):
+            imgset = Imageset(imgset)
+        imgset = save_temporary(imgset)
+        
+        r = detect.call('trios_build combine %s %s %s'%(' '.join([o.fname for o in self.operators]), imgset, self.fname))
+        os.remove(imgset)
+        if r != 0:
+            raise Exception('Combination failed.')
+        
+        self.built = True
+        

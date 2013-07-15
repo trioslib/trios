@@ -13,10 +13,7 @@ import tempfile
 import detect
 
 """
-nao treinar o operador logo de cara?
 eh interessante olhar os xpl, mtm antes de rodar o treinamento. (ou rodar em background e liberar o terminal).
-
-valeria a pena carregar o xpl, mtm como array do numpy.
 
 colocar algumas "analises" simples.
 
@@ -51,7 +48,7 @@ class ImageOperator:
     """
     Holds references to all the objects needed to build and apply an image operator. 
     Since an image operator is a complex object, it is not mantained in memory. The 'fname' parameter contains the path to the saved image operator. 
-    Nothing is written to disk until one of 'build', 'collec' or 'decide' is called.
+    Nothing is written to disk until 'build' is called.
     
     
     Operators built using this class are compatible with the command line tools.
@@ -85,6 +82,9 @@ class ImageOperator:
         raise Exception('Not implemented yet')
         
     def build(self, imgset):
+        """
+        Runs the training process for the ImageOperator using the ImageSet passed in the parameters.  
+        """
         if self.built:
             raise Exception('Operator already built.')
         win = save_temporary(self.win)
@@ -101,6 +101,10 @@ class ImageOperator:
             raise Exception('Build failed')
         
     def apply(self, img):
+        """
+        Apply a trained ImageOperator into an image passed as a parameter. 
+        img can be a path to a PGM image on the disk or a PIL Image.
+        """
         if not self.built:
             raise Exception('Operator not built.')
         
@@ -120,6 +124,9 @@ class ImageOperator:
         return res
         
     def mae(self, test_set):
+        """
+        Calculates the Mean Absolute Error(MAE) of the ImageOperator on a ImageSet.
+        """
         if not self.built:
             raise Exception('Operator not built.')
         
@@ -143,4 +150,7 @@ class ImageOperator:
         return mae_err, acc
         
     def mse(self, test_set):
+        """
+        Calculates the Mean Square Error(MSE) of the ImageOperator on a ImageSet. Not implemented yet.
+        """
         raise Exception('Not implemented yet')
