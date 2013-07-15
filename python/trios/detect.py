@@ -18,8 +18,6 @@ def detect_trios(pth=''):
         TRIOS_PATH = os.getcwd()
     elif os.system(os.path.join(pth, 'trios_build > null')) == 0:
         TRIOS_PATH = pth
-        print pth
-        print TRIOS_PATH
     else:
         print('TRIOS not found.')
         

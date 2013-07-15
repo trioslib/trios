@@ -2,7 +2,6 @@
 Contains training related code for single-level operators.
 """
 from window import *
-from image import *
 from imageset import *
 from aperture import *
 
@@ -12,7 +11,6 @@ import os
 import sys
 import tempfile
 import detect
-import imageset
 
 """
 nao treinar o operador logo de cara?
@@ -66,13 +64,15 @@ class ImageOperator:
         self.built = False
         self.type = tp
         
+    #TODO: criar metodo read
+        
     def collec(self):
         # faz collec e devolve como array do numpy
-        pass
+        raise Exception('Not implemented yet')
     
     def decide(self):
         # faz decisao e devolve como array do numpy
-        pass
+        raise Exception('Not implemented yet')
         
     def build(self):
         #call trios_build, libera terminal ate que esteja treinado
@@ -109,25 +109,27 @@ class ImageOperator:
         return res
         
     def mae(self, test_set):
-        return 0
+        if not self.built:
+            raise Exception('Operator not built.')
+        
+        if type(test_set) == list:
+            test_set = Imageset(test_set)
+        test_set = save_temporary(test_set)
+        
+        errname = temporary_name()
+        r = detect.call('trios_test %s %s > %s'%(self.fname, test_set, errname))
+        if r != 0:
+            raise Exception('trios_test failed')
+        
+        mae_err = 0
+        acc = 0.0
+        with open(errname, 'r') as errfile:
+            content = errfile.read()
+            mae_err = int(content.split()[1])
+            acc = float(content.split()[3])            
+        os.remove(errname)
+        os.remove(test_set)
+        return mae_err, acc
         
     def mse(self, test_set):
         return 0
-
-def bb(fname, imgset, win):
-    return ImageOperator(fname, imgset, win, 'BB')
-    
-def gg(fname, imgset, win):
-    return ImageOperator(fname, imgset, win, 'GG')
-    
-def gb(fname, imgset, win):
-    return ImageOperator(fname, imgset, win, 'GB')
-    
-def wk(fname, imgset, win, apt):
-    return ImageOperator(fname, imgset, win)
-
-def wkf(fname, imgset, win, ki, ko, vplace):
-    return ImageOperator(fname, imgset, win)
-    
-def wkc(fname, imgset, win, ki, vplace):
-    return ImageOperator(fname, imgset, win)

@@ -140,7 +140,6 @@ image_operator_t *image_operator_read(char *path) {
     if (fscanf(f, "%*s%s", temp_string) != 1) {
         return (image_operator_t *) trios_error(MSG, "Failed to read file %s.", path);
     }
-    printf("%s\n", temp_string);
     if (temp_string[0] == 'B' && temp_string[1] == 'B') {
         iop->type = BB;
         sprintf(temp_string, "%s-files/window", path);

@@ -96,7 +96,7 @@ def read(f_name):
     """
     Reads a Window from disk.
     """
-    Window.read(f_name)
+    return Window.read(f_name)
 
 def square(size, displacement=(0, 0)):
     """
