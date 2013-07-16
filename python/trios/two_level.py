@@ -6,10 +6,24 @@ import detect
 import os
 
 class TwoLevelOperator(ImageOperator):
+    """
+    This class represents a two level operators. This type of operator
+    combines ImageOperators trained in the same domain (but with different windows and/or training sets) in order to improve the classification result.
     
+    Operators built with this class are compatible with the command line tools.    
+    """
     @classmethod
     def read(self, fname):
-        pass
+        with open(fname, 'r') as f:
+			lines = f.readlines()
+			tp = lines[0].strip()
+			num_ops = int(lines[2].split()[0])
+			if num_ops != 2: raise Exception('Only two level operators are supported!')
+			ops = []
+			for i in range(num_ops):
+				op = ImageOperator.read('%s-files/level0/operator%d'%(fname, i))
+				ops.append(op)
+			return TwoLevelOperator(fname, *ops)    
     
     def __init__(self, fname, *args):
         self.fname = fname
