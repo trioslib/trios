@@ -1,8 +1,6 @@
-import window
-import imageset
-import image
-import aperture
-import build
-import two_level
+from window import *
+from imageset import *
+from build import ImageOperator
+from two_level import TwoLevelOperator
 
-import detect
+from detect import detect_trios

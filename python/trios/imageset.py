@@ -108,11 +108,3 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
         f.close()
         #Show?
     
-
-
-def read(fname):
-    """
-    Reads Imageset from disk.
-    """
-    return Imageset.read(fname)
-    

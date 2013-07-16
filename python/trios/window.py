@@ -43,6 +43,33 @@ class Window(np.ndarray):
                     win[i, j] = True
         return win
         
+    @staticmethod
+    def square(size, displacement=(0, 0)):
+        """
+        Creates a square window. The displacement argument moves the window through the domain.
+        Size must be odd.
+        """
+        return Window.rect(size, size, displacement)
+
+    @staticmethod
+    def rect(w, h, displacement=(0, 0)):
+        """
+        Creates a rectangular window. The displacement argument moves the window through the domain.
+        """    
+        w_r = w + 2 * abs(displacement[0])
+        h_r = h + 2 * abs(displacement[1])
+        win = Window(h_r, w_r)
+        for i in range(h):
+            for j in range(w):
+                idj = j
+                if displacement[0] > 0:
+                    idj -= w
+                idi = i
+                if displacement[1] < 0:
+                    idi -= h
+                win[idi, idj] = True
+        return win
+        
     def write(self, name):
         """
         Writes a window to the disk.
@@ -89,37 +116,5 @@ class Window(np.ndarray):
             l = matplotlib.lines.Line2D([j, j], [0, h], color='black')
             ax.add_line(l)
         plt.show()
-
-
-def read(f_name):
-    """
-    Reads a Window from disk.
-    """
-    return Window.read(f_name)
-
-def square(size, displacement=(0, 0)):
-    """
-    Creates a square window. The displacement argument moves the window through the domain.
-    Size must be odd.
-    """
-    return rect(size, size, displacement)
-
-def rect(w, h, displacement=(0, 0)):
-    """
-    Creates a rectangular window. The displacement argument moves the window through the domain.
-    """    
-    w_r = w + 2 * abs(displacement[0])
-    h_r = h + 2 * abs(displacement[1])
-    win = Window(h_r, w_r)
-    for i in range(h):
-        for j in range(w):
-            idj = j
-            if displacement[0] > 0:
-                idj -= w
-            idi = i
-            if displacement[1] < 0:
-                idi -= h
-            win[idi, idj] = True
-    return win
 
 
