@@ -70,6 +70,7 @@ class ImageOperator:
             lines = fop.readlines()
             tp = lines[1].strip()
             win = lines[3].strip()
+        win = os.path.join(os.path.split(fname)[0], win)
         op = ImageOperator(fname, win, tp)
         return op
         

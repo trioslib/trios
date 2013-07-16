@@ -29,7 +29,7 @@ static int write_decision(image_operator_t *iop, FILE *operator_file, char *path
     if (!mtm_write(temp_string, iop->decision, iop->win, iop->apt)) {
         return trios_error(MSG, "Error writing mtm at %s", temp_string);
     }
-    sprintf(temp_string, "%s-files/decison", path + file_name_idx);
+    sprintf(temp_string, "%s-files/decision", path + file_name_idx);
     fprintf(operator_file, ".mtm\n%s\n", temp_string);
     return 1;
 }
