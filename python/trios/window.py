@@ -70,6 +70,34 @@ class Window(np.ndarray):
                 win[idi, idj] = True
         return win
         
+    @staticmethod
+    def cross(w, h=0, displacement=(0, 0)):
+        if h == 0: h = w
+        w_r = w + 2 * abs(displacement[0])
+        h_r = h + 2 * abs(displacement[1])
+        win = Window(h_r, w_r)
+        points = []
+        for i in range(h):
+            idj = w / 2
+            if displacement[0] > 0:
+                idj -= w
+            idi = i
+            if displacement[1] < 0:
+                idi -= h
+            points.append((idi, idj))
+        
+        for j in range(w):
+            idj = j
+            if displacement[0] > 0:
+                idj -= w
+            idi = h / 2
+            if displacement[1] < 0:
+                idi -= h
+            points.append((idi, idj))
+        for p in points:
+            win[p[0], p[1]] = True
+        return win
+        
     def write(self, name):
         """
         Writes a window to the disk.
