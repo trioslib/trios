@@ -63,10 +63,10 @@ class Window(np.ndarray):
             for j in range(w):
                 idj = j
                 if displacement[0] > 0:
-                    idj -= w
+                    idj += w_r - w
                 idi = i
                 if displacement[1] < 0:
-                    idi -= h
+                    idi += h_r - h
                 win[idi, idj] = True
         return win
         
@@ -80,10 +80,10 @@ class Window(np.ndarray):
         for i in range(h):
             idj = w / 2
             if displacement[0] > 0:
-                idj -= w
+                idj += w_r - w
             idi = i
             if displacement[1] < 0:
-                idi -= h
+                idi += h_r - h
             points.append((idi, idj))
         
         for j in range(w):
@@ -97,6 +97,32 @@ class Window(np.ndarray):
         for p in points:
             win[p[0], p[1]] = True
         return win
+
+    @staticmethod
+    def circle(radius, displacement=(0, 0)):
+        """
+        Creates a rectangular window. The displacement argument moves the window through the domain.
+        """    
+        diam = 2 * radius + 1
+        w_r = diam + 2 * abs(displacement[0])
+        h_r = diam + 2 * abs(displacement[1])
+        
+        center = radius
+        win = Window(h_r, w_r)
+        
+        for i in range(diam):
+            for j in range(diam):
+                print (i, j), (center, center)
+                if abs(i - center) + abs(j - center) <= radius:
+                    idj = j
+                    if displacement[0] > 0:
+                        idj += radius
+                    idi = i
+                    if displacement[1] > 0:
+                        idi += radius
+                    win[idi, idj] = True
+        return win
+
         
     def write(self, name):
         """
