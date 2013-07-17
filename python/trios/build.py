@@ -11,6 +11,7 @@ import os
 import sys
 import tempfile
 import detect
+import numpy
 
 """
 eh interessante olhar os xpl, mtm antes de rodar o treinamento. (ou rodar em background e liberar o terminal).
@@ -74,13 +75,29 @@ class ImageOperator:
         op = ImageOperator(fname, win, tp)
         return op
         
-    def collec(self):
-        # faz collec e devolve como array do numpy
-        raise Exception('Not implemented yet')
+    def collec(self, imgset):
+        win = save_temporary(self.win)
+        if type(imgset) == list:
+            imgset = Imageset(imgset)
+        imgset = save_temporary(imgset)
+        res = temporary_name()
+        r = detect.call('trios_csv xpl %s %s %s %s'%(self.type, imgset, win, res))
+        if r != 0: raise Exception('Collec failed')
+        arr =  numpy.loadtxt(res, dtype=int, delimiter=',')
+        os.remove(res)
+        return arr
     
-    def decide(self):
-        # faz decisao e devolve como array do numpy
-        raise Exception('Not implemented yet')
+    def decision(self, imgset):
+        win = save_temporary(self.win)
+        if type(imgset) == list:
+            imgset = Imageset(imgset)
+        imgset = save_temporary(imgset)
+        res = temporary_name()
+        r = detect.call('trios_csv mtm %s %s %s %s'%(self.type, imgset, win, res))
+        if r != 0: raise Exception('Collec failed')
+        arr =  numpy.loadtxt(res, dtype=int, delimiter=',')
+        os.remove(res)
+        return arr
         
     def build(self, imgset):
         """
@@ -90,7 +107,7 @@ class ImageOperator:
             raise Exception('Operator already built.')
         win = save_temporary(self.win)
         if type(imgset) == list:
-            imgset = Imageset(self.imgset)
+            imgset = Imageset(imgset)
         imgset = save_temporary(imgset)
         r = detect.call('trios_build single %s %s %s %s'%(self.type, win, imgset, self.fname))
         os.remove(win)
@@ -150,8 +167,3 @@ class ImageOperator:
         os.remove(test_set)
         return mae_err, acc
         
-    def mse(self, test_set):
-        """
-        Calculates the Mean Square Error(MSE) of the ImageOperator on a ImageSet. Not implemented yet.
-        """
-        raise Exception('Not implemented yet')
