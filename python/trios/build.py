@@ -118,7 +118,7 @@ class ImageOperator:
             self.built = False
             raise Exception('Build failed')
         
-    def apply(self, img):
+    def apply(self, img, mask=''):
         """
         Apply a trained ImageOperator into an image passed as a parameter. 
         img can be a path to a PGM image on the disk or a PIL Image.
@@ -132,7 +132,7 @@ class ImageOperator:
             imgname = temporary_name() + '.pgm'
             img.save(imgname)
             
-        r = detect.call('trios_apply %s %s %s'%(self.fname, imgname, resname))
+        r = detect.call('trios_apply %s %s %s %s'%(self.fname, imgname, resname, mask))
         if isinstance(img, Image.Image):
             os.remove(imgname)
         if r != 0:
