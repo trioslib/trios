@@ -13,7 +13,9 @@ def detect_trios(pth=''):
     """
     global TRIOS_PATH
     default_for_package = os.path.split(os.path.realpath(__file__))[0]
+    default_source_package = default_for_package + '../../bin/'
     default_for_package += '/../../bin/bin'
+    
     
     if os.system('trios_build > null') == 0:
         TRIOS_PATH = ''
@@ -23,6 +25,8 @@ def detect_trios(pth=''):
         TRIOS_PATH = pth
     elif os.system(os.path.join(default_for_package, 'trios_build > null')) == 0:
         TRIOS_PATH = default_for_package
+    elif os.system(os.path.join(default_source_package, 'trios_build > null')) == 0:
+        TRIOS_PATH = default_source_package
     else:
         print('TRIOS not found.')
         
