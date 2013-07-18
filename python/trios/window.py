@@ -101,7 +101,7 @@ class Window(np.ndarray):
     @staticmethod
     def circle(radius, displacement=(0, 0)):
         """
-        Creates a rectangular window. The displacement argument moves the window through the domain.
+        Creates a circular window. The displacement argument moves the window through the domain.
         """    
         diam = 2 * radius + 1
         w_r = diam + 2 * abs(displacement[0])
