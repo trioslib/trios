@@ -18,9 +18,3 @@ basic/basic_xplGG.c
 basic/basic_math.c)
 
 ADD_LIBRARY(triosbasic ${TRIOS_BASIC_SRCS})
-
-INSTALL(TARGETS triosbasic
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-)

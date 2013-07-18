@@ -16,10 +16,3 @@ learn/partition.c
 )
 ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})
 target_link_libraries(trioslearn triosbasic triosio trios_collec triosappl trioscv m)
-
-
-INSTALL(TARGETS trioslearn
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-)
