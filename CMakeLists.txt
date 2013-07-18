@@ -58,4 +58,6 @@ INCLUDE(CPack)
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/README.txt" "${CMAKE_CURRENT_SOURCE_DIR}/Copyright.txt"
     DESTINATION .)
 
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/python/trios/" DESTINATION "python/trios")
+
 ################################

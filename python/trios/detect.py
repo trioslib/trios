@@ -13,7 +13,7 @@ def detect_trios(pth=''):
     """
     global TRIOS_PATH
     default_for_package = os.path.split(os.path.realpath(__file__))[0]
-    default_source_package = default_for_package + '../../bin/'
+    default_source_package = default_for_package + '/../../bin/'
     default_for_package += '/../../bin/bin'
     
     
