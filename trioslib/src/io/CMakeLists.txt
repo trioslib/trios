@@ -15,9 +15,3 @@ io/io_apert.c
 )
 ADD_LIBRARY(triosio ${TRIOS_IO_SRCS})
 target_link_libraries(triosio triosbasic trioscv m)
-
-INSTALL(TARGETS triosio
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-)

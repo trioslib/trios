@@ -10,9 +10,3 @@ appl/appl_multi.c
 appl/operator.c
 )
 ADD_LIBRARY(triosappl ${TRIOS_COLLEC_SRCS} ${TRIOS_APPL_SRCS})
-
-INSTALL(TARGETS triosappl
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-)
