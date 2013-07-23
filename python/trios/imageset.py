@@ -42,7 +42,7 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
             print('Number of groups must be 2 or 3')
             return None
         
-        base_dir = [0] * 3
+        base_dir = [""] * 3
         base_dir[0] = lines[4].strip()
         base_dir[1] = lines[5].strip()
         
