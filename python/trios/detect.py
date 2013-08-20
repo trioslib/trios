@@ -51,8 +51,9 @@ def call(cmd, output=os.devnull):
     global TRIOS_PATH
     cmd = shlex.split(cmd)
     cmd[0] = os.path.join(TRIOS_PATH, cmd[0])
-    with open(output, 'w') as redir:        
-        return subprocess.call(cmd, stdout=redir, stderr=redir)
+    with open(output, 'w') as redir:
+        with open(os.devnull, 'w') as trash:
+            return subprocess.call(cmd, stdout=redir, stderr=trash)
 
 detect_trios()
     

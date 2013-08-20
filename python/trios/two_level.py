@@ -31,7 +31,6 @@ class TwoLevelOperator(ImageOperator):
         self.operators = list(args)
         
     def build(self, imgset):
-        print 'aaaa'
         if self.built:
             raise Exception('Operator already built.')
     
