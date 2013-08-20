@@ -3,6 +3,8 @@ Detects TRIOS command line tools. The path is stored in TRIOS_PATH.
 """
 
 import os
+import shlex
+import subprocess
 import os.path
 
 TRIOS_PATH = ''
@@ -16,8 +18,19 @@ def detect_trios(pth=''):
     default_source_package = default_for_package + '/../../bin/'
     default_for_package += '/../../bin/bin'
     
-    
-    if os.system('trios_build > null') == 0:
+    paths = ['', './', pth, default_for_package, default_source_package]
+
+    with open(os.devnull, 'w') as trash:    
+        for p in paths:
+            try:
+                subprocess.call(os.path.join(p, 'trios_build'), stdout=trash, stderr=trash)
+            except OSError:
+                pass
+            else:
+                TRIOS_PATH = p
+                print 'Detected path', TRIOS_PATH
+                return
+    """if os.system('trios_build > null') == 0:
         TRIOS_PATH = ''
     elif os.system('./trios_build > null') == 0:
         TRIOS_PATH = os.getcwd()
@@ -29,14 +42,17 @@ def detect_trios(pth=''):
         TRIOS_PATH = default_source_package
     else:
         print('TRIOS not found.')
-        
-def call(cmd):
+    """
+    
+def call(cmd, output=os.devnull):
     """
     Calls a command line tool from TRIOS.
     """
     global TRIOS_PATH
-    print(os.path.join(TRIOS_PATH, cmd))
-    return os.system(os.path.join(TRIOS_PATH, cmd))
+    cmd = shlex.split(cmd)
+    cmd[0] = os.path.join(TRIOS_PATH, cmd[0])
+    with open(output, 'w') as redir:        
+        return subprocess.call(cmd, stdout=redir, stderr=redir)
 
 detect_trios()
     
