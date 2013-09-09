@@ -2,45 +2,15 @@
 TRIOS - Training Image Operatros from Samples
 =================================================
 
-TRIOS is a toolbox that contains many algorithms for
-the automatic design of image operators from samples.
-Right, it only supports binary images, but grayscale
-operators will be supported in a near future.
+TRIOS is a toolbox for Image Operator Learning. Given a set of examples 
+containing an input image and the desired output, it builds an Image 
+Operator that transforms the input images into the desired outputs with
+minimum error. TRIOS approaches this problem using Machine Learning 
+techniques to build a local transformation of the images. 
+More details about this process are described at [1]. To learn how
+to use TRIOS visit our tutorials page [2].
 
 
--------------------------------------------------
-Compiling TRIOS
--------------------------------------------------
 
-TRIOS contains two different projects. TRIOSlib is 
-a library of funtions to perform supervised image operator
-learning. TRIOS-auto is a GUI tool to train image
-operators in an easy way. 
-
-
-Compiling TRIOSlib
--------------------------------------------------
-
-TRIOSlib is managed with CMake. To compile, go to 
-the root directory of the source and type:
-
-mkdir bin
-cd bin
-cmake ..
-make
-
-The result will contain two important folders: bin
-(which contains test applications) and lib (which
-contains the compiled static libraries).
-
-Compiling TRIOS-auto
--------------------------------------------------
-
-To compile TRIOS-auto you must first compile TRIOS
-following the instructions above. The build MUST
-be made in the bin/ directory. 
-
-The easiest way to build TRIOS-auto is to use 
-Qt Creator (qt.nokia.com) and load the trios-auto.pro.
-The project will be automatically created. Press Ctrl+R 
-to run the project. 
+[1] http://trioslib.sourceforge.net/research/introduction_to_image_operator_learning
+[2] http://trioslib.sourceforge.net/tutorials/
