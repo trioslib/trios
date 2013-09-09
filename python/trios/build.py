@@ -154,7 +154,7 @@ class ImageOperator:
         test_set = save_temporary(test_set)
         
         errname = temporary_name()
-        r = detect.call('trios_test %s %s > %s'%(self.fname, test_set, errname))
+        r = detect.call('trios_test %s %s'%(self.fname, test_set), errname)
         if r != 0:
             raise Exception('trios_test failed')
         
