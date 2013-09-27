@@ -4,6 +4,7 @@ from build import ImageOperator, save_temporary, temporary_name
 from imageset import Imageset
 import detect
 import os
+import sys
 
 class TwoLevelOperator(ImageOperator):
     """
@@ -17,13 +18,15 @@ class TwoLevelOperator(ImageOperator):
         with open(fname, 'r') as f:
             lines = f.readlines()
             tp = lines[0].strip()
-            num_ops = int(lines[2].split()[0])
+            num_ops = int(lines[1].split()[0])
             if num_ops != 2: raise Exception('Only two level operators are supported!')
             ops = []
             for i in range(num_ops):
                 op = ImageOperator.read('%s-files/level0/operator%d'%(fname, i))
                 ops.append(op)
-            return TwoLevelOperator(fname, *ops)    
+            op = TwoLevelOperator(fname, *ops)
+            op.built = True
+            return op
     
     def __init__(self, fname, *args):
         self.fname = fname
@@ -38,7 +41,7 @@ class TwoLevelOperator(ImageOperator):
             imgset = Imageset(imgset)
         imgset = save_temporary(imgset)
         
-        r = detect.call('trios_build combine %s %s %s'%(' '.join([o.fname for o in self.operators]), imgset, self.fname))
+        r = detect.call('trios_build combine %s %s %s'%(' '.join([o.fname for o in self.operators]), imgset, self.fname), sys.stdout)
         os.remove(imgset)
         if r != 0:
             raise Exception('Combination failed.')
