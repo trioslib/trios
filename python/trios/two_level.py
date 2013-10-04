@@ -41,7 +41,7 @@ class TwoLevelOperator(ImageOperator):
             imgset = Imageset(imgset)
         imgset = save_temporary(imgset)
         
-        r = detect.call('trios_build combine %s %s %s'%(' '.join([o.fname for o in self.operators]), imgset, self.fname), sys.stdout)
+        r = detect.call('trios_build combine %s %s %s'%(' '.join([o.fname for o in self.operators]), imgset, self.fname))
         os.remove(imgset)
         if r != 0:
             raise Exception('Combination failed.')
