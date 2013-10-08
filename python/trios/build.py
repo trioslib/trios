@@ -109,6 +109,8 @@ class ImageOperator:
         win = save_temporary(self.win)
         if type(imgset) == list:
             imgset = Imageset(imgset)
+        elif type(imgset) == str:
+            imgset = trios.Imageset.read(imgset)
         imgset = save_temporary(imgset)
         r = detect.call('trios_build single %s %s %s %s'%(self.type, win, imgset, self.fname))
         os.remove(win)
