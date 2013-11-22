@@ -8,8 +8,9 @@
 #include <unistd.h>
 #endif
 
+#define DEBUG 1
 
-#define MAX_PARTITIONS 512
+#define MAX_PARTITIONS 768
 
 /*!
  * Given a set of examples (mtm) determines which is the variable (direction) that most equatively partitions the examples.

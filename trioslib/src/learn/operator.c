@@ -30,7 +30,7 @@ image_operator_t *image_operator_build_bb(imgset_t *set, window_t *win) {
         return (image_operator_t *) trios_error(MSG, "Error in decision");
     }
 
-    iop->bb = lisi_partitioned(iop->win, iop->decision, 13000);
+    iop->bb = lisi_partitioned(iop->win, iop->decision, 30000);
     if (iop->bb == NULL) {
         return (image_operator_t *) trios_error(MSG, "Error in lisi_partitioned");
     }

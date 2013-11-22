@@ -80,7 +80,7 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
         op_collec = lcollec_multi_level(mop, level, j, input_images, mask_images, ideal_images, imgset_get_ngroups(set[set_idx]));
         /* decision em cada um dos operadores */
         op_dec = ldecision_memory(op_collec, mop->type == BB, 0, MEDIAN, 0, 0);
-
+#define DEBUG
 #ifdef DEBUG
         if (mop->type == GG) {
             sprintf(temp, "GG-lv%d-op%d.xp", level, j);
@@ -94,7 +94,7 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
             mtm_write(temp, op_dec, joint_window, NULL);
         }
 #endif
-
+#undef DEBUG
         if (level == 0) {
             if (mop->type == BB) {
                 level_op = (classifier_t *) lisi_partitioned(mop->levels[0].windows[j][0], op_dec, 13000);
@@ -103,7 +103,7 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
             }
         } else {
             if (mop->type == BB) {
-                level_op = (classifier_t *) lisi_partitioned(joint_window, op_dec, 13000);
+                level_op = (classifier_t *) lisi_partitioned(joint_window, op_dec, 30000);
             } else if (mop->type == GG) {
                 level_op = (classifier_t *) ltrainGG_memory(op_dec);
             }
@@ -183,15 +183,22 @@ static int apply_until_level_images(multi_level_operator_t *mop, int level, img_
     input = &img;
     trios_malloc(next, sizeof(img_t *) * mop->levels[level].noperators, int, "Bad alloc");
     for (i = 0; i <= level; i++) {
+
+#pragma omp parallel
+{ 
+	#pragma omp for schedule(static, 1) 
         for (j = 0; j < mop->levels[i].noperators; j++) {
+            printf("Thread %d, max %d\n", j, mop->levels[i].noperators);
             if (mop->type == BB) {
                 next[j] = multi_level_apply_level_bb(mop, i, j, input, mask);
             } else if (mop->type == GG) {
                 next[j] = multi_level_apply_level_gg(mop, i, j, input, mask);
             }
-            sprintf(cmd, "l%dop%d.pgm", i, j);
-            img_writePGM(cmd, next[j]);
+            /*sprintf(cmd, "l%dop%d.pgm", i, j);
+            img_writePGM(cmd, next[j]);*/
         }
+}
+
         if (i > 0) {
             for (j = 0; j < mop->levels[i].ninputs; j++) {
                 img_free(input[j]);
