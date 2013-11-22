@@ -2,6 +2,7 @@
 #include "trios_win.h"
 #include "trios_imgset.h"
 #include "trios_apert.h" 
+#include "trios_operator.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -86,6 +87,15 @@ int lcollecWK(char *fname_i1, char *fname_i2, char *fname_i3, int ki, int ko, in
  * \return The collected examples.
  */
 xpl_t *lcollecWK_memory(imgset_t *imgset, window_t *win, xpl_t *xpl, apert_t *apt);
+
+/*!
+ * Returns the patterns observed by a combination of the provided image operators.
+ * \param imgset Imageset used in the second level.
+ * \param ops Array of image operators.
+ * \param nops Number of image operators.
+ * \return The patterns collected for a two-level operator that combines the output of the operators of the provided image operators.
+ */
+xpl_t *lcollec_two_level(imgset_t *imgset, image_operator_t **ops, int nops);
 
 #ifdef __cplusplus
 }
