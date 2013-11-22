@@ -9,6 +9,8 @@
 #endif
 
 
+#define MAX_PARTITIONS 512
+
 /*!
  * Given a set of examples (mtm) determines which is the variable (direction) that most equatively partitions the examples.
  * \param mtm Set of classified examples.
@@ -70,11 +72,10 @@ int	mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,	itv_t ** ITV
 	mtm_t *mtm0, *mtm1;
 	int var;
 
-
 	if (mtm->nmtm == 0) {
 		return (1);
 	}
-	if (*noper > 255) {
+	if (*noper > MAX_PARTITIONS-1) {
 		return trios_error(1,
 				   "Insufficient buffer size. Please contact maintenance people.");
 	}
@@ -85,7 +86,6 @@ int	mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,	itv_t ** ITV
 		*noper = *noper + 1;
 	} else {
 		var = which_var(mtm, 10000000);
-
 		/* partitions the intervals */
 		itv0 = itv1 = NULL;
 		if (!itv_setvar(itv, var, &itv0, &itv1)) {
@@ -111,9 +111,7 @@ int	mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,	itv_t ** ITV
 		}
 
 	}
-
 	return (1);
-
 }
 
 
@@ -310,9 +308,9 @@ int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 	window_t *win;
 	apert_t *apt;
 	mtm_t *mtm;
-	mtm_t *mtm_list[256];
+	mtm_t *mtm_list[MAX_PARTITIONS];
 	itv_t *start_itv;
-	itv_t *itv_list[256];
+	itv_t *itv_list[MAX_PARTITIONS];
 	char fname[512];
 	FILE *fd;
 	int wsize, noper;
@@ -345,7 +343,7 @@ int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 
 
 	noper = 0;
-	for (i = 0; i < 256; i++) {
+	for (i = 0; i < MAX_PARTITIONS; i++) {
 		mtm_list[i] = NULL;
 		itv_list[i] = NULL;
 	}
@@ -440,9 +438,9 @@ int lpartition_memory(window_t * win, mtm_t * __mtm, int itv_type, int threshold
         }
     }
 
-    trios_malloc(mtm_out, sizeof(mtm_t *) * (256), int,
+    trios_malloc(mtm_out, sizeof(mtm_t *) * (MAX_PARTITIONS), int,
              "Failed to alloc mtm_t list");
-    trios_malloc(itv_out, sizeof(itv_t *) * (256), int,
+    trios_malloc(itv_out, sizeof(itv_t *) * (MAX_PARTITIONS), int,
              "Failed to alloc itv_t list");
 
     start_itv = itv_gen_itv(win, itv_type, BB, 0, 1, 0);
@@ -451,7 +449,7 @@ int lpartition_memory(window_t * win, mtm_t * __mtm, int itv_type, int threshold
     }
 
     noper = 0;
-    for (i = 0; i < 256; i++) {
+    for (i = 0; i < MAX_PARTITIONS; i++) {
         mtm_out[i] = NULL;
         itv_out[i] = NULL;
     }
