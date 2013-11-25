@@ -18,9 +18,10 @@ class TwoLevelOperator(ImageOperator):
         with open(fname, 'r') as f:
             lines = f.readlines()
             tp = lines[0].strip()
-            num_ops = int(lines[1].split()[0])
-            if num_ops != 2: raise Exception('Only two level operators are supported!')
+            num_levels = int(lines[1].split()[0])
+            if num_levels != 2: raise Exception('Only two level operators are supported!')
             ops = []
+            num_ops = int(lines[2].split()[0])
             for i in range(num_ops):
                 op = ImageOperator.read('%s-files/level0/operator%d'%(fname, i))
                 ops.append(op)
