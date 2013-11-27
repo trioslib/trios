@@ -14,6 +14,9 @@ target_link_libraries(trios_csv trios m)
 add_executable(trios_collec trios_collec.c)
 target_link_libraries(trios_collec trios m)
 
+add_executable(trios_relief trios_relief.c)
+target_link_libraries(trios_relief trios m)
+
 install(TARGETS trios_csv trios_test trios_apply trios_build
     RUNTIME DESTINATION bin
     ARCHIVE DESTINATION bin)
