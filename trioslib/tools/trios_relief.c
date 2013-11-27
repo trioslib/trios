@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     int num_prototypes;
     point_weight *pw;
     int seed;
-    int i;
+    int i, j, w, h;
 
     xpl = xpl_read(argv[1], &win, NULL);
     win_size = atoi(argv[2]);
@@ -29,11 +29,17 @@ int main(int argc, char *argv[]) {
 
     pw = reliefBB(xpl, win, num_prototypes);
 
-    result = win_create(win_get_height(win), win_get_width(win), 1);
+    w = win_get_width(win);
+    h = win_get_height(win);
+    result = win_create(h, w, 1);
     for (i = 0; i < win_size; i++) {
         win_set_point(pw[i].i, pw[i].j, 1, 1, result);
     }
     win_write(argv[4], result);
+
+    for (i = 0; i < w*h; i++) {
+        printf("score(i=%d, j=%d) = %f\n", pw[i].i, pw[i].j, pw[i].weight);
+    }
 
     return 0;
 }
