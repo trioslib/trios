@@ -7,6 +7,7 @@
 
 
 
+
 int compare_pw(const void *_p1, const void *_p2) {
     point_weight *p1, *p2;
     p1 = (point_weight *) _p1;

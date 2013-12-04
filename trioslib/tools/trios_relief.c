@@ -16,6 +16,8 @@ int main(int argc, char *argv[]) {
     int seed;
     int i, j, w, h;
 
+    
+    
     xpl = xpl_read(argv[1], &win, NULL);
     win_size = atoi(argv[2]);
     num_prototypes = atoi(argv[3]);
