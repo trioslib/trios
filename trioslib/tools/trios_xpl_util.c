@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-
+    printf("n remove %d k %d\n", n_remove, k);
     new_xpl = xpl_remove_variables(domain, to_remove, n_remove);
 
     xpl_write(argv[3], new_xpl, win, NULL);
