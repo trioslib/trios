@@ -110,7 +110,7 @@ static int build_level(multi_level_operator_t *mop, int level, imgset_t **set, i
             }
             win_free(joint_window);
         }
-        xpl_free(op_collec);
+        /*xpl_free(op_collec);*/
         mtm_free(op_dec);
         mop->levels[level].trained_operator[j] = level_op;
     }
@@ -319,7 +319,7 @@ multi_level_operator_t *multi_level_build(multi_architecture_t *m, imgset_t **se
 }
 
 multi_level_operator_t *multi_level_combine_xpl(image_operator_t **ops, int nops, xpl_t *collec2nd) {
-    multi_architecture_t *arch;
+    multi_architecture_t *arch = NULL;
     multi_level_operator_t *mop = NULL;
     int i;
     window_t *two_level, *joint_window;
@@ -328,6 +328,7 @@ multi_level_operator_t *multi_level_combine_xpl(image_operator_t **ops, int nops
     int levels[] = {0, 1};
     levels[0] = nops;
     arch = multi_level_arch_create(2, levels);
+    printf("arch %p  nops %d\n", arch, nops);
     two_level = win_create(1, 1, 1);
     win_set_point(0, 0, 1, 1, two_level);
     for (i = 0; i < nops; i++) {

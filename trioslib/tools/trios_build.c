@@ -132,21 +132,21 @@ int combine_xpl(int argc, char *argv[]) {
     window_t *win;
     itv_t *iold;
     int i;
-    int nops = argc - 3;
+    int nops = argc - 4;
 
     trios_malloc(ops, sizeof(image_operator_t *) * nops, int, "Error allocating image_operator_t array.");
-    for (i = 2; i < argc - 1; i++) {
+    for (i = 3; i < argc - 1; i++) {
         printf("Read %s\n", argv[i]);
-        ops[i-2] = image_operator_read(argv[i]);
-        if (ops[i-2] == NULL) {
+        ops[i-3] = image_operator_read(argv[i]);
+        if (ops[i-3] == NULL) {
             iold = itv_read(argv[i], &win);
             if (iold == NULL) {
                 trios_fatal("Could not read %s.", argv[i]);
             }
-            ops[i-2] = image_operator_itv(iold, win);
+            ops[i-3] = image_operator_itv(iold, win);
         }
     }
-    collec2nd = xpl_read(argv[1], &win, NULL);
+    collec2nd = xpl_read(argv[2], &win, NULL);
 
     mop = multi_level_combine_xpl(ops, nops, collec2nd);
     multi_level_operator_write(argv[argc-1], mop);
