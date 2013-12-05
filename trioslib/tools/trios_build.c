@@ -5,8 +5,11 @@ void print_usage() {
     fprintf(stderr, "Usage: trios_build [single|two-level] [BB|GG|GB] window(s) training_set [level2_training_set] result_path\n");
     fprintf(stderr, "       trios_build  single WK window aperture training_set result_path\n\n");
     fprintf(stderr, "       trios_build combine operator list level2_training_set result_path\n\n");
+    fprintf(stderr, "       trios_build combine_xpl 2nd_xpl operator list result_path\n\n");
+
     fprintf(stderr, "This tools executes the training process to learn image operators from a set of samples.\n");
     fprintf(stderr, "The combine option skips the first level training step and builds a two-level operator from trained single operators.\n");
+    fprintf(stderr, "The combine_xpl option builds a first level operator using an already observed set of patterns (2nd_xpl). 2nd_xpl can be obtained running trios_collec or by reobserving the patterns of a bigger domain using trios_xpl_util.\n");
 }
 
 
@@ -104,7 +107,7 @@ int join_two_level(int argc, char *argv[]) {
 
     trios_malloc(ops, sizeof(image_operator_t *) * nops, int, "Error allocating image_operator_t array.");
     for (i = 2; i < argc - 2; i++) {
-        printf("read %s\n", argv[i]);
+        printf("Read %s\n", argv[i]);
         ops[i-2] = image_operator_read(argv[i]);
         if (ops[i-2] == NULL) {
             iold = itv_read(argv[i], &wold);
@@ -120,6 +123,35 @@ int join_two_level(int argc, char *argv[]) {
     multi_level_operator_write(argv[argc-1], mop);
 
     return 1;
+}
+
+int combine_xpl(int argc, char *argv[]) {
+    multi_level_operator_t *mop;
+    image_operator_t **ops;
+    xpl_t *collec2nd;
+    window_t *win;
+    itv_t *iold;
+    int i;
+    int nops = argc - 3;
+
+    trios_malloc(ops, sizeof(image_operator_t *) * nops, int, "Error allocating image_operator_t array.");
+    for (i = 2; i < argc - 1; i++) {
+        printf("Read %s\n", argv[i]);
+        ops[i-2] = image_operator_read(argv[i]);
+        if (ops[i-2] == NULL) {
+            iold = itv_read(argv[i], &win);
+            if (iold == NULL) {
+                trios_fatal("Could not read %s.", argv[i]);
+            }
+            ops[i-2] = image_operator_itv(iold, win);
+        }
+    }
+    collec2nd = xpl_read(argv[1], &win, NULL);
+
+    mop = multi_level_combine_xpl(ops, nops, collec2nd);
+    multi_level_operator_write(argv[argc-1], mop);
+
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
@@ -139,6 +171,8 @@ int main(int argc, char *argv[]) {
         train_two_level(argc, argv);
     } else if (strcmp(argv[1], "combine") == 0) {
         join_two_level(argc, argv);
+    } else if (strcmp(argv[1], "combine_xpl") == 0) {
+        return combine_xpl(argc, argv);
     } else {
         print_usage();
         return 0;

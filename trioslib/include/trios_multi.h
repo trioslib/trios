@@ -185,6 +185,15 @@ window_t *multi_level_operator_joint_window(multi_level_operator_t *mop, int lev
  */
 multi_level_operator_t *multi_level_combine_operators(image_operator_t **ops, int nops, imgset_t *level2);
 
+/*!
+ * \brief Combine the input operators. This function skips the second level collec and uses the supplied xpl_t instead.
+ * \param ops List of image operators to combine.
+ * \param nops Number of operators to combine.
+ * \param collec2nd Substitute XPL.
+ * \return A trained two-level operator.
+ */
+multi_level_operator_t *multi_level_combine_xpl(image_operator_t **ops, int nops, xpl_t *collec2nd);
+
 #ifdef __cplusplus
 }
 #endif
