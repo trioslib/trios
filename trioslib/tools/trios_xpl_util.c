@@ -41,8 +41,8 @@ double *read_scores(window_t *win_domain, char *score_file) {
     f = fopen(score_file, "r");
 
     for(k = 0; k < n; k++) {
-        scanf("%d %d %lf", &i, &j, &s);
-        printf("Scores: %d %d %f\n", i, j, s);
+        fscanf(f, "score(i=%d, j=%d) = %lf\n", &i, &j, &s);
+        printf("Scores: i %d j %d  score %f\n", i, j, s);
     }
 
 }
