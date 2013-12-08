@@ -2,6 +2,8 @@
 #include "string.h"
 #include "ctype.h"
 
+#include "trios_fs.h"
+
 int resample_xpl(xpl_t *domain, window_t *win_domain, window_t *win, char *dest) {
     xpl_t *new_xpl = NULL;
     int n_remove, *to_remove;
@@ -28,33 +30,59 @@ int resample_xpl(xpl_t *domain, window_t *win_domain, window_t *win, char *dest)
     xpl_write(dest, new_xpl, win, NULL);
 }
 
-double *read_scores(window_t *win_domain, char *score_file) {
-    double *scores = NULL;
+point_weight *read_scores(window_t *win_domain, char *score_file) {
+    point_weight *scores = NULL;
     double s;
     FILE *f;
     int k, i, j, w, h, n;
 
-
     n = win_get_wsize(win_domain);
-    scores = malloc(sizeof(double) * n);
+    w = win_get_width(win_domain);
+    h = win_get_height(win_domain);
+    scores = malloc(sizeof(point_weight) * n);
 
     f = fopen(score_file, "r");
-
     for(k = 0; k < n; k++) {
         fscanf(f, "score(i=%d, j=%d) = %lf\n", &i, &j, &s);
         printf("Scores: i %d j %d  score %f\n", i, j, s);
+        scores[k].i = i;
+        scores[k].j = j;
+        scores[k].weight = s;
     }
-
+    fclose(f);
+    return scores;
 }
 
-void fill_xpl(xpl_t *domain, window_t *win_domain, double *scores, char *dest) {
+void fill_xpl(xpl_t *domain, window_t *win_domain, point_weight *sorted_scores, char *dest) {
+    int i, n, w, *to_remove, *to_remove_iter;
+    xpl_t *fill = NULL;
+    i = 0;
+    n = win_get_wsize(win_domain);
+    w = win_get_width(win_domain);
+    to_remove = malloc(sizeof(int) * n);
 
+    for (i = 0; i < n; i++) {
+        to_remove[i] = sorted_scores[i].i / w + sorted_scores[i].j;
+    }
+
+    to_remove_iter = to_remove;
+    do {
+        if (fill != NULL) {
+            xpl_free(fill);
+        }
+        i++;
+        to_remove_iter++;
+        fill = xpl_remove_variables(domain, to_remove, n-i);
+        printf("Size: %d, n_nodes = %d\n", i, fill->n_nodes);
+    } while (i < n || (fill != NULL && fill->n_nodes == (1 << i)));
+
+    xpl_write(dest, fill, /*new window*/NULL, NULL);
 }
 
 int main(int argc, char *argv[]) {
     window_t *win, *win_domain;
     xpl_t *domain;
-    double *scores;
+    point_weight *scores;
 
 
     if (strcmp(argv[1], "resample_xpl") == 0) {
