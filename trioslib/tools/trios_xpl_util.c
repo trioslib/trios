@@ -65,18 +65,19 @@ void fill_xpl(xpl_t *domain, window_t *win_domain, point_weight *sorted_scores, 
         to_remove[i] = sorted_scores[i].i / w + sorted_scores[i].j;
     }
 
-    to_remove_iter = to_remove;
+    to_remove_iter = to_remove + n;
+    i = 0;
     do {
-        if (fill != NULL) {
+        if (fill != NULL)
             xpl_free(fill);
-        }
         i++;
-        to_remove_iter++;
-        fill = xpl_remove_variables(domain, to_remove, n-i);
-        printf("Size: %d, n_nodes = %d\n", i, fill->n_nodes);
-    } while (i < n || (fill != NULL && fill->n_nodes == (1 << i)));
+        to_remove_iter--;
+        win_set_point(sorted_scores[n-i].i, sorted_scores[n-i].j, 1, 0, win_domain);
+        fill = xpl_remove_variables(domain, to_remove_iter, i);
+        printf("I%d N%d Size: %d, n_nodes = %d\n", i, n, n-i, fill->n_nodes);
+    } while (i < n && fill->n_nodes != (1 << (n-i) ));
 
-    xpl_write(dest, fill, /*new window*/NULL, NULL);
+    win_write(dest, win_domain);
 }
 
 int main(int argc, char *argv[]) {
