@@ -2,7 +2,6 @@
 
 /* #define _DEBUG_ */
 
-
 /*!
   Allocate a XPL structure.
 
@@ -38,7 +37,6 @@ xpl_t *xpl_create(int wsize, int type)
 void xpl_free(xpl_t * xpl)
 {
 	if (xpl->root) {
-
 		switch (xpl->type) {
 		case BB:
 			xpl_BB_free_tree((xpl_BB *) xpl->root);
@@ -137,7 +135,6 @@ int xpl_get_type(xpl_t * xpl)
 	return (xpl->type);
 }
 
-
 /*!
   Set the pointer to the XPL tree.
 
@@ -146,7 +143,7 @@ int xpl_get_type(xpl_t * xpl)
   */
 void xpl_set_root(xpl_t * xpl, int *root)
 {
-	xpl->root = (int *) root;
+	xpl->root = (int *)root;
 }
 
 /*!
@@ -215,17 +212,15 @@ int xpl_merge(xpl_t * xpl1, xpl_t * xpl2)
 {
 	int type;
 
-
 	if ((type = xpl_get_type(xpl1)) != xpl_get_type(xpl2)) {
 		return trios_error(1, "xpl_merge: different mapping types!");
 	}
-
 
 	if (xpl_get_n_nodes(xpl1) == 0) {
 
 		xpl_set_n_nodes(xpl1, xpl_get_n_nodes(xpl2));
 		xpl_set_sum(xpl1, xpl_get_sum(xpl2));
-		xpl_set_root(xpl1, (int *) xpl2->root);
+		xpl_set_root(xpl1, (int *)xpl2->root);
 
 	}
 
@@ -245,9 +240,10 @@ int xpl_merge(xpl_t * xpl1, xpl_t * xpl2)
 				   return trios_error(MSG, "xpl_merge : xpl_BG_merge() failed.") ;
 				   }   */
 			} else {
-                if(!xpl_GG_merge(xpl1, (xpl_GG *)xpl2->root)) {
-                    return trios_error(MSG, "xpl_merge : xpl_GG_merge() failed.") ;
-                }
+				if (!xpl_GG_merge(xpl1, (xpl_GG *) xpl2->root)) {
+					return trios_error(MSG,
+							   "xpl_merge : xpl_GG_merge() failed.");
+				}
 			}
 		}
 	}
@@ -259,7 +255,6 @@ int xpl_merge(xpl_t * xpl1, xpl_t * xpl2)
 	return (1);
 
 }
-
 
 /*!
   Change the tree structure of a XPL set to the linked list structure.
@@ -297,7 +292,7 @@ int xpl_tree2ll(xpl_t * xpl, int order_type)
 					p = p->right;
 				}
 			}
-			xpl->root = (int *) head;
+			xpl->root = (int *)head;
 		}
 		break;
 	case BG:
@@ -361,7 +356,6 @@ int xpl_tree2ll(xpl_t * xpl, int order_type)
 
 	return (1);
 }
-
 
 /*!
   Count the number of conflicting examples in a XPL set.
@@ -430,9 +424,9 @@ int xpl_conflicts(xpl_t * xpl)
 
 	case GB:
 	default:
-		(void) trios_error(1,
-				   "xpl_conflicts: Mapping %d is not implemented yet.",
-				   type);
+		(void)trios_error(1,
+				  "xpl_conflicts: Mapping %d is not implemented yet.",
+				  type);
 		return (-1);
 		break;
 
@@ -463,7 +457,7 @@ int xpl_sort(xpl_t * xpl)
 				return trios_error(MSG,
 						   "xpl_sort : xpl_sort_BB() failed.");
 			}
-			xpl->root = (int *) p;
+			xpl->root = (int *)p;
 		}
 		break;
 
@@ -499,9 +493,9 @@ int xpl_sort(xpl_t * xpl)
 
 	case GB:
 	default:{
-			(void) trios_error(1,
-					   "xpl_sort: Mapping %d is not implemented yet.",
-					   type);
+			(void)trios_error(1,
+					  "xpl_sort: Mapping %d is not implemented yet.",
+					  type);
 			return (-1);
 		}
 		break;

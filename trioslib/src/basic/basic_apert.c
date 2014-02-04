@@ -2,8 +2,6 @@
 
 /* #define _DEBUG_ */
 
-
-
 /*
      -------------------------------------------
      FUNCTION: apert_create
@@ -26,18 +24,18 @@ apert_create(int nbands		/*+ In: Number of bands                                
 	}
 
 	apt->nbands = nbands;
-	apt->ki = (int *) malloc(sizeof(int) * nbands);
+	apt->ki = (int *)malloc(sizeof(int) * nbands);
 	if (!apt->ki) {
 		free(apt);
 		return (apert_t *) trios_error(1, "Memory allocation failed.");
 	}
-	apt->ko = (int *) malloc(sizeof(int) * nbands);
+	apt->ko = (int *)malloc(sizeof(int) * nbands);
 	if (!apt->ko) {
 		free(apt->ki);
 		free(apt);
 		return (apert_t *) trios_error(1, "Memory allocation failed.");
 	}
-	apt->vplace = (int *) malloc(sizeof(int) * nbands);
+	apt->vplace = (int *)malloc(sizeof(int) * nbands);
 	if (!apt->vplace) {
 		free(apt->ki);
 		free(apt->ko);
@@ -83,7 +81,6 @@ apert_create_set(int nbands,	/*+ In: Number of bands                            
 	return (apt);
 }
 
-
 /*
      -------------------------------------------
      FUNCTION: apert_free
@@ -109,7 +106,6 @@ void /*+ Purpose: free the memory area of an aperture            + */ apert_free
 	}
 
 }
-
 
 /*
      -------------------------------------------
@@ -185,7 +181,6 @@ int				/*+ Purpose: gives the output range of a given band
 	return (apt->ko[band - 1]);
 }
 
-
 /*
      -------------------------------------------
      FUNCTION: apert_get_ko
@@ -203,7 +198,6 @@ apert_get_ko(apert_t * apt	/*+ In: pointer to an aperture                       
 
 	return (apt->ko);
 }
-
 
 /*
      -------------------------------------------
@@ -241,7 +235,6 @@ apert_get_vplace(apert_t * apt	/*+ In: pointer to an aperture                   
 
 	return (apt->vplace);
 }
-
 
 /*
      -------------------------------------------
@@ -300,7 +293,6 @@ apert_set_ko(
 	apt->ko = ko;
 }
 
-
 /*
      -------------------------------------------
      FUNCTION: apert_set_vplace
@@ -319,7 +311,6 @@ void				/*+ Purpose: sets the vector of vertical placements of
 
 	apt->vplace = vplace;
 }
-
 
 /*
      -------------------------------------------
@@ -360,7 +351,6 @@ apert_set_band_ko(
 
 	apt->ko[band - 1] = ko;
 }
-
 
 /*
      -------------------------------------------

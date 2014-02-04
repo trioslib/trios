@@ -20,11 +20,10 @@ xpl_set_rootGG(
 	if ((xpl->type != GG) && (xpl->type != WKF) && (xpl->type != WKC)) {
 		return trios_error(1, "Incompatible data types.");
 	}
-	xpl->root = (int *) root;
+	xpl->root = (int *)root;
 
 	return (1);
 }
-
 
 /*
      -------------------------------------------
@@ -105,7 +104,7 @@ xpl_GG_create(int wsize		/*+ In:  window size                     + */
 		return (xpl_GG *) trios_error(1, "Memory allocation failed.");
 	}
 
-    p->wpat = (int *) malloc(sizeof(int) * wsize);
+	p->wpat = (int *)malloc(sizeof(int) * wsize);
 	if (p->wpat == NULL) {
 		free(p);
 		return (xpl_GG *) trios_error(1, "Memory allocation failed.");
@@ -118,7 +117,6 @@ xpl_GG_create(int wsize		/*+ In:  window size                     + */
 	return (p);
 }
 
-
 /*
      -------------------------------------------
      FUNCTION: xpl_GG_set_node
@@ -127,7 +125,7 @@ xpl_GG_create(int wsize		/*+ In:  window size                     + */
 
 void /*+ Purpose: set the fields of a GG node          + */ xpl_GG_set_node(
 										   xpl_GG * p,	/*+ In/Out: pointer to the GG node            + */
-                                           int *wpat,	/*+ In: w-pattern                             + */
+										   int *wpat,	/*+ In: w-pattern                             + */
 										   int wsize,	/*+ In: w-pattern size                        + */
 										   freq_node * freqlist	/*+ In: pointer to list of frequencies        + */
     )
@@ -158,7 +156,7 @@ int /*+ Purpose: insert a node in a GG tree (recursively)        + */
 xpl_GG_insert(
 			    xpl_t * xpl,	/*+ In/Out: pointer to the XPL structure         + */
 			    xpl_GG ** pp,	/*+ In/Out: pointer to a subtree's root          + */
-                int *wpat,	/*+ In: w-pattern to be inserted                 + */
+			    int *wpat,	/*+ In: w-pattern to be inserted                 + */
 			    freq_node * freqlist	/*+ In: w-pattern list of frequencies and labels + */
     )
 /*+ Return: -1 on failure, >= 0  on success                                   +*/
@@ -178,7 +176,6 @@ xpl_GG_insert(
 	freq_node *pq;
 #endif
 
-
 	wsize = xpl->wsize;
 
 #ifdef _DEBUG_
@@ -197,8 +194,8 @@ xpl_GG_insert(
 
 		*pp = p = xpl_GG_create(xpl->wsize);
 		if (p == NULL) {
-			(void) trios_error(MSG,
-					   "xpl_GG_insert: xpl_GG_create() failed.");
+			(void)trios_error(MSG,
+					  "xpl_GG_insert: xpl_GG_create() failed.");
 			return (-1);
 		}
 		xpl->n_nodes++;
@@ -217,8 +214,8 @@ xpl_GG_insert(
 			xpl->sum += freq_sum(freqlist);
 
 			if (!set_freq(freqlist, &p->freqlist)) {
-				(void) trios_error(MSG,
-						   "xpl_GG_insert: set_freq() failed.");
+				(void)trios_error(MSG,
+						  "xpl_GG_insert: set_freq() failed.");
 				return (-1);
 			}
 #ifdef _DEBUG_
@@ -276,7 +273,6 @@ xpl_GG_free(
 
 }
 
-
 /*
      -------------------------------------------
      FUNCTION: xpl_GG_free_tree
@@ -297,7 +293,6 @@ void /*+ Purpose: free memory area used by a GG tree      + */ xpl_GG_free_tree(
 		xpl_GG_free(p);
 	}
 }
-
 
 /*
      -------------------------------------------
@@ -329,12 +324,10 @@ int /*+ Purpose: merge two GG tree, recursively                + */ xpl_GG_merge
 					   "Recursive call to xpl_GG_merge() failed.");
 		}
 
-
 		if (xpl_GG_add(xpl, (xpl_GG **) (&xpl->root), p) == -1) {
 			return trios_error(MSG,
 					   "xpl_GG_merge: xpl_GG_add() failed.");
 		}
-
 
 		/* IMPORTANT REMARK */
 
@@ -376,7 +369,6 @@ int /*+ Purpose: add a new node into a GG tree, recursively  + */ xpl_GG_add(
 	int deltaH = 0, st;
 	xpl_GG *p;
 
-
 	p = *p_cur;
 	if (p == NULL) {
 		p_new->right = p_new->left = NULL;
@@ -391,8 +383,8 @@ int /*+ Purpose: add a new node into a GG tree, recursively  + */ xpl_GG_add(
 		if (st == 0) {
 			xpl->sum += freq_sum(p_new->freqlist);
 			if (!set_freq(p_new->freqlist, &p->freqlist)) {
-				(void) trios_error(MSG,
-						   "xpl_GG_add: set_freq() failed.");
+				(void)trios_error(MSG,
+						  "xpl_GG_add: set_freq() failed.");
 				return (-1);
 			}
 			p_new->freqlist = NULL;
@@ -491,8 +483,6 @@ int				/*+ Purpose: change GG tree structure to the linked list
 	}
 	return (1);
 }
-
-
 
 /*
      -------------------------------------------

@@ -15,37 +15,33 @@ int lpaccmp(char *i1, char *i2)
 	int a, igual;
 	char ch1, ch2, *palavra1, *palavra2;
 
-
-	palavra1 = (char *) malloc(sizeof(char) * 256);
-	palavra2 = (char *) malloc(sizeof(char) * 256);
-
+	palavra1 = (char *)malloc(sizeof(char) * 256);
+	palavra2 = (char *)malloc(sizeof(char) * 256);
 
 #ifdef _DEBUG_
 	trios_debug("Entering lpaccmp()\n");
 #endif
 
 	if ((f1 = fopen(i1, "r")) == NULL) {
-		(void) trios_error(1,
-				   "The program was unable to open the first input file.");
+		(void)trios_error(1,
+				  "The program was unable to open the first input file.");
 		return (-1);
 	}
-
 
 	if ((f2 = fopen(i2, "r")) == NULL) {
-		(void) trios_error(1,
-				   "The program was unable to open the second input file.");
+		(void)trios_error(1,
+				  "The program was unable to open the second input file.");
 		return (-1);
 	}
-
 
 	igual = 1;
 
 	while (((!feof(f1)) && (!feof(f2))) && igual) {
 
 		/* ignore STDIN while it's spaces, tabs, form feed, new line or vertical tabs */
-		while (isspace(ch1 = getc(f1)));
+		while (isspace(ch1 = getc(f1))) ;
 
-		while (isspace(ch2 = getc(f2)));
+		while (isspace(ch2 = getc(f2))) ;
 
 		/* read one word from the first file */
 		if (!isspace(ch1)) {

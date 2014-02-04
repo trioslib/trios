@@ -8,9 +8,6 @@
 /*       tells how many times the example has been observed during          */
 /*       sampling.                                                          */
 
-
-
-
 /*
      -------------------------------------------
      FUNCTION: DECIDE_TREE_GG - MODA
@@ -76,7 +73,7 @@ decide_tree_gg_moda(
 
 		if (status == 1) {
 			if (!mtm_GX_insert
-			    (mtm, (int) mtm->nmtm, wsize, p->wpat, wpat_label,
+			    (mtm, (int)mtm->nmtm, wsize, p->wpat, wpat_label,
 			     wpat_freq)) {
 				return trios_error(MSG,
 						   "decide_tree_gg: mtm_GX_insert() failed");
@@ -94,9 +91,6 @@ decide_tree_gg_moda(
 	return (1);
 
 }
-
-
-
 
 /*
      -------------------------------------------
@@ -136,8 +130,7 @@ decide_tree_gg_average(
 	unsigned int wpat_freq;	/* the total frequency of the pattern */
 	int wpat_label;		/* the labels of a pattern            */
 
-    int status;
-
+	int status;
 
 #ifdef _DEBUG_
 	trios_debug("Starting decide average");
@@ -159,7 +152,7 @@ decide_tree_gg_average(
 
 		if (status == 1) {
 			if (!mtm_GX_insert
-			    (mtm, (int) mtm->nmtm, wsize, p->wpat, wpat_label,
+			    (mtm, (int)mtm->nmtm, wsize, p->wpat, wpat_label,
 			     wpat_freq)) {
 				return trios_error(MSG,
 						   "decide_tree_gg_average: mtm_GX_insert() failure");
@@ -175,10 +168,6 @@ decide_tree_gg_average(
 
 	return (1);
 }
-
-
-
-
 
 /*
      -------------------------------------------
@@ -227,7 +216,7 @@ decide_tree_gg_median(
 		if (status == 1) {
 
 			if (!mtm_GX_insert
-			    (mtm, (int) mtm->nmtm, wsize, p->wpat, wpat_label,
+			    (mtm, (int)mtm->nmtm, wsize, p->wpat, wpat_label,
 			     wpat_freq)) {
 				return trios_error(MSG,
 						   "decide_tree_gg_median: mtm_GX_insert() failure");
@@ -245,8 +234,6 @@ decide_tree_gg_median(
 	return (1);
 
 }
-
-
 
 /*
      -------------------------------------------
@@ -285,7 +272,6 @@ decide_tree_gg_absolute(
 
 	int status;
 
-
 	if (p) {
 
 		if (!decide_tree_gg_absolute
@@ -300,7 +286,7 @@ decide_tree_gg_absolute(
 		if (status == 1) {
 
 			if (!mtm_GX_insert
-			    (mtm, (int) mtm->nmtm, wsize, p->wpat, wpat_label,
+			    (mtm, (int)mtm->nmtm, wsize, p->wpat, wpat_label,
 			     wpat_freq)) {
 				return trios_error(MSG,
 						   "decide_tree_gg_absolute: mtm_GX_insert() failure");
@@ -318,10 +304,6 @@ decide_tree_gg_absolute(
 	return (1);
 
 }
-
-
-
-
 
 /*
      -------------------------------------------
@@ -363,7 +345,6 @@ decide_tree_gg_general(
 
 	int status;
 
-
 	if (p) {
 
 		if (!decide_tree_gg_general
@@ -379,7 +360,7 @@ decide_tree_gg_general(
 		if (status == 1) {
 
 			if (!mtm_GX_insert
-			    (mtm, (int) mtm->nmtm, wsize, p->wpat, wpat_label,
+			    (mtm, (int)mtm->nmtm, wsize, p->wpat, wpat_label,
 			     wpat_freq)) {
 				return trios_error(MSG,
 						   "decide_tree_bg_general: mtm_BX_insert() failure");

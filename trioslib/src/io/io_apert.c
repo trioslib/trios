@@ -16,11 +16,8 @@ apert_read(char *fname		/*+ In: String with the name of the file                
 /* author:  Nina S. Tomita & Roberto Hirata Jr. (nina@ime.usp.br)         */
 /* date: Thu Feb 17 2000                                                  */
 
-
 	FILE *fd;
 	apert_t *apt;
-
-
 
 	/* open file */
 	fd = fopen(fname, "r");
@@ -34,7 +31,6 @@ apert_read(char *fname		/*+ In: String with the name of the file                
 		fclose(fd);
 		return (apert_t *) trios_error(1, "Unrecognised file format.");
 	}
-
 #ifdef _DEBUG_
 	trios_debug("vai entrar no apert_read_data");
 #endif
@@ -50,8 +46,6 @@ apert_read(char *fname		/*+ In: String with the name of the file                
 
 }
 
-
-
 /*
      -------------------------------------------
      FUNCTION: apert_read_data
@@ -66,12 +60,10 @@ apert_read_data(FILE * fd	/*+ In: file descriptor                         + */
 /* author:  Nina S. Tomita & Roberto Hirata Jr. (nina@ime.usp.br)  */
 /* date: Thu Feb 17 2000                                           */
 
-
 	char tag, dot;
 	int i, stop;
 	int *ki, *ko, *vplace, nbands;
 	apert_t *apt;
-
 
 	stop = 0;
 	ki = NULL;
@@ -79,19 +71,18 @@ apert_read_data(FILE * fd	/*+ In: file descriptor                         + */
 	vplace = NULL;
 	nbands = 1;		/* default value               */
 
-
 	while (!stop) {
 
-		while (((dot = (char) fgetc(fd)) != '.')
-		       && (dot != (char) EOF));
+		while (((dot = (char)fgetc(fd)) != '.')
+		       && (dot != (char)EOF)) ;
 
-		if (dot == (char) EOF) {
+		if (dot == (char)EOF) {
 			fclose(fd);
 			return (apert_t *) trios_error(1,
 						       "Unexpected end of file. No tag found.");
 		}
 
-		tag = (char) fgetc(fd);
+		tag = (char)fgetc(fd);
 
 		switch (tag) {
 
@@ -122,7 +113,7 @@ apert_read_data(FILE * fd	/*+ In: file descriptor                         + */
 			break;
 
 		case 'k':
-			ki = (int *) malloc(sizeof(int) * nbands);
+			ki = (int *)malloc(sizeof(int) * nbands);
 			if (!ki) {
 				fclose(fd);
 				return (apert_t *) trios_error(1,
@@ -138,7 +129,7 @@ apert_read_data(FILE * fd	/*+ In: file descriptor                         + */
 			break;
 
 		case 'l':
-			ko = (int *) malloc(sizeof(int) * nbands);
+			ko = (int *)malloc(sizeof(int) * nbands);
 			if (!ko) {
 				fclose(fd);
 				return (apert_t *) trios_error(1,
@@ -154,7 +145,7 @@ apert_read_data(FILE * fd	/*+ In: file descriptor                         + */
 			break;
 
 		case 'p':
-			vplace = (int *) malloc(sizeof(int) * nbands);
+			vplace = (int *)malloc(sizeof(int) * nbands);
 			if (!vplace) {
 				fclose(fd);
 				return (apert_t *) trios_error(1,
@@ -174,12 +165,11 @@ apert_read_data(FILE * fd	/*+ In: file descriptor                         + */
 			break;
 
 		default:
-			(void) trios_error(1, "Unexpected tag %c ", tag);
+			(void)trios_error(1, "Unexpected tag %c ", tag);
 			return (apert_t *) trios_error(1,
 						       " File format error.");
 		}
 	}
-
 
 	/* If input range is not given, then neither the output range nor the */
 	/* vertical placement should be given too                             */
@@ -192,7 +182,7 @@ apert_read_data(FILE * fd	/*+ In: file descriptor                         + */
 
 	/* if ki is not given ki=0, ko=0 and vplace=VP_center */
 	if (!ki) {
-		ki = (int *) malloc(sizeof(int) * nbands);
+		ki = (int *)malloc(sizeof(int) * nbands);
 		if (!ki) {
 			fclose(fd);
 			return (apert_t *) trios_error(1,
@@ -208,7 +198,7 @@ apert_read_data(FILE * fd	/*+ In: file descriptor                         + */
 	/*   then if ki is given  ko=ki           */
 	/*        else ki=ko=0                    */
 	if (!ko) {
-		ko = (int *) malloc(sizeof(int) * nbands);
+		ko = (int *)malloc(sizeof(int) * nbands);
 		if (!ko) {
 			fclose(fd);
 			return (apert_t *) trios_error(1,
@@ -224,7 +214,7 @@ apert_read_data(FILE * fd	/*+ In: file descriptor                         + */
 	/*   then if ki is given vplace=VP_center   */
 	/*        else vplace=VP_center             */
 	if (!vplace) {
-		vplace = (int *) malloc(sizeof(int) * nbands);
+		vplace = (int *)malloc(sizeof(int) * nbands);
 		if (!vplace) {
 			fclose(fd);
 			return (apert_t *) trios_error(1,
@@ -253,8 +243,6 @@ apert_read_data(FILE * fd	/*+ In: file descriptor                         + */
 	return (apt);
 
 }
-
-
 
 /*
      -------------------------------------------
@@ -296,8 +284,6 @@ int /*+ Purpose: Write to a file a description of an aperture   + */ apert_write
 	return (1);
 }
 
-
-
 /*
      -------------------------------------------
      FUNCTION: apert_write_data
@@ -315,7 +301,6 @@ void /*+ Purpose: Write a data description of an aperture  + */ apert_write_data
 
 	int nbands, *ki, *ko, *vplace;
 	int i;
-
 
 	nbands = apert_get_nbands(apt);
 	ki = apert_get_ki(apt);

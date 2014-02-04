@@ -10,12 +10,12 @@
     \return A mtm_t structure or NULL on failure.
 */
 
-mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
+mtm_t *mtm_read(char *fname, window_t ** win, apert_t ** apt)
 {
 	FILE *fd;
 	mtm_t *mtm;
 	unsigned int *bwpat;
-    int *wpat;
+	int *wpat;
 	unsigned int nmtm, freq, fq, fq1;
 	int value, type, wsize, wzip, label, i, j;
 	char tag, dot;
@@ -43,19 +43,18 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 		return (mtm_t *) trios_error(1, "File header does not match.");
 	}
 
-
 	while (!stop) {
 
-		while (((dot = (char) fgetc(fd)) != '.')
-		       && (dot != (char) EOF));
+		while (((dot = (char)fgetc(fd)) != '.')
+		       && (dot != (char)EOF)) ;
 
-		if (dot == (char) EOF) {
+		if (dot == (char)EOF) {
 			fclose(fd);
 			return (mtm_t *) trios_error(1,
 						     "Unexpected end of file. No tag found.");
 		}
 
-		tag = (char) fgetc(fd);
+		tag = (char)fgetc(fd);
 
 		switch (tag) {
 
@@ -79,7 +78,6 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 			tags_read++;
 			break;
 
-
 			/* read window information ---------------------------------------- */
 
 		case 'W':
@@ -93,8 +91,8 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 
 			/* read aperture information -------------------------------------- */
 		case 'A':{
-                return (mtm_t *) trios_error(1,
-						   "Aperture operators not supported yet.");
+				return (mtm_t *) trios_error(1,
+							     "Aperture operators not supported yet.");
 				/*if(NULL==(*apt = apert_read_data(fd))) {
 				   fclose(fd) ;
 				   return (mtm_t *)trios_error(MSG, "mtm_read: apert_read_data() failed.") ;
@@ -155,11 +153,10 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 
 		default:
 			fclose(fd);
-			(void) trios_error(1, "Unexpected tag %c ", tag);
+			(void)trios_error(1, "Unexpected tag %c ", tag);
 			return (mtm_t *) trios_error(1, " File format error");
 		}
 	}
-
 
 	if (tags_read != 4) {
 		fclose(fd);
@@ -175,7 +172,6 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 		return (mtm_t *) trios_error(1,
 					     "Incompatible tags. Tag .p allowed only when type is BB (.t 0)");
 	}
-
 
 	/* read examples  ------------------------------------------ */
 
@@ -198,7 +194,7 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 
 		wzip = size_of_zpat(wsize);
 
-		if ((bwpat = (int *) malloc(sizeof(int) * wzip)) == NULL) {
+		if ((bwpat = (int *)malloc(sizeof(int) * wzip)) == NULL) {
 			fclose(fd);
 			win_free(*win);
 			mtm_free(mtm);
@@ -307,7 +303,7 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 
 		mtm_set_comp_prob(mtm, comp_prob);
 
-        if ((wpat = (int *) malloc(sizeof(int) * wsize)) == NULL) {
+		if ((wpat = (int *)malloc(sizeof(int) * wsize)) == NULL) {
 			fclose(fd);
 			win_free(*win);
 			mtm_free(mtm);
@@ -335,7 +331,7 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 					trios_fatal
 					    ("Unexpected data or end of file");
 				}
-                wpat[j] = value;
+				wpat[j] = value;
 			}
 
 			if (2 != fscanf(fd, "%d %d", &label, &fq)) {
@@ -374,8 +370,6 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
 	return (mtm);
 }
 
-
-
 /*!
   Writes a classified examples set to a file.
 
@@ -385,7 +379,7 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t  **apt)
   \return 1 on success. 0 on failure.
 */
 
-int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
+int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t * apt)
 {
 	header_t mtmHeader = { "MINTERM ", "" };
 	FILE *fd;
@@ -395,8 +389,7 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 	unsigned int nmtm;
 	int type, wzip, wsize, wsize1, freqsize;
 	int i, j, comp_prob;
-    int value;
-
+	int value;
 
 #ifdef _DEBUG_
 	trios_debug("Entrou no MTM_WRITE");
@@ -434,10 +427,9 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 	win_write_data(fd, win);
 
 	if ((type > 3) && (type < 10)) {
-        fprintf(fd, "%s\n", ".A") ;
-           apert_write_data(fd, apt);
+		fprintf(fd, "%s\n", ".A");
+		apert_write_data(fd, apt);
 	}
-
 
 	fprintf(fd, "%s\n", ".f");
 
@@ -450,7 +442,6 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 	}
 
 	fprintf(fd, "%d\n", 0);
-
 
 	/* up to now, probabilities will be printed only if type==BB */
 	comp_prob = mtm_get_comp_prob(mtm);
@@ -470,7 +461,6 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 
 	wzip = size_of_zpat(wsize);
 
-
 	switch (type) {
 
 	case BB:
@@ -479,17 +469,19 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 		table_BX = (mtm_BX *) mtm->mtm_data;
 		if (!comp_prob) {
 			for (i = 0; i < nmtm; i++) {
-                for (j = 0; j < wzip; j++) {
+				for (j = 0; j < wzip; j++) {
 					fprintf(fd, "%x ", table_BX[i].wpat[j]);
-                }
-                fprintf(fd, "%d %d\n", table_BX[i].label, table_BX[i].fq);
+				}
+				fprintf(fd, "%d %d\n", table_BX[i].label,
+					table_BX[i].fq);
 			}
 		} else {
 			for (i = 0; i < nmtm; i++) {
-                for (j = 0; j < wzip; j++) {
+				for (j = 0; j < wzip; j++) {
 					fprintf(fd, "%x ", table_BX[i].wpat[j]);
-                }
-                fprintf(fd, "%d %d %d\n", table_BX[i].label, table_BX[i].fq, table_BX[i].fq1);
+				}
+				fprintf(fd, "%d %d %d\n", table_BX[i].label,
+					table_BX[i].fq, table_BX[i].fq1);
 			}
 		}
 		break;
@@ -501,9 +493,9 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 
 		for (i = 0; i < nmtm; i++) {
 			for (j = 0; j < wsize; j++) {
-                fprintf(fd, "%d ", table_GX[i].wpat[j]);
+				fprintf(fd, "%d ", table_GX[i].wpat[j]);
 			}
-            fprintf(fd, "%d %d\n",
+			fprintf(fd, "%d %d\n",
 				table_GX[i].label, table_GX[i].fq);
 		}
 		break;
@@ -513,14 +505,15 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 	case WK3F:
 	case WK3C:
 
-        table_GX = (mtm_GX *)mtm->mtm_data ;
+		table_GX = (mtm_GX *) mtm->mtm_data;
 
-        for (i = 0; i < nmtm; i++) {
-            for (j = 0; j < wsize; j++) {
-                fprintf(fd, "%d ", table_GX[i].wpat[j]);
-            }
-            fprintf(fd, "%d %d\n", table_GX[i].label, table_GX[i].fq);
-        }
+		for (i = 0; i < nmtm; i++) {
+			for (j = 0; j < wsize; j++) {
+				fprintf(fd, "%d ", table_GX[i].wpat[j]);
+			}
+			fprintf(fd, "%d %d\n", table_GX[i].label,
+				table_GX[i].fq);
+		}
 		break;
 
 	case WKGG2F:
@@ -554,7 +547,6 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t *apt)
 		return trios_error(1, "Invalid mapping type.");
 		break;
 	}
-
 
 	fclose(fd);
 	return (1);
