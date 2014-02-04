@@ -149,22 +149,21 @@ mtm_t *mtm_decide(xpl_t * xpl, int comp_prob, double freqmin, double estimator,
 				    estimator);
 #endif
 
-			/* This is a call for the RECURSIVE VERSION
+			/*This is a call for the RECURSIVE VERSION */
 			   if(!decide_tree_bb((xpl_BB *)xpl->root, mtm, sum, xpl->wzip,
-			   freqmin, estimator, undflabel, comp_prob)) {
+			   freqmin, estimator, undflabel/*, comp_prob*/)) {
 			   xpl_free( xpl ) ;
 			   mtm_free( mtm ) ;
 			   return(mtm_t *)trios_error(MSG, "mtm_decide: decide examples failure") ;
 			   }
-			 */
-
+			/* 
 			if (!decide_ll_bb
 			    (xpl, mtm, freqmin, estimator, undflabel,
 			     comp_prob)) {
 				mtm_free(mtm);
 				return (mtm_t *) trios_error(MSG,
 							     "mtm_decide: decide examples failure");
-			}
+			}*/
 
 			mtm_set_comp_prob(mtm, comp_prob);
 

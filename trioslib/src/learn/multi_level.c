@@ -145,7 +145,7 @@ static int build_level(multi_level_operator_t * mop, int level, imgset_t ** set,
 			}
 			win_free(joint_window);
 		}
-		/*xpl_free(op_collec); */
+		xpl_free(op_collec);
 		mtm_free(op_dec);
 		mop->levels[level].trained_operator[j] = level_op;
 	}

@@ -134,15 +134,17 @@ typedef struct {
      -------------------------------------------
 */
 
-int /*+ Purpose: Makes the decision  for BB and BG         + */ decide_tree_bb(
+/*int /*+ Purpose: Makes the decision  for BB and BG         +  decide_tree_bb(
 										      xpl_BB * p,	/*+ In: Begining  of the examples                      + */
-										      mtm_t * mtm,	/*+ In/Out:  Pointer to minterms                       + */
-										      unsigned int sum, int wzip,	/*+ In: Number of bytes to put wpatern                 + */
-										      double freqmin,	/*+ In: Minimal frequency to consider an example, in % + */
-										      double estimator,	/*+ In: Decision Estimator                             + */
-										      int conflt	/*+ In: Value assigned to conflicting cases            + */
-    )
+										      /*mtm_t * mtm,	/*+ In/Out:  Pointer to minterms                       + */
+										      /*unsigned int sum, int wzip,	/*+ In: Number of bytes to put wpatern                 + */
+										      /*double freqmin,	/*+ In: Minimal frequency to consider an example, in % + */
+										      /*double estimator,	/*+ In: Decision Estimator                             + */
+										      /*int conflt	/*+ In: Value assigned to conflicting cases            + */
+    /*)
 /*+ Return: 1 on Success 0 on Failure                                       +*/
+int decide_tree_bb(xpl_BB * p, mtm_t * mtm, unsigned int sum, int wzip,
+		   double freqmin, double estimator, int undflabel);
     ;
 
 /*

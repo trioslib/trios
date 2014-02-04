@@ -61,7 +61,7 @@ int decide_tree_bb(xpl_BB * p, mtm_t * mtm, unsigned int sum, int wzip,
 
 				if (!mtm_BX_insert
 				    (mtm, (int)mtm->nmtm, wzip, p->wpat,
-                     wpat_label, p->fq0, p->fq1)) {
+                     wpat_label, wpat_freq, p->fq1)) {
 					return trios_error(MSG,
 							   "decide_tree_bb failure");
 				}
@@ -87,7 +87,7 @@ int decide_tree_bb(xpl_BB * p, mtm_t * mtm, unsigned int sum, int wzip,
 
 				if (!mtm_BX_insert
 				    (mtm, (int)mtm->nmtm, wzip, p->wpat,
-                     wpat_label, p->fq0, p->fq1)) {
+                     wpat_label, wpat_freq, p->fq1)) {
 					return trios_error(MSG,
 							   "decide_tree_bb failure");
 				}
@@ -115,14 +115,14 @@ int decide_tree_bb(xpl_BB * p, mtm_t * mtm, unsigned int sum, int wzip,
 				if (((float)wpat_max / wpat_freq) >= estimator) {
 					if (!mtm_BX_insert
 					    (mtm, (int)mtm->nmtm, wzip, p->wpat,
-                         wpat_label, p->fq0, p->fq1)) {
+                         wpat_label, wpat_freq, p->fq1)) {
 						return trios_error(MSG,
 								   "decide_tree_bb failure");
 					}
 				} else {
 					if (!mtm_BX_insert
 					    (mtm, (int)mtm->nmtm, wzip, p->wpat,
-                         undflabel, p->fq0, p->fq1)) {
+                         undflabel, wpat_freq, p->fq1)) {
 						return trios_error(MSG,
 								   "decide_tree_bb failure");
 					}

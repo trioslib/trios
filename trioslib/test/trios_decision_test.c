@@ -81,5 +81,56 @@ UTEST(test_decision_pair1_gg_memory) {
     mtm_free(result);
 } TEST_END
 
+UTEST(test_decide_ll_and_tree) {
+    int i, j, sum, nmtm;
+    xpl_t *xpl;
+    mtm_t *tree, *ll;
+    mtm_BX *tree_node, *ll_node;
+    window_t *win;
+    
+    imgset_t *set = imgset_read("jung9x7/level1.set");
+    win = win_create(5, 5, 1);
+    for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j++) {
+            win_set_point(i, j, 1, 1, win);
+        }
+    }
+    xpl = lcollec_memory(set, win, BB);
+
+    mu_assert("xpl->wzip != zpat size", size_of_zpat(xpl->wsize) == xpl->wzip);
+    
+    sum = xpl_get_sum(xpl);
+    nmtm = xpl_get_n_nodes(xpl);
+    tree = mtm_create(xpl->wsize, BB, nmtm);
+    ll = mtm_create(xpl->wsize, BB, nmtm);
+    
+    mtm_set_nmtm(tree, 0);
+    mtm_set_nmtm(ll, 0);
+    
+    xpl_write("xpl_test.xpl", xpl, win, NULL);
+    
+    decide_tree_bb((xpl_BB*) xpl->root, tree, sum, xpl->wzip, 0, AVERAGE, 1);
+    decide_ll_bb(xpl, ll, 0, AVERAGE, 1, 1);
+    
+    xpl_write("xpl_test_ll.xpl", xpl, win, NULL);
+    
+    mtm_write("tree.mtm", tree, win, NULL);
+    mtm_write("ll.mtm", ll, win, NULL);
+    
+    for (i = 0; i < nmtm; i++) {
+        tree_node = ((mtm_BX*) tree->mtm_data) + i;
+        ll_node = ((mtm_BX*) ll->mtm_data) + i;
+        printf("wpat tree %x fq %d fq1 %d\n", tree_node->wpat[0], tree_node->fq, tree_node->fq1);
+        printf("wpat ll   %x fq %d fq1 %d\n", ll_node->wpat[0], ll_node->fq, ll_node->fq1);
+        mu_assert("Different fq0", tree_node->fq == ll_node->fq);
+        
+    }
+    
+    xpl_free(xpl);
+    mtm_free(tree);
+    mtm_free(ll);
+    win_free(win);
+    imgset_free(set);
+} TEST_END
 
 #include "runner.h"
