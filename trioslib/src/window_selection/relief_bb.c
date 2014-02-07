@@ -5,9 +5,6 @@
 #define attr(wpat, idx) ((wpat[(idx)/NB] & (1 << (idx)%NB)) != 0 )
 
 
-
-
-
 int compare_pw(const void *_p1, const void *_p2) {
     point_weight *p1, *p2;
     p1 = (point_weight *) _p1;
@@ -15,10 +12,12 @@ int compare_pw(const void *_p1, const void *_p2) {
     return p2->weight - p1->weight;
 }
 
+/* stores a single instance of the xpl_t */
 typedef struct {
-    unsigned int *pattern;
-    int cls;
+    unsigned int *pattern; /*! < Pattern. */
+    int cls; /*! < Label of the pattern. */
 } sample;
+
 
 sample *new_sample(unsigned int *pattern, int cls) {
     sample *smp = NULL;
@@ -55,11 +54,12 @@ void free_sample(sample *s) {
     free(s);
 }
 
+
+
 sample *select_instance_BB(xpl_BB *node, window_t *win, int *i) {
     sample *smp = NULL;
     int tot_freq = node->fq0 + node->fq1;
-    
-    /* visita no esquerdo */
+
     if (node->left != NULL) {
         smp = select_instance_BB(node->left, win, i);
         if (smp != NULL) {
@@ -99,7 +99,7 @@ int dist_BB(unsigned int *a, unsigned int *b, int nA) {
 
 unsigned int *nearest_hit_BB(xpl_BB* node, sample *smp, int nA, unsigned int *current) {
     if (node == NULL) return current;
-    /* checa atual, checa os filhos */
+    
     if ((smp->cls == 0 && node->fq0 != 0) || (smp->cls == 1 && node->fq1 != 0)) {
         if (current == NULL) {
             current = node->wpat;
@@ -107,7 +107,6 @@ unsigned int *nearest_hit_BB(xpl_BB* node, sample *smp, int nA, unsigned int *cu
             if (dist_BB(smp->pattern, current, nA) > dist_BB(smp->pattern, node->wpat, nA) &&
                 dist_BB(smp->pattern, node->wpat, nA) > 0) {
                 current = node->wpat;
-                /*printf("change!, fq0 %d fq1 %d sample class %d\n", node->fq0, node->fq1, smp->cls);*/
             }
         }
     }
@@ -118,7 +117,7 @@ unsigned int *nearest_hit_BB(xpl_BB* node, sample *smp, int nA, unsigned int *cu
 
 unsigned int *nearest_miss_BB(xpl_BB* node, sample *smp, int nA, unsigned int *current) {
     if (node == NULL) return current;
-    /* checa atual, checa os filhos */
+
     if ((smp->cls == 0 && node->fq1 != 0) || (smp->cls == 1 && node->fq0 != 0)) {        
         if (current == NULL) {
             current = node->wpat;
@@ -136,17 +135,17 @@ unsigned int *nearest_miss_BB(xpl_BB* node, sample *smp, int nA, unsigned int *c
 
 point_weight *reliefBB(xpl_t *xpl, window_t *win, int m) {
     float *weights;
-    int i, j, k, nA, n, w, h;
+    int i, j, k, nA, w, h;
     int *random_numbers;
     unsigned int *hit, *miss;
     sample *smp = NULL;
     point_weight *pw = NULL;
+    window_t *result = NULL;
 
     nA = win_get_wsize(win);
     w = win_get_width(win);
     h = win_get_height(win);
 
-    n = xpl->sum;
     trios_malloc(weights, sizeof(float) * nA, point_weight* , "Error allocating weights");
     
     for (j = 0; j < nA; j++) {
@@ -163,21 +162,8 @@ point_weight *reliefBB(xpl_t *xpl, window_t *win, int m) {
         /* select random instance */
         k = random_numbers[i];
         smp = select_instance_BB((xpl_BB*)xpl->root, win, &k);
-#ifdef DEBUG
-    print_sample_BB(smp, win);
-    printf("Calculating nearest hit!\n");
-#endif
         hit = nearest_hit_BB((xpl_BB*)xpl->root,  smp, nA, NULL);
-#ifdef DEBUG
-    printf("Distance %d -- \n", dist_BB(hit, smp->pattern, nA));
-    /*print_pattern_BB(hit, win);putchar('\n');*/
-    printf("Calculating nearest miss!\n");
-#endif
         miss = nearest_miss_BB((xpl_BB*)xpl->root, smp, nA, NULL);
-#ifdef DEBUG
-    printf("Distance %d -- \n", dist_BB(miss, smp->pattern, nA));
-    /*print_pattern_BB(miss, win);putchar('\n');*/
-#endif
         #pragma omp critical
         {
             for (j = 0; j < nA; j++) {
@@ -194,7 +180,12 @@ point_weight *reliefBB(xpl_t *xpl, window_t *win, int m) {
         pw[i].i = i / w;
         pw[i].j = i % w;
     }
-    qsort(pw, w* h, sizeof(point_weight), compare_pw);
     free(weights);
+    qsort(pw, w* h, sizeof(point_weight), compare_pw);
+    
+    result = win_create(win->height, win->width, 1);
+    for (i = 0; i < 10; i++) {
+        win_set_point(pw[i].i, pw[i].j, 1, 1, result);
+    }
     return pw;
 }

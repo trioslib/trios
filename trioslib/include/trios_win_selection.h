@@ -9,6 +9,12 @@ extern "C" {
 #include "trios_xpl.h"
 #include "trios_mtm.h"
 
+/*! Holds the rank of a window point. */
+typedef struct {
+    float weight; /*! < Rank of the point. */
+    int i; /*! < Point row. */
+    int j; /*! < Point column. */
+} point_weight;
 
 
 /* other methods for window selection will be implemented! */
@@ -19,10 +25,11 @@ extern "C" {
  * \param domain A window containing all the points to be considered.
  * \param m Number of prototype instances.
  * \param n The number of points in the desired window.
+ * \param pw (Optional) Sorted array of the weight of each point in the domain window.
  * \return A window with n points.
  * \sa lcollec_memory
  */
-window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n);
+window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight **pw);
 
 /*!
  * Resample the xpl_domain patterns using new_win. Useful when the lcollec_* functions take a long time or when
