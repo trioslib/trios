@@ -16,12 +16,13 @@ extern "C" {
 /*!
  * Runs the Relief algorithm to select a subwindow of domain with n points.
  * \param xpl Set of patterns extracted from an imageset.
- * \param domain A window containing all the points to be considered. 
+ * \param domain A window containing all the points to be considered.
+ * \param m Number of prototype instances.
  * \param n The number of points in the desired window.
  * \return A window with n points.
  * \sa lcollec_memory
  */
-window_t *window_relief(xpl_t *xpl, window_t *domain, int n);
+window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n);
 
 /*!
  * Resample the xpl_domain patterns using new_win. Useful when the lcollec_* functions take a long time or when
