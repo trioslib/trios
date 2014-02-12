@@ -29,14 +29,15 @@ int main(int argc, char *argv[]) {
     }
     srand(seed);
 
-    pw = reliefBB(xpl, win, num_prototypes);
+    /*pw = reliefBB(xpl, win, num_prototypes);*/
+    result = window_relief(xpl, win, num_prototypes, win_size, &pw);
 
-    w = win_get_width(win);
+    /*w = win_get_width(win);
     h = win_get_height(win);
     result = win_create(h, w, 1);
     for (i = 0; i < win_size; i++) {
         win_set_point(pw[i].i, pw[i].j, 1, 1, result);
-    }
+    }*/
     win_write(argv[4], result);
 
     for (i = 0; i < w*h; i++) {

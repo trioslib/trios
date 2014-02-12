@@ -133,18 +133,17 @@ unsigned int *nearest_miss_BB(xpl_BB* node, sample *smp, int nA, unsigned int *c
     return nearest_miss_BB(node->right, smp, nA, current);
 }
 
-point_weight *reliefBB(xpl_t *xpl, window_t *win, int m) {
+window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight **pw) {
     float *weights;
     int i, j, k, nA, w, h;
     int *random_numbers;
     unsigned int *hit, *miss;
     sample *smp = NULL;
-    point_weight *pw = NULL;
     window_t *result = NULL;
 
-    nA = win_get_wsize(win);
-    w = win_get_width(win);
-    h = win_get_height(win);
+    nA = win_get_wsize(domain);
+    w = win_get_width(domain);
+    h = win_get_height(domain);
 
     trios_malloc(weights, sizeof(float) * nA, point_weight* , "Error allocating weights");
     
@@ -161,7 +160,7 @@ point_weight *reliefBB(xpl_t *xpl, window_t *win, int m) {
     for (i = 0; i < m; i++) {
         /* select random instance */
         k = random_numbers[i];
-        smp = select_instance_BB((xpl_BB*)xpl->root, win, &k);
+        smp = select_instance_BB((xpl_BB*)xpl->root, domain, &k);
         hit = nearest_hit_BB((xpl_BB*)xpl->root,  smp, nA, NULL);
         miss = nearest_miss_BB((xpl_BB*)xpl->root, smp, nA, NULL);
         #pragma omp critical
@@ -174,18 +173,18 @@ point_weight *reliefBB(xpl_t *xpl, window_t *win, int m) {
         free_sample(smp);
     }
 
-    pw = malloc(sizeof(point_weight) * w * h);
+    *pw = malloc(sizeof(point_weight) * w * h);
     for (i = 0; i < w * h; i++) {
-        pw[i].weight = weights[i];
-        pw[i].i = i / w;
-        pw[i].j = i % w;
+        (*pw)[i].weight = weights[i];
+        (*pw)[i].i = i / w;
+        (*pw)[i].j = i % w;
     }
     free(weights);
-    qsort(pw, w* h, sizeof(point_weight), compare_pw);
+    qsort(*pw, w* h, sizeof(point_weight), compare_pw);
     
-    result = win_create(win->height, win->width, 1);
+    result = win_create(domain->height, domain->width, 1);
     for (i = 0; i < 10; i++) {
-        win_set_point(pw[i].i, pw[i].j, 1, 1, result);
+        win_set_point((*pw)[i].i, (*pw)[i].j, 1, 1, result);
     }
     return pw;
 }
