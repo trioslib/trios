@@ -31,6 +31,9 @@ typedef struct {
  */
 window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight **pw);
 
+
+window_t *window_martins_barrera(xpl_t *xpl, window_t *domain, point_weight **pw);
+
 /*!
  * Resample the xpl_domain patterns using new_win. Useful when the lcollec_* functions take a long time or when
  * determining two-level architectures.
