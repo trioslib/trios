@@ -2,7 +2,6 @@
 
 /*#define _DEBUG_*/
 
-
 /*!
     Create an image set structure.
 
@@ -11,57 +10,57 @@
     \return A new image set.
 */
 
-imgset_t *imgset_create(int ngroups, int grpsize) {
-  imgset_t *imgset ;
-  int      i, k ;
-  char     **f ;
+imgset_t *imgset_create(int ngroups, int grpsize)
+{
+	imgset_t *imgset;
+	int i, k;
+	char **f;
 
+	imgset = (imgset_t *) malloc(sizeof(imgset_t));
+	if (imgset == NULL) {
+		return (imgset_t *) trios_error(1, "Memory allocation failed.");
+	}
 
-  imgset = (imgset_t *)malloc(sizeof(imgset_t)) ;
-  if(imgset==NULL) {
-    return (imgset_t *)trios_error(1, "Memory allocation failed.") ;
-  }
+	imgset->dir = (char **)malloc(sizeof(char *) * grpsize);
+	if (imgset->dir == NULL) {
+		free(imgset);
+		return (imgset_t *) trios_error(1, "Memory allocation failed.");
+	}
 
-  imgset->dir = (char **)malloc(sizeof(char *)*grpsize) ;
-  if(imgset->dir==NULL) {
-    free(imgset) ;
-    return (imgset_t *)trios_error(1, "Memory allocation failed.") ;
-  }
+	imgset->file = (char ***)malloc(sizeof(char **) * ngroups);
+	if (imgset->file == NULL) {
+		free(imgset->dir);
+		free(imgset);
+		return (imgset_t *) trios_error(1, "Memory allocation failed.");
+	}
 
-  imgset->file = (char ***)malloc(sizeof(char **)*ngroups) ;
-  if(imgset->file==NULL) {
-    free(imgset->dir) ;
-    free(imgset) ;
-    return (imgset_t *)trios_error(1, "Memory allocation failed.") ;
-  }
+	for (k = 0; k < ngroups; k++) {
+		imgset->file[k] = (char **)malloc(sizeof(char *) * grpsize);
+		if (imgset->file[k] == NULL) {
+			free(imgset->dir);
+			free(imgset->file);
+			free(imgset);
+			return (imgset_t *) trios_error(1,
+							"Memory allocation failed.");
+		}
+	}
 
-  for(k=0; k<ngroups; k++) {
-    imgset->file[k] = (char **)malloc(sizeof(char *)*grpsize) ;
-    if(imgset->file[k]==NULL) {
-      free(imgset->dir) ;
-      free(imgset->file) ;
-      free(imgset) ;
-      return (imgset_t *)trios_error(1, "Memory allocation failed.") ;
-    }
-  }
+	for (i = 0; i < grpsize; i++) {
+		imgset->dir[i] = NULL;
+	}
 
-  for(i=0; i<grpsize; i++) {
-    imgset->dir[i] = NULL ;
-  }
+	for (k = 0; k < ngroups; k++) {
+		f = imgset->file[k];
+		for (i = 0; i < grpsize; i++) {
+			f[i] = NULL;
+		}
+	}
 
-  for(k=0; k<ngroups; k++) {
-    f = imgset->file[k];
-    for(i=0; i<grpsize; i++) {
-      f[i] = NULL ;
-    }
-  }
+	imgset->ngroups = ngroups;
+	imgset->grpsize = grpsize;
 
-  imgset->ngroups = ngroups ;
-  imgset->grpsize = grpsize ;
-
-  return(imgset) ;
+	return (imgset);
 }
-
 
 /*!
     Free IMGSET memory.
@@ -69,46 +68,43 @@ imgset_t *imgset_create(int ngroups, int grpsize) {
     \param imgset Pointer to the image set.
 */
 
-void        /*+ Purpose: free image set memory area                        +*/
-  imgset_free(
-    imgset_t *imgset  /*+ In/Out: pointer to the image set                 +*/
-  )
-/*+ Return: nothing                                                        +*/
-{
- 
-  int  i, k ;
-  char **f ;
-  if (imgset == NULL) {
-    trios_warning("Trying to free NULL imgset_t pointer.") ;
-    return;
-  }
-  if(imgset->dir) {
-    for(i=0; i<imgset->grpsize; i++) {
-      if(imgset->dir[i]) free(imgset->dir[i]) ;
-      imgset->dir[i] = NULL ;
-    }
-    free(imgset->dir) ;
-    imgset->dir = NULL ;
-  }
+void imgset_free(imgset_t * imgset) {
 
-  if(imgset->file) {
-    for(k=0; k<imgset->ngroups; k++) {
-      if(imgset->file[k]) {
-        f = imgset->file[k];
-        if(f) {
-          for(i=0; i<imgset->grpsize; i++) {
-            if(f[i]) free(f[i]) ;
-            f[i] = NULL ;
-          }
-          free(imgset->file[k]) ;
-          imgset->file[k] = NULL ;
-        }
-      }
-    }
-    free(imgset->file) ;
-    imgset->file = NULL ;    
-  }
-  free(imgset) ;
+	int i, k;
+	char **f;
+	if (imgset == NULL) {
+		trios_warning("Trying to free NULL imgset_t pointer.");
+		return;
+	}
+	if (imgset->dir) {
+		for (i = 0; i < imgset->grpsize; i++) {
+			if (imgset->dir[i])
+				free(imgset->dir[i]);
+			imgset->dir[i] = NULL;
+		}
+		free(imgset->dir);
+		imgset->dir = NULL;
+	}
+
+	if (imgset->file) {
+		for (k = 0; k < imgset->ngroups; k++) {
+			if (imgset->file[k]) {
+				f = imgset->file[k];
+				if (f) {
+					for (i = 0; i < imgset->grpsize; i++) {
+						if (f[i])
+							free(f[i]);
+						f[i] = NULL;
+					}
+					free(imgset->file[k]);
+					imgset->file[k] = NULL;
+				}
+			}
+		}
+		free(imgset->file);
+		imgset->file = NULL;
+	}
+	free(imgset);
 }
 
 /*!
@@ -118,8 +114,9 @@ void        /*+ Purpose: free image set memory area                        +*/
    \return Number of groups in imgset.
 */
 
-int imgset_get_ngroups(imgset_t *imgset) {
-  return(imgset->ngroups) ;
+int imgset_get_ngroups(imgset_t * imgset)
+{
+	return (imgset->ngroups);
 }
 
 /*!
@@ -129,8 +126,9 @@ int imgset_get_ngroups(imgset_t *imgset) {
    \return Number of images of groups.
 */
 
-int imgset_get_grpsize(imgset_t *imgset) {
-  return(imgset->grpsize) ;
+int imgset_get_grpsize(imgset_t * imgset)
+{
+	return (imgset->grpsize);
 }
 
 /*!
@@ -140,28 +138,30 @@ int imgset_get_grpsize(imgset_t *imgset) {
     \param i Image identifier.
     \param k Group identifier.
 */
-char *imgset_get_fname(imgset_t *imgset, int i, int k) {
-  char **f, *fname ;
+char *imgset_get_fname(imgset_t * imgset, int i, int k)
+{
+	char **f, *fname;
 
+	if (k > imgset_get_ngroups(imgset)) {
+		return (NULL);
+	}
+	if (i > imgset_get_grpsize(imgset)) {
+		return (NULL);
+	}
 
-  if(k > imgset_get_ngroups(imgset)) {
-    return (NULL) ;
-  }
-  if(i > imgset_get_grpsize(imgset)) {
-    return (NULL) ;
-  }
-
-  f = imgset->file[k-1] ;
-  fname = f[i-1] ;
-  if(fname==NULL) return(NULL) ;
+	f = imgset->file[k - 1];
+	fname = f[i - 1];
+	if (fname == NULL)
+		return (NULL);
 
 #ifdef _DEBUG_
-trios_debug("File name : %s.", fname) ;
+	trios_debug("File name : %s.", fname);
 #endif
 
-  if(strlen(fname)==0) return(NULL) ;
+	if (strlen(fname) == 0)
+		return (NULL);
 
-  return(fname) ;
+	return (fname);
 }
 
 /*!
@@ -174,31 +174,34 @@ trios_debug("File name : %s.", fname) ;
    \return 1 on success. 0 on failure.
 */
 
-int imgset_set_fname(imgset_t *imgset, int i, int k, char *fname) {
-  char **f ;
-
+int imgset_set_fname(imgset_t * imgset, int i, int k, char *fname)
+{
+	char **f;
 
 #ifdef _DEBUG_
-trios_debug("%d-th group, %d-th file %s", k, i, fname) ;
+	trios_debug("%d-th group, %d-th file %s", k, i, fname);
 #endif
 
-  if(k > imgset_get_ngroups(imgset)) {
-    return trios_error(1, "Images set do not contain %d-th group.", k) ;
-  }
-  if(i > imgset_get_grpsize(imgset)) {
-    return trios_error(1, "Image group doesn't contain %d-th element", i) ;
-  }
+	if (k > imgset_get_ngroups(imgset)) {
+		return trios_error(1, "Images set do not contain %d-th group.",
+				   k);
+	}
+	if (i > imgset_get_grpsize(imgset)) {
+		return trios_error(1,
+				   "Image group doesn't contain %d-th element",
+				   i);
+	}
 
-  if(fname != NULL) {
-    f = imgset->file[k-1] ;
-    f[i-1] = (char *)malloc(sizeof(char)*(strlen(fname)+1)) ;
-    if(!f[i-1]) {
-      return trios_error(1, "Memory allocation failed.") ;
-    }
-    strcpy(f[i-1], fname) ;
-  }
+	if (fname != NULL) {
+		f = imgset->file[k - 1];
+		f[i - 1] = (char *)malloc(sizeof(char) * (strlen(fname) + 1));
+		if (!f[i - 1]) {
+			return trios_error(1, "Memory allocation failed.");
+		}
+		strcpy(f[i - 1], fname);
+	}
 
-  return(1) ;
+	return (1);
 
 }
 
@@ -210,30 +213,25 @@ trios_debug("%d-th group, %d-th file %s", k, i, fname) ;
     \return The directory of the i-th group.
 */
 
-char *             /*+ Purpose: get the i-th pathname                      +*/
-  imgset_get_dname(
-    imgset_t *imgset,     /*+ In: pointer to the image set                 +*/
-    int      i            /*+ In: indication for the desired path name     +*/
-  )
-/*+ Return: the i-th pathname on succes, NULL on failure                   +*/ 
-{
-  char *dir ;
+char *imgset_get_dname(imgset_t * imgset, int i) {
+	char *dir;
 
+	if (i > imgset_get_grpsize(imgset)) {
+		return (NULL);
+	}
 
-  if(i > imgset_get_grpsize(imgset)) {
-    return(NULL) ;
-  }
+	dir = imgset->dir[i - 1];
 
-  dir = imgset->dir[i-1] ;
-
-  if(dir==NULL) return(NULL) ;
+	if (dir == NULL)
+		return (NULL);
 
 #ifdef _DEBUG_
-trios_debug("Directory name : %s.", dir) ;
+	trios_debug("Directory name : %s.", dir);
 #endif
 
-  if(strlen(dir)==0) return(NULL) ;
-  return(dir) ;
+	if (strlen(dir) == 0)
+		return (NULL);
+	return (dir);
 }
 
 /*!
@@ -245,27 +243,30 @@ trios_debug("Directory name : %s.", dir) ;
     \return 1 on success. 0 on failure.
 */
 
-int imgset_set_dname(imgset_t *imgset, int i, char *dir) {
+int imgset_set_dname(imgset_t * imgset, int i, char *dir)
+{
 #ifdef _DEBUG_
-trios_debug("%d-th diretorio %s", i, dir) ;
+	trios_debug("%d-th diretorio %s", i, dir);
 #endif
 
+	if (i > imgset_get_grpsize(imgset)) {
+		(void)trios_error(1,
+				  "Image group doesn't contain %d-th element\n",
+				  i);
+		return (0);
+	}
 
-  if(i>imgset_get_grpsize(imgset)) {
-    (void)trios_error(1, "Image group doesn't contain %d-th element\n", i) ;
-    return(0) ;
-  }
+	if (dir != NULL) {
 
-  if(dir!=NULL) {
+		imgset->dir[i - 1] =
+		    (char *)malloc(sizeof(char) * (strlen(dir) + 1));
+		if (!imgset->dir[i - 1]) {
+			return trios_error(1, "Memory allocation failed.");
+		}
+		strcpy(imgset->dir[i - 1], dir);
+	}
 
-    imgset->dir[i-1] = (char *)malloc(sizeof(char)*(strlen(dir)+1)) ;
-    if(!imgset->dir[i-1]) {
-      return trios_error(1, "Memory allocation failed.") ;
-    }
-    strcpy(imgset->dir[i-1], dir) ;
-  }
-
-  return(1) ;
+	return (1);
 
 }
 
@@ -277,37 +278,34 @@ trios_debug("%d-th diretorio %s", i, dir) ;
     \param k Group identifier.
     \return The full file name if it exists. NULL on error.
 */
- 
-char *imgset_get_ffullname(imgset_t *imgset, int i, int k) {
-  char *dirname ;
-  char *fname ;
-  char *fullname ;
 
+char *imgset_get_ffullname(imgset_t * imgset, int i, int k)
+{
+	char *dirname;
+	char *fname;
+	char *fullname;
 
-  if(!(dirname = imgset_get_dname(imgset, i))) {
-    return(NULL) ;
-  }
+	if (!(dirname = imgset_get_dname(imgset, i))) {
+		return (NULL);
+	}
 #ifdef _DEBUG_
-trios_debug("dirname=%s", dirname) ;
-#endif
-  
-  if(!(fname = imgset_get_fname(imgset, i, k))) {
-    return(NULL) ;
-  }
-#ifdef _DEBUG_
-trios_debug("fname=%s", fname) ;
+	trios_debug("dirname=%s", dirname);
 #endif
 
-  fullname = (char *)malloc(strlen(dirname)+strlen(fname)+2) ;
+	if (!(fname = imgset_get_fname(imgset, i, k))) {
+		return (NULL);
+	}
+#ifdef _DEBUG_
+	trios_debug("fname=%s", fname);
+#endif
 
-  strcpy(fullname, dirname);
-  if (dirname[strlen(dirname) - 1] != '/') {
-      strcat(fullname, "/");
-  }
-  strcat(fullname, fname) ;
+	fullname = (char *)malloc(strlen(dirname) + strlen(fname) + 2);
 
-  return(fullname) ;
+	strcpy(fullname, dirname);
+	if (dirname[strlen(dirname) - 1] != '/') {
+		strcat(fullname, "/");
+	}
+	strcat(fullname, fname);
+
+	return (fullname);
 }
-
-
-

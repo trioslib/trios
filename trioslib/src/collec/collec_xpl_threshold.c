@@ -37,18 +37,17 @@ colthresh_BB(unsigned short *s1,	/* + In: input image data + */
 	int aux, st;
 	xpl_t *xpl;		/* XPL structure */
 
-
-	bpat = (unsigned int *) malloc(sizeof(int) * size_of_zpat(wsize));
+	bpat = (unsigned int *)malloc(sizeof(int) * size_of_zpat(wsize));
 	if (bpat == NULL) {
 		return (xpl_t *) trios_error(1, "Memory allocation failed.");
 	}
 
-	wpat = (int *) malloc(sizeof(int) * wsize);
+	wpat = (int *)malloc(sizeof(int) * wsize);
 	if (wpat == NULL) {
 		return (xpl_t *) trios_error(1, "Memory allocation failed.");
 	}
 
-	ord = (int *) malloc(sizeof(int) * (wsize + 2));
+	ord = (int *)malloc(sizeof(int) * (wsize + 2));
 	if (ord == NULL) {
 		return (xpl_t *) trios_error(1, "Memory allocation failed.");
 	}
@@ -67,7 +66,6 @@ colthresh_BB(unsigned short *s1,	/* + In: input image data + */
 	trios_debug("xpl structure have been allocated");
 #endif
 
-
 	for (j = 0; j < npixels; j++) {	/* shifts the window through each
 					 * pixel */
 
@@ -83,7 +81,7 @@ colthresh_BB(unsigned short *s1,	/* + In: input image data + */
 							 * window... */
 				i = j + offset[k];
 				if (i >= 0 && i < npixels)
-					wpat[k] = (int) s1[i];
+					wpat[k] = (int)s1[i];
 			}
 
 			for (k = 0; k < wsize; k++) {
@@ -133,7 +131,7 @@ colthresh_BB(unsigned short *s1,	/* + In: input image data + */
 							     bitmsk[nshifts]);
 						}
 					}
-					if ((int) p2[j] >= ord[i]) {
+					if ((int)p2[j] >= ord[i]) {
 						freq0 = 0;
 						freq1 = aux;
 					} else if (p2[j] <= ord[i - 1]) {
@@ -152,8 +150,8 @@ colthresh_BB(unsigned short *s1,	/* + In: input image data + */
 #endif
 
 					st = xpl_BB_insert(xpl,
-							   (xpl_BB **) (&xpl->
-									root),
+							   (xpl_BB
+							    **) (&xpl->root),
 							   bpat, freq0, freq1);
 					if (st == -1) {
 						xpl_free(xpl);
@@ -174,8 +172,9 @@ colthresh_BB(unsigned short *s1,	/* + In: input image data + */
 
 }
 
-
-int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_format, char *o1_fname) {
+int lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey,
+		      int output_format, char *o1_fname)
+{
 	imgset_t *imgset;
 	window_t *win;
 	xpl_t *xpl, *xpl_new;
@@ -185,7 +184,6 @@ int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_fo
 	unsigned short *s1;
 	unsigned char *c2, *c3;
 	img_t *img1, *img2, *img3;
-
 
 	/*
 	 * read image set file 
@@ -232,19 +230,17 @@ int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_fo
 		return trios_error(MSG, "lcolthresh: win_read() failed.");
 	}
 
-
 	/*
 	 * allocate vector of offsets 
 	 */
 	wsize = win_get_wsize(win);
 
-	offset = (int *) malloc(sizeof(int) * wsize);
+	offset = (int *)malloc(sizeof(int) * wsize);
 	if (offset == NULL) {
 		imgset_free(imgset);
 		win_free(win);
 		return trios_error(MSG, "lcolthresh: offset_create() failed.");
 	}
-
 
 	xpl = xpl_create(wsize, BB);
 	if (!xpl) {
@@ -286,9 +282,9 @@ int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_fo
 		 */
 		offset_set(offset, win, nc, 1);
 
-		s1 = (unsigned short *) img_get_data(img1);
-		c2 = (unsigned char *) img_get_data(img2);
-		c3 = (unsigned char *) img_get_data(img3);
+		s1 = (unsigned short *)img_get_data(img1);
+		c2 = (unsigned char *)img_get_data(img2);
+		c3 = (unsigned char *)img_get_data(img3);
 
 		xpl_new =
 		    colthresh_BB(s1, c2, c3, offset, wsize, npixels, maxgrey);
@@ -321,27 +317,28 @@ int	lcollec_threshold(char *fname_i1, char *fname_i2, int maxgrey, int output_fo
 	trios_debug("End of image scanning");
 #endif
 
-    if (output_format & XPL_OUTPUT == XPL_OUTPUT) {
-        char *ext = malloc(sizeof(char) * (strlen(o1_fname) + 4 + 1));
-        strcpy(ext, o1_fname);
-        strcat(ext, ".xpl");
-        if (!xpl_write(ext, xpl, win, NULL)) {
-            imgset_free(imgset);
-            win_free(win);
-            free(offset);
-            xpl_free(xpl);
-            free(ext);
-            return trios_error(MSG, "lcollec : xpl_write() failed.");
-        }
-        free(ext);
-    }
-    if (output_format & SWT_OUTPUT == SWT_OUTPUT) {
-        char *ext = malloc(sizeof(char) * (strlen(o1_fname) + 4 + 1));
-        strcpy(ext, o1_fname);
-        strcat(ext, ".swt");
-        swt_write(ext, xpl, win);
-        free(ext);
-    }
+	if (output_format & XPL_OUTPUT == XPL_OUTPUT) {
+		char *ext = malloc(sizeof(char) * (strlen(o1_fname) + 4 + 1));
+		strcpy(ext, o1_fname);
+		strcat(ext, ".xpl");
+		if (!xpl_write(ext, xpl, win, NULL)) {
+			imgset_free(imgset);
+			win_free(win);
+			free(offset);
+			xpl_free(xpl);
+			free(ext);
+			return trios_error(MSG,
+					   "lcollec : xpl_write() failed.");
+		}
+		free(ext);
+	}
+	if (output_format & SWT_OUTPUT == SWT_OUTPUT) {
+		char *ext = malloc(sizeof(char) * (strlen(o1_fname) + 4 + 1));
+		strcpy(ext, o1_fname);
+		strcat(ext, ".swt");
+		swt_write(ext, xpl, win);
+		free(ext);
+	}
 
 	/*
 	 * free allocated memory 

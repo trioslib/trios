@@ -2,7 +2,7 @@
 #include "string.h"
 #include "ctype.h"
 
-#include "trios_fs.h"
+#include "trios_win_selection.h"
 
 int resample_xpl(xpl_t *domain, window_t *win_domain, window_t *win, char *dest) {
     xpl_t *new_xpl = NULL;

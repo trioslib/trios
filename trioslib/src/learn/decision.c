@@ -23,7 +23,6 @@ int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim,
 	window_t *win;
 	/*apert_t  *apt = NULL ; */
 
-
 #ifdef _DEBUG_
 	trios_debug("Entered ldecision with if=%s e of=%s", fname_i, fname_o);
 #endif
@@ -31,7 +30,6 @@ int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim,
 	/* read observed examples file */
 	if (NULL == (xpl = (xpl_t *) xpl_read(fname_i, &win /*, &apt */ )))
 		return trios_error(MSG, "xpl_read failed.");
-
 
 	if (NULL == (mtm = (mtm_t *) mtm_decide(xpl, comp_prob,
 						freqmin, estim, comptype,
@@ -48,7 +46,6 @@ int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim,
 		mtm_free(mtm);
 		return trios_error(MSG, "mtm_write failed.");
 	}
-
 #ifdef _DEBUG_
 	trios_debug("Antes dos frees finais");
 #endif
@@ -56,7 +53,7 @@ int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim,
 #ifdef _DEBUG_
 	trios_debug("DEpois dos free win");
 #endif
-    xpl_free(xpl) ;
+	xpl_free(xpl);
 #ifdef _DEBUG_
 	trios_debug("DEpois dos free xpl");
 #endif
@@ -64,14 +61,13 @@ int ldecision_disk(char *fname_i, int comp_prob, double freqmin, double estim,
 #ifdef _DEBUG_
 	trios_debug("DEpois dos free mtm");
 #endif
-    /*if(apt) apert_free(apt) ;*/
+	/*if(apt) apert_free(apt) ; */
 #ifdef _DEBUG_
 	trios_debug("DEpois dos frees finais");
 #endif
 
 	return (1);
 }
-
 
 /*!
     Builds the classified examples set.
@@ -90,7 +86,6 @@ mtm_t *mtm_decide(xpl_t * xpl, int comp_prob, double freqmin, double estimator,
 	mtm_t *mtm;
 	int type, wsize;
 	unsigned int nmtm, sum;
-
 
 	wsize = xpl_get_wsize(xpl);
 
@@ -128,12 +123,10 @@ mtm_t *mtm_decide(xpl_t * xpl, int comp_prob, double freqmin, double estimator,
 		    type, nmtm);
 #endif
 
-
 	/* Now we've to reset the value of nmtm because it will be different
 	   depending on the decisions                                           */
 
 	mtm_set_nmtm(mtm, 0);
-
 
 	switch (type) {
 
@@ -149,29 +142,28 @@ mtm_t *mtm_decide(xpl_t * xpl, int comp_prob, double freqmin, double estimator,
 
 			if ((estimator != MABS)
 			    && ((estimator > 1) || (estimator < 0.5))) {
-				estimator = (float) AVERAGE;
+				estimator = (float)AVERAGE;
 			}
 #ifdef _DEBUG_
 			trios_debug("BIN mtmdecide estimador = %f \n",
 				    estimator);
 #endif
 
-			/* This is a call for the RECURSIVE VERSION
+			/*This is a call for the RECURSIVE VERSION */
 			   if(!decide_tree_bb((xpl_BB *)xpl->root, mtm, sum, xpl->wzip,
-			   freqmin, estimator, undflabel, comp_prob)) {
+			   freqmin, estimator, undflabel/*, comp_prob*/)) {
 			   xpl_free( xpl ) ;
 			   mtm_free( mtm ) ;
 			   return(mtm_t *)trios_error(MSG, "mtm_decide: decide examples failure") ;
 			   }
-			 */
-
+			/* 
 			if (!decide_ll_bb
 			    (xpl, mtm, freqmin, estimator, undflabel,
 			     comp_prob)) {
 				mtm_free(mtm);
 				return (mtm_t *) trios_error(MSG,
 							     "mtm_decide: decide examples failure");
-			}
+			}*/
 
 			mtm_set_comp_prob(mtm, comp_prob);
 
@@ -184,7 +176,7 @@ mtm_t *mtm_decide(xpl_t * xpl, int comp_prob, double freqmin, double estimator,
 			break;
 		}
 
-    case GB:
+	case GB:
 	case GG:
 	case WKC:
 	case WKF:
@@ -194,7 +186,7 @@ mtm_t *mtm_decide(xpl_t * xpl, int comp_prob, double freqmin, double estimator,
 	case WKGG2C:
 	case GG3:
 #ifdef _DEBUG_
-        trios_debug("GRAY mtmdecide estimador = %f \n", estimator);
+		trios_debug("GRAY mtmdecide estimador = %f \n", estimator);
 #endif
 		if (estimator == AVERAGE) {
 			if (!decide_tree_gg_average
@@ -229,7 +221,7 @@ mtm_t *mtm_decide(xpl_t * xpl, int comp_prob, double freqmin, double estimator,
 				return (mtm_t *) trios_fatal(MSG,
 							     "mtm_decide: decide examples failure");
 			}
-        } else {
+		} else {
 			if (!decide_tree_gg_general
 			    ((xpl_GG *) xpl->root, mtm, sum, xpl->wsize,
 			     freqmin, estimator, undflabel, comptype)) {

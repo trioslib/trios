@@ -4,7 +4,6 @@
 
 /* #define _DEBUG_ */
 
-
 /*!
     Read a header from a file.
 
@@ -12,27 +11,30 @@
     \return A pointer to a Header structure on success, NULL on failure.
 */
 
-header_t *header_read(FILE *fd) {
-  char      buffer[64];
-  header_t  *aHeader;
-  int	     index1=0;
+header_t *header_read(FILE * fd)
+{
+	char buffer[64];
+	header_t *aHeader;
+	int index1 = 0;
 
-  do buffer[index1++]= (char)getc(fd);
-  while ( (buffer[index1-1] != EOF) && (index1 < 64) );
+	do
+		buffer[index1++] = (char)getc(fd);
+	while ((buffer[index1 - 1] != EOF) && (index1 < 64));
 
-  if(index1 != 64)
-    return (header_t *)trios_error(1, "header_read: file is too short.") ;
+	if (index1 != 64)
+		return (header_t *) trios_error(1,
+						"header_read: file is too short.");
 
-  if( !(aHeader= (header_t *)malloc(sizeof(header_t))) ) {
-    return (header_t *)trios_error(1, "header_read: memory alocation error.");
-  }
-  strncpy(aHeader->fileType, buffer, 8);
-  aHeader->fileType[8]= 0;
-  strncpy(aHeader->rest, &buffer[8], 56);
+	if (!(aHeader = (header_t *) malloc(sizeof(header_t)))) {
+		return (header_t *) trios_error(1,
+						"header_read: memory alocation error.");
+	}
+	strncpy(aHeader->fileType, buffer, 8);
+	aHeader->fileType[8] = 0;
+	strncpy(aHeader->rest, &buffer[8], 56);
 
-  return(aHeader);
+	return (aHeader);
 }
-
 
 /*!
     Write a header to a file.
@@ -41,27 +43,29 @@ header_t *header_read(FILE *fd) {
     \param aHeader Pointer to a Header.
 */
 
-void header_write(FILE *fd, header_t *aHeader) {
-  int i ;
-  int aux ;
-  
-  aux = strlen(aHeader->fileType);
-  if (aux < 8) {
-    for (i=aux; i<8; i++) aHeader->fileType[i] = ' ';
-  }
-  aHeader->fileType[8] = '\0';
-  
-  fprintf(fd, "%s", aHeader->fileType) ;
+void header_write(FILE * fd, header_t * aHeader)
+{
+	int i;
+	int aux;
 
-  aux = strlen(aHeader->rest);
-  if (aux < 56) {
-    for (i=aux; i<56; i++) aHeader->rest[i] = '#';
-  }
+	aux = strlen(aHeader->fileType);
+	if (aux < 8) {
+		for (i = aux; i < 8; i++)
+			aHeader->fileType[i] = ' ';
+	}
+	aHeader->fileType[8] = '\0';
 
-  fprintf(fd, "%s\n", aHeader->rest) ;
+	fprintf(fd, "%s", aHeader->fileType);
+
+	aux = strlen(aHeader->rest);
+	if (aux < 56) {
+		for (i = aux; i < 56; i++)
+			aHeader->rest[i] = '#';
+	}
+
+	fprintf(fd, "%s\n", aHeader->rest);
 
 }
-
 
 /*!
     Compare two headers.
@@ -71,12 +75,11 @@ void header_write(FILE *fd, header_t *aHeader) {
     \return 1 if they are equal, 0 otherwise.
 */
 
-int header_compare(header_t *aHeader, header_t *otherHeader) {
-  return(!strcmp(aHeader->fileType, otherHeader->fileType));
+int header_compare(header_t * aHeader, header_t * otherHeader)
+{
+	return (!strcmp(aHeader->fileType, otherHeader->fileType));
 
 }
-
-
 
 /*!
     Checks if the header keyword matches a given keyword.
@@ -86,22 +89,23 @@ int header_compare(header_t *aHeader, header_t *otherHeader) {
     \return 1 if they are match, 0 otherwise.
 */
 
-int header_match(FILE *fd, const char *keyword) {
-  header_t *aHeader ;
-  int      result ;
+int header_match(FILE * fd, const char *keyword)
+{
+	header_t *aHeader;
+	int result;
 
-  /* read file header */
-  aHeader= header_read(fd);  
-  if(!aHeader) {
-    return /*(apert_t *)*/trios_error(1, "header_match: header_head() failed.") ;
-  }
-  
-#ifdef _DEBUG_ 
-  trios_debug("header_read() done") ;  
+	/* read file header */
+	aHeader = header_read(fd);
+	if (!aHeader) {
+		return /*(apert_t *) */ trios_error(1,
+						    "header_match: header_head() failed.");
+	}
+#ifdef _DEBUG_
+	trios_debug("header_read() done");
 #endif
 
-  result = !((int)strcmp(aHeader->fileType, keyword)) ;
-  free( aHeader ) ;
+	result = !((int)strcmp(aHeader->fileType, keyword));
+	free(aHeader);
 
-  return( result ) ;
+	return (result);
 }
