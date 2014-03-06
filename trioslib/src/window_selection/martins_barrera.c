@@ -12,16 +12,20 @@ double entropy_bb(xpl_BB *node, xpl_t *xpl, double alpha) {
     if (node == NULL) return 0;
     
     tot = node->fq0 + node->fq1;
-    entr = (node->fq0/tot) * log2(node->fq0/tot);
-    entr += (node->fq1/tot) * log2(node->fq1/tot);
+    entr = 0.0;
+    if (node->fq0 > 0) {
+        entr += (node->fq0/tot) * log2(node->fq0/tot);
+    }
+    if (node->fq1 > 0) {
+        entr += (node->fq1/tot) * log2(node->fq1/tot);
+    }
     
-    return -entr + entropy_bb(node->left, xpl, alpha) + entropy_bb(node->right, xpl, alpha); 
+    entr = -entr * (tot + alpha);
+    
+    return entr + entropy_bb(node->left, xpl, alpha) + entropy_bb(node->right, xpl, alpha); 
 }
 
-/* adiciona a feature k ao conjunto atual, calcula a entropia, testa contra o mínimo e, se for
-melhor, retorna 1*/
-
-double try_add_variable(xpl_t *xpl, int *features, int n_tot, int n_features, int k, double max_entropy) {
+double try_add_variable(xpl_t *xpl, int *features, int n_tot, int n_features, int k) {
     int temp;
     double entr;
     xpl_t *new_xpl;
@@ -32,13 +36,14 @@ double try_add_variable(xpl_t *xpl, int *features, int n_tot, int n_features, in
     features[n_tot - n_features] = temp;
     
     new_xpl = xpl_remove_variables(xpl, features, n_tot - n_features);
-    entr = entropy_bb((xpl_BB *) xpl->root, xpl, 1);
+    entr = entropy_bb((xpl_BB *) new_xpl->root, new_xpl, 1);
+    entr += (2 << n_features) + xpl->sum;
     
     temp = features[k];
     features[k] = features[n_tot - n_features];
     features[n_tot - n_features] = temp;
     
-    xpl_free(xpl);
+    xpl_free(new_xpl);
     return entr;
 }
 
@@ -52,17 +57,21 @@ window_t *window_martins_barrera(xpl_t *xpl, window_t *domain, point_weight **pw
      */
     
     int *features;
-    int i, j, k;
+    int i, j, k, temp;
     window_t *win;
-    double current_entropy, best_entropy;
-    best_entropy = 1000000000000; /* infinity */
+    double current_entropy, best_entropy, entropy;
+    best_entropy = current_entropy = 1000000000000; /* infinity */
     
     n_total = win_get_wsize(domain);
     n_features = n_old = 0;
     win = win_create(domain->height, domain->width, 1);
     trios_malloc(features, sizeof(int) * n_total, window_t *, "Malloc error");
     
-    while (!stop) {
+    for (i = 0; i < n_total; i++) features[i] = i;
+    
+    printf("Starting martins_barrera algorithm\n");
+    while (!stop && n_features < n_total) {
+        printf("Iteration start\n");
         n_old = n_features;
         
         best_entropy = current_entropy;
@@ -71,22 +80,38 @@ window_t *window_martins_barrera(xpl_t *xpl, window_t *domain, point_weight **pw
             i = k / domain->width;
             j = k % domain->width;
             if (win_get_point(i, j, 1, win) == 0) {
-                printf("Trying variable %d\n", k);
-                /* calcula a entropia do conjunto atual + k
-                 * se é melhor que a entropia atual, guarda, se não joga fora
-                 */
-                current_entropy = try_add_variable(xpl, features, n_total, n_features, k, best_entropy);
-                printf("Entropy %f\n", current_entropy);
-                features[n_features] = k;
-                n_features++;
+                
+                entropy = try_add_variable(xpl, features, n_total, n_features, k);
+                /*printf("Entropy %f\n", entropy);*/
+                if (entropy < best_entropy) {
+                    best_entropy = entropy;
+                    /* troca k por n_tot -  n_features - 1 */
+                    temp = features[k];
+                    features[k] = features[n_total - n_features - 1];
+                    features[n_total - n_features - 1] = temp;
+                }
+                
             }
         }
-        /* adiciona a variavel com melhor entropia. se nenhuma variavel melhora o conjunto atual pare.*/
-        
-        if (best_entropy == current_entropy) break;
-        else n_features++;
-        
+        printf("Best variable: %d Entropy %f Current entropy %f\n", features[n_total - n_features - 1], best_entropy, current_entropy);
+        if (best_entropy >= current_entropy) {
+            /* time to stop adding variables */
+            break;
+        } else {
+            n_features++;
+            current_entropy = best_entropy;
+        }
     }
+    
+    printf("Num selected %d\n:", n_features);
+    for (k = 1; k <= n_features; k++) {
+        i = features[n_total - k] / domain->width;
+        j = features[n_total - k] % domain->width;
+        win_set_point(i, j, 1, 1, win);
+
+        printf("%d ", features[n_total - k]);        
+    }
+    printf("\n");
     
     return win;
 }

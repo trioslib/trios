@@ -6,7 +6,7 @@
 void print_usage() {
     printf("Usage:\n"
            "\t trios_win_select relief xpl_file window_size number_of_prototypes result_path (optional)seed\n"
-           "\t trios_win_select martins_barrera xpl_file window_size\n");
+           "\t trios_win_select martins_barrera xpl_file domain result_path\n");
 }
 
 int main(int argc, char *argv[]) {
@@ -23,8 +23,9 @@ int main(int argc, char *argv[]) {
     
     if (strcmp(argv[1], "relief") == 0) {
         
-    } else if (strcmp(argv[2], "martins_barrera") == 0) {
+    } else if (strcmp(argv[1], "martins_barrera") == 0) {
         new_window = window_martins_barrera(xpl, domain, NULL);
+        win_write(argv[4], new_window);
     }
 
     /* writes selected window */

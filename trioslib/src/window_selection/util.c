@@ -55,9 +55,9 @@ xpl_t *xpl_remove_variables(xpl_t * old_xpl, int *vars, int n_remove) {
             idx[i] = k;
             k++;
         }
-        printf("%d ", idx[i]);
+        /*printf("%d ", idx[i]);*/
     }
-    printf("\n");
+    /*printf("\n");*/
 
     new_xpl = xpl_create(n - n_remove, old_xpl->type);
     trios_malloc(wpat, sizeof(unsigned int) * new_xpl->wzip, xpl_t *, "Could not alloc aux array.");
