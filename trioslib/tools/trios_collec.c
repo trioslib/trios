@@ -14,6 +14,11 @@ int main(int argc, char *argv[]) {
     image_operator_t **iops;
     xpl_t *result;
     int i;
+    
+    if (argc < 4) {
+        print_usage();
+        return -1;
+    }
 
     if (strcmp(argv[1], "two-level") != 0) {
         /* single level collec */
