@@ -20,6 +20,8 @@ target_link_libraries(trios_relief trios m)
 add_executable(trios_xpl_util trios_xpl_util.c)
 target_link_libraries(trios_xpl_util trios m)
 
+add_executable(trios_win_select trios_win_select.c)
+target_link_libraries(trios_win_select trios m)
 
 install(TARGETS trios_csv trios_test trios_apply trios_build
     RUNTIME DESTINATION bin
