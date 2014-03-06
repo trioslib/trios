@@ -45,6 +45,8 @@ window_t *window_martins_barrera(xpl_t *xpl, window_t *domain, point_weight **pw
 xpl_t *window_resample_xpl(xpl_t *xpl_domain, window_t *win_domain, window_t *new_win);
 
 
+xpl_t *xpl_remove_variables(xpl_t * old_xpl, int *vars, int n_remove);
+
 #ifdef __cplusplus
 }
 #endif
