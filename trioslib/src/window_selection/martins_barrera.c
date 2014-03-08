@@ -58,7 +58,7 @@ int sequential_forward_selection_step(xpl_t *xpl,  window_t *domain,  int *featu
     for (k = 0; k < n_total - n_features; k++) {
         i = k / domain->width;
         j = k % domain->width;
-            
+        
         entropy = try_add_variable(xpl, features, n_total, n_features, k);
         /*printf("Entropy %f\n", entropy);*/
         if (entropy < best_entropy) {
@@ -126,11 +126,11 @@ window_t *window_martins_barrera(xpl_t *xpl, window_t *domain, point_weight **pw
                 
             }
         }*/
-        printf("Best variable: %d Entropy %f Current entropy %f\n", features[n_total - n_features - 1], best_entropy, current_entropy);
-        if (best_entropy >= current_entropy) {
+        if (best_entropy >= current_entropy || best_entropy == -1) {
             /* time to stop adding variables */
             break;
         } else {
+            printf("Best variable: %d Entropy %f Current entropy %f\n", features[n_total - n_features], best_entropy, current_entropy);
             current_entropy = best_entropy;
         }
     }
