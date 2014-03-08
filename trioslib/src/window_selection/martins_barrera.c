@@ -47,6 +47,38 @@ double try_add_variable(xpl_t *xpl, int *features, int n_tot, int n_features, in
     return entr;
 }
 
+/*Returns the best_entropy found or -1 if the no variable decreases the entropy.
+ * If a variable is selected, n_features increases and it is put in features[n_total - n_features].*/
+int sequential_forward_selection_step(xpl_t *xpl,  window_t *domain,  int *features, int n_total, int *n_features_, double best_entropy) {
+    int i, j, k, temp;
+    int n_features;
+    double entropy;
+    n_features = *n_features_;
+    int add_var = 0;
+    for (k = 0; k < n_total - n_features; k++) {
+        i = k / domain->width;
+        j = k % domain->width;
+            
+        entropy = try_add_variable(xpl, features, n_total, n_features, k);
+        /*printf("Entropy %f\n", entropy);*/
+        if (entropy < best_entropy) {
+            add_var = 1;
+            best_entropy = entropy;
+            /* troca k por n_tot -  n_features - 1 */
+            temp = features[k];
+            features[k] = features[n_total - n_features - 1];
+            features[n_total - n_features - 1] = temp;
+        }
+    }
+    if (add_var) {
+        *n_features_ += 1;
+        return best_entropy;
+    } else {
+        return -1;
+    }
+}
+
+
 window_t *window_martins_barrera(xpl_t *xpl, window_t *domain, point_weight **pw) {
     int n_features, n_total, n_old, stop = 0;
     /* features contains the unused features in the left and the selected ones in the right
@@ -74,31 +106,31 @@ window_t *window_martins_barrera(xpl_t *xpl, window_t *domain, point_weight **pw
         printf("Iteration start\n");
         n_old = n_features;
         
-        best_entropy = current_entropy;
+        /* do a SFS step */        
+        best_entropy = sequential_forward_selection_step(xpl, domain, features, n_total, &n_features, current_entropy);
         
-        for (k = 0; k < n_total - n_features; k++) {
+        /*for (k = 0; k < n_total - n_features; k++) {
             i = k / domain->width;
             j = k % domain->width;
             if (win_get_point(i, j, 1, win) == 0) {
                 
                 entropy = try_add_variable(xpl, features, n_total, n_features, k);
-                /*printf("Entropy %f\n", entropy);*/
+                /*printf("Entropy %f\n", entropy);
                 if (entropy < best_entropy) {
                     best_entropy = entropy;
-                    /* troca k por n_tot -  n_features - 1 */
+                    /* troca k por n_tot -  n_features - 1 
                     temp = features[k];
                     features[k] = features[n_total - n_features - 1];
                     features[n_total - n_features - 1] = temp;
                 }
                 
             }
-        }
+        }*/
         printf("Best variable: %d Entropy %f Current entropy %f\n", features[n_total - n_features - 1], best_entropy, current_entropy);
         if (best_entropy >= current_entropy) {
             /* time to stop adding variables */
             break;
         } else {
-            n_features++;
             current_entropy = best_entropy;
         }
     }
