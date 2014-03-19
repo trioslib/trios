@@ -24,6 +24,11 @@ int main(int argc, char *argv[]) {
     xpl = xpl_read(argv[2], &domain, NULL);
     
     if (strcmp(argv[1], "relief") == 0) {
+        if (argc < 6) {
+            print_usage();
+            return -1;
+        }
+        
         win_size = atoi(argv[3]);
         num_proto = atoi(argv[4]);
         if (argc == 7) seed = atoi(argv[6]);
@@ -32,6 +37,10 @@ int main(int argc, char *argv[]) {
         new_window = window_relief(xpl, domain, num_proto, win_size, NULL, seed);
         win_write(argv[5], new_window);
     } else if (strcmp(argv[1], "martins_barrera") == 0) {
+        if (argc < 5) {
+            print_usage();
+            return -1;
+        }
         new_window = window_martins_barrera(xpl, domain, NULL);
         win_write(argv[4], new_window);
     }
