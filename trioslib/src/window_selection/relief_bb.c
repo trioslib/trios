@@ -185,7 +185,7 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     qsort(*pw, w* h, sizeof(point_weight), compare_pw);
     
     result = win_create(domain->height, domain->width, 1);
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < n; i++) {
         win_set_point((*pw)[i].i, (*pw)[i].j, 1, 1, result);
     }
     return result;
