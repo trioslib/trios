@@ -133,8 +133,9 @@ unsigned int *nearest_miss_BB(xpl_BB* node, sample *smp, int nA, unsigned int *c
     return nearest_miss_BB(node->right, smp, nA, current);
 }
 
-window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight **pw, int seed) {
+window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight **_pw, int seed) {
     float *weights;
+    point_weight *pw;
     int i, j, k, nA, w, h;
     int *random_numbers;
     unsigned int *hit, *miss;
@@ -145,7 +146,7 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     w = win_get_width(domain);
     h = win_get_height(domain);
 
-    trios_malloc(weights, sizeof(float) * nA, point_weight* , "Error allocating weights");
+    trios_malloc(weights, sizeof(float) * nA, window_t* , "Error allocating weights");
     
     for (j = 0; j < nA; j++) {
         weights[j] = 0.0;
@@ -175,18 +176,19 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     }
     free(random_numbers);
     
-    *pw = malloc(sizeof(point_weight) * w * h);
+    pw = malloc(sizeof(point_weight) * w * h);
     for (i = 0; i < w * h; i++) {
-        (*pw)[i].weight = weights[i];
-        (*pw)[i].i = i / w;
-        (*pw)[i].j = i % w;
+        pw[i].weight = weights[i];
+        pw[i].i = i / w;
+        pw[i].j = i % w;
     }
     free(weights);
-    qsort(*pw, w* h, sizeof(point_weight), compare_pw);
+    qsort(pw, w * h, sizeof(point_weight), compare_pw);
     
     result = win_create(domain->height, domain->width, 1);
     for (i = 0; i < n; i++) {
-        win_set_point((*pw)[i].i, (*pw)[i].j, 1, 1, result);
+        win_set_point(pw[i].i, (*pw)[i].j, 1, 1, result);
     }
+    *_pw = pw;
     return result;
 }
