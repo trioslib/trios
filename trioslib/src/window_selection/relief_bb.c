@@ -133,7 +133,7 @@ unsigned int *nearest_miss_BB(xpl_BB* node, sample *smp, int nA, unsigned int *c
     return nearest_miss_BB(node->right, smp, nA, current);
 }
 
-window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight **pw) {
+window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight **pw, int seed) {
     float *weights;
     int i, j, k, nA, w, h;
     int *random_numbers;
@@ -151,6 +151,7 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
         weights[j] = 0.0;
     }
     
+    srand(seed);
     random_numbers = malloc(sizeof(int) * m);
     for (i = 0; i < m; i++) {
         random_numbers[i] = rand() % xpl->sum;
@@ -172,7 +173,8 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
         }
         free_sample(smp);
     }
-
+    free(random_numbers);
+    
     *pw = malloc(sizeof(point_weight) * w * h);
     for (i = 0; i < w * h; i++) {
         (*pw)[i].weight = weights[i];
@@ -186,5 +188,5 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     for (i = 0; i < 10; i++) {
         win_set_point((*pw)[i].i, (*pw)[i].j, 1, 1, result);
     }
-    return pw;
+    return result;
 }

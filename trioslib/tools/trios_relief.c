@@ -27,10 +27,10 @@ int main(int argc, char *argv[]) {
     } else {
         seed = 0;
     }
-    srand(seed);
+    /*srand(seed);*/
 
     /*pw = reliefBB(xpl, win, num_prototypes);*/
-    result = window_relief(xpl, win, num_prototypes, win_size, &pw);
+    result = window_relief(xpl, win, num_prototypes, win_size, &pw, seed);
 
     /*w = win_get_width(win);
     h = win_get_height(win);

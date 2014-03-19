@@ -26,10 +26,11 @@ typedef struct {
  * \param m Number of prototype instances.
  * \param n The number of points in the desired window.
  * \param pw (Optional) Sorted array of the weight of each point in the domain window.
+ * \param seed (Optional) Random seed. Pass 0 to use the default value.
  * \return A window with n points.
  * \sa lcollec_memory
  */
-window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight **pw);
+window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight **pw, int seed);
 
 
 window_t *window_martins_barrera(xpl_t *xpl, window_t *domain, point_weight **pw);
