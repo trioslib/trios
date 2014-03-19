@@ -153,6 +153,7 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     }
     
     srand(seed);
+    printf("seed %d\n", seed);
     random_numbers = malloc(sizeof(int) * m);
     for (i = 0; i < m; i++) {
         random_numbers[i] = rand() % xpl->sum;
@@ -187,7 +188,7 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     
     result = win_create(domain->height, domain->width, 1);
     for (i = 0; i < n; i++) {
-        win_set_point(pw[i].i, (*pw)[i].j, 1, 1, result);
+        win_set_point(pw[i].i, pw[i].j, 1, 1, result);
     }
     *_pw = pw;
     return result;
