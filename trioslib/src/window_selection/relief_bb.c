@@ -190,6 +190,12 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     for (i = 0; i < n; i++) {
         win_set_point(pw[i].i, pw[i].j, 1, 1, result);
     }
-    *_pw = pw;
+    
+    if (_pw != NULL) {
+        *_pw = pw;
+    } else {
+        free(pw);
+    }
+    
     return result;
 }

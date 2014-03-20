@@ -27,9 +27,7 @@ int main(int argc, char *argv[]) {
     } else {
         seed = 0;
     }
-    /*srand(seed);*/
 
-    /*pw = reliefBB(xpl, win, num_prototypes);*/
     result = window_relief(xpl, win, num_prototypes, win_size, &pw, seed);
     win_write(argv[4], result);
     
