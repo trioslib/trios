@@ -33,13 +33,6 @@ int main(int argc, char *argv[]) {
     
     w = win_get_width(win);
     h = win_get_height(win);
-    result = win_create(h, w, 1);
-    for (i = 0; i < win_size; i++) {
-        win_set_point(pw[i].i, pw[i].j, 1, 1, result);
-    }
-    win_write("test.win", result);
-    
-
     for (i = 0; i < w*h; i++) {
         printf("score(i=%d, j=%d) = %f\n", pw[i].i, pw[i].j, pw[i].weight);
     }
