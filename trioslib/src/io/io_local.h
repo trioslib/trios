@@ -3,12 +3,10 @@
 
 #include "trios_apert.h"
 
-apert_t *apert_read_data(FILE *fd);
-void apert_write_data(FILE *fd, apert_t *apt);
+apert_t *apert_read_data(FILE * fd);
+void apert_write_data(FILE * fd, apert_t * apt);
 
-
-window_t *win_read_data(FILE *fd);
-void win_write_data(FILE *fd, window_t *win);
-
+window_t *win_read_data(FILE * fd);
+void win_write_data(FILE * fd, window_t * win);
 
 #endif

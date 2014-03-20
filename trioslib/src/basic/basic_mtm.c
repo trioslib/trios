@@ -25,13 +25,9 @@ mtm_t *mtm_create(int wsize, int type, unsigned int nmtm)
 	case BB:
 	case BG:{
 
-			if (!
-			    (mtm->mtm_data =
-			     (int *) malloc(sizeof(mtm_BX) * nmtm))) {
+            if (!(mtm->mtm_data = (int *)malloc(sizeof(mtm_BX) * nmtm))) {
 				free(mtm);
-				return
-				    (mtm_t *) trios_error(1,
-							  "mtm_create: memory allocation error for mtm");
+                return (mtm_t *) trios_error(1, "mtm_create: memory allocation error for mtm");
 			}
 			break;
 		}
@@ -45,10 +41,13 @@ mtm_t *mtm_create(int wsize, int type, unsigned int nmtm)
 	case WKGG2F:
 	case WKGG2C:
 	case GG3:{
-            if(!(mtm->mtm_data = (int *) malloc( sizeof(mtm_GX) * nmtm))) {
-                free ( mtm ) ;
-                return (mtm_t *)trios_error(1, "mtm_create: memory allocation error for mtm") ;
-             }
+			if (!
+			    (mtm->mtm_data =
+			     (int *)malloc(sizeof(mtm_GX) * nmtm))) {
+				free(mtm);
+				return (mtm_t *) trios_error(1,
+							     "mtm_create: memory allocation error for mtm");
+			}
 			break;
 		}
 
@@ -64,13 +63,12 @@ mtm_t *mtm_create(int wsize, int type, unsigned int nmtm)
 
 }
 
-
 void mtm_free(mtm_t * mtm)
 {
 
 	int i;
 	mtm_BX *table_BX;
-    mtm_GX *table_GX ;
+	mtm_GX *table_GX;
 
 	if (mtm == NULL)
 		return;
@@ -100,9 +98,9 @@ void mtm_free(mtm_t * mtm)
 		case WKGG2F:
 		case WKGG2C:
 		case GG3:{
-                table_GX = (mtm_GX *)mtm->mtm_data ;
-                for (i = 0; i < mtm->nmtm; i++)
-                   free( table_GX[i].wpat ) ;
+				table_GX = (mtm_GX *) mtm->mtm_data;
+				for (i = 0; i < mtm->nmtm; i++)
+					free(table_GX[i].wpat);
 				break;
 			}
 
@@ -121,30 +119,20 @@ void mtm_free(mtm_t * mtm)
 
 }
 
-
-
-
 int mtm_get_wsize(mtm_t * mtm)
 {
 	return (mtm->wsize);
 }
-
-
-
 
 int mtm_get_type(mtm_t * mtm)
 {
 	return (mtm->type);
 }
 
-
-
-
 unsigned int mtm_get_nmtm(mtm_t * mtm)
 {
 	return (mtm->nmtm);
 }
-
 
 unsigned int mtm_get_nsum(mtm_t * mtm)
 {
@@ -152,13 +140,11 @@ unsigned int mtm_get_nsum(mtm_t * mtm)
 
 }
 
-
 int mtm_get_comp_prob(mtm_t * mtm)
 {
 	return (mtm->comp_prob);
 
 }
-
 
 freq_node *mtm_get_freqlist(mtm_t * mtm_i)
 {
@@ -169,13 +155,11 @@ freq_node *mtm_get_freqlist(mtm_t * mtm_i)
 	return (p);
 }
 
-
 void mtm_set_wsize(mtm_t * mtm, int wsize)
 {
 	mtm->wsize = wsize;
 
 }
-
 
 void mtm_set_type(mtm_t * mtm, int type)
 {
@@ -183,13 +167,11 @@ void mtm_set_type(mtm_t * mtm, int type)
 
 }
 
-
 void mtm_set_nmtm(mtm_t * mtm, unsigned int nmtm)
 {
 	mtm->nmtm = nmtm;
 
 }
-
 
 void mtm_set_nsum(mtm_t * mtm, unsigned int nsum)
 {
@@ -198,14 +180,12 @@ void mtm_set_nsum(mtm_t * mtm, unsigned int nsum)
 
 }
 
-
 void mtm_set_comp_prob(mtm_t * mtm, int comp_prob)
 {
 
 	mtm->comp_prob = comp_prob;
 
 }
-
 
 int mtm_BX_insert(mtm_t * mtm, int index1, int wzip, unsigned int *wpat,
 		  int label, unsigned int fq, unsigned int fq1)
@@ -214,12 +194,11 @@ int mtm_BX_insert(mtm_t * mtm, int index1, int wzip, unsigned int *wpat,
 	freq_node *freqlist, *freqnode;
 	int j;
 
-
 	p = (mtm_BX *) mtm->mtm_data;
 
 	freqlist = (freq_node *) mtm->mtm_freq;
 
-	p[index1].wpat = (unsigned int *) malloc(sizeof(int) * wzip);
+	p[index1].wpat = (unsigned int *)malloc(sizeof(int) * wzip);
 	if (!p[index1].wpat) {
 		return trios_error(1, "Memory allocation failed.");
 	}
@@ -245,21 +224,19 @@ int mtm_BX_insert(mtm_t * mtm, int index1, int wzip, unsigned int *wpat,
 	return (1);
 }
 
-
 /*
      -------------------------------------------
      FUNCTION: MTM_GX_insert
      -------------------------------------------
 */
-int                       /*+ Purpose: inserts a minterm in the table      +*/
-  mtm_GX_insert(
-    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/
-    int index1,            /*+ In: insert position                          +*/
-    int wsize,            /*+ In: wpat size in bytes                       +*/
-    int *wpat,           /*+ In: w-pattern                                +*/
-    int label,            /*+ In: label of the inserted minterm            +*/
-    unsigned int fq       /*+ In: frequency of wpat                        +*/
-)
+int /*+ Purpose: inserts a minterm in the table      + */ mtm_GX_insert(
+									       mtm_t * mtm,	/*+ In: pointer to mtm structure                 + */
+									       int index1,	/*+ In: insert position                          + */
+									       int wsize,	/*+ In: wpat size in bytes                       + */
+									       int *wpat,	/*+ In: w-pattern                                + */
+									       int label,	/*+ In: label of the inserted minterm            + */
+									       unsigned int fq	/*+ In: frequency of wpat                        + */
+    )
 /*+ Return: 1 on success 0 on failure                                      +*/
 {
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
@@ -273,46 +250,45 @@ int                       /*+ Purpose: inserts a minterm in the table      +*/
 /*  Date: Thu Aug 19 1999                                                   */
 /*  Mod: changes regarding frequency information                            */
 
-  mtm_GX *p ;
-  freq_node *freqlist, *freqnode ;
-  int j ;
+	mtm_GX *p;
+	freq_node *freqlist, *freqnode;
+	int j;
 
-  p = (mtm_GX *)mtm->mtm_data ;
+	p = (mtm_GX *) mtm->mtm_data;
 
-  freqlist = (freq_node *) mtm->mtm_freq ;
+	freqlist = (freq_node *) mtm->mtm_freq;
 
-  p[index1].wpat = (int *)malloc(sizeof(int)*wsize) ;
-  if(!p[index1].wpat) {
-    return trios_error(1, "Memory allocation failed.") ;
-  }
-
+	p[index1].wpat = (int *)malloc(sizeof(int) * wsize);
+	if (!p[index1].wpat) {
+		return trios_error(1, "Memory allocation failed.");
+	}
 #ifdef _DEBUG_
-trios_debug("index=%d", index1) ;
-trios_debug("mtm_gx_insert ") ;
-for (j=0;j<wsize;j++) {
-  trios_debug("wpat[%d]=%d", j, p[index1].wpat[j]) ;
-}
-trios_debug("with label = %d", label) ;
+	trios_debug("index=%d", index1);
+	trios_debug("mtm_gx_insert ");
+	for (j = 0; j < wsize; j++) {
+		trios_debug("wpat[%d]=%d", j, p[index1].wpat[j]);
+	}
+	trios_debug("with label = %d", label);
 #endif
 
-  for ( j = 0; j < wsize; j++) {
-    p[index1].wpat[j] = wpat[j] ;
-  }
+	for (j = 0; j < wsize; j++) {
+		p[index1].wpat[j] = wpat[j];
+	}
 
-  p[index1].label = label ;  /* Here we removed a cast to char */
-  p[index1].fq = fq ;        /* Aug 19, 1999 */
+	p[index1].label = label;	/* Here we removed a cast to char */
+	p[index1].fq = fq;	/* Aug 19, 1999 */
 
-  if((freqnode = freq_node_create(label, 1))==NULL) {
-    return trios_error(MSG, "mtm_insert: freq_node_create() failed.") ;
-  }
+	if ((freqnode = freq_node_create(label, 1)) == NULL) {
+		return trios_error(MSG,
+				   "mtm_insert: freq_node_create() failed.");
+	}
 
-  set_freq(freqnode, &freqlist) ; /* Insert the node to the list */
-  mtm->mtm_freq = freqlist ;
-  mtm->nsum = mtm->nsum + fq ;
+	set_freq(freqnode, &freqlist);	/* Insert the node to the list */
+	mtm->mtm_freq = freqlist;
+	mtm->nsum = mtm->nsum + fq;
 
-  return(1) ;
+	return (1);
 }
-
 
 /*
      -------------------------------------------
@@ -320,50 +296,42 @@ trios_debug("with label = %d", label) ;
      -------------------------------------------
 */
 
-int *          /*+ Purpose: Get a pattern from the table                  +*/
-  mtm_GX_get_pattern(
-    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/
-    int index1             /*+ In: pattern position                         +*/
-)
+int *				/*+ Purpose: Get a pattern from the table                  + */
+mtm_GX_get_pattern(mtm_t * mtm,	/*+ In: pointer to mtm structure                 + */
+		   int index1	/*+ In: pattern position                         + */
+    )
 /*+ Return: A char pointer to a pattern                                    +*/
 {
 
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Thu Jan  8 1998                                                   */
 
-  mtm_GX *p ;
+	mtm_GX *p;
 
-  p = (mtm_GX *)mtm->mtm_data ;
+	p = (mtm_GX *) mtm->mtm_data;
 
-  return(p[index1].wpat) ;
+	return (p[index1].wpat);
 
 }
 
-
-
-
-
-int             /*+ Purpose: Get the label of a  pattern from the table    +*/
-  mtm_GX_get_label(
-    mtm_t *mtm,           /*+ In: pointer to mtm structure                 +*/
-    int index1             /*+ In: pattern position                         +*/
-)
+int /*+ Purpose: Get the label of a  pattern from the table    + */
+mtm_GX_get_label(
+			       mtm_t * mtm,	/*+ In: pointer to mtm structure                 + */
+			       int index1	/*+ In: pattern position                         + */
+    )
 /*+ Return: the label of the pattern at the given position                 +*/
 {
 
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Thu Jan  8 1998                                                   */
 
-  mtm_GX *p ;
+	mtm_GX *p;
 
-  p = (mtm_GX *)mtm->mtm_data ;
+	p = (mtm_GX *) mtm->mtm_data;
 
-  return(p[index1].label) ;
+	return (p[index1].label);
 
 }
-
-
-
 
 int mtm_sep(mtm_t * mtm_i, int k, mtm_t ** mtm_o1, mtm_t ** mtm_o2)
 {
@@ -372,7 +340,6 @@ int mtm_sep(mtm_t * mtm_i, int k, mtm_t ** mtm_o1, mtm_t ** mtm_o2)
 	int wsize, wzip, type, comp_prob;
 	unsigned int nmtm_i, nmtm_1, nmtm_2;
 	int i;
-
 
 	type = mtm_get_type(mtm_i);
 	wsize = mtm_get_wsize(mtm_i);
@@ -434,7 +401,6 @@ int mtm_sep(mtm_t * mtm_i, int k, mtm_t ** mtm_o1, mtm_t ** mtm_o2)
 	return (1);
 }
 
-
 unsigned int mtm_count(mtm_t * mtm_i, int k)
 {
 
@@ -453,7 +419,6 @@ unsigned int mtm_count(mtm_t * mtm_i, int k)
 	return (counter);
 }
 
-
 unsigned int mtm_index_by_freq_count(mtm_t * mtm_i, int *indexes)
 {
 	unsigned int i, freqmax, nlabels, fnow, flast, fold, nmtm;
@@ -469,7 +434,7 @@ unsigned int mtm_index_by_freq_count(mtm_t * mtm_i, int *indexes)
 	p = mtm_get_freqlist(mtm_i);
 	nmtm = mtm_get_nmtm(mtm_i);
 
-	indexes = (unsigned int *) malloc(sizeof(int) * nmtm);
+	indexes = (unsigned int *)malloc(sizeof(int) * nmtm);
 	if (!indexes) {
 		return trios_error(1,
 				   "mtm_index_by_freq: Memory allocation failed for indexes.");
@@ -487,7 +452,6 @@ unsigned int mtm_index_by_freq_count(mtm_t * mtm_i, int *indexes)
 
 	p = p_last = qlist;	/* release pointer */
 	q = NULL;
-
 
 	/* search list for label 0 */
 
@@ -577,7 +541,6 @@ unsigned int mtm_index_by_freq_count(mtm_t * mtm_i, int *indexes)
 	return (1);
 }
 
-
 int mtm_compute_mae(mtm_t * mtm, double *mae_error)
 {
 	mtm_BX *q;
@@ -594,7 +557,6 @@ int mtm_compute_mae(mtm_t * mtm, double *mae_error)
 	   MAE<psi> = sum { Px.px : psi(x)=0 } + sum { Px.(1-px) : psi(x)=1 } 
 
 	   We are using fq(x), fq1(x) and nsum = sum {fq(x) }
-
 
 	   Let FMAE = sum { fq1(x) : psi(x)=0 } + sum { fq(x)-fq1(x) : psi(x)=1 }
 
@@ -633,11 +595,10 @@ int mtm_compute_mae(mtm_t * mtm, double *mae_error)
 		}
 	}
 
-	*mae_error = (double) (FMAE) / (double) (mtm->nsum);
+	*mae_error = (double)(FMAE) / (double)(mtm->nsum);
 
 	return (1);
 }
-
 
 int mtm_search_wpat_BX(unsigned int nmtm, mtm_t * mtm, unsigned int *wpat,
 		       int wzip)
@@ -657,7 +618,7 @@ int mtm_search_wpat_BX(unsigned int nmtm, mtm_t * mtm, unsigned int *wpat,
 	p = (mtm_BX *) mtm->mtm_data;
 
 	while (low <= high) {
-		middle = (int) ((low + high) / 2);
+		middle = (int)((low + high) / 2);
 #ifdef _DEBUG_
 		trios_debug("middle = %d", middle);
 #endif

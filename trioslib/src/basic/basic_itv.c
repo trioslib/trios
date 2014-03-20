@@ -22,7 +22,6 @@ itv_get_nitv(
 	}
 }
 
-
 /*
      -------------------------------------------
      FUNCTION: itv_get_wsize
@@ -37,8 +36,6 @@ itv_get_wsize(
 {
 	return (itv->wsize);
 }
-
-
 
 /*
      -------------------------------------------
@@ -56,8 +53,6 @@ int				/*+ Purpose: give the pointer to the header of the list
 	return (itv->head);
 }
 
-
-
 /*
      -------------------------------------------
      FUNCTION: itv_get_deflabel
@@ -72,7 +67,6 @@ itv_get_deflabel(
 {
 	return (itv->deflabel);
 }
-
 
 /*
      -------------------------------------------
@@ -89,8 +83,6 @@ itv_get_type(
 	return (itv->type);
 }
 
-
-
 /*
      -------------------------------------------
      FUNCTION: itv_get_wzip
@@ -106,7 +98,6 @@ itv_get_wzip(
 	return (itv->wzip);
 }
 
-
 /*
      -------------------------------------------
      FUNCTION: itv_get_maxlabel
@@ -121,8 +112,6 @@ itv_get_maxlabel(
 {
 	return (itv->maxlabel);
 }
-
-
 
 /*
      -------------------------------------------
@@ -156,8 +145,6 @@ itv_set_wsize(
 	itv->wsize = wsize;
 }
 
-
-
 /*
      -------------------------------------------
      FUNCTION: itv_set_head
@@ -190,7 +177,6 @@ itv_set_deflabel(
 	itv->deflabel = deflabel;
 }
 
-
 /*
      -------------------------------------------
      FUNCTION: itv_set_type
@@ -207,8 +193,6 @@ itv_set_type(
 	itv->type = type;
 }
 
-
-
 /*
      -------------------------------------------
      FUNCTION: itv_set_wzip
@@ -224,7 +208,6 @@ itv_set_wzip(
 {
 	itv->wzip = wzip;
 }
-
 
 /*
      -------------------------------------------
@@ -243,8 +226,6 @@ itv_set_maxlabel(
 
 }
 
-
-
 /*
      -------------------------------------------
      FUNCTION: itv_create
@@ -260,7 +241,6 @@ itv_create(int wsize,		/*+ In: w-pattern size                                 + 
 {
 	itv_t *itv;
 	int wzip;
-
 
 	itv = (itv_t *) malloc(sizeof(itv_t));
 	if (itv == NULL) {
@@ -357,8 +337,6 @@ itv_nodebx_free(
 	free(p);
 }
 
-
-
 itv_GX *			/*+ Purpose: create an interval of GX type              + */
 itv_nodegx_create(int wsize	/*+ In: size of a w-pattern                   + */
     )
@@ -374,13 +352,13 @@ itv_nodegx_create(int wsize	/*+ In: size of a w-pattern                   + */
 		return (itv_GX *) trios_error(1, "Memory allocation failed.");
 	}
 
-	p->A = (char *) malloc(sizeof(char) * wsize);
+	p->A = (char *)malloc(sizeof(char) * wsize);
 	if (p->A == NULL) {
 		free(p);
 		return (itv_GX *) trios_error(1, "Memory allocation failed.");
 	}
 
-	p->B = (char *) malloc(sizeof(char) * wsize);
+	p->B = (char *)malloc(sizeof(char) * wsize);
 	if (p->B == NULL) {
 		free(p->A);
 		free(p);
@@ -396,7 +374,6 @@ itv_nodegx_create(int wsize	/*+ In: size of a w-pattern                   + */
 
 }
 
-
 itv_BX *			/*+ Purpose: create an interval of BX type              + */
 itv_nodebx_create(int wzip	/*+ In: compacted size of w-pattern           + */
     )
@@ -409,13 +386,13 @@ itv_nodebx_create(int wzip	/*+ In: compacted size of w-pattern           + */
 		return (itv_BX *) trios_error(1, "Memory allocation failed.");
 	}
 
-	p->A = (unsigned int *) malloc(sizeof(int) * wzip);
+	p->A = (unsigned int *)malloc(sizeof(int) * wzip);
 	if (p->A == NULL) {
 		free(p);
 		return (itv_BX *) trios_error(1, "Memory allocation failed.");
 	}
 
-	p->B = (unsigned int *) malloc(sizeof(int) * wzip);
+	p->B = (unsigned int *)malloc(sizeof(int) * wzip);
 	if (p->B == NULL) {
 		free(p->A);
 		free(p);
@@ -445,8 +422,6 @@ itv_nodegx_free(
 	}
 	free(p);
 }
-
-
 
 /*
      -------------------------------------------
@@ -478,10 +453,6 @@ itvbx_set(
 	p->next = next;
 
 }
-
-
-
-
 
 /*
      -------------------------------------------
@@ -516,8 +487,6 @@ itv_dimension(
 	return (dim);
 }
 
-
-
 /*
      -------------------------------------------
      FUNCTION: itv_equal
@@ -544,12 +513,6 @@ int /*+ Purpose: check if two intervals are identical          + */ itv_equal(
 
 }
 
-
-
-
-
-
-
 /*
      -------------------------------------------
      FUNCTION: itv_and
@@ -567,10 +530,9 @@ itv_and(itv_BX * itv1,		/*+ In: fisrt interval                              + */
 	itv_BX *itv;
 	int i;
 
-
 	itv = itv_nodebx_create(wzip);
 	if (!itv) {
-		(void) trios_error(MSG, "itv_and: itv_nodebx_create() failed.");
+		(void)trios_error(MSG, "itv_and: itv_nodebx_create() failed.");
 		return ((itv_BX *) (-1));
 	}
 
@@ -585,7 +547,6 @@ itv_and(itv_BX * itv1,		/*+ In: fisrt interval                              + */
 
 	return (itv);
 }
-
 
 /*
      -------------------------------------------
@@ -619,8 +580,6 @@ itv_group(itv_BX * itv1,	/*+ In: first interval                              + *
 	return (itv);
 }
 
-
-
 /*
      -------------------------------------------
      FUNCTION: itv_select
@@ -652,18 +611,18 @@ itv_select(itv_t * itv,		/*+ In/Out: interval set                            + *
 	if ((type == BB) || (type == BG)) {
 
 		p1 = (itv_BX *) itv->head;
-		itv->head = (int *) NULL;
+		itv->head = (int *)NULL;
 
 		while (p1) {
 			tmp = p1->next;
 			if (p1->label == label) {
 				p1->next = (itv_BX *) itv_new->head;
-				itv_new->head = (int *) p1;
+				itv_new->head = (int *)p1;
 				itv_new->nitv++;
 				itv->nitv--;
 			} else {
 				p1->next = (itv_BX *) itv->head;
-				itv->head = (int *) p1;
+				itv->head = (int *)p1;
 			}
 			p1 = tmp;
 		}
@@ -699,9 +658,6 @@ itv_select(itv_t * itv,		/*+ In/Out: interval set                            + *
 
 }
 
-
-
-
 /*
      -------------------------------------------
      FUNCTION: itv_sort
@@ -716,7 +672,6 @@ int /*+ Purpose: sort intervals according to its dimension + */ itv_sort(
 	itv_BX **p_vector;
 	itv_BX *p, *tmp;
 	int i, dim, wsize, wzip;
-
 
 	wsize = itv_get_wsize(itv);
 	wzip = size_of_zpat(wsize);
@@ -755,15 +710,13 @@ int /*+ Purpose: sort intervals according to its dimension + */ itv_sort(
 				p = p->next;
 			}
 			p->next = (itv_BX *) itv->head;
-			itv->head = (int *) p_vector[i];
+			itv->head = (int *)p_vector[i];
 		}
 
 	}
 
 	return (1);
 }
-
-
 
 /*
      -------------------------------------------
@@ -780,7 +733,6 @@ int /*+ Purpose: check if an interval contains a w-pattern     + */ itv_contain(
 {
 	int i;
 
-
 	for (i = 0; i < wzip; i++) {
 
 		if ((wpat[i] & p_itv->A[i]) != p_itv->A[i]) {
@@ -793,11 +745,6 @@ int /*+ Purpose: check if an interval contains a w-pattern     + */ itv_contain(
 
 	return (1);
 }
-
-
-
-
-
 
 /*
      -------------------------------------------
@@ -857,7 +804,6 @@ int				/*+ Purpose: given an interval set and a label "old_label",
 	return (1);
 }
 
-
 /*
      -------------------------------------------
      FUNCTION: itv_list_contain
@@ -903,7 +849,6 @@ int				/*+ Purpose: check if some interval of a list contains a
 		return (label);
 	}
 }
-
 
 void /*+ Purpose: set some data  of an interval                        + */
 itvgx_set(
@@ -954,12 +899,11 @@ double /*+ Purpose: compute the size of a gray-scale interval + */ itvgx_size(
 
 	size = 1;
 	for (i = 0; i < wsize; i++) {
-		size = size * ((double) p->B[i] - (double) p->A[i] + 1.0);
+		size = size * ((double)p->B[i] - (double)p->A[i] + 1.0);
 	}
 
 	return (size);
 }
-
 
 /*
      -------------------------------------------
@@ -981,7 +925,7 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 /*+ Return: Pointer to ITV structure on success, NULL on failure           +*/
 {
 	int wsize, wzip, i, cx, cy, count;
-    char *Ag, *Bg;
+	char *Ag, *Bg;
 	unsigned int *A, *B;
 	itv_t *itv;
 	itv_BX *p;
@@ -998,11 +942,11 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 	case BB:
 	case BG:
 		/* allocates space for the patterns of the interval [A,B] */
-		if ((A = (unsigned int *) malloc(sizeof(int) * wzip)) == NULL) {
+		if ((A = (unsigned int *)malloc(sizeof(int) * wzip)) == NULL) {
 			return (itv_t *) trios_error(1,
 						     "itv_gen_itv: memory allocation error.");
 		}
-		if ((B = (unsigned int *) malloc(sizeof(int) * wzip)) == NULL) {
+		if ((B = (unsigned int *)malloc(sizeof(int) * wzip)) == NULL) {
 			return (itv_t *) trios_error(1,
 						     "itv_gen_itv: memory allocation error.");
 		}
@@ -1065,7 +1009,7 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 		/* the itv_t structure will contain, actually, just one interval */
 		p = itv_nodebx_create(wzip);
 		itvbx_set(p, A, B, wzip, label, (itv_BX *) (itv->head));
-		itv->head = (int *) p;
+		itv->head = (int *)p;
 		itv->nitv = 1;
 
 		free(A);
@@ -1075,18 +1019,18 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 
 	case GG:
 		/* allocates space for the patterns of the interval [A,B] */
-        if ((Ag = (char *) malloc(sizeof(char) * wsize)) == NULL) {
+		if ((Ag = (char *)malloc(sizeof(char) * wsize)) == NULL) {
 			return (itv_t *) trios_error(1,
 						     "itv_gen_itv: memory allocation error.");
 		}
-        if ((Bg = (char *) malloc(sizeof(char) * wsize)) == NULL) {
+		if ((Bg = (char *)malloc(sizeof(char) * wsize)) == NULL) {
 			return (itv_t *) trios_error(1,
 						     "itv_gen_itv: memory allocation error.");
 		}
 
 		for (i = 0; i < wsize; i++) {
 			Ag[i] = 0;
-            Bg[i] = (char) 255;
+			Bg[i] = (char)255;
 		}
 
 		/* create structure to hold the interval */
@@ -1101,7 +1045,7 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 		itvgx_set(pg, Ag, Bg, wsize, label, 0, 0, NULL,
 			  (itv_GX *) (itv->head));
 		pg->size = itvgx_size(pg, wsize);	/* added on Oct 31, 2000 - Nina */
-		itv->head = (int *) pg;
+		itv->head = (int *)pg;
 		itv->nitv = 1;
 
 		free(Ag);
@@ -1110,12 +1054,12 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 
 	case WKC:
 	case WKF:
-        return (itv_t *) trios_error(MSG, "Operator not supported");
+		return (itv_t *) trios_error(MSG, "Operator not supported");
 		/*
 		   #ifdef _DEBUG_
 		   trios_debug("itv_gen_itv: WKC or WKF entered") ;
-           #endif*/
-		   /* allocates space for the patterns of the interval [A,B] *//*
+		   #endif */
+		/* allocates space for the patterns of the interval [A,B] *//*
 		   if((Ag = (char *)malloc(sizeof(char)*wsize)) == NULL) {
 		   return (itv_t *)trios_error(1, "itv_gen_itv: memory allocation error.") ;
 		   }
@@ -1132,19 +1076,19 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 		   for(i=0; i<wsize; i++) {
 		   trios_debug("Ag[%d] = %d, Bg[%d] = %d", i, Ag[i], i, Bg[i]) ;
 		   }
-           #endif*/
+		   #endif */
 
-		   /* create structure to hold the interval *//*
+		/* create structure to hold the interval *//*
 		   if(NULL==(itv = itv_create(wsize, map_type, def_label))) {
 		   win_free(win) ;
 		   return (itv_t *)trios_error(MSG, "itv_gen_itv: itv_create() failed.") ;
-           }*/
+		   } */
 
-           /* the itv_t structure will contain, actually, just one interval
+		/* the itv_t structure will contain, actually, just one interval
 
 		   pg = itv_nodegx_create(wsize) ;
 		   itvgx_set(pg, Ag, Bg, wsize, label, 0, 0, NULL, (itv_GX *)(itv->head)) ;
-           pg->size = itvgx_size(pg, wsize) ;*/ /* added on Oct 31, 2000 - Nina */ /*
+		   pg->size = itvgx_size(pg, wsize) ; *//* added on Oct 31, 2000 - Nina *//*
 		   itv->head = (int *)pg ;
 		   itv->nitv = 1 ;
 
@@ -1165,8 +1109,6 @@ itv_gen_itv(window_t * win,	/*+ In: window                                      
 
 }
 
-
-
 /*
      -------------------------------------------
      FUNCTION: itv_consistency
@@ -1186,7 +1128,6 @@ int				/*+ Given a set of intervals and a set of classified
 
 	int i, wzip;
 	mtm_BX *table_BX;
-
 
 	wzip = size_of_zpat(itv_get_wsize(itv));
 

@@ -38,12 +38,12 @@ xpl_t *collec_WKF(unsigned char *p1, unsigned char *p2, unsigned char *p3,
 xpl_t *collec_WKC(unsigned char *p1, unsigned char *p2, unsigned char *p3,
 		  int *offset, int wsize, int npixels, int ki, int vplace);
 
-
-
-xpl_t *lcollecWK_memory(imgset_t *imgset, window_t *win, xpl_t *xpl, apert_t *apt) {
+xpl_t *lcollecWK_memory(imgset_t * imgset, window_t * win, xpl_t * xpl,
+			apert_t * apt)
+{
 	unsigned char *c1, *c2, *c3;
-    int k;
-    int ko, ki, vplace;
+	int k;
+	int ko, ki, vplace;
 	int type;
 	int *offset;
 	int width, wsize, npixels;
@@ -60,11 +60,11 @@ xpl_t *lcollecWK_memory(imgset_t *imgset, window_t *win, xpl_t *xpl, apert_t *ap
 	/*  will be scanned.                                       */
 	if (imgset_get_grpsize(imgset) < 2) {
 		imgset_free(imgset);
-		return (xpl_t *)trios_error(1,
-				   "Each image group must contain at leat two image files.");
+		return (xpl_t *) trios_error(1,
+					     "Each image group must contain at leat two image files.");
 	}
 
-    /* If window has multiple bands, force it to ONE band only */
+	/* If window has multiple bands, force it to ONE band only */
 	/* Users will be warned about this fact                    */
 	if (win_get_nbands(win) > 1) {
 		trios_warning("Window has %d bands.", win_get_nbands(win));
@@ -92,7 +92,8 @@ xpl_t *lcollecWK_memory(imgset_t *imgset, window_t *win, xpl_t *xpl, apert_t *ap
 
 	offset = (int *)malloc(sizeof(int) * wsize);
 	if (offset == NULL) {
-		return (xpl_t *) trios_error(MSG, "lcollec: offset_create() failed.");
+		return (xpl_t *) trios_error(MSG,
+					     "lcollec: offset_create() failed.");
 	}
 
 	/* if input example collection is specified then read it;
@@ -172,7 +173,7 @@ xpl_t *lcollecWK_memory(imgset_t *imgset, window_t *win, xpl_t *xpl, apert_t *ap
 	/* --------------------------------------------------------------------- */
 
 	free(offset);
-	
+
 	return xpl;
 
  END_lcollec:
@@ -192,9 +193,9 @@ xpl_t *lcollecWK_memory(imgset_t *imgset, window_t *win, xpl_t *xpl, apert_t *ap
 
 }
 
-
 int lcollecWK(char *fname_i1, char *fname_i2, char *fname_i3, int ki, int ko,
-	      int vplace, char *o1_fname) {
+	      int vplace, char *o1_fname)
+{
 /* author: Nina S. Tomita and R. Hirata Jr. (nina@ime.usp.br)               */
 /* date: Mon Oct 21 1996                                                    */
 
@@ -243,7 +244,6 @@ int lcollecWK(char *fname_i1, char *fname_i2, char *fname_i3, int ki, int ko,
 		imgset_free(imgset);
 		return trios_error(MSG, "lcollec: win_read() failed.");
 	}
-
 #ifdef _DEBUG_
 	trios_debug("Window reading : done.");
 #endif
@@ -268,7 +268,7 @@ int lcollecWK(char *fname_i1, char *fname_i2, char *fname_i3, int ki, int ko,
 			return trios_error(MSG, "lcollec: xpl_read() failed.");
 		}
 	}
-	
+
 	xpl = lcollecWK_memory(imgset, win, xpl, apt);
 	if (xpl == NULL) {
 		imgset_free(imgset);
@@ -301,8 +301,6 @@ int lcollecWK(char *fname_i1, char *fname_i2, char *fname_i3, int ki, int ko,
 
 	return (1);
 }
-
-
 
 xpl_t *collec_WKF(unsigned char *p1, unsigned char *p2, unsigned char *p3,
 		  int *offset, int wsize, int npixels, int ki, int ko,

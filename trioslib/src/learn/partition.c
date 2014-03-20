@@ -18,13 +18,14 @@
  * \param LIMIT Threshold.
  * \return The value corresponding to a direction (0 .. window size).
  */
-int which_var(mtm_t * mtm, int LIMIT) {
+int which_var(mtm_t * mtm, int LIMIT)
+{
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  Date: Tue Apr 20 1999                                                   */
 	mtm_BX *q;
 	int aux, i, j, mdiv2, var, min_ct, ct, mask_i;
 
-    mdiv2 = mtm->nmtm / 2;	/* one half of examples */
+	mdiv2 = mtm->nmtm / 2;	/* one half of examples */
 
 	q = (mtm_BX *) mtm->mtm_data;	/* pointer to mtm examples */
 
@@ -52,7 +53,6 @@ int which_var(mtm_t * mtm, int LIMIT) {
 		}
 	}
 
-
 	return (var);
 }
 
@@ -66,7 +66,9 @@ int which_var(mtm_t * mtm, int LIMIT) {
  * \param noper Next partition to be built (at the end this contains the total number of partitions).
  * \return 1 on success, 0 on failure.
  */
-int	mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,	itv_t ** ITV, int *noper) {
+int mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,
+	     itv_t ** ITV, int *noper)
+{
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Tue Apr 20 1999                                                   */
 	itv_t *itv0, *itv1;
@@ -76,7 +78,7 @@ int	mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,	itv_t ** ITV
 	if (mtm->nmtm == 0) {
 		return (1);
 	}
-	if (*noper > MAX_PARTITIONS-1) {
+	if (*noper > MAX_PARTITIONS - 1) {
 		return trios_error(1,
 				   "Insufficient buffer size. Please contact maintenance people.");
 	}
@@ -100,7 +102,7 @@ int	mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,	itv_t ** ITV
 			return trios_error(MSG,
 					   "mtm_part: call to sep_mtm() failed.");
 		}
-        mtm_free(mtm);
+		mtm_free(mtm);
 
 		if (!mtm_part(mtm0, itv0, threshold, MTM, ITV, noper)) {
 			return trios_error(MSG,
@@ -115,7 +117,6 @@ int	mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,	itv_t ** ITV
 	return (1);
 }
 
-
 /*!
  * Separates the set of classified examples in disjoint subsets, according to the decomposition variable.
  * \param mtm Set of classified examples.
@@ -125,16 +126,15 @@ int	mtm_part(mtm_t * mtm, itv_t * itv, int threshold, mtm_t ** MTM,	itv_t ** ITV
  * \param mtm1 Examples with var=1.
  * \return 1 on success, 0 on failure.
  */
-int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1) {
+int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1)
+{
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Wed Jul  8 1998                                                   */
-
 
 	mtm_BX *q, *q0, *q1;
 	unsigned int nmtm, count;
 	int j, j0, j1, aux, mask_i, wsize;
 	freq_node *fq, *freqlist1 = NULL, *freqlist0 = NULL;
-
 
 	q0 = q1 = NULL;
 	q = (mtm_BX *) mtm->mtm_data;
@@ -153,14 +153,14 @@ int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1) {
 
 	/* create subsets for the examples */
 	*mtm0 = *mtm1 = NULL;
-    if (nmtm - count > 0) {
+	if (nmtm - count > 0) {
 		*mtm0 = mtm_create(wsize, BB, nmtm - count);
 		if (*mtm0 == NULL) {
 			return (0);
 		}
 		q0 = (mtm_BX *) (*mtm0)->mtm_data;
 	}
-    if (count > 0) {
+	if (count > 0) {
 		*mtm1 = mtm_create(wsize, BB, count);
 		if (*mtm1 == NULL) {
 			return trios_error(MSG, "mtm_sep: mtm_create() failed");
@@ -191,8 +191,8 @@ int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1) {
 			}
 			q1[j1].wpat = q[j].wpat;
 			q1[j1].label = q[j].label;
-            q1[j1].fq = q[j].fq;
-            q1[j1].fq1 = q[j].fq1;
+			q1[j1].fq = q[j].fq;
+			q1[j1].fq1 = q[j].fq1;
 			q[j].wpat = NULL;
 			j1++;
 		} else {
@@ -202,8 +202,8 @@ int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1) {
 			}
 			q0[j0].wpat = q[j].wpat;
 			q0[j0].label = q[j].label;
-            q0[j0].fq = q[j].fq;
-            q0[j0].fq1 = q[j].fq1;
+			q0[j0].fq = q[j].fq;
+			q0[j0].fq1 = q[j].fq1;
 			q[j].wpat = NULL;
 			j0++;
 		}
@@ -215,7 +215,6 @@ int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1) {
 	return (1);
 }
 
-
 /*!
  * Given an interval, set the indicated variable as a constant (thus creating two subintervals).
  * \param itv Input interval.
@@ -224,7 +223,8 @@ int sep_mtm(mtm_t * mtm, itv_t * itv, int var, mtm_t ** mtm0, mtm_t ** mtm1) {
  * \param itv1 Second output interval.
  * \return 1 on success, 0 on failure.
  */
-int itv_setvar(itv_t * itv,	int var, itv_t ** itv0,	itv_t ** itv1) {
+int itv_setvar(itv_t * itv, int var, itv_t ** itv0, itv_t ** itv1)
+{
 
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Wed Jul  8 1998                                      */
@@ -244,10 +244,10 @@ int itv_setvar(itv_t * itv,	int var, itv_t ** itv0,	itv_t ** itv1) {
 	wzip = size_of_zpat(itv->wsize);
 
 	/* allocates space for the patterns of the interval [A,B] */
-	if ((A = (unsigned int *) malloc(sizeof(int) * wzip)) == NULL) {
+	if ((A = (unsigned int *)malloc(sizeof(int) * wzip)) == NULL) {
 		return trios_error(1, "itv_setvar: memory allocation error.");
 	}
-	if ((B = (unsigned int *) malloc(sizeof(int) * wzip)) == NULL) {
+	if ((B = (unsigned int *)malloc(sizeof(int) * wzip)) == NULL) {
 		return trios_error(1, "itv_setvar: memory allocation error.");
 	}
 
@@ -267,10 +267,9 @@ int itv_setvar(itv_t * itv,	int var, itv_t ** itv0,	itv_t ** itv1) {
 	/* the itv_t structure will contain, actually, just one interval */
 	q = itv_nodebx_create(wzip);
 	itvbx_set(q, p->A, B, wzip, 1, (itv_BX *) (I0->head));
-	I0->head = (int *) q;
+	I0->head = (int *)q;
 	I0->nitv = 1;
 	*itv0 = I0;
-
 
 	A[var / 32] = A[var / 32] | bitmsk[var % 32];
 
@@ -282,7 +281,7 @@ int itv_setvar(itv_t * itv,	int var, itv_t ** itv0,	itv_t ** itv1) {
 	/* the itv_t structure will contain, actually, just one interval */
 	q = itv_nodebx_create(wzip);
 	itvbx_set(q, A, p->B, wzip, 1, (itv_BX *) (I1->head));
-	I1->head = (int *) q;
+	I1->head = (int *)q;
 	I1->nitv = 1;
 	*itv1 = I1;
 
@@ -291,8 +290,6 @@ int itv_setvar(itv_t * itv,	int var, itv_t ** itv0,	itv_t ** itv1) {
 
 	return (1);
 }
-
-
 
 int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 		    char *itv_pref, int *n_itv)
@@ -342,7 +339,6 @@ int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 
 	 */
 
-
 	noper = 0;
 	for (i = 0; i < MAX_PARTITIONS; i++) {
 		mtm_list[i] = NULL;
@@ -359,16 +355,14 @@ int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 	mtm = NULL;
 	start_itv = NULL;
 
-
 #ifdef _DEBUG_
 	trios_debug("Separating examples: done.");
 
 	for (i = 0; i < noper; i++) {
-        itv_BX *p = (itv_BX *) itv_list[i]->head;
+		itv_BX *p = (itv_BX *) itv_list[i]->head;
 		trios_debug("itv_list[%d]=[%x,%x]\n", i, p->A[0], p->B[0]);
 	}
 #endif
-
 
 	*n_itv = noper;
 
@@ -390,7 +384,6 @@ int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 					   fname);
 		}
 		itv_free(itv_list[i]);
-
 
 		/* write the i+1-th mtm subset */
 		sprintf(fname, "%s%d%s", mtm_pref, i + 1, ".mtm");
@@ -415,59 +408,65 @@ int lpartition_disk(char *fname_i, int itv_type, int threshold, char *mtm_pref,
 	return (1);
 }
 
-int lpartition_memory(window_t * win, mtm_t * __mtm, int itv_type, int threshold,
-		      mtm_t *** _mtm_out, itv_t *** _itv_out, int *n_itv)
+int lpartition_memory(window_t * win, mtm_t * __mtm, int itv_type,
+		      int threshold, mtm_t *** _mtm_out, itv_t *** _itv_out,
+		      int *n_itv)
 {
-    int r;
-    int i, j, noper, wzip;
-    char temp[100];
-    window_t *tt;
-    mtm_t **mtm_out, *mtm;
-    itv_t **itv_out, *start_itv;
+	int r;
+	int i, j, noper, wzip;
+	char temp[100];
+	window_t *tt;
+	mtm_t **mtm_out, *mtm;
+	itv_t **itv_out, *start_itv;
 
-    mtm = mtm_create(__mtm->wsize, __mtm->type, __mtm->nmtm);
-    mtm->nsum = __mtm->nsum;
-    for (i = 0; i < mtm->nmtm; i++) {
-        ((mtm_BX *)mtm->mtm_data)[i].fq = ((mtm_BX *)__mtm->mtm_data)[i].fq;
-        ((mtm_BX *)mtm->mtm_data)[i].fq1 = ((mtm_BX *)__mtm->mtm_data)[i].fq1;
-        ((mtm_BX *)mtm->mtm_data)[i].label = ((mtm_BX *)__mtm->mtm_data)[i].label;
-        mtm->comp_prob = __mtm->comp_prob;
-        wzip = size_of_zpat(mtm_get_wsize(__mtm));
-        trios_malloc(((mtm_BX *)mtm->mtm_data)[i].wpat, wzip * sizeof(unsigned int), int, "Error copying mtm");
-        for (j = 0; j < wzip; j++) {
-            ((mtm_BX *)mtm->mtm_data)[i].wpat[j] = ((mtm_BX *)__mtm->mtm_data)[i].wpat[j];
-        }
-    }
+	mtm = mtm_create(__mtm->wsize, __mtm->type, __mtm->nmtm);
+	mtm->nsum = __mtm->nsum;
+	for (i = 0; i < mtm->nmtm; i++) {
+		((mtm_BX *) mtm->mtm_data)[i].fq =
+		    ((mtm_BX *) __mtm->mtm_data)[i].fq;
+		((mtm_BX *) mtm->mtm_data)[i].fq1 =
+		    ((mtm_BX *) __mtm->mtm_data)[i].fq1;
+		((mtm_BX *) mtm->mtm_data)[i].label =
+		    ((mtm_BX *) __mtm->mtm_data)[i].label;
+		mtm->comp_prob = __mtm->comp_prob;
+		wzip = size_of_zpat(mtm_get_wsize(__mtm));
+		trios_malloc(((mtm_BX *) mtm->mtm_data)[i].wpat,
+			     wzip * sizeof(unsigned int), int,
+			     "Error copying mtm");
+		for (j = 0; j < wzip; j++) {
+			((mtm_BX *) mtm->mtm_data)[i].wpat[j] =
+			    ((mtm_BX *) __mtm->mtm_data)[i].wpat[j];
+		}
+	}
 
-    trios_malloc(mtm_out, sizeof(mtm_t *) * (MAX_PARTITIONS), int,
-             "Failed to alloc mtm_t list");
-    trios_malloc(itv_out, sizeof(itv_t *) * (MAX_PARTITIONS), int,
-             "Failed to alloc itv_t list");
+	trios_malloc(mtm_out, sizeof(mtm_t *) * (MAX_PARTITIONS), int,
+		     "Failed to alloc mtm_t list");
+	trios_malloc(itv_out, sizeof(itv_t *) * (MAX_PARTITIONS), int,
+		     "Failed to alloc itv_t list");
 
-    start_itv = itv_gen_itv(win, itv_type, BB, 0, 1, 0);
-    if (start_itv == NULL) {
-        return trios_error(MSG, "lpartition: itv_gen_itv() failed.");
-    }
+	start_itv = itv_gen_itv(win, itv_type, BB, 0, 1, 0);
+	if (start_itv == NULL) {
+		return trios_error(MSG, "lpartition: itv_gen_itv() failed.");
+	}
 
-    noper = 0;
-    for (i = 0; i < MAX_PARTITIONS; i++) {
-        mtm_out[i] = NULL;
-        itv_out[i] = NULL;
-    }
+	noper = 0;
+	for (i = 0; i < MAX_PARTITIONS; i++) {
+		mtm_out[i] = NULL;
+		itv_out[i] = NULL;
+	}
 
-    /* Divide examples and compute the respective partitions (intervals) */
-    /* The memory space used both by mtm and by start_itv aren't released   */
-    if (!mtm_part(mtm, start_itv, threshold, mtm_out, itv_out, &noper)) {
-        win_free(win);
-        mtm_free(mtm);
-        return trios_error(MSG, "lpartition: sep_mtm() failed.");
-    }
+	/* Divide examples and compute the respective partitions (intervals) */
+	/* The memory space used both by mtm and by start_itv aren't released   */
+	if (!mtm_part(mtm, start_itv, threshold, mtm_out, itv_out, &noper)) {
+		win_free(win);
+		mtm_free(mtm);
+		return trios_error(MSG, "lpartition: sep_mtm() failed.");
+	}
 
-
-    *_mtm_out = mtm_out;
-    *_itv_out = itv_out;
-    *n_itv = noper;
-    return 1;
+	*_mtm_out = mtm_out;
+	*_itv_out = itv_out;
+	*n_itv = noper;
+	return 1;
 }
 
 /*!
@@ -477,102 +476,102 @@ int lpartition_memory(window_t * win, mtm_t * __mtm, int itv_type, int threshold
  * \param fname_o Output path.
  * \return 1 on success. 0 on failure.
  */
-int litvconcat(char *fname_i, int nfiles, char *fname_o) {
+int litvconcat(char *fname_i, int nfiles, char *fname_o)
+{
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Sun Apr 25 1999                                                   */
 
-    char fname[512];
-    window_t *win;
-    apert_t *apt;
-    itv_t *out_itv, *in_itv;
-    itv_BX *p, *q;
-    int i;
+	char fname[512];
+	window_t *win;
+	apert_t *apt;
+	itv_t *out_itv, *in_itv;
+	itv_BX *p, *q;
+	int i;
 
+	out_itv = NULL;
 
-    out_itv = NULL;
+	/* input file names are assumed to be in the form fname1.itv, fname2.itv
+	   fname3.itv, ... and so son                                            */
 
-    /* input file names are assumed to be in the form fname1.itv, fname2.itv
-       fname3.itv, ... and so son                                            */
+	if (nfiles == 1) {
 
-    if (nfiles == 1) {
-
-        sprintf(fname, "%s%d%s", fname_i, 1, ".itv");
-
-#ifdef _DEBUG_
-        trios_debug("File name is %s", fname);
-#endif
-
-        if (!(out_itv = itv_read(fname, &win))) {
-            win_free(win);
-            return trios_error(MSG,
-                       "litvconcat: itv_read() failed to read %s",
-                       fname);
-        }
-
-        if (!itv_write(fname_o, out_itv, win)) {
-            win_free(win);
-            itv_free(out_itv);
-            return trios_error(MSG,
-                       "litvconcat: itv_write() failed to write %s",
-                       fname_o);
-        }
-
-        win_free(win);
-        itv_free(out_itv);
-
-    } else {
-
-        for (i = 1; i <= nfiles; i++) {
-            sprintf(fname, "%s%d%s", fname_i, i, ".itv");
+		sprintf(fname, "%s%d%s", fname_i, 1, ".itv");
 
 #ifdef _DEBUG_
-            trios_debug("File name is %s", fname);
+		trios_debug("File name is %s", fname);
 #endif
 
-            if (i == 1) {
-                if (!(out_itv = itv_read(fname, &win))) {
-                    win_free(win);
-                    return trios_error(MSG,
-                               "litvconcat: itv_read() failed to read %s",
-                               fname);
-                }
-            } else {
-                win_free(win);
-                if (!(in_itv = itv_read(fname, &win))) {
-                    win_free(win);
-                    itv_free(out_itv);
-                    return trios_error(MSG,
-                               "litvconcat: itv_read() failed to read %s",
-                               fname);
-                }
+		if (!(out_itv = itv_read(fname, &win))) {
+			win_free(win);
+			return trios_error(MSG,
+					   "litvconcat: itv_read() failed to read %s",
+					   fname);
+		}
 
-                p = (itv_BX *) out_itv->head;
-                q = (itv_BX *) in_itv->head;
-                if (in_itv->nitv) {
-                    out_itv->nitv =
-                        out_itv->nitv + in_itv->nitv;
-                    Concatenate_lists(p, q);
-                    out_itv->head = (int *) p;
-                    in_itv->head = NULL;
-                }
-                itv_free(in_itv);
-            }
-        }
+		if (!itv_write(fname_o, out_itv, win)) {
+			win_free(win);
+			itv_free(out_itv);
+			return trios_error(MSG,
+					   "litvconcat: itv_write() failed to write %s",
+					   fname_o);
+		}
 
-        if (!itv_write(fname_o, out_itv, win)) {
-            win_free(win);
-            itv_free(out_itv);
-            return trios_error(MSG,
-                       "litvconcat: itv_write() failed to write %s",
-                       fname_o);
-        }
+		win_free(win);
+		itv_free(out_itv);
 
-        win_free(win);
-        itv_free(out_itv);
+	} else {
 
-    }
+		for (i = 1; i <= nfiles; i++) {
+			sprintf(fname, "%s%d%s", fname_i, i, ".itv");
 
-    return (1);
+#ifdef _DEBUG_
+			trios_debug("File name is %s", fname);
+#endif
+
+			if (i == 1) {
+				if (!(out_itv = itv_read(fname, &win))) {
+					win_free(win);
+					return trios_error(MSG,
+							   "litvconcat: itv_read() failed to read %s",
+							   fname);
+				}
+			} else {
+				win_free(win);
+				if (!(in_itv = itv_read(fname, &win))) {
+					win_free(win);
+					itv_free(out_itv);
+					return trios_error(MSG,
+							   "litvconcat: itv_read() failed to read %s",
+							   fname);
+				}
+
+				p = (itv_BX *) out_itv->head;
+				q = (itv_BX *) in_itv->head;
+				if (in_itv->nitv) {
+					out_itv->nitv =
+					    out_itv->nitv + in_itv->nitv;
+					Concatenate_lists(p, q);
+					out_itv->head = (int *)p;
+					in_itv->head = NULL;
+				}
+				itv_free(in_itv);
+			}
+		}
+
+		if (!itv_write(fname_o, out_itv, win)) {
+			win_free(win);
+			itv_free(out_itv);
+			return trios_error(MSG,
+					   "litvconcat: itv_write() failed to write %s",
+					   fname_o);
+		}
+
+		win_free(win);
+		itv_free(out_itv);
+
+	}
+
+	return (1);
 }
 
 /*!
@@ -581,33 +580,32 @@ int litvconcat(char *fname_i, int nfiles, char *fname_o) {
  * \param n Number of intervals.
  * \return The new interval.
  */
-itv_t *litvconcat_memory(itv_t **in, int n) {
+itv_t *litvconcat_memory(itv_t ** in, int n)
+{
 /*  author: Nina S. Tomita, R. Hirata Jr. (nina@ime.usp.br)                 */
 /*  date: Sun Apr 25 1999                                                   */
 
-    itv_t *out_itv, *in_itv;
-    itv_BX *p, *q;
-    int i;
+	itv_t *out_itv, *in_itv;
+	itv_BX *p, *q;
+	int i;
 
-    out_itv = in[0];
+	out_itv = in[0];
 
-    for (i = 1; i < n; i++) {
-        in_itv = in[i];
-        p = (itv_BX *) out_itv->head;
-        q = (itv_BX *) in_itv->head;
-        if (in_itv->nitv > 0) {
-            out_itv->nitv =
-                out_itv->nitv + in_itv->nitv;
-            Concatenate_lists(p, q);
-            out_itv->head = (int *) p;
-            in_itv->head = NULL;
-        }
-        itv_free(in_itv);
-    }
+	for (i = 1; i < n; i++) {
+		in_itv = in[i];
+		p = (itv_BX *) out_itv->head;
+		q = (itv_BX *) in_itv->head;
+		if (in_itv->nitv > 0) {
+			out_itv->nitv = out_itv->nitv + in_itv->nitv;
+			Concatenate_lists(p, q);
+			out_itv->head = (int *)p;
+			in_itv->head = NULL;
+		}
+		itv_free(in_itv);
+	}
 
-    return out_itv;
+	return out_itv;
 }
-
 
 /*!
  * Runs ISI on a partition of the original interval.
@@ -627,16 +625,15 @@ itv_t *solve_partition(mtm_t * part_m, itv_t * part_i, int i, window_t * win)
 	pid = getpid();
 #endif
 	part_i = lisi_memory(part_m, part_i, 3, 20, 0, 0);
-    /*sprintf(cmd, "part.temp%d-%d.itv", pid, i + 1);
-    itv_write(cmd, part_i, win);*/
+	/*sprintf(cmd, "part.temp%d-%d.itv", pid, i + 1);
+	   itv_write(cmd, part_i, win); */
 	mtm_free(part_m);
-    /*itv_free(part_i);*/
+	/*itv_free(part_i); */
 #ifdef DEBUG
 	printf("Finished %d\n", i);
 #endif
-    return part_i;
+	return part_i;
 }
-
 
 itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 {
@@ -644,20 +641,19 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 	mtm_t **part_m;
 	itv_t **part_i;
 	int i, n, pid = 0;
-    char cmd[100], cmd2[100];
+	char cmd[100], cmd2[100];
 #ifdef __linux__
 	pid = getpid();
 #endif
 
-    if (mtm->nmtm <= threshold) {
-        itv_t * starting_interval = itv_gen_itv(win, 1, BB, 0, 1, 0);
-        return lisi_memory(mtm, starting_interval, 3, 5, 0, 0);
-    }
+	if (mtm->nmtm <= threshold) {
+		itv_t *starting_interval = itv_gen_itv(win, 1, BB, 0, 1, 0);
+		return lisi_memory(mtm, starting_interval, 3, 5, 0, 0);
+	}
 
 	if (!lpartition_memory(win, mtm, 1, threshold, &part_m, &part_i, &n)) {
 		return (itv_t *) trios_error(MSG, "Error in partition!");
 	}
-
 #ifdef DEBUG
 	printf("Number of partitions %d\n", n);
 	printf("OMP NUM PROC %d threads %d\n", omp_get_num_procs(),
@@ -669,28 +665,27 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 
 #pragma omp for schedule(static, 1)
 		for (i = 0; i < n; i++) {
-            part_i[i] = solve_partition(part_m[i], part_i[i], i, win);
+			part_i[i] =
+			    solve_partition(part_m[i], part_i[i], i, win);
 		}
 	}
-
 
 #ifdef DEBUG
 	printf("Finished ISI\n");
 #endif
 
+	sprintf(cmd, "part.temp%d-", pid);
+	sprintf(cmd2, "final-%d.temp", pid);
+	/*if (litvconcat(cmd, n, cmd2) == 0) {
+	   return (itv_t *) trios_error(MSG, "Error on itv concat");
+	   } */
+	acc = litvconcat_memory(part_i, n);
 
-    sprintf(cmd, "part.temp%d-", pid);
-    sprintf(cmd2, "final-%d.temp", pid);
-    /*if (litvconcat(cmd, n, cmd2) == 0) {
-		return (itv_t *) trios_error(MSG, "Error on itv concat");
-    }*/
-    acc = litvconcat_memory(part_i, n);
+	free(part_m);
+	free(part_i);
 
-    free(part_m);
-    free(part_i);
-
-    /*acc = itv_read(cmd2, &win);
-    win_free(win);*/
+	/*acc = itv_read(cmd2, &win);
+	   win_free(win); */
 
 	return acc;
 }
