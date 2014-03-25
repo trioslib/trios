@@ -6,7 +6,7 @@ int main(int argc, char *argv[]) {
     itv_t *itv;
     window_t *win;
     imgset_t *test;
-    int mae;
+    unsigned long mae, mse;
     double acc;
 
     if (argc < 3) {
@@ -36,14 +36,20 @@ int main(int argc, char *argv[]) {
     }
 
     if (op != NULL) {
-        mae = image_operator_mae(op, test, &acc);
+        if (op->type == BB) {
+            mae = image_operator_mae(op, test, &acc);
+            printf("MAE: %d Accuracy: %f\n", mae, acc);
+        } else {
+            mae = image_operator_mse(op, test, &acc);
+            printf("MSE: %d Accuracy: %f\n", mse, acc);
+        }
     } else if (mop != NULL){
         mae = computeMAEBBmulti(mop, test, &acc);
     } else {
         mae = computeMAEBB(itv, win, test, &acc);
     }
 
-    printf("MAE: %d Accuracy: %f\n", mae, acc);
+    
 
     return 0;
 }
