@@ -45,8 +45,10 @@ int main(int argc, char *argv[]) {
         }
     } else if (mop != NULL){
         mae = computeMAEBBmulti(mop, test, &acc);
+        printf("MAE: %d Accuracy: %f\n", mae, acc);
     } else {
         mae = computeMAEBB(itv, win, test, &acc);
+        printf("MAE: %d Accuracy: %f\n", mae, acc);
     }
 
     
