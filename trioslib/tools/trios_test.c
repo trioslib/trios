@@ -36,12 +36,12 @@ int main(int argc, char *argv[]) {
     }
 
     if (op != NULL) {
-        if (op->type == BB) {
+        if (op->type == BB || op->type == GB) {
             mae = image_operator_mae(op, test, &acc);
             printf("MAE: %d Accuracy: %f\n", mae, acc);
         } else {
-            mae = image_operator_mse(op, test, &acc);
-            printf("MSE: %d Accuracy: %f\n", mse, acc);
+            mae = image_operator_mse(op, test);
+            printf("MSE: %d\n", mse);
         }
     } else if (mop != NULL){
         mae = computeMAEBBmulti(mop, test, &acc);
