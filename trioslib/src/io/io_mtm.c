@@ -281,6 +281,7 @@ mtm_t *mtm_read(char *fname, window_t ** win, apert_t ** apt)
 		break;
 
 	case GG:
+	case GB:
 	case WKC:
 	case WKF:
 	case WK3F:
@@ -487,6 +488,7 @@ int mtm_write(char *fname, mtm_t * mtm, window_t * win, apert_t * apt)
 		break;
 
 	case GG:
+	case GB:
 	case GG3:
 
 		table_GX = (mtm_GX *) mtm->mtm_data;
