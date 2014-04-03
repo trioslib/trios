@@ -298,6 +298,7 @@ xpl_t *xpl_read(char *fname, window_t ** win, apert_t ** apt)
 		break;
 
 	case GG:
+	case GB:
 	case WKF:
 	case WKC:
 	case WK3C:
@@ -474,6 +475,7 @@ int xpl_write(char *fname, xpl_t * xpl, window_t * win, apert_t * apt)
 		break;
 
 	case GG:
+	case GB:
 	case GG3:
 		xpl_GG_write_tree(fd, (xpl_GG *) (xpl->root), wsize);
 		break;
