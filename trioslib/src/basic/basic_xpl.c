@@ -48,6 +48,7 @@ void xpl_free(xpl_t * xpl)
 			break;
 
 		case GG:
+		case GB:
 		case WKC:
 		case WKF:
 		case WK3F:
