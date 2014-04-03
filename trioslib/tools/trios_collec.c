@@ -3,7 +3,7 @@
 #include "string.h"
 
 void print_usage() {
-    printf("Usage: trios_collec image_set_path window_path result_path\n");
+    printf("Usage: trios_collec [BB|GB|GG] image_set_path window_path result_path\n");
     printf("       trios_collec two-level image_set_path operator1_path ... operatorn_path result_path\n");
     printf("This tool collects the observed patterns in the provided image set.\n");
 }
@@ -15,18 +15,18 @@ int main(int argc, char *argv[]) {
     xpl_t *result;
     int i;
     
-    if (argc < 4) {
+    if (argc < 5) {
         print_usage();
         return -1;
     }
 
     if (strcmp(argv[1], "two-level") != 0) {
         /* single level collec */
-        if (argc < 4) {
+        if (argc < 5) {
             print_usage();
             return -1;
         }
-        if (lcollec(argv[1], argv[2], NULL, 1, 1, 0, argv[3], NULL) == 0) {
+        if (lcollec(argv[2], argv[3], NULL, argv[1][0] == 'B', argv[1][1] == 'B', 0, argv[4], NULL) == 0) {
 
         }
     } else {

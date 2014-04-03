@@ -54,7 +54,7 @@ void free_sample(sample *s) {
     free(s);
 }
 
-
+/* =========== BB Relief Functions ================ */
 
 sample *select_instance_BB(xpl_BB *node, window_t *win, int *i) {
     sample *smp = NULL;
@@ -133,12 +133,110 @@ unsigned int *nearest_miss_BB(xpl_BB* node, sample *smp, int nA, unsigned int *c
     return nearest_miss_BB(node->right, smp, nA, current);
 }
 
+/* =========== GB Relief Functions ================ */
+
+sample *select_instance_GX(xpl_GG *node, window_t *win, int *i) {
+    sample *smp = NULL;
+    freq_node *f;
+    int tot_freq = freq_sum(node->freqlist);
+
+    if (node->left != NULL) {
+        smp = select_instance_GX(node->left, win, i);
+        if (smp != NULL) {
+            return smp;
+        }
+    }
+    
+    for (f = node->freqlist; f != NULL; f = f->next) {
+        if (*i < f->freq) {
+            *i = -1;
+            smp = new_sample(node->wpat, f->label);
+            return smp;
+        } else {
+            *i -= f->freq;
+        }
+    }
+    
+    if (node->right != NULL) {
+        smp = select_instance_GX(node->right, win, i);
+        if (smp != NULL) {
+            return smp;
+        }
+    }
+    return NULL;
+}
+
+int dist_GX(unsigned int *a, unsigned int *b, int nA) {
+    int i;
+    int r = 0;
+    for (i = 0; i < nA; i++) {
+        r += attr(a, i) != attr(b, i);
+    }
+    return r;
+}
+
+unsigned int *nearest_hit_GB(xpl_GG* node, sample *smp, int nA, int *current) {
+    unsigned int fq0, fq1;
+    if (node == NULL) return current;
+    
+    if (node->freqlist->label == 0) {
+        fq0 = node->freqlist->freq;
+        fq1 = node->freqlist->next->freq;
+    } else {
+        fq1 = node->freqlist->freq;
+        fq0 = node->freqlist->next->freq;
+    }    
+    
+    if ((smp->cls == 0 && fq0 != 0) || (smp->cls == 1 && fq1 != 0)) {
+        if (current == NULL) {
+            current = node->wpat;
+        } else {
+            if (dist_GX(smp->pattern, current, nA) > dist_GX(smp->pattern, node->wpat, nA) &&
+                dist_GX(smp->pattern, node->wpat, nA) > 0) {
+                current = node->wpat;
+            }
+        }
+    }
+    
+    current = nearest_hit_GB(node->left, smp, nA, current);
+    return nearest_hit_GB(node->right, smp, nA, current);
+}
+
+unsigned int *nearest_miss_GB(xpl_GG* node, sample *smp, int nA, int *current) {
+    unsigned int fq0, fq1;
+    if (node == NULL) return current;
+    
+    if (node->freqlist->label == 0) {
+        fq0 = node->freqlist->freq;
+        fq1 = node->freqlist->next->freq;
+    } else {
+        fq1 = node->freqlist->freq;
+        fq0 = node->freqlist->next->freq;
+    }    
+
+    if ((smp->cls == 0 && fq1 != 0) || (smp->cls == 1 && fq0 != 0)) {        
+        if (current == NULL) {
+            current = node->wpat;
+        } else {
+            if (dist_GX(smp->pattern, current, nA) > dist_GX(smp->pattern, node->wpat, nA) &&
+                dist_GX(smp->pattern, node->wpat, nA) > 0) {
+                current = node->wpat;
+            }
+        }
+    }
+    
+    current = nearest_miss_GB(node->left, smp, nA, current);
+    return nearest_miss_GB(node->right, smp, nA, current);
+}
+
+
 window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight **_pw, int seed) {
     float *weights;
     point_weight *pw;
     int i, j, k, nA, w, h;
     int *random_numbers;
     unsigned int *hit, *miss;
+    unsigned char **hitGX, **missGX;
     sample *smp = NULL;
     window_t *result = NULL;
 
@@ -147,7 +245,13 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     h = win_get_height(domain);
 
     trios_malloc(weights, sizeof(float) * nA, window_t* , "Error allocating weights");
-    
+    if (xpl->type == GB) {
+        trios_malloc(hitGX, sizeof(unsigned char *) * 256, window_t*, "Error allocating hitGX");
+        trios_malloc(missGX, sizeof(unsigned char *) * 256, window_t*, "Error allocating missGX");
+    } else if (xpl->type == GG) {
+        trios_error(MSG, "window_relief: GG operators are not supported yet.\n");
+        return NULL;
+    }
     for (j = 0; j < nA; j++) {
         weights[j] = 0.0;
     }
@@ -163,9 +267,15 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     for (i = 0; i < m; i++) {
         /* select random instance */
         k = random_numbers[i];
-        smp = select_instance_BB((xpl_BB*)xpl->root, domain, &k);
-        hit = nearest_hit_BB((xpl_BB*)xpl->root,  smp, nA, NULL);
-        miss = nearest_miss_BB((xpl_BB*)xpl->root, smp, nA, NULL);
+        if (xpl->type == BB) {
+            smp = select_instance_BB((xpl_BB*)xpl->root, domain, &k);
+            hit = nearest_hit_BB((xpl_BB*)xpl->root,  smp, nA, NULL);
+            miss = nearest_miss_BB((xpl_BB*)xpl->root, smp, nA, NULL);
+        } else {
+            smp = select_instance_GX((xpl_GG*)xpl->root, domain, &k);
+            hit = nearest_hit_GB((xpl_GG*)xpl->root,  smp, nA, NULL);
+            miss = nearest_miss_GB((xpl_GG*)xpl->root, smp, nA, NULL);
+        }
         #pragma omp critical
         {
             for (j = 0; j < nA; j++) {
