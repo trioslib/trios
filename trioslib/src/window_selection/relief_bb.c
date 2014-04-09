@@ -9,7 +9,8 @@ int compare_pw(const void *_p1, const void *_p2) {
     point_weight *p1, *p2;
     p1 = (point_weight *) _p1;
     p2 = (point_weight *) _p2;
-    return p2->weight - p1->weight;
+    /*if (p2->weight == p1->weight) return p2 - p1;
+    else */return p2->weight - p1->weight;
 }
 
 /* stores a single instance of the xpl_t */
@@ -47,6 +48,26 @@ void print_pattern_BB(unsigned int *wpat, window_t *win) {
 void print_sample_BB(sample *s, window_t *win) {
     printf("Sample:\n");
     print_pattern_BB(s->pattern, win);
+    printf(" -- class: %d\n", s->cls);
+}
+
+void print_pattern_GX(unsigned int *wpat, window_t *win) {
+    int i, j;
+    int w, h;
+    
+    w = win_get_width(win);
+    h = win_get_height(win);
+    for (i = 0; i < h; i++) {
+        for (j = 0; j < w; j++) {
+            printf("%d ",  wpat[i * w + j] );
+        }
+        printf("\n");
+    }
+}
+
+void print_sample_GX(sample *s, window_t *win) {
+    printf("Sample:\n");
+    print_pattern_GX(s->pattern, win);
     printf(" -- class: %d\n", s->cls);
 }
 
@@ -261,11 +282,22 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     }
     
     srand(seed);
+    printf("Random seed %d\n", seed);
     random_numbers = malloc(sizeof(int) * m);
     for (i = 0; i < m; i++) {
         random_numbers[i] = rand() % xpl->sum;
     }
-    #pragma omp parallel for private(k, smp, hit, miss, j)
+    
+    /*for (i = 0; i < m; i++) {
+        k = random_numbers[i];
+        printf("Random %d = %d\n", i, k);
+        smp = select_instance_GX((xpl_GG*)xpl->root, domain, &k);
+        hitG = nearest_hit_GB((xpl_GG*)xpl->root,  smp, nA, NULL);
+        print_sample_GX(smp, domain);
+        printf("Hit:\n"); print_pattern_GX(hitG, domain);
+    }*/
+    
+    #pragma omp parallel for private(k, smp, hit, miss, hitG, missG, j)
     for (i = 0; i < m; i++) {
         /* select random instance */
         k = random_numbers[i];
@@ -277,7 +309,6 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
             smp = select_instance_GX((xpl_GG*)xpl->root, domain, &k);
             hitG = nearest_hit_GB((xpl_GG*)xpl->root,  smp, nA, NULL);
             missG = nearest_miss_GB((xpl_GG*)xpl->root, smp, nA, NULL);
-            printf("class %d hit %p miss %p\n", smp->cls, hitG, missG);
         }
         #pragma omp critical
         {
@@ -286,7 +317,7 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
                 if (xpl->type == BB) {
                     weights[j] += - (attr(hit, j) != attr(smp->pattern, j)) + (attr(miss, j) != attr(smp->pattern, j));
                 } else if (xpl->type == GB) {
-                    weights[j] += - (hitG[j] != ((int *) smp->pattern)[i]) + (missG[j] != ((int *) smp->pattern)[j]);
+                    weights[j] += - (hitG[j] != ((int *) smp->pattern)[j]) + (missG[j] != ((int *) smp->pattern)[j]);
                 }
             }
         }
@@ -304,6 +335,7 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     
     result = win_create(domain->height, domain->width, 1);
     for (i = 0; i < n; i++) {
+        printf("Point %d %d val %f\n", pw[i].i, pw[i].j, pw[i].weight);
         win_set_point(pw[i].i, pw[i].j, 1, 1, result);
     }
     
