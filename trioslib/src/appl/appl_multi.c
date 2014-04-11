@@ -66,7 +66,7 @@ img_t *multi_level_apply_level_bb(multi_level_operator_t *mop, int level, int op
     return output;
 }
 
-img_t *multi_level_apply_level_gg(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask) {
+img_t *multi_level_apply_level_gx(multi_level_operator_t *mop, int level, int op, img_t **inputs, img_t *mask) {
     img_t *output;
     int i, j, k, l, m;
     int w, h, win_size = 0, curr_off;
@@ -112,7 +112,15 @@ img_t *multi_level_apply_level_gg(multi_level_operator_t *mop, int level, int op
         }
         /* classify w_pattern */
         int label = lapplyGG_wpat(mop->levels[level].trained_operator[op], w_pattern, win_size);
-        img_set_pixel(output, k / output->width, k % output->width, 0, (unsigned char) label);
+        if (mop->type == GG) {
+            img_set_pixel(output, k / output->width, k % output->width, 0, (unsigned char) label);
+        } else if (mop->type == GB) {
+            if (label > 127) {
+                img_set_pixel(output, k / output->width, k % output->width, 0, 255);
+            } else {
+                img_set_pixel(output, k / output->width, k % output->width, 0, 0);
+            }
+        }
     }
 
     free(offset);
@@ -134,8 +142,8 @@ img_t *multi_level_apply(multi_level_operator_t *mop, img_t *img, img_t *mask) {
         for (j = 0; j < mop->levels[i].noperators; j++) {
             if (mop->type == BB) {
                 next[j] = multi_level_apply_level_bb(mop, i, j, input, mask);
-            } else if (mop->type == GG) {
-                next[j] = multi_level_apply_level_gg(mop, i, j, input, mask);
+            } else if (mop->type == GG || mop->type == GB) {
+                next[j] = multi_level_apply_level_gx(mop, i, j, input, mask);
             }
         }
 }

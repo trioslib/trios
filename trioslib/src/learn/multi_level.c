@@ -104,22 +104,7 @@ static int build_level(multi_level_operator_t * mop, int level, imgset_t ** set,
 					mask_images, ideal_images,
 					imgset_get_ngroups(set[set_idx]));
 		/* decision em cada um dos operadores */
-		op_dec =
-		    ldecision_memory(op_collec, mop->type == BB, 0, MEDIAN, 0,
-				     0);
-#ifdef DEBUG
-		if (mop->type == GG) {
-			sprintf(temp, "GG-lv%d-op%d.xp", level, j);
-			xpl_write(temp, op_collec, joint_window, NULL);
-			sprintf(temp, "GG-lv%d-op%d.mtm", level, j);
-			mtm_write(temp, op_dec, joint_window, NULL);
-		} else {
-			sprintf(temp, "BB-lv%d-op%d.xp", level, j);
-			xpl_write(temp, op_collec, joint_window, NULL);
-			sprintf(temp, "BB-lv%d-op%d.mtm", level, j);
-			mtm_write(temp, op_dec, joint_window, NULL);
-		}
-#endif
+		op_dec = ldecision_memory(op_collec, mop->type == BB, 0, MEDIAN, 0, 0);
 		if (level == 0) {
 			if (mop->type == BB) {
 				level_op =
@@ -129,7 +114,7 @@ static int build_level(multi_level_operator_t * mop, int level, imgset_t ** set,
 								      [0],
 								      op_dec,
 								      PARTITION_SIZE);
-			} else if (mop->type == GG) {
+			} else if (mop->type == GG || mop->type == GB) {
 				level_op =
 				    (classifier_t *) ltrainGG_memory(op_dec);
 			}
@@ -139,7 +124,7 @@ static int build_level(multi_level_operator_t * mop, int level, imgset_t ** set,
 				    (classifier_t *)
 				    lisi_partitioned(joint_window, op_dec,
 						     PARTITION_SIZE);
-			} else if (mop->type == GG) {
+			} else if (mop->type == GG || mop->type == GB) {
 				level_op =
 				    (classifier_t *) ltrainGG_memory(op_dec);
 			}
@@ -258,7 +243,7 @@ static int apply_until_level_images(multi_level_operator_t * mop, int level,
 								       mask);
 				} else if (mop->type == GG) {
 					next[j] =
-					    multi_level_apply_level_gg(mop, i,
+					    multi_level_apply_level_gx(mop, i,
 								       j, input,
 								       mask);
 				}
