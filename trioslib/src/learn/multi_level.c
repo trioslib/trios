@@ -241,7 +241,7 @@ static int apply_until_level_images(multi_level_operator_t * mop, int level,
 					    multi_level_apply_level_bb(mop, i,
 								       j, input,
 								       mask);
-				} else if (mop->type == GG) {
+				} else if (mop->type == GG || mop->type == GB) {
 					next[j] =
 					    multi_level_apply_level_gx(mop, i,
 								       j, input,
@@ -394,7 +394,6 @@ multi_level_operator_t *multi_level_build(multi_architecture_t * m,
 			}
 			/* coloca o ponteiro input_images como o resultado da aplicação acima */
 			input_images = new_input_images;
-
 		}
 
 	}
