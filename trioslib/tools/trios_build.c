@@ -65,8 +65,15 @@ void train_two_level(int argc, char *argv[]) {
     multi_level_operator_t *mop;
     imgset_t *training[2];
     int n_wins, i, ops_per_level[2];
+    int type;
 
-    if (strcmp(argv[2], "GG") == 0) trios_fatal("Operation not implemented.");
+    if (strcmp(argv[2], "BB") == 0) {
+        type = BB;
+    } else if (strcmp(argv[2], "GG") == 0) {
+        type = GG;
+    } else if (strcmp(argv[2], "GB") == 0) {
+        type = GB;
+    }
 
     n_wins = argc - 6;
     if (n_wins < 2) {
@@ -89,7 +96,8 @@ void train_two_level(int argc, char *argv[]) {
     if (training[0] == NULL) trios_fatal("Error reading training set: %s.", argv[argc-3]);
     if (training[1] == NULL) trios_fatal("Error reading training set: %s.", argv[argc-2]);
 
-    mop = multi_level_build_bb(arch, training);
+    
+    mop = multi_level_build(arch, training, type);
     if (mop == NULL) trios_fatal("Error building multi-level operator.");
     if (multi_level_operator_write(argv[argc-1], mop) == 0) {
         trios_fatal("Error writing operator %s.", argv[argc-1]);

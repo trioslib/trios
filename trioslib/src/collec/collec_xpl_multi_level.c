@@ -7,9 +7,9 @@
 xpl_t *collec_level_operator_bb_main(multi_level_operator_t * mop, int level,
 				     int op, img_t ** inputs, img_t * mask,
 				     img_t * ideal);
-xpl_t *collec_level_operator_gg_main(multi_level_operator_t * mop, int level,
+xpl_t *collec_level_operator_gx_main(multi_level_operator_t * mop, int level,
 				     int op, img_t ** inputs, img_t * mask,
-				     img_t * ideal);
+				     img_t * ideal, int type);
 
 xpl_t *lcollec_multi_level(multi_level_operator_t * mop, int level, int op,
 			   img_t *** input, img_t ** mask, img_t ** ideal,
@@ -39,9 +39,9 @@ xpl_t *lcollec_multi_level(multi_level_operator_t * mop, int level, int op,
 							  ideal[i]);
 		} else {
 			xpl_new =
-			    collec_level_operator_gg_main(mop, level, op,
+			    collec_level_operator_gx_main(mop, level, op,
 							  input[i], mask[i],
-							  ideal[i]);
+							  ideal[i], mop->type);
 		}
 		if (xpl == NULL) {
 			xpl = xpl_new;
@@ -128,9 +128,9 @@ xpl_t *collec_level_operator_bb_main(multi_level_operator_t * mop, int level,
 	return xpl;
 }
 
-xpl_t *collec_level_operator_gg_main(multi_level_operator_t * mop, int level,
+xpl_t *collec_level_operator_gx_main(multi_level_operator_t * mop, int level,
 				     int op, img_t ** inputs, img_t * mask,
-				     img_t * ideal)
+				     img_t * ideal, int type)
 {
 	int i, j, k, l, npixels, w, h, win_size =
 	    0, *joint_wpat, *offset, win_offset;
@@ -140,7 +140,7 @@ xpl_t *collec_level_operator_gg_main(multi_level_operator_t * mop, int level,
 	for (i = 0; i < mop->levels[level].ninputs; i++) {
 		win_size += win_get_wsize(mop->levels[level].windows[op][i]);
 	}
-	xpl = xpl_create(win_size, GG);
+	xpl = xpl_create(win_size, type);
 	joint_wpat = malloc(sizeof(int) * win_size);
 	offset = malloc(sizeof(int) * win_size);
 
@@ -172,8 +172,13 @@ xpl_t *collec_level_operator_gg_main(multi_level_operator_t * mop, int level,
 			}
 		}
 		/* cria freq node */
-		freq =
-		    freq_node_create(img_get_pixel(ideal, k / w, k % w, 0), 1);
+		if (type == GG) {
+			freq =
+			    freq_node_create(img_get_pixel(ideal, k / w, k % w, 0), 1);
+		} else {
+			freq =
+			    freq_node_create((img_get_pixel(ideal, k / w, k % w, 0) == 0) * 255, 1);
+		}
 		/* adiciona na arvore */
 		xpl_GG_insert(xpl, (xpl_GG **) & xpl->root, joint_wpat, freq);
 	}
