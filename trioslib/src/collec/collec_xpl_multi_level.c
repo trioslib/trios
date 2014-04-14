@@ -177,7 +177,7 @@ xpl_t *collec_level_operator_gx_main(multi_level_operator_t * mop, int level,
 			    freq_node_create(img_get_pixel(ideal, k / w, k % w, 0), 1);
 		} else {
 			freq =
-			    freq_node_create((img_get_pixel(ideal, k / w, k % w, 0) == 0) * 255, 1);
+			    freq_node_create((img_get_pixel(ideal, k / w, k % w, 0) != 0) * 255, 1);
 		}
 		/* adiciona na arvore */
 		xpl_GG_insert(xpl, (xpl_GG **) & xpl->root, joint_wpat, freq);

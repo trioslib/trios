@@ -27,13 +27,13 @@ img_t *multi_level_apply_level_bb(multi_level_operator_t *mop, int level, int op
     trios_malloc(w_pattern, sizeof(int) * size_of_zpat(win_size), img_t *, "Bad alloc");
     trios_malloc(offset, sizeof(int) * win_size, img_t *, "Bad alloc");
 
-    /*if (level == 1)*/ {
+    /*if (level == 1) {
         char fl[200];
         for (i = 0; i < mop->levels[level].ninputs; i++) {
-            sprintf(fl, "inputl%dop%d.pgm", level, i);
+            sprintf(fl, "apply-l%dop%d.pgm", level, i);
             img_writePGM(fl, inputs[i]);
         }
-    }
+    }*/
 
     for (k = 0; k < npixels; k++) {
         if (mask != NULL && img_get_pixel(mask, k / mask->width, k % mask->width, 0) == 0) {
@@ -84,13 +84,13 @@ img_t *multi_level_apply_level_gx(multi_level_operator_t *mop, int level, int op
     trios_malloc(w_pattern, sizeof(int) * win_size, img_t *, "Bad alloc");
     trios_malloc(offset, sizeof(int) * win_size, img_t *, "Bad alloc");
 
-    /*if (level == 1)*/ {
+    /*if (level == 1) {
         char fl[200];
         for (i = 0; i < mop->levels[level].ninputs; i++) {
-            sprintf(fl, "inputl%dop%d.pgm", level, i);
+            sprintf(fl, "apply-l%dop%d.pgm", level, i);
             img_writePGM(fl, inputs[i]);
         }
-    }
+    }*/
 
     for (k = 0; k < npixels; k++) {
         if (mask != NULL && img_get_pixel(mask, k / mask->width, k % mask->width, 0) == 0) {
@@ -116,9 +116,9 @@ img_t *multi_level_apply_level_gx(multi_level_operator_t *mop, int level, int op
             img_set_pixel(output, k / output->width, k % output->width, 0, (unsigned char) label);
         } else if (mop->type == GB) {
             if (label > 127) {
-                img_set_pixel(output, k / output->width, k % output->width, 0, 255);
+                img_set_pixel(output, k / output->width, k % output->width, 0, (unsigned char) 255);
             } else {
-                img_set_pixel(output, k / output->width, k % output->width, 0, 0);
+                img_set_pixel(output, k / output->width, k % output->width, 0, (unsigned char) 0);
             }
         }
     }
