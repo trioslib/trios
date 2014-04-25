@@ -16,7 +16,7 @@ SET(LIBRARY_OUTPUT_PATH ${TRIOS_BINARY_DIR}/lib CACHE INTERNAL "Single output di
 SET(EXECUTABLE_OUTPUT_PATH ${TRIOS_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all executables.")
 # Make sure the linker can find the TRIOS library once it is built.
 LINK_DIRECTORIES(${LIBRARY_OUTPUT_PATH})
-SET(BUILD_SHARED_LIBS ${TRIOS_BUILD_SHARED})
+#SET(BUILD_SHARED_LIBS ${TRIOS_BUILD_SHARED})
 # If set, runtime paths are not added when using shared libraries
 SET(CMAKE_SKIP_RPATH ON)
 
