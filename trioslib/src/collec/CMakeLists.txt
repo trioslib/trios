@@ -10,6 +10,3 @@ set(TRIOS_COLLEC_SRCS
     collec/collec_two_level.c
 )
 
-add_library(trios_collec_lib ${TRIOS_COLLEC_SRCS})
-target_link_libraries(trios_collec_lib triosbasic triosio m)
-

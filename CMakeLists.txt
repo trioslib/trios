@@ -1,6 +1,13 @@
 PROJECT(TRIOS)
 cmake_minimum_required(VERSION 2.8)
 
+# Options
+OPTION(TRIOS_BUILD_SHARED "Build a shared version of TRIOS libraries" ON)
+OPTION(WRAP_PYTHON "Build TRIOS wrapper for python." ON)
+OPTION(BUILD_LATEX "Build latex (TRIOS guide) documentation." ON)
+OPTION(BUILD_CXREF "Build cxref (API) documentation." ON)
+
+
 # Path for auxiliary CMake files
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
 INCLUDE_DIRECTORIES(trioslib/include)
@@ -13,11 +20,6 @@ SET(BUILD_SHARED_LIBS ${TRIOS_BUILD_SHARED})
 # If set, runtime paths are not added when using shared libraries
 SET(CMAKE_SKIP_RPATH ON)
 
-# Options
-OPTION(TRIOS_BUILD_SHARED "Build a shared version of TRIOS libraries" OFF)
-OPTION(WRAP_PYTHON "Build TRIOS wrapper for python." ON)
-OPTION(BUILD_LATEX "Build latex (TRIOS guide) documentation." ON)
-OPTION(BUILD_CXREF "Build cxref (API) documentation." ON)
 
 #Enable tests
 ENABLE_TESTING()

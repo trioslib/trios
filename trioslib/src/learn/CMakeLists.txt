@@ -14,5 +14,3 @@ learn/train_gg.c
 learn/partition.c
 
 )
-ADD_LIBRARY(trioslearn ${TRIOS_LEARN_SRCS})
-target_link_libraries(trioslearn triosbasic triosio trios_collec triosappl trioscv m)

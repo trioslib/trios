@@ -17,4 +17,3 @@ basic/basic_xplBB.c
 basic/basic_xplGG.c
 basic/basic_math.c)
 
-ADD_LIBRARY(triosbasic ${TRIOS_BASIC_SRCS})

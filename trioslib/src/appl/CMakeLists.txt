@@ -9,4 +9,3 @@ appl/appl_wk.c
 appl/appl_multi.c
 appl/operator.c
 )
-ADD_LIBRARY(triosappl ${TRIOS_COLLEC_SRCS} ${TRIOS_APPL_SRCS})

@@ -42,7 +42,7 @@ target_link_libraries(trios_apert_test trios m)
 add_test(NAME ApertTest WORKING_DIRECTORY ${TRIOS_BINARY_DIR}/bin/ COMMAND ${TRIOS_BINARY_DIR}/bin/trios_apert_test )
 
 add_executable(trios_operator_test trios_operator_test.c)
-target_link_libraries(trios_operator_test trios m)
+target_link_libraries(trios_operator_test ${OpenMP_LIBS} trios m)
 add_test(NAME OperatorTest WORKING_DIRECTORY ${TRIOS_BINARY_DIR}/bin/ COMMAND ${TRIOS_BINARY_DIR}/bin/trios_operator_test )
 
 
