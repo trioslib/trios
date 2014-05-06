@@ -92,7 +92,7 @@ cv::Mat build_classes_from_xpl(xpl_t *xpl) {
 }
 
 
-void test_accuracy(CvDTree &tr, cv::Mat samples, cv::Mat labels) {
+void test_accuracy(CvDTree &tr, cv::Mat samples, cv::Mat labels, int binary_out) {
     cv::Mat wpat(1, samples.cols, CV_32FC1);
     unsigned long right, wrong, mse;
     int value, label;
@@ -100,22 +100,20 @@ void test_accuracy(CvDTree &tr, cv::Mat samples, cv::Mat labels) {
     for (int i = 0; i < samples.rows; i++) {
         for (int j = 0; j < samples.cols; j++) {
             wpat.at<float>(0, j) = samples.at<float>(i, j);
-        }        
+        }
 
         CvDTreeNode *node = tr.predict(wpat);
         value = (int) node->value;
         label = (int) labels.at<float>(i, 0);
-        /*std::cout << wpat;
-        printf(" %d real %d\n", value, label);*/
+        if (binary_out == 1) {
+		if (value > 127) value = 255;
+		else value = 0;
+	}
         if (value == label) {
             right++;
         } else {
             mse += pow(value - labels.at<float>(i, 0), 2);
             wrong++;
-            /*for (int j = 0; j < samples.cols; j++) {
-                printf("%d ", (int) samples.at<float>(i, j));
-            }
-            printf("\n");*/
         }
     }
     fprintf(stderr, "MTM Acc %f wrong %lu prop %lu/%lu MSE %lu\n", 1.0 * right/(right + wrong), wrong, right, right + wrong, mse);
@@ -133,19 +131,29 @@ extern "C" void *train_cv_tree(mtm_t *mtm) {
     params.use_surrogates = false;
     params.max_categories = INT_MAX;
     cv::Mat var_type(1, mtm->wsize + 1, CV_8UC1);
-    if (mtm->type == BB || mtm->type == GG || mtm->type == GB) {
-        for (int i = 0; i < mtm->wsize + 1; i++) {
-            var_type.at<unsigned char>(0, i) = CV_VAR_NUMERICAL;
-        }
-    } else if (mtm->type == WKF || mtm->type == WKC) {
-        for (int i = 0; i < mtm->wsize + 1; i++) {
+    
+    if (mtm->type == BB || mtm->type == GB) {
+        for (int i = 0; i < mtm->wsize; i++) {
             var_type.at<unsigned char>(0, i) = CV_VAR_CATEGORICAL;
         }
+    } else {
+        for (int i = 0; i < mtm->wsize; i++) {
+            var_type.at<unsigned char>(0, i) = CV_VAR_NUMERICAL;
+        }
     }
+    
+    if (mtm->type != GG) {
+        var_type.at<unsigned char>(0, mtm->wsize) = CV_VAR_CATEGORICAL;
+    } else {
+        var_type.at<unsigned char>(0, mtm->wsize) = CV_VAR_NUMERICAL;
+    }
+    
+    
     CvDTree *tr_mtm = new CvDTree();
     tr_mtm->pruned_tree_idx = -INT_MAX;
     tr_mtm->train(samples_mtm, CV_ROW_SAMPLE, labels_mtm, cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
-    test_accuracy(*tr_mtm, samples_mtm, labels_mtm);
+
+    test_accuracy(*tr_mtm, samples_mtm, labels_mtm, mtm->type == GB || mtm->type == BB);
 
     ~samples_mtm;
     ~labels_mtm;

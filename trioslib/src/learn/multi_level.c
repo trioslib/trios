@@ -103,23 +103,9 @@ static int build_level(multi_level_operator_t * mop, int level, imgset_t ** set,
 		    lcollec_multi_level(mop, level, j, input_images,
 					mask_images, ideal_images,
 					imgset_get_ngroups(set[set_idx]));
+		
 		/* decision em cada um dos operadores */
-		op_dec =
-		    ldecision_memory(op_collec, mop->type == BB, 0, MEDIAN, 0,
-				     0);
-#ifdef DEBUG
-		if (mop->type == GG) {
-			sprintf(temp, "GG-lv%d-op%d.xp", level, j);
-			xpl_write(temp, op_collec, joint_window, NULL);
-			sprintf(temp, "GG-lv%d-op%d.mtm", level, j);
-			mtm_write(temp, op_dec, joint_window, NULL);
-		} else {
-			sprintf(temp, "BB-lv%d-op%d.xp", level, j);
-			xpl_write(temp, op_collec, joint_window, NULL);
-			sprintf(temp, "BB-lv%d-op%d.mtm", level, j);
-			mtm_write(temp, op_dec, joint_window, NULL);
-		}
-#endif
+		op_dec = ldecision_memory(op_collec, mop->type == BB, 0, MEDIAN, 0, 0);
 		if (level == 0) {
 			if (mop->type == BB) {
 				level_op =
@@ -129,7 +115,7 @@ static int build_level(multi_level_operator_t * mop, int level, imgset_t ** set,
 								      [0],
 								      op_dec,
 								      PARTITION_SIZE);
-			} else if (mop->type == GG) {
+			} else if (mop->type == GG || mop->type == GB) {
 				level_op =
 				    (classifier_t *) ltrainGG_memory(op_dec);
 			}
@@ -139,7 +125,7 @@ static int build_level(multi_level_operator_t * mop, int level, imgset_t ** set,
 				    (classifier_t *)
 				    lisi_partitioned(joint_window, op_dec,
 						     PARTITION_SIZE);
-			} else if (mop->type == GG) {
+			} else if (mop->type == GG || mop->type == GB) {
 				level_op =
 				    (classifier_t *) ltrainGG_memory(op_dec);
 			}
@@ -209,7 +195,6 @@ multi_level_operator_t *multi_level_build_single(multi_architecture_t * m,
 			/* muda os ponteiros dos input e ideal_images */
 			for (j = 0; j < mop->levels[i].noperators; j++) {
 				for (k = 0; k < imgset_get_ngroups(set); k++) {
-					sprintf(filename, "l%dop%d.pgm", i, j);
 					new_input_images[k][j] =
 					    multi_level_apply_level_bb(mop, i,
 								       j,
@@ -217,8 +202,10 @@ multi_level_operator_t *multi_level_build_single(multi_architecture_t * m,
 								       [k],
 								       mask_images
 								       [k]);
-					img_writePGM(filename,
-						     new_input_images[k][j]);
+					/*
+					 * sprintf(filename, "l%dop%d.pgm", i, j);
+					 * img_writePGM(filename,
+						     new_input_images[k][j]);*/
 				}
 			}
 			free_images(input_images, ideal_images, mask_images,
@@ -249,20 +236,18 @@ static int apply_until_level_images(multi_level_operator_t * mop, int level,
 		{
 #pragma omp for schedule(static, 1)
 			for (j = 0; j < mop->levels[i].noperators; j++) {
-				printf("Thread %d, max %d\n", j,
-				       mop->levels[i].noperators);
 				if (mop->type == BB) {
 					next[j] =
 					    multi_level_apply_level_bb(mop, i,
 								       j, input,
 								       mask);
-				} else if (mop->type == GG) {
+				} else if (mop->type == GG || mop->type == GB) {
 					next[j] =
-					    multi_level_apply_level_gg(mop, i,
+					    multi_level_apply_level_gx(mop, i,
 								       j, input,
 								       mask);
 				}
-				/*sprintf(cmd, "l%dop%d.pgm", i, j);
+				/*sprintf(cmd, "build-l%dop%d.pgm", i, j);
 				   img_writePGM(cmd, next[j]); */
 			}
 		}
@@ -409,7 +394,6 @@ multi_level_operator_t *multi_level_build(multi_architecture_t * m,
 			}
 			/* coloca o ponteiro input_images como o resultado da aplicação acima */
 			input_images = new_input_images;
-
 		}
 
 	}

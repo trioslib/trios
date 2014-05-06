@@ -166,11 +166,14 @@ int multi_level_operator_write(char *filename, multi_level_operator_t * mop)
 	if (f == NULL) {
 		return trios_error(MSG, "Failed to open %s.", filename);
 	}
+
 	if (mop->type == BB) {
 		fprintf(f, "BB\n");
 	} else if (mop->type == GG) {
 		fprintf(f, "GG\n");
-	}
+	} else if (mop->type == GB) {
+                fprintf(f, "GB\n");
+        }
 
 	write_multi_architecture_data2(f, filename, mop);
 
@@ -213,8 +216,9 @@ int multi_level_operator_write(char *filename, multi_level_operator_t * mop)
 							i);
 						fclose(first);
 					}
-				} else if (mop->type == GG) {
+				} else if (mop->type == GG || mop->type == GB) {
 					// escreve GG
+                                    write_tree2(temp_name, mop->levels[k].trained_operator[i]);
 				}
 			}
 		}
@@ -244,7 +248,9 @@ multi_level_operator_t *multi_level_operator_read(char *filename)
 		type = BB;
 	} else if (strcmp(temp_name, "GG") == 0) {
 		type = GG;
-	} else {
+	} else if (strcmp(temp_name, "GB") == 0) {
+                type = GB;
+        } else {
 		return (multi_level_operator_t *) trios_error(MSG,
 							      "Unknown operator type: %s.",
 							      temp_name);
@@ -267,6 +273,8 @@ multi_level_operator_t *multi_level_operator_read(char *filename)
 					mop->levels[k].trained_operator[i] =
 					    (classifier_t *) itv_read(temp_name,
 								      &joint);
+				} else if (mop->type == GG || mop->type == GB) {
+					mop->levels[k].trained_operator[i] = (classifier_t *) read_tree2(temp_name);
 				}
 			}
 		}
