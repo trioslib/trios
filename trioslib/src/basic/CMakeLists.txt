@@ -1,6 +1,5 @@
 
 PROJECT(TRIOS_BASIC)
-#SET(CMAKE_BUILD_TYPE debug)
 SET(TRIOS_BASIC_SRCS
 basic/basic_apert.c
 basic/basic_cmp.c
