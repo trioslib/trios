@@ -3,3 +3,5 @@ bin/
 bin2/
 triosauto-build-*
 *.pyc
+*~
+*.autosave
