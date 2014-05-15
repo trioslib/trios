@@ -35,6 +35,15 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
 
 window_t *window_martins_barrera(xpl_t *xpl, window_t *domain, point_weight **pw);
 
+
+
+window_t **window_two_level_relief(window_t *domain, imgset_t *T1, imgset_t *T2, int n_1st_level, int sz_1st_level, int n_proto1, int n_proto2, int type);
+
+
+
+
+
+
 /*!
  * Resample the xpl_domain patterns using new_win. Useful when the lcollec_* functions take a long time or when
  * determining two-level architectures.

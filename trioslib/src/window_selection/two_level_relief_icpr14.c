@@ -14,7 +14,6 @@ window_t **window_two_level_relief(window_t *domain, imgset_t *T1, imgset_t *T2,
     
     trios_malloc(ops, sizeof(image_operator_t *) * n_1st_level, window_t **, "Failed to alloc operator vector\n");
     trios_malloc(wins, sizeof(window_t) * n_1st_level, window_t **, "Failed to alloc window vector\n");
-    
     xpl_domain = lcollec_memory(T1, domain, type);
     
     for (i = 0; i < n_1st_level; i++) {

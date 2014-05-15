@@ -7,7 +7,7 @@ void print_usage() {
     printf("Usage:\n"
            "\t trios_win_select relief xpl_file window_size number_of_prototypes result_path (optional)seed\n"
            "\t trios_win_select martins_barrera xpl_file domain result_path\n"
-           "\t trios_win_select two_level_relief imgset1 imgset2 n1stlevel win_size nproto1 nproto2 \n");
+           "\t trios_win_select two_level_relief win_domain imgset1 imgset2 n1stlevel win_size nproto1 nproto2 \n");
 }
 
 int main(int argc, char *argv[]) {
@@ -24,14 +24,12 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     
-    xpl = xpl_read(argv[2], &domain, NULL);
-    
     if (strcmp(argv[1], "relief") == 0) {
         if (argc < 6) {
             print_usage();
             return -1;
         }
-        
+        xpl = xpl_read(argv[2], &domain, NULL);
         win_size = atoi(argv[3]);
         num_proto = atoi(argv[4]);
         if (argc == 7) seed = atoi(argv[6]);
@@ -44,21 +42,23 @@ int main(int argc, char *argv[]) {
             print_usage();
             return -1;
         }
+        xpl = xpl_read(argv[2], &domain, NULL);
         new_window = window_martins_barrera(xpl, domain, NULL);
         win_write(argv[4], new_window);
     } else if (strcmp(argv[1], "two_level_relief") == 0) {
-        if (argc < 8) {
+        if (argc < 9) {
             print_usage();
             return -1;
         }
-        T1 = imgset_read(argv[2]);
-        T2 = imgset_read(argv[3]);
-        n1stlevel = atoi(argv[4]);
-        win_size = atoi(argv[5]);
-        num_proto = atoi(argv[6]);
-        num_proto2 = atoi(argv[7]);
+        domain = win_read(argv[2]);
+        T1 = imgset_read(argv[3]);
+        T2 = imgset_read(argv[4]);
+        n1stlevel = atoi(argv[5]);
+        win_size = atoi(argv[6]);
+        num_proto = atoi(argv[7]);
+        num_proto2 = atoi(argv[8]);
         
-        window_two_level_relief(T1, T2, n1stlevel, win_size, num_proto, num_proto2);
+        window_two_level_relief(domain, T1, T2, n1stlevel, win_size, num_proto, num_proto2, BB);
     }
 
     /* writes selected window */
