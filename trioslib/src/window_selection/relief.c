@@ -9,8 +9,13 @@ int compare_pw(const void *_p1, const void *_p2) {
     point_weight *p1, *p2;
     p1 = (point_weight *) _p1;
     p2 = (point_weight *) _p2;
-    /*if (p2->weight == p1->weight) return p2 - p1;
-    else */return p2->weight - p1->weight;
+    if (p2->weight == p1->weight) {
+        if (p1->i < p2->i ||
+            (p1->i == p2->i && p1->j < p2->j) ) 
+            return -1;
+        return 1;
+        /*return p1 - p2;*/
+    } else return p2->weight - p1->weight;
 }
 
 /* stores a single instance of the xpl_t */
@@ -119,7 +124,9 @@ int dist_BB(unsigned int *a, unsigned int *b, int nA) {
 }
 
 unsigned int *nearest_hit_BB(xpl_BB* node, sample *smp, int nA, unsigned int *current) {
-    if (node == NULL) return current;
+    if (node->left != NULL) {
+        current = nearest_hit_BB(node->left, smp, nA, current);
+    }
     
     if ((smp->cls == 0 && node->fq0 != 0) || (smp->cls == 1 && node->fq1 != 0)) {
         if (current == NULL) {
@@ -132,12 +139,17 @@ unsigned int *nearest_hit_BB(xpl_BB* node, sample *smp, int nA, unsigned int *cu
         }
     }
     
-    current = nearest_hit_BB(node->left, smp, nA, current);
-    return nearest_hit_BB(node->right, smp, nA, current);
+    if (node->right != NULL) {
+        current = nearest_hit_BB(node->right, smp, nA, current);
+    }
+    
+    return current;
 }
 
 unsigned int *nearest_miss_BB(xpl_BB* node, sample *smp, int nA, unsigned int *current) {
-    if (node == NULL) return current;
+    if (node->left != NULL) {
+        current = nearest_miss_BB(node->left, smp, nA, current);
+    }
 
     if ((smp->cls == 0 && node->fq1 != 0) || (smp->cls == 1 && node->fq0 != 0)) {        
         if (current == NULL) {
@@ -150,8 +162,11 @@ unsigned int *nearest_miss_BB(xpl_BB* node, sample *smp, int nA, unsigned int *c
         }
     }
     
-    current = nearest_miss_BB(node->left, smp, nA, current);
-    return nearest_miss_BB(node->right, smp, nA, current);
+    if (node->right != NULL) {
+        current = nearest_miss_BB(node->right, smp, nA, current);
+    }
+    
+    return current;
 }
 
 /* =========== GB Relief Functions ================ */
@@ -198,7 +213,11 @@ int dist_GB(int *a, int *b, int nA) {
 
 int *nearest_hit_GB(xpl_GG* node, sample *smp, int nA, int *current) {
     unsigned int fq0, fq1;
-    if (node == NULL) return current;
+    
+    if (node->left != NULL) {
+        current = nearest_hit_GB(node->left, smp, nA, current);
+    }
+    
     fq0 = fq1 = 0;
     if (node->freqlist->label == 0) {
         fq0 = node->freqlist->freq;
@@ -222,13 +241,20 @@ int *nearest_hit_GB(xpl_GG* node, sample *smp, int nA, int *current) {
         }
     }
     
-    current = nearest_hit_GB(node->left, smp, nA, current);
-    return nearest_hit_GB(node->right, smp, nA, current);
+    if (node->right != NULL) {
+        current = nearest_hit_GB(node->right, smp, nA, current);
+    }
+    return current;
 }
 
 int *nearest_miss_GB(xpl_GG* node, sample *smp, int nA, int *current) {
     unsigned int fq0, fq1;
-    if (node == NULL) return current;
+    
+    if (node->left != NULL) {
+        current = nearest_miss_GB(node->left, smp, nA, current);
+    }
+    
+    
     fq0 = fq1 = 0;
     if (node->freqlist->label == 0) {
         fq0 = node->freqlist->freq;
@@ -253,8 +279,10 @@ int *nearest_miss_GB(xpl_GG* node, sample *smp, int nA, int *current) {
         }
     }
     
-    current = nearest_miss_GB(node->left, smp, nA, current);
-    return nearest_miss_GB(node->right, smp, nA, current);
+    if (node->right != NULL) {
+        current = nearest_miss_GB(node->right, smp, nA, current);
+    }
+    return current;
 }
 
 
@@ -282,21 +310,12 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     }
     
     srand(seed);
-    printf("Random seed %d\n", seed);
+    fprintf(stderr, "Random seed %d\n", seed);
     random_numbers = malloc(sizeof(int) * m);
     for (i = 0; i < m; i++) {
         random_numbers[i] = rand() % xpl->sum;
     }
-    
-    /*for (i = 0; i < m; i++) {
-        k = random_numbers[i];
-        printf("Random %d = %d\n", i, k);
-        smp = select_instance_GX((xpl_GG*)xpl->root, domain, &k);
-        hitG = nearest_hit_GB((xpl_GG*)xpl->root,  smp, nA, NULL);
-        print_sample_GX(smp, domain);
-        printf("Hit:\n"); print_pattern_GX(hitG, domain);
-    }*/
-    
+        
     #pragma omp parallel for private(k, smp, hit, miss, hitG, missG, j)
     for (i = 0; i < m; i++) {
         /* select random instance */
@@ -334,8 +353,10 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     qsort(pw, w * h, sizeof(point_weight), compare_pw);
     
     result = win_create(domain->height, domain->width, 1);
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < nA; i++) {
         printf("Point %d %d val %f\n", pw[i].i, pw[i].j, pw[i].weight);
+    }
+    for (i = 0; i < n; i++) {
         win_set_point(pw[i].i, pw[i].j, 1, 1, result);
     }
     
@@ -344,5 +365,6 @@ window_t *window_relief(xpl_t *xpl, window_t *domain, int m, int n, point_weight
     } else {
         free(pw);
     }
+    printf("End\n\n");
     return result;
 }

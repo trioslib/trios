@@ -7,7 +7,7 @@ void print_usage() {
     printf("Usage:\n"
            "\t trios_win_select relief xpl_file window_size number_of_prototypes result_path (optional)seed\n"
            "\t trios_win_select martins_barrera xpl_file domain result_path\n"
-           "\t trios_win_select two_level_relief win_domain imgset1 imgset2 n1stlevel win_size nproto1 nproto2 \n");
+           "\t trios_win_select two_level_relief win_domain imgset1 imgset2 n1stlevel win_size nproto1 nproto2  result_path\n");
 }
 
 int main(int argc, char *argv[]) {
@@ -15,6 +15,9 @@ int main(int argc, char *argv[]) {
     xpl_t *xpl;
     window_t *domain;
     imgset_t *T1, *T2;
+    
+    multi_level_operator_t *mop;
+    
     int num_proto, win_size, seed;
     int num_proto2, n1stlevel;
     char *dest;
@@ -46,7 +49,7 @@ int main(int argc, char *argv[]) {
         new_window = window_martins_barrera(xpl, domain, NULL);
         win_write(argv[4], new_window);
     } else if (strcmp(argv[1], "two_level_relief") == 0) {
-        if (argc < 9) {
+        if (argc < 10) {
             print_usage();
             return -1;
         }
@@ -58,7 +61,8 @@ int main(int argc, char *argv[]) {
         num_proto = atoi(argv[7]);
         num_proto2 = atoi(argv[8]);
         
-        window_two_level_relief(domain, T1, T2, n1stlevel, win_size, num_proto, num_proto2, BB);
+        mop = window_two_level_relief(domain, T1, T2, n1stlevel, win_size, num_proto, num_proto2, BB);
+        multi_level_operator_write(argv[argc-1], mop);
     }
 
     /* writes selected window */
