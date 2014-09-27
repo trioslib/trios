@@ -206,7 +206,7 @@ int multi_level_operator_write(char *filename, multi_level_operator_t * mop)
 							".w\noperator%d-files/window\n",
 							i);
 						fprintf(first,
-							".xpl\noperator%d-files/colled\n",
+							".xpl\noperator%d-files/collec\n",
 							i);
 						fprintf(first,
 							".mtm\noperator%d-files/decision\n",
@@ -219,6 +219,31 @@ int multi_level_operator_write(char *filename, multi_level_operator_t * mop)
 				} else if (mop->type == GG || mop->type == GB) {
 					// escreve GG
                                     write_tree2(temp_name, mop->levels[k].trained_operator[i]);
+				    if (k == 0) {
+					/* write the operator file so that first level operators can be read as image_operator_t. */
+					sprintf(temp_name,
+						"%s-files/level%d/operator%d",
+						filename, k, i);
+					first = fopen(temp_name, "w");
+					if (first == NULL)
+						return trios_error(MSG,
+								   "Failed to open %s.",
+								   temp_name);
+					fprintf(first, ".t\nGB\n");
+					fprintf(first,
+						".w\noperator%d-files/window\n",
+						i);
+					fprintf(first,
+						".xpl\noperator%d-files/collec\n",
+						i);
+					fprintf(first,
+						".mtm\noperator%d-files/decision\n",
+						i);
+					fprintf(first,
+						".gg\noperator%d-files/operator\n",
+						i);
+					fclose(first);
+				}
 				}
 			}
 		}

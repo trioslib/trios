@@ -114,7 +114,7 @@ class ImageOperator:
         imgset = save_temporary(imgset)
         r = detect.call('trios_build single %s %s %s %s'%(self.type, win, imgset, self.fname))
         os.remove(win)
-        os.remove(imgset)
+        #os.remove(imgset)
         if r == 0:
             self.built = True
         else:
@@ -167,6 +167,6 @@ class ImageOperator:
             mae_err = int(content.split()[1])
             acc = float(content.split()[3])            
         os.remove(errname)
-        os.remove(test_set)
+        #os.remove(test_set)
         return mae_err, acc
         
