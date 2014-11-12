@@ -9,13 +9,17 @@ int compare_pw(const void *_p1, const void *_p2) {
     point_weight *p1, *p2;
     p1 = (point_weight *) _p1;
     p2 = (point_weight *) _p2;
+    
     if (p2->weight == p1->weight) {
         if (p1->i < p2->i ||
             (p1->i == p2->i && p1->j < p2->j) ) 
             return -1;
         return 1;
-        /*return p1 - p2;*/
-    } else return p2->weight - p1->weight;
+    } else if (p2->weight > p1->weight) {
+        return 1;
+    } else {
+        return -1;
+    }
 }
 
 /* stores a single instance of the xpl_t */

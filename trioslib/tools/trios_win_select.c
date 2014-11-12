@@ -7,6 +7,7 @@ void print_usage() {
     printf("Usage:\n"
            "\t trios_win_select relief xpl_file window_size number_of_prototypes result_path (optional)seed\n"
            "\t trios_win_select martins_barrera xpl_file domain result_path\n"
+           "\t trios_win_select mutual_information xpl_file domain window_size result_path\n"
            "\t trios_win_select two_level_relief win_domain imgset1 imgset2 n1stlevel win_size nproto1 nproto2  result_path\n");
 }
 
@@ -48,6 +49,11 @@ int main(int argc, char *argv[]) {
         xpl = xpl_read(argv[2], &domain, NULL);
         new_window = window_martins_barrera(xpl, domain, NULL);
         win_write(argv[4], new_window);
+    } else if (strcmp(argv[1], "mutual_information") == 0) {
+        xpl = xpl_read(argv[2], &domain, NULL);
+        win_size = atoi(argv[4]);
+        new_window = window_mutual_information(xpl, domain, win_size, NULL);
+        win_write(argv[5], new_window);
     } else if (strcmp(argv[1], "two_level_relief") == 0) {
         if (argc < 10) {
             print_usage();
