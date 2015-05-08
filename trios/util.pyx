@@ -44,9 +44,7 @@ cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=True):
         
 
     assert i == nrows
-    X = X / 255.0
     if include_output:
-        y = y / 255.0
         return X, y, C
     return X, C
 

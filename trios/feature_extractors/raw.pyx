@@ -7,7 +7,7 @@ from trios.serializable import Serializable
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cpdef RAWExtract(np.ndarray[unsigned char, ndim=2] win, np.ndarray[unsigned char, ndim=2] img, int i, int j, pattern):
+cpdef RAWExtract(np.ndarray[unsigned char, ndim=2] win, np.ndarray[unsigned char, ndim=2] img, int i, int j, pattern, bint normalize):
     cdef int hh = win.shape[0]
     cdef int ww = win.shape[1]
     cdef int hh2 = hh/2
@@ -20,12 +20,15 @@ cpdef RAWExtract(np.ndarray[unsigned char, ndim=2] win, np.ndarray[unsigned char
         for m in range(-ww2, ww2+1):
             if win[l+hh2, m+ww2] != 0:
                 pattern[k] = img[i+l,j+m]
-                k += 1                    
+                k += 1                
+    if normalize:
+        pattern /= 255.0
 
 
 class RAWFeatureExtractor(FeatureExtractor):
-    def __init__(self, window=None):
+    def __init__(self, window=None, normalize=True):
         self.window = window
+        self.normalize = normalize
 
     def __len__(self):
         return np.greater(self.window, 0).sum()
@@ -34,7 +37,15 @@ class RAWFeatureExtractor(FeatureExtractor):
         return np.zeros(len(self), np.int32)
         
     def extract(self, img, i, j, pattern):
-        RAWExtract(self.window, img, i, j, pattern)
+        RAWExtract(self.window, img, i, j, pattern, self.normalize)
+    
+    def write_state(self, obj_dict):
+        FeatureExtractor.write_state(self, obj_dict)
+        obj_dict['normalize'] = self.normalize
+    
+    def set_state(self, obj_dict):
+        FeatureExtractor.set_state(self, obj_dict)
+        self.normalize = obj_dict['normalize']
         
 @cython.boundscheck(False)
 @cython.nonecheck(False)

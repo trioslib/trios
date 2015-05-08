@@ -27,7 +27,7 @@ class AutoEncoder(FeatureExtractor):
         '''
         
         FeatureExtractor.__init__(self)
-        if window != None:
+        if not window is None:
             self.configure(window, n_hidden, hidden_nl)
         
     def configure(self, window, n_hidden, hidden_nl):
@@ -168,7 +168,6 @@ class AutoEncoder(FeatureExtractor):
             Apply AE and return the encoded input
         '''
         self.raw.extract(img, i, j, self.raw_pat)
-        self.raw_pat = self.raw_pat / 255.0
         encoded = self.encode(self.raw_pat.reshape(1, self.n_inputs))
         np.copyto(pat, encoded)
         

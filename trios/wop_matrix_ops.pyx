@@ -68,7 +68,6 @@ cpdef apply_loop(np.ndarray[unsigned char, ndim=2] window, np.ndarray[unsigned c
                 count += 1
                 extractor.extract(image, i, j, pat)
                 output[i,j] = classifier.apply(pat)
-    output = output * 255
     return output
     
 @cython.boundscheck(False)
