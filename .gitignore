@@ -1,2 +1,5 @@
+*.pyc
 build
 cython_debug
+site/cache
+site/output
