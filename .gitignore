@@ -1,7 +1,2 @@
-*.user
-bin/
-bin2/
-triosauto-build-*
-*.pyc
-*~
-*.autosave
+build
+cython_debug
