@@ -36,6 +36,9 @@ setup(
             Extension('trios.util', [
                     'trios/util.pyx'
                     ], include_dirs=[np.get_include()]),
+            Extension('trios.serializable', [
+                    'trios/serializable.pyx'
+                    ], include_dirs=[np.get_include()]),
     ], gdb_debug=True, output_dir='.'),
     packages = ['trios', 'trios.feature_extractors', 'trios.ISI', 'trios.classifiers']
 )

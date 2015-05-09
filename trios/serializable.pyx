@@ -8,7 +8,7 @@ Created on Sun May  3 10:23:16 2015
 import json
 import importlib
 
-class Serializable(object):
+cdef class Serializable:
     def __init__(self):
         pass
     
