@@ -45,9 +45,9 @@ class WOperator(Serializable):
         dataset = {}
         for (inp, out, msk) in imgset:
             print('Processing', inp, out, msk, file=sys.stderr)
-            inp = sp.misc.imread(inp, True).astype(np.uint8)
-            out = sp.misc.imread(out, True).astype(np.uint8)
-            msk = sp.misc.imread(msk, True).astype(np.uint8)
+            inp = sp.ndimage.imread(inp, mode='L')
+            out = sp.ndimage.imread(out, mode='L')
+            msk = sp.ndimage.imread(msk, mode='L')
             process_image(dataset, window, inp, out, msk, extractor)
         return dataset
     
@@ -69,9 +69,9 @@ class WOperator(Serializable):
             x_border = y_border = 0
         for (inp, out, msk) in imgset:
             print('Testing', inp, out, file=sys.stderr)
-            inp = sp.misc.imread(inp, True).astype(np.uint8)
-            out = sp.misc.imread(out, True).astype(np.uint8)
-            msk = sp.misc.imread(msk, True).astype(np.uint8)
+            inp = sp.ndimage.imread(inp, mode='L')
+            out = sp.ndimage.imread(out, mode='L')
+            msk = sp.ndimage.imread(msk, mode='L')
             res = self.apply(inp, msk)
             
             errors.append(compare_images(out, msk, res, x_border, y_border))
