@@ -5,10 +5,13 @@ Created on Mon Apr 13 13:49:26 2015
 @author: igordsm
 """
 
+from __future__ import print_function
+
 import theano.tensor as T
 import theano
 import math
 import numpy as np
+import sys
 
 from trios.WOperator import FeatureExtractor
 from trios.feature_extractors import RAWFeatureExtractor
@@ -139,7 +142,7 @@ class AutoEncoder(FeatureExtractor):
         sgd = theano.function(inputs=[self.X], outputs=[cost_fn], updates=updates)
         for e in range(epochs):
             nbatches = int(math.ceil(m / batch_size))            
-            #print('Epoch', e, 'Batches', nbatches)
+            print('Epoch', e, 'Batches', nbatches, file=sys.stderr)
             for b in range(nbatches):
                 cost = sgd(X[b*batch_size:(b+1)*batch_size])[0]
                 #print('%d - %f'%(b, cost))

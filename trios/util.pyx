@@ -16,8 +16,8 @@ cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=True):
 
     for pat in dataset:
         occur = dataset[pat]
-        nrows += len(occur) # one line for each unique pair (X, y)
-    
+        nrows += len(occur) 
+        
     X = np.zeros((nrows, ncols), dtype)
     C = np.zeros(nrows, np.uint)
     if include_output:
