@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 AUTHOR = u'Igor Montagner'
 SITENAME = u'TRIOSlib - Training Image Operators from Samples'
-SITEURL = ''
+SITEURL = 'http://trioslib.sf.net/blog/'
 
 THEME = 'gum'
 PATH = 'content'
@@ -12,6 +12,11 @@ PATH = 'content'
 TIMEZONE = 'Europe/Paris'
 
 DEFAULT_LANG = u'en'
+
+PLUGIN_PATHS = ['../../pelican-plugins']
+PLUGINS = ['ipynb']
+
+DELETE_OUTPUT_DIRECTORY = True
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
