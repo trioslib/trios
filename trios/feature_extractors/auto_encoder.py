@@ -125,7 +125,7 @@ class AutoEncoder(FeatureExtractor):
         '''
         if not error in self.cost_dict:
             raise ValueError("Error function not found: %s"%error)
-        cost_fn = self.cost_dict[error] + l2_coef * T.sum(T.mul(self.W, self.W)) + l1_coef * T.sum(T.abs(self.W))
+        cost_fn = self.cost_dict[error] + l2_coef * T.sum(T.mul(self.W, self.W)) + l1_coef * T.sum(T.abs_(self.W))
 
         if isinstance(dataset, np.ndarray):
             X = dataset
@@ -143,7 +143,7 @@ class AutoEncoder(FeatureExtractor):
         sgd = theano.function(inputs=[self.X], outputs=[cost_fn], updates=updates)
         for e in range(epochs):
             nbatches = int(math.ceil(m / batch_size))            
-            print('Epoch', e, 'Batches', nbatches, file=sys.stderr)
+            print('Epoch', e, file=sys.stderr)
             for b in range(nbatches):
                 cost = sgd(X[b*batch_size:(b+1)*batch_size])[0]
                 #print('%d - %f'%(b, cost))
