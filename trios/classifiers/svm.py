@@ -13,21 +13,17 @@ from trios import util
 import pickle
 
 class SVM(Classifier):
-    def __init__(self, **kw):
+    def __init__(self, *a, **kw):
         self.cls = sklearn.svm.SVC(**kw)
     
     def train(self, dataset, **kw):
         X, y, C = util.dataset_to_array(dataset, np.float64, True, False)
-        np.savetxt('X', X)
-        np.savetxt('y', y)
-        y = np.reshape(y, y.shape[0])
-        print(self.cls.fit(X, y, C))
+        self.cls.fit(X, y, C)
+        print(self.cls.score(X, y, C))
     
     def apply(self, fvector):
         r = self.cls.predict(fvector)
-        if r[0] > 0:
-            print(r)
-        return 1.0
+        return r
 
     def write_state(self, obj_dict):
         obj_dict['svm'] = pickle.dumps(self.cls)

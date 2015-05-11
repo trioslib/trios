@@ -71,6 +71,8 @@ class AutoEncoder(FeatureExtractor):
         self.cost_ce = -T.sum( self.X * T.log(self.z) +  (1 - self.X) * T.log(1 - self.z), axis=1  ).mean()
         self.cost_class = T.sum(T.abs_(self.z_round - self.X), axis=1).mean()
         
+        self.cost_dict = {'MSE': self.cost_mse, 'CE': self.cost_ce, 'CLASS': self.cost_class}
+        
         self.__encode = theano.function(inputs=[self.X], outputs=[self.y])
         
     
@@ -116,16 +118,15 @@ class AutoEncoder(FeatureExtractor):
     def temp_feature_vector(self):
         return np.zeros(self.n_hidden, theano.config.floatX)
     
-    def train(self, dataset, epochs=1, learning_rate=0.01, batch_size=100, error='MSE'):
+    def train(self, dataset, epochs=1, learning_rate=0.01, batch_size=100, error='MSE', l2_coef=0, l1_coef=0):
         '''
             Takes a dataset and builds a matrix with n_inputs columns and len(dataset)
             rows apply SGD with a given number of epochs.
-        '''        
-        if error == 'MSE':
-            cost_fn = self.cost_mse
-        else:
-            cost_fn = self.cost_ce
-        
+        '''
+        if not error in self.cost_dict:
+            raise ValueError("Error function not found: %s"%error)
+        cost_fn = self.cost_dict[error] + l2_coef * T.sum(T.mul(self.W, self.W)) + l1_coef * T.sum(T.abs(self.W))
+
         if isinstance(dataset, np.ndarray):
             X = dataset
         else:
@@ -148,12 +149,9 @@ class AutoEncoder(FeatureExtractor):
                 #print('%d - %f'%(b, cost))
                 
     def reconstruction_error(self, dataset, error='MSE'):
-        if error == 'MSE':
-            cost_fn = self.cost_mse
-        elif error == 'CE':
-            cost_fn = self.cost_ce
-        else:
-            cost_fn = self.cost_class
+        if not error in self.cost_dict:
+            raise ValueError("Error function not found: %s"%error)
+        cost_fn = self.cost_dict[error]
             
         if isinstance(dataset, np.ndarray):
             X = dataset
