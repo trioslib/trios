@@ -43,4 +43,8 @@ typedef struct idx_ll {
 
 extern unsigned int bitmsk[32] ;
 
+int set_freq(freq_node * freqlstin, freq_node ** freqlist);
+freq_node *freq_node_create(int label, unsigned int freq);
+void freqlist_free(freq_node * freq_list);
+
 #endif

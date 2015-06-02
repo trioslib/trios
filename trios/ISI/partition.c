@@ -446,37 +446,27 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
         printf("OMP NUM PROC %d threads %d\n", omp_get_num_procs(),
 	       omp_get_max_threads());
 #endif 
-
 #endif
-/* -==== For now I'm disabling OpenMP. It is crashing my current dev machine......
-#pragma omp parallel private(i)
-	{
 
-#pragma omp for schedule(static, 1)
-*/
 
-		for (i = 0; i < n; i++) {
-			part_i[i] =
-			    solve_partition(part_m[i], part_i[i], i, win);
-		}
-//	}
+    for (i = 0; i < n; i++) {
+        sprintf(cmd, "part.temp-P-%d.mtm", i + 1);
+	   mtm_write(cmd, part_m[i], win, NULL); 
+    }
+
+#pragma omp parallel for
+	for (i = 0; i < n; i++) {
+		part_i[i] = solve_partition(part_m[i], part_i[i], i, win);
+	}
+
 
 #ifdef DEBUG
 	printf("Finished ISI\n");
 #endif
-
-	sprintf(cmd, "part.temp%d-", pid);
-	sprintf(cmd2, "final-%d.temp", pid);
-	/*if (litvconcat(cmd, n, cmd2) == 0) {
-	   return (itv_t *) trios_error(MSG, "Error on itv concat");
-	   } */
 	acc = litvconcat_memory(part_i, n);
 
 	free(part_m);
 	free(part_i);
-
-	/*acc = itv_read(cmd2, &win);
-	   win_free(win); */
 
 	return acc;
 }

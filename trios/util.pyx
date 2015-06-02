@@ -57,23 +57,33 @@ cpdef minimize_error(dict dataset):
     cdef unsigned long pat_count
     cdef double avg, temp
     cdef np.ndarray[unsigned int, ndim=2] decisions = np.zeros((npatterns, win_size+1), dtype=np.uint32)
+    cdef np.ndarray[unsigned int, ndim=2] freqs = np.zeros((npatterns, 2), dtype=np.uint32)
+
+    keys_r = [tuple(reversed(k)) for k in dataset.keys()]
+    keys_r.sort()
+    #patterns = sorted(dataset.keys(), key=reversed)
     
     i = 0
-    for pat in dataset:
-        # averages all occurrences and round up
-        pat_count = 0
-        pat_occur = dataset[pat]
-        avg = 0
+    for pat_r in keys_r:
+        fq_tot = fq0 = fq1 = 0
+        pat = tuple(reversed(pat_r))
+        if 0 in dataset[pat]:
+            fq0 = dataset[pat][0]
+        if 255 in dataset[pat]:
+            fq1 = dataset[pat][255]
+            
+        assert fq0 != 0 or fq1 != 0
         
-        for oc in pat_occur:
-            pat_count += pat_occur[oc]
-        
-        for oc in pat_occur:
-            temp = pat_occur[oc]
-            avg += oc * temp/pat_count
+        fq_tot = fq0 + fq1
+        freqs[i, 0] = fq_tot
+        freqs[i, 1] = fq1
         
         for j in range(win_size):
             decisions[i,j] = pat[j] & 0xffffffff
-        decisions[i, win_size] = int(avg+0.5) 
+            
+        if fq0 > fq1:
+            decisions[i, win_size] = 0 & 0xffffffff
+        else:
+            decisions[i, win_size] = 1 & 0xffffffff
         i+=1
-    return decisions
+    return decisions, freqs

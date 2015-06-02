@@ -57,8 +57,20 @@ cdef class ISI(trios.serializable.Serializable):
             return self._trained
     
     cpdef train(self, dict dataset):
-        cdef np.ndarray[unsigned int, ndim=2] X = util.minimize_error(dataset)
-        self.interval_list = definitions.train_operator_ISI(<unsigned int *> X.data, self.wsize, X.shape[0], self.win)
+        cdef np.ndarray[unsigned int, ndim=2] X
+        cdef np.ndarray[unsigned int, ndim=2] F
+        X, F = util.minimize_error(dataset)
+        print(X.shape[0], X.shape[1])
+        cdef int shape = X.shape[0]
+        cdef definitions.window_t *win = self.win
+        cdef int wsize = self.wsize
+        cdef unsigned int *data = <unsigned int *> X.data
+        cdef unsigned int *freqs = <unsigned int *> F.data
+        cdef definitions.itv_t *ilist
+        with nogil:
+            #self.interval_list = definitions.train_operator_ISI(<unsigned int *> X.data, self.wsize, X.shape[0], self.win)
+            ilist = definitions.train_operator_ISI(data, freqs, wsize, shape, win)  
+        self.interval_list = ilist
         self._trained = True
         
     def write_state(self, obj_dict):

@@ -26,7 +26,7 @@ setup(
                     'trios/ISI/io_itv.c',
                     'trios/ISI/io_win.c',
                     'trios/ISI/io_mtm.c',
-                    ], include_dirs=['trios/ISI', np.get_include()]),# , extra_compile_args = ['-fopenmp', '-g'], extra_link_args = ['-fopenmp']),
+                    ], include_dirs=['trios/ISI', np.get_include()], extra_compile_args = ['-fopenmp', '-g'], extra_link_args = ['-fopenmp']),
             Extension('trios.feature_extractors.raw', [
                     'trios/feature_extractors/raw.pyx'
                     ], include_dirs=[np.get_include()]),

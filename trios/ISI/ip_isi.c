@@ -20,36 +20,6 @@
 #include </usr/include/time.h>
 #endif
 
-/* GLobal variables */
-char *GLtmp_bas_file, *GLlog_file;
-int GLlog_step;
-window_t *GLwin;
-/*apert_t  *GLapt ;*/
-FILE *GLfd;
-
-#define Print_Log(i) {                                           \
-                                                                 \
-    if((GLlog_step) && ((i % GLlog_step) == 0)) {                \
-      /* output data to the log file */                          \
-      if(GLlog_file) {                                           \
-        GLfd = fopen(GLlog_file, "w") ;                          \
-        fprintf(GLfd, "Processed examples = %d\n", i) ;          \
-        fclose(GLfd) ;                                           \
-      }                                                          \
-      else {                                                     \
-        printf("Processed examples = %d\n", i) ;                 \
-      }                                                          \
-                                                                 \
-      /* and write current set of intervals if required */       \
-      if(GLtmp_bas_file) {                                       \
-        if(0/*!itv_write(GLtmp_bas_file, itv, GLwin/*, GLapt*/) {             \
-          trios_warning("Warning : could not write int. basis file %s.",  \
-                  GLtmp_bas_file) ;                              \
-        }                                                        \
-      }                                                          \
-    }                                                            \
-  }                                                              \
-
 
 /* macro to check whether the interval p_new is covered by some interval
    in the list pointed by p                                         */
@@ -111,16 +81,16 @@ int /*+ Purpose: Perform ISI by points (binary case)              + */ isi_basic
 	int j;
 #endif
 
-	GLlog_step = log_step;
+	/*GLlog_step = log_step;
 	if (log_step) {
 		/*
 		   strcpy(GLlog_file, log_file) ;
 		   strcat(GLlog_file, ".tmp") ;
-		 */
+		 
 		GLlog_file = log_file;
 		GLtmp_bas_file = tmp_bas_file;
 		GLwin = win;
-	}
+	}*/
 
 	mtm = mtm_i;
 	itv = *itv_i;
@@ -147,12 +117,13 @@ int /*+ Purpose: Perform ISI by points (binary case)              + */ isi_basic
 	/* get wsize */
 	wsize1 = itv_get_wsize(itv);
 	wsize2 = mtm_get_wsize(mtm);
-
+/*
 #ifdef _DEBUG_1_
 	trios_debug("itv:wsize=%d  mtm:wsize=%d", wsize1, wsize2);
 	trios_debug("itv:nitv=%d  mtm:nmtm=%d", itv_get_nitv(itv),
 		    mtm_get_nmtm(mtm));
 #endif
+*/
 
 	if (wsize1 != wsize2) {
 		return trios_error(1,
@@ -359,16 +330,16 @@ int /*+ Purpose: ISI with groupment of examples            + */ isi_gen(
 	trios_debug("Starting isi_gen()");
 #endif
 
-	GLlog_step = log_step;
+	/*GLlog_step = log_step;
 	if (log_step) {
 		/*
 		   strcpy(GLlog_file, log_file) ;
 		   strcat(GLlog_file, ".tmp") ;
-		 */
+		 
 		GLlog_file = log_file;
 		GLtmp_bas_file = tmp_bas_file;
 		GLwin = win;
-	}
+	}*/
 
 	itv = *itv_i;
 	mtm = mtm_i;
@@ -752,8 +723,7 @@ int /*+ Purpose: ISI-0 by points                               + */ isi_0(
 
 	for (i = 0; i < nmtm; i++) {
 
-		Print_Log(i);
-
+		
 		p_list = (itv_BX *) itv->head;
 		itv->head = NULL;
 		itv->nitv = 0;
@@ -902,7 +872,6 @@ int /*+ Purpose: ISI-1 (point case)                            + */ isi_1(
 
 	for (i = 0; i < nmtm; i++) {
 
-		Print_Log(i);
 
 		p_list = (itv_BX *) itv->head;
 		itv->head = NULL;
@@ -1073,7 +1042,6 @@ int /*+ Purpose: ISI-2 (point case)                            + */ isi_2(
 
 	for (i = 0; i < nmtm; i++) {
 
-		Print_Log(i);
 
 		p_list = (itv_BX *) itv->head;
 		itv->head = NULL;
@@ -1338,7 +1306,6 @@ int /*+ Purpose: ISI-3 (point case)                            + */ isi_3(
 
 	for (i = 0; i < nmtm; i++) {
 
-		Print_Log(i);
 
 		p_list = (itv_BX *) itv->head;
 		itv->head = NULL;
@@ -1557,8 +1524,6 @@ int				/*+ Purpose: split all intervals of a list (of intervals)
 
 		I = itv_list;
 
-		Print_Log(count);
-
 		p = (itv_BX *) itv->head;
 		itv->head = NULL;
 		p_kill = NULL;
@@ -1683,7 +1648,6 @@ int				/*+ Purpose: split all intervals of a list (of intervals)
 
 		I = itv_list;
 
-		Print_Log(count);
 
 		p = (itv_BX *) itv->head;
 		itv->head = NULL;
@@ -1823,7 +1787,6 @@ int				/*+ Purpose: split all intervals of a list (of intervals)
 
 		I = itv_list;
 
-		Print_Log(count);
 
 		p = (itv_BX *) itv->head;
 		itv->head = NULL;
