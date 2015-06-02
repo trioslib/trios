@@ -27,7 +27,7 @@ cpdef RAWExtract(np.ndarray[unsigned char, ndim=2] win, np.ndarray[unsigned char
 class RAWFeatureExtractor(FeatureExtractor):
     def __init__(self, window=None, mul=1.0):
         self.window = window
-        self.mul = 1.0
+        self.mul = mul
 
     def __len__(self):
         return np.greater(self.window, 0).sum()

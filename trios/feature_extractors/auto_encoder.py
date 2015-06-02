@@ -38,7 +38,7 @@ class AutoEncoder(FeatureExtractor):
         self.n_inputs = np.greater(self.window, 0).sum()
         self.n_hidden = n_hidden
         
-        self.raw = RAWFeatureExtractor(window)
+        self.raw = RAWFeatureExtractor(window, 1.0/255)
         self.raw_pat = np.zeros(self.n_inputs, theano.config.floatX)
         
         initial_W = np.asarray(
@@ -125,7 +125,7 @@ class AutoEncoder(FeatureExtractor):
         '''
         if not error in self.cost_dict:
             raise ValueError("Error function not found: %s"%error)
-        cost_fn = self.cost_dict[error] + l2_coef * T.sum(T.mul(self.W, self.W)) + l1_coef * T.sum(T.abs_(self.W))
+        cost_fn = self.cost_dict[error] + l2_coef * T.sum(self.W ** 2) + l1_coef * T.sum(abs(self.W))
 
         if isinstance(dataset, np.ndarray):
             X = dataset
