@@ -2,6 +2,7 @@
 #include "trios_mtm.h"
 #include "trios_win.h"
 #include "trios_misc.h"
+#include "trios_learn.h"
 
 #include "trios_error.h"
 

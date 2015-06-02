@@ -106,6 +106,6 @@ cdef class ISI(trios.serializable.Serializable):
     @cython.nonecheck(False)
     cpdef apply(self, np.ndarray pat):
         cdef int wz = len(pat)
-        cdef unsigned char r = definitions.itv_list_contain(self.interval_list, <unsigned int *> pat.data, wz)
+        cdef unsigned char r = 255 * definitions.itv_list_contain(self.interval_list, <unsigned int *> pat.data, wz)
         return r
     
