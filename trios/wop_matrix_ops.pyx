@@ -24,8 +24,6 @@ cpdef process_image(dict dataset, np.ndarray[unsigned char, ndim=2] win, np.ndar
     cdef int ww = win.shape[1]
     cdef int hh2 = hh/2
     cdef int ww2 = ww/2
-    cdef int wsize = np.greater(win, 0).sum()
-    
     cdef int count = 0
     
     wpat = extractor.temp_feature_vector()
@@ -53,11 +51,7 @@ cpdef apply_loop(np.ndarray[unsigned char, ndim=2] window, np.ndarray[unsigned c
     cdef int w = image.shape[1]    
     cdef int wh = int(window.shape[0]/2)
     cdef int ww = int(window.shape[1]/2)
-    
     cdef np.ndarray[unsigned char, ndim=2] output = np.zeros((image.shape[0], image.shape[1]), dtype=np.uint8)
-
-    cdef int wsize = np.greater(window, 0).sum()
-    
     cdef np.ndarray pat = extractor.temp_feature_vector()
     
     cdef int i, j
