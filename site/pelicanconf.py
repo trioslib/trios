@@ -13,7 +13,7 @@ TIMEZONE = 'Europe/Paris'
 
 DEFAULT_LANG = u'en'
 
-PLUGIN_PATHS = ['../../pelican-plugins']
+PLUGIN_PATHS = ['./plugins']
 PLUGINS = ['ipynb']
 
 DELETE_OUTPUT_DIRECTORY = True
