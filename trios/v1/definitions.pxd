@@ -56,7 +56,10 @@ cdef extern from "trios_win.h":
     int win_get_point(int i, int j, int k, window_t *win)
     int win_free(window_t *win)
 
-cdef extern int itv_write(char *fname, itv_t *it, window_t *win)
+cdef extern window_t *win_read(char *fname)
 cdef extern itv_t *itv_read(char *fname, window_t ** win)
+
+cdef extern int itv_write(char *fname, itv_t *it, window_t *win)
+
 cdef extern itv_t *train_operator_ISI(unsigned int *data, unsigned int *freqs, int wsize, int npat, window_t *win) nogil
 cdef extern int itv_list_contain(itv_t * itv, unsigned int *wpat,	int wzip)
