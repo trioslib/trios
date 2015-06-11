@@ -81,7 +81,7 @@ cpdef minimize_error(dict dataset):
         for j in range(win_size):
             decisions[i,j] = pat[j] & 0xffffffff
             
-        if fq0 > fq1:
+        if fq0 >= fq1:
             decisions[i, win_size] = 0 & 0xffffffff
         else:
             decisions[i, win_size] = 1 & 0xffffffff
