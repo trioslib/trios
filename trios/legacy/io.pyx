@@ -5,6 +5,8 @@ cimport trios.v1.definitions as v1
 
 #from trios.ISI import ISI
 from trios.ISI.isi cimport ISI
+from trios.WOperator import WOperator
+from trios.feature_extractors import RAWBitFeatureExtractor
 
 cpdef itv_read(char *fname):
     cdef v1.window_t *win
@@ -15,7 +17,7 @@ cpdef itv_read(char *fname):
     cdef ISI isi = ISI(win_np)    
     isi.set_itv(itv_isi)
     v1.win_free(win)
-    return isi
+    return WOperator(RAWBitFeatureExtractor(win_np), isi)
 
 cpdef win_read(char *fname):
     cdef v1.window_t *old_win = v1.win_read(fname)
@@ -35,4 +37,4 @@ cdef win_from_old(v1.window_t *old_win):
 
 cpdef operator_read(fname):
     # add error handling in case of two level operators?
-    return itv_read(fname + '-foles/operator')
+    return itv_read(fname + '-files/operator')
