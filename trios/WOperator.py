@@ -44,7 +44,7 @@ class WOperator(Serializable):
     def extract_dataset(imgset, window, extractor):
         dataset = {}
         for (inp, out, msk) in imgset:
-            print('Processing', inp, out, msk, file=sys.stderr)
+            #print('Processing', inp, out, msk, file=sys.stderr)
             inp = sp.ndimage.imread(inp, mode='L')
             out = sp.ndimage.imread(out, mode='L')
             msk = sp.ndimage.imread(msk, mode='L')
@@ -68,7 +68,7 @@ class WOperator(Serializable):
         else:
             x_border = y_border = 0
         for (inp, out, msk) in imgset:
-            print('Testing', inp, out, file=sys.stderr)
+            #print('Testing', inp, out, file=sys.stderr)
             inp = sp.ndimage.imread(inp, mode='L')
             out = sp.ndimage.imread(out, mode='L')
             msk = sp.ndimage.imread(msk, mode='L')

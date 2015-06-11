@@ -19,7 +19,6 @@ cpdef process_image(dict dataset, np.ndarray[unsigned char, ndim=2] win, np.ndar
     cdef int j
     cdef int l
     cdef int m
-    
     cdef int hh = win.shape[0]
     cdef int ww = win.shape[1]
     cdef int hh2 = hh/2
@@ -41,7 +40,7 @@ cpdef process_image(dict dataset, np.ndarray[unsigned char, ndim=2] win, np.ndar
                 else:
                     dataset[wpatt][output[i,j]] += 1
                     
-    print('Extracted', count, 'samples', file=sys.stderr)
+    #print('Extracted', count, 'samples', file=sys.stderr)
     
 
 @cython.boundscheck(False)
