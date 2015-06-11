@@ -37,4 +37,5 @@ cdef win_from_old(v1.window_t *old_win):
 
 cpdef operator_read(fname):
     # add error handling in case of two level operators?
-    return itv_read(fname + '-files/operator')
+    fname = fname + '-files/operator'
+    return itv_read(fname)
