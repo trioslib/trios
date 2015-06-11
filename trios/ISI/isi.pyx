@@ -54,7 +54,6 @@ cdef class ISI(trios.serializable.Serializable):
         cdef np.ndarray[unsigned int, ndim=2] X
         cdef np.ndarray[unsigned int, ndim=2] F
         X, F = util.minimize_error(dataset)
-        print(X.shape[0], X.shape[1])
         cdef int shape = X.shape[0]
         cdef v1.window_t *win = self.win
         cdef int wsize = self.wsize
