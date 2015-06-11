@@ -70,7 +70,7 @@ cpdef RAWBitExtract(np.ndarray[unsigned char, ndim=2] win, np.ndarray[unsigned c
                 
 
 class RAWBitFeatureExtractor(FeatureExtractor):
-    def __init__(self, np.ndarray[unsigned char, ndim=2] window):
+    def __init__(self, np.ndarray[unsigned char, ndim=2] window=None):
         self.window = window
 
     def __len__(self):

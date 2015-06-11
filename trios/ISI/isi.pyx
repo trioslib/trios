@@ -23,7 +23,7 @@ for i in range(32):
 
 cdef class ISI(trios.serializable.Serializable):
    
-    def __init__(self, win_np):
+    def __init__(self, win_np=None):
         self._trained = False
         if not win_np is None:
             self.configure(win_np)
