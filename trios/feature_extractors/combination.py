@@ -1,16 +1,16 @@
 import numpy as np
 
-from trios.WOperator import FeatureExtractor
-from trios.serializable import Serializable
+from trios.WOperator import FeatureExtractor, WOperator
 import math
 
-class CombinationPattern(Serializable):
+class CombinationPattern(FeatureExtractor):
     def __init__(self,  *wops, **kwargs):
         if 'bitpack' in kwargs:
             self.bitpack = kwargs['bitpack']
         else:
             self.bitpack = False
-            
+        
+        self.window = np.zeros((len(wops), 1), np.uint8)
         self.wops = wops
         self.fvectors = [wop.extractor.temp_feature_vector() for wop in wops]
 
@@ -40,8 +40,20 @@ class CombinationPattern(Serializable):
     
     def write_state(self, obj_dict):
         FeatureExtractor.write_state(self, obj_dict)
+        obj_dict['bitpack'] = self.bitpack
+        obj_dict['nwops'] = len(self.wops)
+        for i in range(len(self.wops)):
+            obj_dict['operator_%d'%i] = self.wops[i].write(None)
     
     def set_state(self, obj_dict):
         FeatureExtractor.set_state(self, obj_dict)
- 
+        self.bitpack = obj_dict['bitpack']
+        n = obj_dict['nwops']
+        self.wops = []
+        for i in range(n):
+            op = WOperator.read(obj_dict['operator_%d'%i])
+            self.wops.append(op)
+        self.window = self.window.reshape((n, 1))
+        self.fvectors = [wop.extractor.temp_feature_vector() for wop in self.wops]
+            
 

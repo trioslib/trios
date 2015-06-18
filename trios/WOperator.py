@@ -98,6 +98,8 @@ class WOperator(Serializable):
         f = StringIO(obj_dict['window'])
         self.window = np.loadtxt(f, np.uint8)
         f.close()
+        if len(self.window.shape) == 1:
+            self.window = self.window.reshape((self.window.shape[0], 1))
 
 class Classifier(Serializable):
     '''
