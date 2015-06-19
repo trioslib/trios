@@ -39,7 +39,6 @@ cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=True):
                     y[i] = val_min
                 else:
                     y[i] = val
-            
             i += 1
         
 
@@ -48,6 +47,23 @@ cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=True):
         return X, y, C
     return X, C
 
+
+cpdef expand_dataset(np.ndarray X, np.ndarray y, np.ndarray C):
+    nrows = sum(C)
+    X2 = np.zeros((nrows, X.shape[1]), X.dtype)    
+    y2 = np.zeros(nrows, y.dtype)
+    
+    k = 0
+    for i in range(X.shape[0]):
+        freq = C[i]
+        for j in range(freq):
+            X2[k+j] = X[i]
+            y2[k+j] = y[i]
+        k += freq
+        
+    assert k == nrows
+    return X2, y2
+    
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
