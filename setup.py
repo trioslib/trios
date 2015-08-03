@@ -54,6 +54,9 @@ setup(
                         'trios/v1/io_win.c',
                         'trios/v1/io_mtm.c',                    
                       ], include_dirs=['trios/v1/', np.get_include()]),
+            Extension('trios.window_determination.relief', [
+                    'trios/window_determination/relief.pyx'
+                    ], include_dirs=[np.get_include()]),
     ], gdb_debug=True, output_dir='.'),
-    packages = ['trios', 'trios.feature_extractors', 'trios.ISI', 'trios.classifiers', 'trios.v1', 'trios.legacy']
+    packages = ['trios', 'trios.feature_extractors', 'trios.ISI', 'trios.classifiers', 'trios.v1', 'trios.legacy', 'trios.window_determination']
 )

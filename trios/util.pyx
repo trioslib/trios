@@ -4,7 +4,7 @@ cimport numpy as np
 import numpy as np
 cimport cython
 
-cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=True):
+cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=False):
     cdef unsigned long npatterns = len(dataset)
     cdef int win_size = len(dataset.keys()[0])        
     cdef unsigned long pat_count
@@ -19,7 +19,7 @@ cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=True):
         nrows += len(occur) 
         
     X = np.zeros((nrows, ncols), dtype)
-    C = np.zeros(nrows, np.uint)
+    C = np.zeros(nrows, np.uint32)
     if include_output:
         y = np.zeros(nrows, dtype=np.float)
     
@@ -29,7 +29,8 @@ cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=True):
         if minimize:
             val_min = sum([x * occur[x] for x in occur])/sum(occur.values())
         
-        for val in dataset[pat]:            
+        values = sorted(dataset[pat].keys())
+        for val in values:            
             noccur = occur[val]            
             for j in range(win_size):
                 X[i, j] = pat[j]
