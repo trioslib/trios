@@ -6,7 +6,7 @@ Created on Wed Mar 25 14:40:19 2015
 """
 from __future__ import print_function
 
-from trios.wop_matrix_ops import process_image, apply_loop, compare_images
+from trios.wop_matrix_ops import process_image, apply_loop, compare_images, process_image_ordered
 from trios.serializable import Serializable
 
 import numpy as np
@@ -40,19 +40,8 @@ class WOperator(Serializable):
         
         self.trained = False
     
-    @staticmethod
-    def extract_dataset(imgset, window, extractor):
-        dataset = {}
-        for (inp, out, msk) in imgset:
-            #print('Processing', inp, out, msk, file=sys.stderr)
-            inp = sp.ndimage.imread(inp, mode='L')
-            out = sp.ndimage.imread(out, mode='L')
-            msk = sp.ndimage.imread(msk, mode='L')
-            process_image(dataset, window, inp, out, msk, extractor)
-        return dataset
-    
     def train(self, imgset):
-        dataset = WOperator.extract_dataset(imgset, self.window, self.extractor)
+        dataset = self.extractor.extract_dataset(imgset)
         self.classifier.train(dataset)
         self.trained = True
         return dataset
@@ -124,6 +113,19 @@ class FeatureExtractor(Serializable):
     def __len__(self):
         ''' return feature vector length '''
         return 1
+    
+    def extract_dataset(self, imgset, ordered=False):
+        if ordered == True:
+            return process_image_ordered(imgset, self)
+            
+        dataset = {}
+        for (inp, out, msk) in imgset:
+            #print('Processing', inp, out, msk, file=sys.stderr)
+            inp = sp.ndimage.imread(inp, mode='L')
+            out = sp.ndimage.imread(out, mode='L')
+            msk = sp.ndimage.imread(msk, mode='L')
+            process_image(dataset, self.window, inp, out, msk, self)
+        return dataset
     
     def temp_feature_vector(self):
         return np.zeros(len(self), np.float)

@@ -1,9 +1,15 @@
+# cython: profile=True
+# filename: wop_matrix_ops.pyx
+
+
 from __future__ import print_function
 
 
 cimport numpy as np
 import numpy as np
 cimport cython
+
+import scipy as sp
 
 from cython.parallel import prange
 
@@ -39,9 +45,44 @@ cpdef process_image(dict dataset, np.ndarray[unsigned char, ndim=2] win, np.ndar
                     dataset[wpatt][output[i,j]] = 1
                 else:
                     dataset[wpatt][output[i,j]] += 1
-                    
-    #print('Extracted', count, 'samples', file=sys.stderr)
+
+@cython.boundscheck(False)
+@cython.nonecheck(False)
+cpdef process_image_ordered(imageset, extractor):
+    # count all pixels in mask
+    cdef long npixels = 0
+    cdef long k
+    cdef int h, w, i, j, l, ww, hh, ww2, hh2    
     
+    for _i, _o, m in imageset:
+        msk = sp.ndimage.imread(m, mode='L')
+        for i in range(msk.shape[0]):
+            for j in range(msk.shape[1]):
+                if msk[i, j] != 0:
+                    npixels += 1
+                    
+    temp = extractor.temp_feature_vector()
+    X = np.zeros((npixels, len(extractor)), temp.dtype)
+    y = np.zeros((npixels, 1), np.uint8)
+    
+    hh, ww = extractor.window.shape
+    hh2 = hh/2
+    ww2 = ww/2
+    k = 0
+    for (inp, out, msk) in imageset:
+        inp = sp.ndimage.imread(inp, mode='L')
+        out = sp.ndimage.imread(out, mode='L')
+        msk = sp.ndimage.imread(msk, mode='L')
+        h, w = inp.shape
+        for i in range(hh2, h-hh2):
+            for j in range(ww2, w-ww2):
+                if (not msk is None) and msk[i,j] > 0:
+                    extractor.extract(inp, i, j, temp)
+                    X[k] = temp
+                    y[k] = out[i, j]
+                    k += 1
+    
+    return X, y
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
