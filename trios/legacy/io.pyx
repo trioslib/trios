@@ -6,7 +6,7 @@ cimport trios.v1.definitions as v1
 #from trios.ISI import ISI
 from trios.ISI.isi cimport ISI
 from trios.WOperator import WOperator
-from trios.feature_extractors import RAWBitFeatureExtractor
+from trios.feature_extractors import RAWBitFeatureExtractor, CombinationPattern
 
 cpdef itv_read(char *fname):
     cdef v1.window_t *win
@@ -39,3 +39,15 @@ cpdef operator_read(fname):
     # add error handling in case of two level operators?
     fname = fname + '-files/operator'
     return itv_read(fname)
+
+cpdef two_level_operator_read(fname):
+    with open(fname) as f:
+        lines = f.readlines()
+        n_ops = int(lines[2].split()[0])
+    ops = []
+    for i in range(n_ops):
+        opfname = '%s-files/level0/operator%d'
+        ops.append(operator_read(opfname))
+    comb = CombinationPattern(*ops, bitpack=True)
+    op2nd = operator_read('%s-files/level1/operator0')
+    wop = WOperator(comb, op2nd.classifier)
