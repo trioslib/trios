@@ -8,3 +8,4 @@ Created on Mon Apr 20 11:42:24 2015
 from svm import *
 from dtree import *
 from SKClassifier import *
+from linear import *

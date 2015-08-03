@@ -10,7 +10,7 @@ class CombinationPattern(FeatureExtractor):
         else:
             self.bitpack = False
         
-        self.window = np.zeros((len(wops), 1), np.uint8)
+        self.window = np.ones((len(wops), 1), np.uint8)
         self.wops = wops
         self.fvectors = [wop.extractor.temp_feature_vector() for wop in wops]
 
