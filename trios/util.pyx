@@ -21,7 +21,7 @@ cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=False):
     X = np.zeros((nrows, ncols), dtype)
     C = np.zeros(nrows, np.uint32)
     if include_output:
-        y = np.zeros(nrows, dtype=np.float)
+        y = np.zeros(nrows, dtype=np.uint32)
     
     cdef int i = 0
     for pat in dataset:

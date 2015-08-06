@@ -4,6 +4,8 @@
 import numpy as np
 cimport numpy as np
 
+from cython.parallel import prange
+
 cimport cython
 
 cdef extern from "stdlib.h":
@@ -15,7 +17,7 @@ from collections import OrderedDict
     
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cdef long select_instance(np.ndarray[unsigned int, ndim=2] X, np.ndarray[double, ndim=1] y, np.ndarray[unsigned int, ndim=1] C, long k):
+cdef long select_instance(unsigned int[:] C, long k) nogil:
     cdef long j = 0
     cdef long i = 0
     while j <= k:
@@ -25,7 +27,7 @@ cdef long select_instance(np.ndarray[unsigned int, ndim=2] X, np.ndarray[double,
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cdef long pattern_dist(np.ndarray[unsigned int, ndim=1] pat1, np.ndarray[unsigned int, ndim=1] pat2, bint bitpack, int nfeats):
+cdef long pattern_dist(unsigned int[:]  pat1, unsigned int[:] pat2, bint bitpack, int nfeats) nogil:
     cdef int i = 0 
     cdef long n = 0
     cdef int shift, byt
@@ -35,19 +37,23 @@ cdef long pattern_dist(np.ndarray[unsigned int, ndim=1] pat1, np.ndarray[unsigne
             shift = i / 32
             byt = i % 32
             n += (pat1[shift] & (1 << byt)) != (pat2[shift] & (1 << byt))
-        return n
     else:
-        return np.sum(np.abs(pat1 - pat2))
-
+        for i in range(nfeats):
+            if pat1[i] > pat2[i]:
+                n += pat1[i] - pat2[i]
+            else:
+                n += pat2[i] - pat1[i]
+    return n
+    
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cdef nearest_hit(np.ndarray[unsigned int, ndim=2] X, np.ndarray[double, ndim=1] y, long prot, long prot_class, bint bitpack, int nfeats):
+cdef int nearest_hit(unsigned int[:,:] X, unsigned int[:] y, long prot, long prot_class, bint bitpack, int nfeats) nogil:
     cdef int i
     cdef int r = -1
-    cdef double r_dist = 0
-    cdef double dist = 0
+    cdef long r_dist = 0
+    cdef long dist = 0
     for i in range(X.shape[0]):
-        if y[i] != prot_class:
+        if y[i] != prot_class:  
             continue
         dist = pattern_dist(X[prot], X[i], bitpack, nfeats)
         if (r < 0 or r_dist > dist) and dist > 0:
@@ -58,18 +64,22 @@ cdef nearest_hit(np.ndarray[unsigned int, ndim=2] X, np.ndarray[double, ndim=1] 
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-def nearest_miss(np.ndarray[unsigned int, ndim=2] X, np.ndarray[double, ndim=1] y, prot, prot_class, bitpack, int nfeats):
-    r = None
-    r_dist = 0
+cdef int nearest_miss(unsigned int[:,:] X, unsigned int[:] y, long prot, long prot_class, bint bitpack, int nfeats) nogil:
+    cdef int i
+    cdef int r = -1
+    cdef long r_dist = 0
+    cdef long dist = 0
     for i in range(X.shape[0]):
-        if y[i] == prot_class:
+        if y[i] == prot_class:  
             continue
         dist = pattern_dist(X[prot], X[i], bitpack, nfeats)
-        if (r == None or r_dist > dist) and dist > 0:
+        if (r < 0 or r_dist > dist) and dist > 0:
             r = i
             r_dist = dist
             
     return r
+
+
 
 def sort_dataset(dataset, bitpack):
     if bitpack:
@@ -77,8 +87,15 @@ def sort_dataset(dataset, bitpack):
     else:
         return OrderedDict(sorted(dataset.items(), key=lambda t: t[0]))
 
-cpdef Relief(dataset, domain, n_prototypes, bitpack, int seed):
+cpdef Relief(dataset, domain, int n_prototypes, int win_size, bint bitpack, int seed):
     cdef int shift, byt
+    cdef long prot, hit, miss
+    cdef Py_ssize_t i, j
+    cdef unsigned int[:,:] X
+    cdef int[:,:] weights_all
+    cdef unsigned int[:] y
+    cdef unsigned int[:] C 
+    cdef int nfeats
 
     ds_sorted = sort_dataset(dataset, bitpack)
     X, y, C = util.dataset_to_array(ds_sorted, np.uint32, True, False)
@@ -86,7 +103,9 @@ cpdef Relief(dataset, domain, n_prototypes, bitpack, int seed):
     nfeats = np.sum(domain)
 
     c_libc_srand(seed)
-    rands = np.zeros(n_prototypes, np.uint32)
+    rands_np = np.zeros(n_prototypes, np.uint32)
+    cdef unsigned int[:] rands = rands_np
+     
     for i in range(n_prototypes):
         rands[i] = c_libc_rand() % nrows
     
@@ -94,32 +113,26 @@ cpdef Relief(dataset, domain, n_prototypes, bitpack, int seed):
     assert classes.shape[0] == 2
 
     weights_all = np.zeros((n_prototypes, nfeats), np.int32)
-    for i in range(n_prototypes): # prange!!!s
-        prot = select_instance(X, y, C, rands[i])
+    for i in prange(n_prototypes, nogil=True):  # prange(n_prototypes, nogil=True)
+        prot = select_instance(C, rands[i])
         
         hit = nearest_hit(X, y, prot, y[prot], bitpack, nfeats)
         miss = nearest_miss(X, y, prot, y[prot], bitpack, nfeats)
-        # update weights
-        #print(hex(X[prot, 0]), hex(X[prot, 1]))
-        #print(hex(X[hit, 0]), hex(X[hit, 1]))
-        #print(hex(X[miss, 0]), hex(X[miss, 1]))
         if bitpack:
             for j in range(nfeats):
                 shift = j / 32
                 byt = j % 32
-                weights_all[i, j] = - int( (X[hit, shift] & (1 << byt)) != (X[prot, shift] & (1 << byt)) )  \
-                                     + int( (X[miss, shift] & (1 << byt)) != (X[prot, shift] & (1 << byt)) )
-                #if j == 0:
-                #    print( X[hit, shift] & (1 << byt), X[miss, shift] & (1 << byt), X[prot, shift] & (1 << byt),
-                #        - ( (X[hit, shift] & (1 << byt)) != (X[prot, shift] & (1 << byt)) )  ,
-                #                     + ( (X[miss, shift] & (1 << byt)) != (X[prot, shift] & (1 << byt)) )
-                #             )
-                                     
+                weights_all[i, j] = - 1* ( (X[hit, shift] & (1 << byt)) != (X[prot, shift] & (1 << byt)) )  \
+                                     +  1*( (X[miss, shift] & (1 << byt)) != (X[prot, shift] & (1 << byt)) ) 
         else:
             for j in range(nfeats):
                 weights_all[i, j] += -(X[hit, j] != X[prot, j]) + (X[miss, j] != X[prot, j])
-        #print('---------')
     weights = np.sum(weights_all, axis=0)
-    idx = sorted([(e, -i) for i,e in enumerate(weights)])
+    idx = sorted([(e, -k) for k,e in enumerate(weights)])
     idx.reverse()
-    return [ (-i[1] / domain.shape[1], -i[1] % domain.shape[1], i[0]) for i in idx]
+    points = [ (-k[1] / domain.shape[1], -k[1] % domain.shape[1], k[0]) for k in idx]
+    w = np.zeros(domain.shape, domain.dtype)
+    for k in range(win_size):
+        i2, j = points[k][0], points[k][1]
+        w[i2, j] = 1
+    return w, points
