@@ -1,3 +1,7 @@
+
+# cython: profile=True
+# filename: raw.pyx
+
 cimport numpy as np
 import numpy as np
 cimport cython
@@ -7,7 +11,7 @@ from trios.serializable import Serializable
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cpdef RAWExtract(np.ndarray[unsigned char, ndim=2] win, np.ndarray[unsigned char, ndim=2] img, int i, int j, np.ndarray pattern, float mul):
+cpdef RAWExtract(np.ndarray[unsigned char, ndim=2] win, unsigned char[:,:] img, int i, int j, unsigned char[:] pattern, float mul):
     cdef int hh = win.shape[0]
     cdef int ww = win.shape[1]
     cdef int hh2 = hh/2
@@ -21,7 +25,9 @@ cpdef RAWExtract(np.ndarray[unsigned char, ndim=2] win, np.ndarray[unsigned char
                 pattern[k] = img[i+l,j+m]
                 k += 1
     if mul != 1:
-        pattern *= mul
+        for l in range(pattern.shape[0]):
+            pattern[i] = <unsigned char> (pattern[i] * mul)
+        #pattern *= mul
 
 
 class RAWFeatureExtractor(FeatureExtractor):
@@ -33,7 +39,7 @@ class RAWFeatureExtractor(FeatureExtractor):
         return np.greater(self.window, 0).sum()
     
     def temp_feature_vector(self):
-        return np.zeros(len(self), np.float32)
+        return np.zeros(len(self), np.uint8)
         
     def extract(self, img, i, j, pattern):
         RAWExtract(self.window, img, i, j, pattern, self.mul)
@@ -48,7 +54,7 @@ class RAWFeatureExtractor(FeatureExtractor):
         
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cpdef RAWBitExtract(np.ndarray[unsigned char, ndim=2] win, np.ndarray[unsigned char, ndim=2] img, int i, int j, pattern):       
+cpdef void RAWBitExtract(np.ndarray[unsigned char, ndim=2] win, np.ndarray[unsigned char, ndim=2] img, int i, int j, unsigned int[:] pattern):       
     cdef int hh = win.shape[0]
     cdef int ww = win.shape[1]
     cdef int hh2 = hh/2
@@ -57,7 +63,7 @@ cpdef RAWBitExtract(np.ndarray[unsigned char, ndim=2] win, np.ndarray[unsigned c
     cdef int k = 0
     
     
-    for l in range(len(pattern)): pattern[l] = 0    
+    for l in range(pattern.shape[0]): pattern[l] = 0    
     
     for l in range(-hh2, hh2+1):
         for m in range(-ww2, ww2+1):

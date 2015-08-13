@@ -52,7 +52,10 @@ cpdef process_image_ordered(imageset, extractor):
     # count all pixels in mask
     cdef long npixels = 0
     cdef long k
-    cdef int h, w, i, j, l, ww, hh, ww2, hh2    
+    cdef int h, w, i, j, l, ww, hh, ww2, hh2
+    cdef unsigned char [:,:] msk
+    cdef unsigned char [:,:] inp
+    cdef unsigned char [:,:] out    
     
     for _i, _o, m in imageset:
         msk = sp.ndimage.imread(m, mode='L')
@@ -69,11 +72,11 @@ cpdef process_image_ordered(imageset, extractor):
     hh2 = hh/2
     ww2 = ww/2
     k = 0
-    for (inp, out, msk) in imageset:
-        inp = sp.ndimage.imread(inp, mode='L')
-        out = sp.ndimage.imread(out, mode='L')
-        msk = sp.ndimage.imread(msk, mode='L')
-        h, w = inp.shape
+    for (inp_, out_, msk_) in imageset:
+        inp = sp.ndimage.imread(inp_, mode='L')
+        out = sp.ndimage.imread(out_, mode='L')
+        msk = sp.ndimage.imread(msk_, mode='L')
+        h = inp.shape[0] ; w = inp.shape[1]
         for i in range(hh2, h-hh2):
             for j in range(ww2, w-ww2):
                 if (not msk is None) and msk[i,j] > 0:
@@ -86,7 +89,7 @@ cpdef process_image_ordered(imageset, extractor):
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cpdef apply_loop(np.ndarray[unsigned char, ndim=2] window, np.ndarray[unsigned char, ndim=2] image, np.ndarray[unsigned char, ndim=2] mask, classifier, extractor):
+cpdef unsigned char[:,:] apply_loop(np.ndarray[unsigned char, ndim=2] window, np.ndarray[unsigned char, ndim=2] image, np.ndarray[unsigned char, ndim=2] mask, classifier, extractor):
     cdef int h = image.shape[0]
     cdef int w = image.shape[1]    
     cdef int wh = int(window.shape[0]/2)
@@ -106,7 +109,7 @@ cpdef apply_loop(np.ndarray[unsigned char, ndim=2] window, np.ndarray[unsigned c
     
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cpdef compare_images(np.ndarray[unsigned char, ndim=2] out, np.ndarray[unsigned char, ndim=2] msk, np.ndarray[unsigned char, ndim=2] res, int x_border, int y_border):
+cpdef compare_images(unsigned char[:,:] out, unsigned char[:,:] msk, unsigned char[:,:] res, int x_border, int y_border):
     cdef int i, j
     cdef int w = out.shape[1]
     cdef int h = out.shape[0]
