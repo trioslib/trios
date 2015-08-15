@@ -4,12 +4,33 @@ cimport numpy as np
 import numpy as np
 cimport cython
 
-cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=False):
+ctypedef fused raw_data:
+    cython.uchar
+    cython.uint
+    cython.double
+
+@cython.boundscheck(False)
+@cython.nonecheck(False)
+cpdef copy_data(raw_data[:,:] X, int i, int win_size, tuple pat):
+    cdef int j
+    for j in range(win_size):
+        X[i, j] = pat[j]
+
+@cython.boundscheck(False)
+@cython.nonecheck(False)
+cpdef dataset_to_array(dict dataset, dtype, bint include_output=True, bint minimize=False):
     cdef unsigned long npatterns = len(dataset)
     cdef int win_size = len(dataset.keys()[0])        
     cdef unsigned long pat_count
     cdef double avg, temp
     cdef np.ndarray X
+    
+    cdef unsigned char [:] y
+    cdef unsigned int [:] C
+    
+    cdef int noccur
+    cdef unsigned char val_min, val
+    cdef int i = 0
     
     cdef int ncols = win_size
     cdef int nrows = 0
@@ -21,9 +42,8 @@ cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=False):
     X = np.zeros((nrows, ncols), dtype)
     C = np.zeros(nrows, np.uint32)
     if include_output:
-        y = np.zeros(nrows, dtype=np.uint32)
+        y = np.zeros(nrows, dtype=np.uint8)
     
-    cdef int i = 0
     for pat in dataset:
         occur = dataset[pat]
         if minimize:
@@ -32,8 +52,13 @@ cpdef dataset_to_array(dataset, dtype, include_output=True, minimize=False):
         values = sorted(dataset[pat].keys())
         for val in values:            
             noccur = occur[val]            
-            for j in range(win_size):
-                X[i, j] = pat[j]
+            if X.dtype == np.uint8:
+                copy_data[cython.uchar](X, i, win_size, pat)
+            elif X.dtype == np.uint32:
+                copy_data[cython.uint](X, i, win_size, pat)
+            elif X.dtype == np.float:
+                copy_data[cython.double](X, i, win_size, pat)
+                
             C[i] = noccur
             if include_output:
                 if minimize:

@@ -46,6 +46,32 @@ cpdef process_image(dict dataset, np.ndarray[unsigned char, ndim=2] win, np.ndar
                 else:
                     dataset[wpatt][output[i,j]] += 1
 
+ctypedef fused raw_data:
+    cython.uchar
+    cython.uint
+    cython.float
+
+
+@cython.boundscheck(False)
+@cython.nonecheck(False)
+cpdef long process_one_image(unsigned char[:,:] win, unsigned char[:,:] inp, unsigned char[:,:] out, unsigned char[:,:] msk, raw_data [:,:] X, unsigned char[:] y, extractor, raw_data [:] temp, int k):
+    cdef int h, w, i, j, l, ww, hh, ww2, hh2
+    hh = win.shape[0]; ww = win.shape[1]
+    hh2 = hh/2
+    ww2 = ww/2
+    
+    h = inp.shape[0] ; w = inp.shape[1]
+    for i in range(hh2, h-hh2):
+        for j in range(ww2, w-ww2):
+            if (not msk is None) and msk[i,j] > 0:
+                extractor.extract(inp, i, j, temp)
+                for l in range(temp.shape[0]):
+                    X[k, l] = temp[l]
+                y[k] = out[i, j]
+                k += 1 
+    return k
+    
+
 @cython.boundscheck(False)
 @cython.nonecheck(False)
 cpdef process_image_ordered(imageset, extractor):
@@ -55,7 +81,10 @@ cpdef process_image_ordered(imageset, extractor):
     cdef int h, w, i, j, l, ww, hh, ww2, hh2
     cdef unsigned char [:,:] msk
     cdef unsigned char [:,:] inp
-    cdef unsigned char [:,:] out    
+    cdef unsigned char [:,:] out
+    
+    cdef np.ndarray X
+    cdef np.ndarray temp
     
     for _i, _o, m in imageset:
         msk = sp.ndimage.imread(m, mode='L')
@@ -66,24 +95,19 @@ cpdef process_image_ordered(imageset, extractor):
                     
     temp = extractor.temp_feature_vector()
     X = np.zeros((npixels, len(extractor)), temp.dtype)
-    y = np.zeros((npixels, 1), np.uint8)
+    y = np.zeros(npixels, np.uint8)
     
-    hh, ww = extractor.window.shape
-    hh2 = hh/2
-    ww2 = ww/2
     k = 0
     for (inp_, out_, msk_) in imageset:
         inp = sp.ndimage.imread(inp_, mode='L')
         out = sp.ndimage.imread(out_, mode='L')
         msk = sp.ndimage.imread(msk_, mode='L')
-        h = inp.shape[0] ; w = inp.shape[1]
-        for i in range(hh2, h-hh2):
-            for j in range(ww2, w-ww2):
-                if (not msk is None) and msk[i,j] > 0:
-                    extractor.extract(inp, i, j, temp)
-                    X[k] = temp
-                    y[k] = out[i, j]
-                    k += 1
+        if X.dtype == np.uint8:
+            k = process_one_image[cython.uchar](extractor.window, inp, out, msk, X, y, extractor, temp, k)
+        elif X.dtype == np.float:
+            k = process_one_image[cython.float](extractor.window, inp, out, msk, X, y, extractor, temp, k)
+        elif X.dtype == np.uint32:
+            k = process_one_image[cython.uint](extractor.window, inp, out, msk, X, y, extractor, temp, k)
     
     return X, y
 
