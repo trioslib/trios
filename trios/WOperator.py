@@ -11,11 +11,34 @@ from trios.serializable import Serializable
 
 import numpy as np
 import scipy as sp
+import scipy.ndimage
 
 from StringIO import StringIO
 
 import inspect
 import sys
+
+import multiprocessing
+from functools import partial
+import itertools
+
+def worker_eval(t):
+    self, imgset, nprocs, procnumber = t
+    idx = [ i  for i in range(len(imgset)) if i % nprocs == procnumber]
+    errs = []
+    for i in idx:
+        inp, out, msk = imgset[i]
+        print('Testing', i, inp, out, file=sys.stderr)
+        x_border = self.window.shape[1]/2
+        y_border = self.window.shape[0]/2
+        
+        inp = sp.ndimage.imread(inp, mode='L')
+        out = sp.ndimage.imread(out, mode='L')
+        msk = sp.ndimage.imread(msk, mode='L')
+        res = self.apply(inp, msk)
+        errs.append(compare_images(out, msk, res, x_border, y_border))
+    return errs
+    
 
 class WOperator(Serializable):
     '''
@@ -41,7 +64,7 @@ class WOperator(Serializable):
         self.trained = False
     
     def train(self, imgset):
-        dataset = self.extractor.extract_dataset(imgset)
+        dataset = self.extractor.extract_dataset(imgset, self.classifier.ordered)
         self.classifier.train(dataset)
         self.trained = True
         return dataset
@@ -49,22 +72,46 @@ class WOperator(Serializable):
     def apply(self, image, mask):
         return apply_loop(self.window, image, mask, self.classifier, self.extractor)
     
-    def eval(self, imgset, window=None, per_image=False):
+    def eval_worker(self, imgset, procnumber):
+        idx = [ i  for i in range(len(imgset)) if i % procnumber == 0]
+        errs = []
+        for i in idx:
+            print('Testing', i, inp, out, file=sys.stderr)
+            inp, out, msk = imgset[i]
+            x_border = self.window.shape[1]/2
+            y_border = self.window.shape[0]/2
+            
+            inp = sp.ndimage.imread(inp, mode='L')
+            out = sp.ndimage.imread(out, mode='L')
+            msk = sp.ndimage.imread(msk, mode='L')
+            res = self.apply(inp, msk)
+            errs.append(compare_images(out, msk, res, x_border, y_border))
+        return errs
+    
+    def eval(self, imgset, window=None, per_image=False, procs=2):
         errors = []
-        if not window is None:
+        errors_p = multiprocessing.Pool(processes=procs)
+        ll = itertools.izip(itertools.repeat(self), itertools.repeat(imgset), itertools.repeat(procs), range(procs))
+        print(ll) 
+        errors = errors_p.map(worker_eval, ll)
+        '''if not window is None:
             x_border = window.shape[1]/2
             y_border = window.shape[0]/2
         else:
             x_border = y_border = 0
+        i = 0
         for (inp, out, msk) in imgset:
-            #print('Testing', inp, out, file=sys.stderr)
+            print('Testing', i, inp, out, file=sys.stderr)
+            i += 1
             inp = sp.ndimage.imread(inp, mode='L')
             out = sp.ndimage.imread(out, mode='L')
             msk = sp.ndimage.imread(msk, mode='L')
             res = self.apply(inp, msk)
             
             errors.append(compare_images(out, msk, res, x_border, y_border))
-        
+        '''
+        errors = list(itertools.chain(*errors))
+        print(errors)
         total_pixels = sum([err[1] for err in errors])
         total_errors = sum([err[0] for err in errors])
         if per_image:
@@ -76,17 +123,19 @@ class WOperator(Serializable):
         obj_dict['classifier'] = self.classifier.write(None)
         obj_dict['extractor'] = self.extractor.write(None)
         
-        f = StringIO()
-        np.savetxt(f, self.window)
-        obj_dict['window'] = f.getvalue()
+        obj_dict['window'] = self.window
+        #f = StringIO()
+        #np.savetxt(f, self.window)
+        #obj_dict['window'] = f.getvalue()
     
     def set_state(self, obj_dict):
         self.classifier = Serializable.read(obj_dict['classifier'])
         self.extractor = Serializable.read(obj_dict['extractor'])
         
-        f = StringIO(obj_dict['window'])
-        self.window = np.loadtxt(f, np.uint8)
-        f.close()
+        #f = StringIO(obj_dict['window'])
+        #self.window = np.loadtxt(f, np.uint8)
+        #f.close()
+        self.window = obj_dict['window']
         if len(self.window.shape) == 1:
             self.window = self.window.reshape((self.window.shape[0], 1))
 
@@ -96,6 +145,7 @@ class Classifier(Serializable):
     '''
     def __init__(self, *a, **kw):
         self.minimize = False
+        self.ordered = False
     
     def train(self, dataset, **kw):
         raise NotImplementedError()
@@ -137,12 +187,14 @@ class FeatureExtractor(Serializable):
         pass
     
     def write_state(self, obj_dict):
-        f = StringIO()
-        np.savetxt(f, self.window)
-        obj_dict['window'] = f.getvalue()
+        #f = StringIO()
+        #np.savetxt(f, self.window)
+        #obj_dict['window'] = f.getvalue()
+        obj_dict['window'] = self.window
     
     def set_state(self, obj_dict):
-        f = StringIO(obj_dict['window'])
-        self.window = np.loadtxt(f, np.uint8)
-        f.close()
+        #f = StringIO(obj_dict['window'])
+        #self.window = np.loadtxt(f, np.uint8)
+        #f.close()
+        self.window = obj_dict['window'] 
         
