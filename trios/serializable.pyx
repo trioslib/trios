@@ -6,6 +6,7 @@ Created on Sun May  3 10:23:16 2015
 """
 
 import json
+import cPickle as pickle
 import importlib
 
 cdef class Serializable:
@@ -28,9 +29,10 @@ cdef class Serializable:
         
         if type(fname) == str:
             with open(fname, 'w') as f:
-                json.dump(obj_dict, f)
+                #json.dump(obj_dict, f)
+                pickle.dump(obj_dict, f)
         elif fname == None:
-            return json.dumps(obj_dict)
+            return obj_dict#json.dumps(obj_dict)
         else:
             json.dump(obj_dict, fname)
             
@@ -38,13 +40,10 @@ cdef class Serializable:
     @staticmethod
     def read(fname):
         if type(fname) == str or type(fname) == unicode:
-            try:
-                with open(fname) as f:
-                    obj_dict = json.load(f)
-            except IOError:
-                obj_dict = json.loads(fname)
+            with open(fname) as f:
+                obj_dict = pickle.load(f)
         else:
-            obj_dict = json.load(fname)
+            obj_dict = fname
         
         module = importlib.import_module(obj_dict['class_module'])
         class_obj = getattr(module, obj_dict['class_name'])

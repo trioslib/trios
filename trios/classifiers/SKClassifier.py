@@ -15,9 +15,10 @@ import pickle
 import inspect
 
 class SKClassifier(Classifier):
-    def __init__(self, cls, minimize=False):
+    def __init__(self, cls=None, minimize=False):
         self.cls = cls
         self.minimize = minimize
+        self.ordered = False
     
     def train(self, dataset, **kw):
         X, y, C = util.dataset_to_array(dataset, np.float64, True, False)            
@@ -33,9 +34,11 @@ class SKClassifier(Classifier):
         return self.cls.predict(fvector)[0]
 
     def write_state(self, obj_dict):
-        obj_dict['cls'] = pickle.dumps(self.cls)
+        #obj_dict['cls'] = pickle.dumps(self.cls)
+        obj_dict['cls'] = self.cls
         obj_dict['min'] = self.minimize
         
     def set_state(self, obj_dict):
-        self.cls = pickle.loads(obj_dict['cls'])
+        #self.cls = pickle.loads(obj_dict['cls'])
+        self.cls = obj_dict['cls']
         self.minimize = obj_dict['min']
