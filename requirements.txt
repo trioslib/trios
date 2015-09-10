@@ -1,0 +1,6 @@
+numpy
+pillow
+cython
+scipy
+scikit-learn
+nose
