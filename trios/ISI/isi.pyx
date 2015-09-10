@@ -18,6 +18,9 @@ bitmsk = [0] * 32
 for i in range(32):
     bitmsk[i] = (1 << i)
 
+def rebuild_isi():
+    pass
+
 cdef class ISI(trios.serializable.Serializable):
    
     def __init__(self, win_np=None):
@@ -46,6 +49,15 @@ cdef class ISI(trios.serializable.Serializable):
     property trained:
         def __get__(self):
             return self._trained
+    
+    property ordered:
+        def __get__(self):
+            return False
+    
+    property parallel:
+        def __get__(self):
+            return False
+    
     
     cpdef train(self, dict dataset):
         cdef np.ndarray[unsigned int, ndim=2] X
@@ -102,4 +114,6 @@ cdef class ISI(trios.serializable.Serializable):
         cdef int wz = len(pat)
         cdef unsigned char r = 255 * v1.itv_list_contain(self.interval_list, <unsigned int *> pat.data, wz)
         return r
-    
+
+    def __reduce__(self):
+        pass    
