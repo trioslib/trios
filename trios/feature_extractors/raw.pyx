@@ -1,7 +1,4 @@
 
-# cython: profile=True
-# filename: raw.pyx
-
 cimport numpy as np
 import numpy as np
 cimport cython
@@ -13,7 +10,7 @@ from trios.serializable cimport Serializable
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cpdef RAWExtract(unsigned char[:,:] win, unsigned char[:,:] img, int i, int j, unsigned char[:] pattern, float mul):
+cpdef RAWExtract(unsigned char[:,:] win, unsigned char[:,:] img, int i, int j, unsigned int[:] pattern, float mul):
     cdef int hh = win.shape[0]
     cdef int ww = win.shape[1]
     cdef int hh2 = hh/2
@@ -31,10 +28,6 @@ cpdef RAWExtract(unsigned char[:,:] win, unsigned char[:,:] img, int i, int j, u
             pattern[i] = <unsigned char> (pattern[i] * mul)
         #pattern *= mul
 
-def rebuild_raw(win, mul):
-    r = RAWFeatureExtractor(win, mul)
-    return r
-
 cdef class RAWFeatureExtractor(FeatureExtractor):
     def __init__(self, unsigned char[:,:] window=None, double mul=1.0):
         FeatureExtractor.__init__(self, window)
@@ -44,7 +37,7 @@ cdef class RAWFeatureExtractor(FeatureExtractor):
         return np.greater(self.window, 0).sum()
     
     def temp_feature_vector(self):
-        return np.zeros(len(self), np.uint8)
+        return np.zeros(len(self), np.uint32)
         
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
         RAWExtract(self.window, img, i, j, pat, self.mul)
@@ -57,8 +50,6 @@ cdef class RAWFeatureExtractor(FeatureExtractor):
         FeatureExtractor.set_state(self, obj_dict)
         self.mul = obj_dict['mul']
         
-    def __reduce__(self):
-        return (rebuild_raw, (np.asarray(self.window), self.mul))
         
 @cython.boundscheck(False)
 @cython.nonecheck(False)
@@ -82,10 +73,6 @@ cpdef RAWBitExtract(unsigned char[:,:] win, unsigned char[:,:] img, int i, int j
                     pattern[shift] = pattern[shift] | (1 << byt)
                 k += 1
                 
-
-def rebuild_rawbit(window):
-    return RAWBitFeatureExtractor(window)
-
 class RAWBitFeatureExtractor(FeatureExtractor):
     def __init__(self, np.ndarray[unsigned char, ndim=2] window=None):
         FeatureExtractor.__init__(self, window)
@@ -102,6 +89,4 @@ class RAWBitFeatureExtractor(FeatureExtractor):
     
     def extract(self, unsigned char[:,:] img, int i, int j, unsigned int[:] pattern):
         RAWBitExtract(self.window, img, i, j, pattern)
-        
-    def __reduce__(self):
-        return (rebuild_rawbit, (np.asarray(self.window), ))
+       

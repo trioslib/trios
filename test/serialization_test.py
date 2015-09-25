@@ -78,5 +78,5 @@ def test_pickle_woperator_tree():
 	compare_window(wop.window, wop2.window)
 	compare_raw_fe(wop.extractor, wop2.extractor)
 	assert_equal(wop.trained, wop2.trained)
-	#assert_equal(wop.classifier.cls, wop2.classifier.cls)
+	assert_equal(type(wop.classifier.cls), type(wop2.classifier.cls))
 	

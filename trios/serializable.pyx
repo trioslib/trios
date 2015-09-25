@@ -12,6 +12,10 @@ except ImportError:
     import pickle
 import importlib
 
+def rebuild_serializable(obj_dict):
+    print(obj_dict, type(obj_dict))
+    return Serializable.read(obj_dict)
+
 cdef class Serializable:
     def __init__(self):
         pass
@@ -38,6 +42,9 @@ cdef class Serializable:
         else:
             json.dump(obj_dict, fname)
             
+    def __reduce__(self):
+        obj_dict = self.write(None)
+        return (rebuild_serializable, (obj_dict,) )
     
     @staticmethod
     def read(fname):
