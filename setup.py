@@ -3,12 +3,21 @@ from distutils.extension import Extension
 from Cython.Build import cythonize
 from Cython.Distutils import build_ext
 
+
+
+from Cython.Compiler.Options import directive_defaults
+
+directive_defaults['linetrace'] = True
+directive_defaults['binding'] = True
+
 import numpy as np
 
-setup(
-    name='trios',
-    cmdclass = {'build_ext': build_ext},
-    ext_modules = cythonize([
+includes = [np.get_include(), 'C:/Users/Igor/Miniconda3/includes']
+libs = ['C:/Users/Igor/Miniconda3/libs']
+extra_compile_args = ['-fopenmp']
+extra_link_args = ['-fopenmp']
+
+extensions = [
         
             Extension('trios.ISI.isi', ['trios/ISI/isi.pyx', 
                     'trios/v1/definitions.pxd',
@@ -28,19 +37,19 @@ setup(
                     'trios/ISI/ip_isi.c',
                     'trios/ISI/partition.c',
                     'trios/ISI/ip_mincover.c', 
-                    ], include_dirs=['trios/v1', 'trios/ISI', np.get_include()], extra_compile_args = ['-fopenmp', '-g'], extra_link_args = ['-fopenmp']),
+                    ], include_dirs=['trios/v1', 'trios/ISI']),
+            Extension('trios.WOperator', [
+                    'trios/WOperator.pyx']),
             Extension('trios.feature_extractors.raw', [
-                    'trios/feature_extractors/raw.pyx'
-                    ], include_dirs=[np.get_include()]),
+                    'trios/feature_extractors/raw.pyx']),
+                    Extension('trios.feature_extractors.combination', [
+                    'trios/feature_extractors/combination.pyx']),            
             Extension('trios.wop_matrix_ops', [
-                    'trios/wop_matrix_ops.pyx'
-                    ], include_dirs=[np.get_include()]),
+                    'trios/wop_matrix_ops.pyx']),
             Extension('trios.util', [
-                    'trios/util.pyx'
-                    ], include_dirs=[np.get_include()]),
+                    'trios/util.pyx']),
             Extension('trios.serializable', [
-                    'trios/serializable.pyx'
-                    ], include_dirs=[np.get_include()]),
+                    'trios/serializable.pyx']),
             Extension('trios.legacy.io', [
                       'trios/legacy/io.pyx',
                         'trios/v1/definitions.pxd',
@@ -53,10 +62,20 @@ setup(
                         'trios/v1/io_itv.c',
                         'trios/v1/io_win.c',
                         'trios/v1/io_mtm.c',                    
-                      ], include_dirs=['trios/v1/', np.get_include()]),
+                      ], include_dirs=['trios/v1/']),
             Extension('trios.window_determination.relief', [
                     'trios/window_determination/relief.pyx'
-                    ], include_dirs=[np.get_include()]),
-    ], gdb_debug=True, output_dir='.'),
+                    ])]
+
+for ext in extensions:
+    ext.include_dirs += includes
+    ext.library_dirs += libs
+    ext.extra_compile_args += extra_compile_args
+    ext.extra_link_args += extra_link_args
+
+setup(
+    name='trios',
+    cmdclass = {'build_ext': build_ext},
+    ext_modules = cythonize(extensions),
     packages = ['trios', 'trios.feature_extractors', 'trios.ISI', 'trios.classifiers', 'trios.v1', 'trios.legacy', 'trios.window_determination']
 )
