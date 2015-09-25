@@ -18,7 +18,7 @@ cpdef copy_data(raw_data[:,:] X, int i, int win_size, tuple pat):
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cpdef dataset_to_array(dict dataset, dtype, bint include_output=True, bint minimize=False):
+cpdef dataset_to_array(dataset, dtype, bint include_output=True, bint minimize=False):
     cdef unsigned long npatterns = len(dataset)
     cdef int win_size = len(dataset.keys()[0])        
     cdef unsigned long pat_count
