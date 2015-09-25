@@ -47,7 +47,7 @@ cdef long pattern_dist(unsigned int[:]  pat1, unsigned int[:] pat2, bint bitpack
     
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cdef int nearest_hit(unsigned int[:,:] X, unsigned int[:] y, long prot, long prot_class, bint bitpack, int nfeats) nogil:
+cdef int nearest_hit(unsigned int[:,:] X, unsigned char[:] y, long prot, long prot_class, bint bitpack, int nfeats) nogil:
     cdef int i
     cdef int r = -1
     cdef long r_dist = 0
@@ -64,7 +64,7 @@ cdef int nearest_hit(unsigned int[:,:] X, unsigned int[:] y, long prot, long pro
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cdef int nearest_miss(unsigned int[:,:] X, unsigned int[:] y, long prot, long prot_class, bint bitpack, int nfeats) nogil:
+cdef int nearest_miss(unsigned int[:,:] X, unsigned char[:] y, long prot, long prot_class, bint bitpack, int nfeats) nogil:
     cdef int i
     cdef int r = -1
     cdef long r_dist = 0
@@ -87,19 +87,27 @@ def sort_dataset(dataset, bitpack):
     else:
         return OrderedDict(sorted(dataset.items(), key=lambda t: t[0]))
 
+
 cpdef Relief(dataset, domain, int n_prototypes, int win_size, bint bitpack, int seed):
     cdef int shift, byt
     cdef long prot, hit, miss
     cdef Py_ssize_t i, j
     cdef unsigned int[:,:] X
     cdef int[:,:] weights_all
-    cdef unsigned int[:] y
+    cdef unsigned char[:] y
     cdef unsigned int[:] C 
     cdef int nfeats
-
-    ds_sorted = sort_dataset(dataset, bitpack)
-    X, y, C = util.dataset_to_array(ds_sorted, np.uint32, True, False)
-    nrows = np.sum(C)
+    cdef bint is_dataset 
+    
+    is_dataset = type(dataset) == dict
+    if is_dataset:
+        ds_sorted = sort_dataset(dataset, bitpack)
+        X, y, C = util.dataset_to_array(ds_sorted, np.uint32, True, False)
+        nrows = np.sum(C)
+    else:
+        X, y = dataset
+        nrows = X.shape[0]    
+        
     nfeats = np.sum(domain)
 
     c_libc_srand(seed)
@@ -113,8 +121,11 @@ cpdef Relief(dataset, domain, int n_prototypes, int win_size, bint bitpack, int 
     assert classes.shape[0] == 2
 
     weights_all = np.zeros((n_prototypes, nfeats), np.int32)
-    for i in prange(n_prototypes, nogil=True):  # prange(n_prototypes, nogil=True)
-        prot = select_instance(C, rands[i])
+    for i in prange(n_prototypes, nogil=True):
+        if is_dataset:
+            prot = select_instance(C, rands[i])
+        else:
+            prot = rands[i]
         
         hit = nearest_hit(X, y, prot, y[prot], bitpack, nfeats)
         miss = nearest_miss(X, y, prot, y[prot], bitpack, nfeats)
