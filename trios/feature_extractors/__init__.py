@@ -1,4 +1,7 @@
-from raw import RAWFeatureExtractor, RAWBitFeatureExtractor
-from auto_encoder import *
-from combination import CombinationPattern
-from aperture import *
+from .raw import RAWFeatureExtractor, RAWBitFeatureExtractor
+try:
+	from .auto_encoder import *
+except: 
+	pass
+from .combination import CombinationPattern
+from .aperture import *
