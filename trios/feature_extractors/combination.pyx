@@ -88,7 +88,7 @@ cdef class CombinationPattern(FeatureExtractor):
         cdef int i, j, l, sh, byt
         cdef long imgsize = inp.shape[0] * inp.shape[1]
         
-        if trios.mp_support or self.nprocs == 1:
+        if not trios.mp_support or self.nprocs == 1:
             return FeatureExtractor.extract_batch(self, inp, out, msk, _X, y, k)
        
         inp_shared = sharedctypes.RawArray(ctypes.c_ubyte, np.asarray(inp).flat)

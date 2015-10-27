@@ -110,7 +110,6 @@ class WOperator(Serializable):
                 msk = sp.ndimage.imread(msk, mode='L')
                 res = self.apply(inp, msk)
                 errors.append(compare_images(out, msk, res, x_border, y_border))
-        print(errors)
         if binary:
             TP = sum([err[0] for err in errors])
             TN = sum([err[1] for err in errors])
