@@ -20,7 +20,7 @@ cpdef copy_data(raw_data[:,:] X, int i, int win_size, tuple pat):
 @cython.nonecheck(False)
 cpdef dataset_to_array(dataset, dtype, bint include_output=True, bint minimize=False):
     cdef unsigned long npatterns = len(dataset)
-    cdef int win_size = len(dataset.keys()[0])        
+    cdef int win_size = len(next(iter(dataset.keys())))
     cdef unsigned long pat_count
     cdef double avg, temp
     cdef np.ndarray X
@@ -95,7 +95,7 @@ cpdef expand_dataset(np.ndarray X, np.ndarray y, np.ndarray C):
 @cython.nonecheck(False)
 cpdef minimize_error(dict dataset):
     cdef unsigned long npatterns = len(dataset)
-    cdef int win_size = len(dataset.keys()[0])
+    cdef int win_size = len(next(iter(dataset.keys())))
     cdef unsigned long pat_count
     cdef double avg, temp
     cdef np.ndarray[unsigned int, ndim=2] decisions = np.zeros((npatterns, win_size+1), dtype=np.uint32)

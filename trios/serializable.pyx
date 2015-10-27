@@ -13,7 +13,7 @@ except ImportError:
 import importlib
 
 def rebuild_serializable(obj_dict):
-    print(obj_dict, type(obj_dict))
+    #print(obj_dict, type(obj_dict))
     return Serializable.read(obj_dict)
 
 cdef class Serializable:
