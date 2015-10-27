@@ -7,6 +7,8 @@ Created on Tue Mar 31 16:59:49 2015
 cimport numpy as np
 import numpy as np
 
+cimport cython
+
 from WOperator cimport FeatureExtractor
 
 cpdef unsigned char[:,:] apply_loop(unsigned char[:,:] window, np.ndarray[unsigned char, ndim=2] image, np.ndarray[unsigned char, ndim=2] mask, classifier, extractor)
@@ -15,3 +17,10 @@ cpdef compare_images(unsigned char[:,:] out, unsigned char[:,:] msk, unsigned ch
 cpdef compare_images_binary(unsigned char[:,:] out, unsigned char[:,:] msk, unsigned char[:,:] res, int x_border, int y_border)
 
 cpdef process_image_ordered(imageset, FeatureExtractor extractor)
+
+ctypedef fused raw_data:
+    cython.uchar
+    cython.uint
+    cython.float
+
+cpdef long process_one_image(unsigned char[:,:] win, unsigned char[:,:] inp, unsigned char[:,:] out, unsigned char[:,:] msk, raw_data [:,:] X, unsigned char[:] y, FeatureExtractor extractor, raw_data [:] temp, int k)

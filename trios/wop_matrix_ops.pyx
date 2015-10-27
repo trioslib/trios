@@ -49,11 +49,6 @@ cpdef process_image(dict dataset, unsigned char[:,:] win, np.ndarray[unsigned ch
                 else:
                     dataset[wpatt][output[i,j]] += 1
 
-ctypedef fused raw_data:
-    cython.uchar
-    cython.uint
-    cython.float
-
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
@@ -62,7 +57,7 @@ cpdef long process_one_image(unsigned char[:,:] win, unsigned char[:,:] inp, uns
     hh = win.shape[0]; ww = win.shape[1]
     hh2 = hh/2
     ww2 = ww/2
-    
+    #print(cython.typeof(temp))
     h = inp.shape[0] ; w = inp.shape[1]
     for i in range(hh2, h-hh2):
         for j in range(ww2, w-ww2):
@@ -105,13 +100,7 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
         inp = sp.ndimage.imread(inp_, mode='L')
         out = sp.ndimage.imread(out_, mode='L')
         msk = sp.ndimage.imread(msk_, mode='L')
-        if X.dtype == np.uint8:
-            k = process_one_image[cython.uchar](extractor.window, inp, out, msk, X, y, extractor, temp, k)
-        elif X.dtype == np.float:
-            k = process_one_image[cython.float](extractor.window, inp, out, msk, X, y, extractor, temp, k)
-        elif X.dtype == np.uint32:
-            k = process_one_image[cython.uint](extractor.window, inp, out, msk, X, y, extractor, temp, k)
-    
+        k = extractor.extract_batch(inp, out, msk, X, y, k)    
     return X, y
 
 @cython.boundscheck(False)
