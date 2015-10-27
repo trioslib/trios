@@ -12,6 +12,8 @@ from trios.wop_matrix_ops import process_image, apply_loop, compare_images, comp
 from trios.serializable import Serializable
 from trios.serializable cimport Serializable
 
+import trios
+
 import numpy as np
 cimport numpy as np
 import scipy as sp
@@ -83,7 +85,7 @@ class WOperator(Serializable):
     
     def eval(self, imgset, window=None, per_image=False, binary=False, procs=2):
         errors = []
-        if procs > 1:
+        if trios.mp_support and procs > 1:
             errors_p = multiprocessing.Pool(processes=procs)
             ll = list(zip(itertools.repeat(self), itertools.repeat(window), itertools.repeat(imgset), itertools.repeat(procs), range(procs), itertools.repeat(binary)))
             errors = errors_p.map(worker_eval, ll)
