@@ -129,12 +129,14 @@ class WOperator(Serializable):
         obj_dict['extractor'] = self.extractor.write(None)
         
         obj_dict['window'] = np.asarray(self.window)
+        obj_dict['trained'] = self.trained
         
     def set_state(self, obj_dict):
         self.classifier = Serializable.read(obj_dict['classifier'])
         self.extractor = Serializable.read(obj_dict['extractor'])
         
         self.window = obj_dict['window']
+        self.trained = obj_dict['trained']
         if len(self.window.shape) == 1:
             self.window = self.window.reshape((self.window.shape[0], 1))
 
