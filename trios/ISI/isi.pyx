@@ -54,11 +54,6 @@ cdef class ISI(trios.serializable.Serializable):
         def __get__(self):
             return False
     
-    property parallel:
-        def __get__(self):
-            return False
-    
-    
     cpdef train(self, dict dataset):
         cdef np.ndarray[unsigned int, ndim=2] X
         cdef np.ndarray[unsigned int, ndim=2] F

@@ -6,13 +6,14 @@ Created on Wed Mar 25 14:40:19 2015
 """
 from __future__ import print_function
 
-import cython
+cimport cython
 
-from trios.wop_matrix_ops import process_image, apply_loop, compare_images, compare_images_binary, process_image_ordered
+from trios.wop_matrix_ops import process_image, apply_loop, compare_images, compare_images_binary, process_image_ordered, process_one_image
 from trios.serializable import Serializable
 from trios.serializable cimport Serializable
 
 import numpy as np
+cimport numpy as np
 import scipy as sp
 import scipy.ndimage
 
@@ -24,14 +25,17 @@ from functools import partial
 import itertools
 
 def worker_eval(t):
-    self, imgset, nprocs, procnumber, bin = t
+    self, window, imgset, nprocs, procnumber, bin = t
+    if not window is None:
+        x_border = window.shape[1]/2
+        y_border = window.shape[0]/2
+    else:
+        x_border = y_border = 0
     idx = [ i  for i in range(len(imgset)) if i % nprocs == procnumber]
     errs = []
     for i in idx:
         inp, out, msk = imgset[i]
         print('Testing', i, inp, out, file=sys.stderr)
-        x_border = self.window.shape[1]/2
-        y_border = self.window.shape[0]/2
         
         inp = sp.ndimage.imread(inp, mode='L')
         out = sp.ndimage.imread(out, mode='L')
@@ -41,7 +45,7 @@ def worker_eval(t):
             errs.append(compare_images_binary(out, msk, res, x_border, y_border))
         else:
             errs.append(compare_images(out, msk, res, x_border, y_border))
-    print(errs)
+        del inp, out, msk, res
     return errs
     
 
@@ -79,11 +83,16 @@ class WOperator(Serializable):
     
     def eval(self, imgset, window=None, per_image=False, binary=False, procs=2):
         errors = []
-        if self.extractor.parallel and self.classifier.parallel:
+        if procs > 1:
             errors_p = multiprocessing.Pool(processes=procs)
-            ll = list(itertools.izip(itertools.repeat(self), itertools.repeat(imgset), itertools.repeat(procs), range(procs), itertools.repeat(binary)))
+            ll = list(zip(itertools.repeat(self), itertools.repeat(window), itertools.repeat(imgset), itertools.repeat(procs), range(procs), itertools.repeat(binary)))
             errors = errors_p.map(worker_eval, ll)
+            errors_p.close()
+            errors_p.join()
+            del errors_p
+            
             errors = list(itertools.chain(*errors))
+            
         else:
             if not window is None:
                 x_border = window.shape[1]/2
@@ -99,7 +108,7 @@ class WOperator(Serializable):
                 msk = sp.ndimage.imread(msk, mode='L')
                 res = self.apply(inp, msk)
                 errors.append(compare_images(out, msk, res, x_border, y_border))
-        
+        print(errors)
         if binary:
             TP = sum([err[0] for err in errors])
             TN = sum([err[1] for err in errors])
@@ -135,7 +144,6 @@ class Classifier(Serializable):
     def __init__(self, *a, **kw):
         self.minimize = False
         self.ordered = False
-        self.parallel = False
     
     def train(self, dataset, **kw):
         raise NotImplementedError()
@@ -149,7 +157,6 @@ cdef class FeatureExtractor(Serializable):
     '''
     def __init__(self, unsigned char[:,:] window=None):
         self.window = window
-        self.parallel = False
 
     def __len__(self):
         ''' return feature vector length '''
@@ -161,7 +168,6 @@ cdef class FeatureExtractor(Serializable):
         
         dataset = {}
         for (inp, out, msk) in imgset:
-            #print('Processing', inp, out, msk, file=sys.stderr)
             inp = sp.ndimage.imread(inp, mode='L')
             out = sp.ndimage.imread(out, mode='L')
             msk = sp.ndimage.imread(msk, mode='L')
@@ -171,8 +177,12 @@ cdef class FeatureExtractor(Serializable):
     def temp_feature_vector(self):
         return np.zeros(len(self), np.float)
     
+    cpdef extract_batch(self, unsigned char[:,:] inp, unsigned char[:,:] out, unsigned char[:,:] msk, np.ndarray X, unsigned char[:] y, int k):
+        cdef np.ndarray temp = self.temp_feature_vector()
+        k = process_one_image(self.window, inp, out, msk, X, y, self, temp, k)
+        return k
+    
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
-        print('erro')
         pat[0] = 0
         
     def train(self, dataset):
@@ -183,5 +193,5 @@ cdef class FeatureExtractor(Serializable):
         obj_dict['window'] = win
     
     def set_state(self, obj_dict):
-        self.window = obj_dict['window'] 
+        self.window = np.asarray(obj_dict['window'])
         
