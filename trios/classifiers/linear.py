@@ -12,8 +12,6 @@ from trios.WOperator import Classifier
 from trios import util
 import pickle
 
-from StringIO import StringIO
-
 import inspect
 
 class LinearClassifier(Classifier):
