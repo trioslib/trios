@@ -3,6 +3,7 @@ Contains Imageset related functions.
 """
 
 import os.path
+import numpy as np
 
 class Imageset(list):
     """
@@ -66,7 +67,7 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
             input_img = base_dir[0] + lines[line_count].strip()
             ideal_img = base_dir[1] + lines[line_count+1].strip()
             if ngroups == 2:
-                imgset.append( (input_img, ideal_img) )
+                imgset.append( (input_img, ideal_img, None) )
             else:
                 mask_img = base_dir[2] + lines[line_count+2].strip()
                 imgset.append( (input_img, ideal_img, mask_img) )

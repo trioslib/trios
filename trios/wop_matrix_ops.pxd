@@ -23,4 +23,4 @@ ctypedef fused raw_data:
     cython.uint
     cython.float
 
-cpdef long process_one_image(unsigned char[:,:] win, unsigned char[:,:] inp, unsigned char[:,:] out, unsigned char[:,:] msk, raw_data [:,:] X, unsigned char[:] y, FeatureExtractor extractor, raw_data [:] temp, int k)
+cpdef long process_one_image(unsigned char[:,:] win, unsigned char[:,:] inp, unsigned char[:,:] out, unsigned char[:,:] msk, raw_data [:,:] X, unsigned char[:] y, FeatureExtractor extractor, raw_data [:] temp, long k)

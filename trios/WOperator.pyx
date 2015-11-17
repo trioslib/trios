@@ -173,7 +173,10 @@ cdef class FeatureExtractor(Serializable):
         for (inp, out, msk) in imgset:
             inp = sp.ndimage.imread(inp, mode='L')
             out = sp.ndimage.imread(out, mode='L')
-            msk = sp.ndimage.imread(msk, mode='L')
+            if msk != None:
+                msk = sp.ndimage.imread(msk, mode='L')
+            else:
+                msk = np.ones(inp.shape, inp.dtype)
             process_image(dataset, self.window, inp, out, msk, self)
         return dataset
     

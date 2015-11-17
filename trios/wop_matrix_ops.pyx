@@ -52,12 +52,11 @@ cpdef process_image(dict dataset, unsigned char[:,:] win, np.ndarray[unsigned ch
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cpdef long process_one_image(unsigned char[:,:] win, unsigned char[:,:] inp, unsigned char[:,:] out, unsigned char[:,:] msk, raw_data [:,:] X, unsigned char[:] y, FeatureExtractor extractor, raw_data [:] temp, int k):
+cpdef long process_one_image(unsigned char[:,:] win, unsigned char[:,:] inp, unsigned char[:,:] out, unsigned char[:,:] msk, raw_data [:,:] X, unsigned char[:] y, FeatureExtractor extractor, raw_data [:] temp, long k):
     cdef int h, w, i, j, l, ww, hh, ww2, hh2
     hh = win.shape[0]; ww = win.shape[1]
     hh2 = hh/2
     ww2 = ww/2
-    #print(cython.typeof(temp))
     h = inp.shape[0] ; w = inp.shape[1]
     for i in range(hh2, h-hh2):
         for j in range(ww2, w-ww2):
@@ -85,10 +84,16 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
     cdef np.ndarray temp
         
     for _i, _o, m in imageset:
-        msk = sp.ndimage.imread(m, mode='L')
+        if m != None:
+            msk = sp.ndimage.imread(m, mode='L')
+        else:
+            # if there is no mask we take the shape from the input image
+            # and check for m != 0 below.
+            msk = sp.ndimage.imread(_i, mode='L')
+            
         for i in range(msk.shape[0]):
             for j in range(msk.shape[1]):
-                if msk[i, j] != 0:
+                if m is None or msk[i, j] != 0:
                     npixels += 1
                     
     temp = extractor.temp_feature_vector()
@@ -99,8 +104,11 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
     for (inp_, out_, msk_) in imageset:
         inp = sp.ndimage.imread(inp_, mode='L')
         out = sp.ndimage.imread(out_, mode='L')
-        msk = sp.ndimage.imread(msk_, mode='L')
-        k = extractor.extract_batch(inp, out, msk, X, y, k)    
+        if msk_ != None:
+            msk = sp.ndimage.imread(msk_, mode='L')
+        else:
+            msk = np.ones((inp.shape[0], inp.shape[1]), np.uint8)
+        k = extractor.extract_batch(inp, out, msk, X, y, k)
     return X, y
 
 @cython.boundscheck(False)
