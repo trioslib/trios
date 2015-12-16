@@ -76,7 +76,7 @@ class WOperator(Serializable):
     
     def train(self, imgset):
         dataset = self.extractor.extract_dataset(imgset, self.classifier.ordered)
-        self.classifier.train(dataset)
+        self.classifier.train(dataset, {})
         self.trained = True
         return dataset
         
@@ -136,11 +136,14 @@ class WOperator(Serializable):
         self.extractor = Serializable.read(obj_dict['extractor'])
         
         self.window = obj_dict['window']
-        self.trained = obj_dict['trained']
+        if 'trained' in obj_dict:
+            self.trained = obj_dict['trained']
+        else:
+            self.trained = True
         if len(self.window.shape) == 1:
             self.window = self.window.reshape((self.window.shape[0], 1))
 
-class Classifier(Serializable):
+cdef class Classifier(Serializable):
     '''
     docs for the classifier interface
     '''
@@ -148,10 +151,10 @@ class Classifier(Serializable):
         self.minimize = False
         self.ordered = False
     
-    def train(self, dataset, **kw):
+    cpdef train(self, dataset, kw):
         raise NotImplementedError()
     
-    def apply(self, fvector):
+    cpdef apply(self, fvector):
         raise NotImplementedError()
        
 cdef class FeatureExtractor(Serializable):

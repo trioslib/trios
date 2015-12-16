@@ -9,9 +9,9 @@ import numpy as np
 
 cimport cython
 
-from WOperator cimport FeatureExtractor
+from WOperator cimport FeatureExtractor, Classifier
 
-cpdef unsigned char[:,:] apply_loop(unsigned char[:,:] window, np.ndarray[unsigned char, ndim=2] image, np.ndarray[unsigned char, ndim=2] mask, classifier, extractor)
+cpdef unsigned char[:,:] apply_loop(unsigned char[:,:] window, np.ndarray[unsigned char, ndim=2] image, np.ndarray[unsigned char, ndim=2] mask, Classifier classifier, FeatureExtractor extractor)
 cpdef process_image(dict dataset, unsigned char[:,:] win, np.ndarray[unsigned char, ndim=2] iinput, np.ndarray[unsigned char, ndim=2] output, np.ndarray[unsigned char, ndim=2] mask, extractor)
 cpdef compare_images(unsigned char[:,:] out, unsigned char[:,:] msk, unsigned char[:,:] res, int x_border, int y_border)
 cpdef compare_images_binary(unsigned char[:,:] out, unsigned char[:,:] msk, unsigned char[:,:] res, int x_border, int y_border)

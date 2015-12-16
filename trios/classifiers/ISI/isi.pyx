@@ -9,7 +9,7 @@ import sys
 
 from trios import util
 
-cimport trios.serializable
+from trios.WOperator cimport Classifier
 
 import tempfile
 import os
@@ -21,9 +21,9 @@ for i in range(32):
 def rebuild_isi():
     pass
 
-cdef class ISI(trios.serializable.Serializable):
-   
+cdef class ISI(Classifier):
     def __init__(self, win_np=None):
+        Classifier.__init__(self, win_np)
         self._trained = False
         if not win_np is None:
             self.configure(win_np)
@@ -54,7 +54,8 @@ cdef class ISI(trios.serializable.Serializable):
         def __get__(self):
             return False
     
-    cpdef train(self, dict dataset):
+    cpdef train(self, _dataset, kw):
+        cdef dict dataset = _dataset
         cdef np.ndarray[unsigned int, ndim=2] X
         cdef np.ndarray[unsigned int, ndim=2] F
         X, F = util.minimize_error(dataset)
@@ -105,9 +106,10 @@ cdef class ISI(trios.serializable.Serializable):
         
     @cython.boundscheck(False)
     @cython.nonecheck(False)
-    cpdef apply(self, np.ndarray pat):
+    cpdef apply(self, pat):
+        cdef unsigned int[:] pattern = pat
         cdef int wz = len(pat)
-        cdef unsigned char r = 255 * v1.itv_list_contain(self.interval_list, <unsigned int *> pat.data, wz)
+        cdef unsigned char r = 255 * v1.itv_list_contain(self.interval_list, &pattern[0], wz)
         return r
 
     def __reduce__(self):

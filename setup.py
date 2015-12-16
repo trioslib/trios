@@ -19,7 +19,7 @@ extra_link_args = ['-fopenmp']
 
 extensions = [
         
-            Extension('trios.ISI.isi', ['trios/ISI/isi.pyx', 
+            Extension('trios.classifiers.ISI.isi', ['trios/classifiers/ISI/isi.pyx', 
                     'trios/v1/definitions.pxd',
                     'trios/v1/basic_mtm.c',
                     'trios/v1/basic_itv.c',
@@ -31,13 +31,13 @@ extensions = [
                     'trios/v1/io_win.c',
                     'trios/v1/io_mtm.c',                    
 
-                    'trios/ISI/train_operator.c',
+                    'trios/classifiers/ISI/train_operator.c',
                     # ISI algorithm
-                    'trios/ISI/dp_isi.c',
-                    'trios/ISI/ip_isi.c',
-                    'trios/ISI/partition.c',
-                    'trios/ISI/ip_mincover.c', 
-                    ], include_dirs=['trios/v1', 'trios/ISI']),
+                    'trios/classifiers/ISI/dp_isi.c',
+                    'trios/classifiers/ISI/ip_isi.c',
+                    'trios/classifiers/ISI/partition.c',
+                    'trios/classifiers/ISI/ip_mincover.c', 
+                    ], include_dirs=['trios/v1', 'trios/classifiers/ISI']),
             Extension('trios.WOperator', [
                     'trios/WOperator.pyx']),
             Extension('trios.feature_extractors.raw', [
@@ -77,5 +77,5 @@ setup(
     name='trios',
     cmdclass = {'build_ext': build_ext},
     ext_modules = cythonize(extensions),
-    packages = ['trios', 'trios.feature_extractors', 'trios.ISI', 'trios.classifiers', 'trios.v1', 'trios.legacy', 'trios.window_determination', 'trios.shortcuts']
+    packages = ['trios', 'trios.feature_extractors', 'trios.classifiers.ISI', 'trios.classifiers', 'trios.v1', 'trios.legacy', 'trios.window_determination', 'trios.shortcuts']
 )

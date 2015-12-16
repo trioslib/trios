@@ -1,9 +1,9 @@
 cimport trios.v1.definitions as v1
-cimport trios.serializable
+from trios.WOperator cimport Classifier
 
 cimport numpy as np
 
-cdef class ISI(trios.serializable.Serializable):
+cdef class ISI(Classifier):
     cdef v1.itv_t *interval_list
     cdef v1.window_t *win
     cdef int wsize
@@ -11,5 +11,4 @@ cdef class ISI(trios.serializable.Serializable):
     cdef bint _trained
     
     cdef set_itv(self, v1.itv_t *it)
-    cpdef apply(self, np.ndarray pat)
-    cpdef train(self, dict dataset)
+    

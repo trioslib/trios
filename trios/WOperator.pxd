@@ -14,3 +14,9 @@ cdef class FeatureExtractor(Serializable):
     
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat)
     cpdef extract_batch(self, unsigned char[:,:] inp, unsigned char[:,:] out, unsigned char[:,:] msk, np.ndarray X, unsigned char[:] y, int k)
+    
+cdef class Classifier(Serializable):
+    cdef bint minimize, ordered
+    
+    cpdef train(self, dataset, kw)
+    cpdef apply(self, fvector)

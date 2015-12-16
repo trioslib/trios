@@ -9,7 +9,7 @@ cimport numpy as np
 import numpy as np
 cimport cython
 
-from WOperator cimport FeatureExtractor
+from WOperator cimport FeatureExtractor, Classifier
 
 import scipy as sp
 
@@ -113,12 +113,12 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cpdef unsigned char[:,:] apply_loop(unsigned char[:,:] window, np.ndarray[unsigned char, ndim=2] image, np.ndarray[unsigned char, ndim=2] mask, classifier, extractor):
+cpdef unsigned char[:,:] apply_loop(unsigned char[:,:] window, np.ndarray[unsigned char, ndim=2] image, np.ndarray[unsigned char, ndim=2] mask, Classifier classifier, FeatureExtractor extractor):
     cdef int h = image.shape[0]
     cdef int w = image.shape[1]    
     cdef int wh = int(window.shape[0]/2)
     cdef int ww = int(window.shape[1]/2)
-    cdef np.ndarray[unsigned char, ndim=2] output = np.zeros((image.shape[0], image.shape[1]), dtype=np.uint8)
+    cdef unsigned char[:,:] output = np.zeros((image.shape[0], image.shape[1]), dtype=np.uint8)
     
     cdef np.ndarray pat = extractor.temp_feature_vector()
     cdef int i, j
