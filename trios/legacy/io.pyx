@@ -3,8 +3,7 @@ import numpy as np
 
 cimport trios.v1.definitions as v1
 
-#from trios.ISI import ISI
-from trios.ISI.isi cimport ISI
+from trios.classifiers.ISI.isi cimport ISI
 from trios.WOperator import WOperator
 from trios.feature_extractors import RAWBitFeatureExtractor, CombinationPattern
 
