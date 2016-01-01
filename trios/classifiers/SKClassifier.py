@@ -20,7 +20,7 @@ class SKClassifier(Classifier):
         self.minimize = minimize
         self.ordered = False
     
-    def train(self, dataset, **kw):
+    def train(self, dataset, kw):
         X, y, C = util.dataset_to_array(dataset, np.float64, True, False)            
         specs = inspect.getargspec(self.cls.fit)
         if 'sample_weight' in specs.args:
@@ -31,7 +31,7 @@ class SKClassifier(Classifier):
         #print(self.cls.score(X, y, C))
     
     def apply(self, fvector):
-        return self.cls.predict(fvector)[0]
+        return self.cls.predict(fvector.reshape(1, -1))[0]
 
     def write_state(self, obj_dict):
         #obj_dict['cls'] = pickle.dumps(self.cls)

@@ -20,7 +20,7 @@ class LinearClassifier(Classifier):
         self.bias = bias
         self.minimize = minimize
     
-    def train(self, dataset, **kw):
+    def train(self, dataset, kw):
         self.trained = True
     
     def apply(self, fvector):
