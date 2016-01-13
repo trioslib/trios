@@ -15,20 +15,30 @@ import pickle
 import inspect
 
 class SKClassifier(Classifier):
-    def __init__(self, cls=None, minimize=False):
+    def __init__(self, cls=None, minimize=False, ordered=False):
         self.cls = cls
         self.minimize = minimize
-        self.ordered = False
+        self.ordered = ordered
     
     def train(self, dataset, kw):
-        X, y, C = util.dataset_to_array(dataset, np.float64, True, False)            
+        if not self.ordered:
+            X, y, C = util.dataset_to_array(dataset, np.float64, True, False)            
+        else:
+            if len(dataset) == 2:
+                X, y = dataset
+                C = None
+            else:
+                X, y, C = dataset
+
         specs = inspect.getargspec(self.cls.fit)
-        if 'sample_weight' in specs.args:
+        if C != None and 'sample_weight' in specs.args:
             self.cls.fit(X, y, C)
         else:
-            X2, y2 = util.expand_dataset(X, y, C)
-            self.cls.fit(X2, y2) ## use fit_params={'sample_weight': C} ????
-        #print(self.cls.score(X, y, C))
+            if C != None:
+                X2, y2 = util.expand_dataset(X, y, C)
+                self.cls.fit(X2, y2)
+            else:
+                self.cls.fit(X, y)
     
     def apply(self, fvector):
         return self.cls.predict(fvector.reshape(1, -1))[0]
