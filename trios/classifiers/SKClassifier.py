@@ -7,22 +7,21 @@ Created on Fri May 15 12:22:04 2015
 
 
 import numpy as np
-import sklearn
 from trios.WOperator import Classifier
 from trios import util
-import pickle
 
 import inspect
 
 class SKClassifier(Classifier):
-    def __init__(self, cls=None, minimize=False, ordered=False):
+    def __init__(self, cls=None, minimize=False, ordered=False, dtype=np.uint8):
         self.cls = cls
         self.minimize = minimize
         self.ordered = ordered
+        self.dtype = dtype
     
     def train(self, dataset, kw):
         if not self.ordered:
-            X, y, C = util.dataset_to_array(dataset, np.float64, True, False)            
+            X, y, C = util.dataset_to_array(dataset, self.dtype, True, False)            
         else:
             if len(dataset) == 2:
                 X, y = dataset
