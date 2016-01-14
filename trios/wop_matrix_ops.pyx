@@ -19,6 +19,28 @@ import sys
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
+cpdef long count_pixels_mask(unsigned char[:,:] msk, unsigned char[:,:] win):
+    cdef int hh = win.shape[0]
+    cdef int ww = win.shape[1]
+    cdef int hh2 = hh//2
+    cdef int ww2 = ww//2
+    cdef int h = msk.shape[0]
+    cdef int w = msk.shape[1]
+    
+    cdef long count = 0
+    cdef int i, j
+    
+    for i in range(hh2, h-hh2):
+        for j in range(ww2, w-ww2):
+            if msk[i,j] != 0:
+                count += 1
+    
+    return count
+
+    
+
+@cython.boundscheck(False)
+@cython.nonecheck(False)
 cpdef process_image(dict dataset, unsigned char[:,:] win, np.ndarray[unsigned char, ndim=2] iinput, np.ndarray[unsigned char, ndim=2] output, np.ndarray[unsigned char, ndim=2] mask, extractor):
     cdef int h = iinput.shape[0]
     cdef int w = iinput.shape[1]
@@ -52,7 +74,7 @@ cpdef process_image(dict dataset, unsigned char[:,:] win, np.ndarray[unsigned ch
 
 @cython.boundscheck(False)
 @cython.nonecheck(False)
-cpdef long process_one_image(unsigned char[:,:] win, unsigned char[:,:] inp, unsigned char[:,:] out, unsigned char[:,:] msk, raw_data [:,:] X, unsigned char[:] y, FeatureExtractor extractor, raw_data [:] temp, long k):
+cpdef long process_one_image(unsigned char[:,:] win, unsigned char[:,:] inp, unsigned char[:,:] msk, raw_data [:,:] X, FeatureExtractor extractor, raw_data [:] temp, long k):
     cdef int h, w, i, j, l, ww, hh, ww2, hh2
     hh = win.shape[0]; ww = win.shape[1]
     hh2 = hh/2
@@ -64,7 +86,6 @@ cpdef long process_one_image(unsigned char[:,:] win, unsigned char[:,:] inp, uns
                 extractor.extract(inp, i, j, temp)
                 for l in range(temp.shape[0]):
                     X[k, l] = temp[l]
-                y[k] = out[i, j]
                 k += 1 
     return k
     
@@ -82,6 +103,11 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
     
     cdef np.ndarray X
     cdef np.ndarray temp
+    cdef unsigned char[:,:] win = extractor.window
+    
+    hh = win.shape[0]; ww = win.shape[1]
+    hh2 = hh//2
+    ww2 = ww//2
         
     for _i, _o, m in imageset:
         if m != None:
@@ -91,8 +117,8 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
             # and check for m != 0 below.
             msk = sp.ndimage.imread(_i, mode='L')
             
-        for i in range(msk.shape[0]):
-            for j in range(msk.shape[1]):
+        for i in range(hh2, msk.shape[0]-hh2):
+            for j in range(ww2, msk.shape[1]-ww2):
                 if m is None or msk[i, j] != 0:
                     npixels += 1
                     
@@ -108,7 +134,16 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
             msk = sp.ndimage.imread(msk_, mode='L')
         else:
             msk = np.ones((inp.shape[0], inp.shape[1]), np.uint8)
-        k = extractor.extract_batch(inp, out, msk, X, y, k)
+        
+        k2 = k
+        for i in range(hh2, out.shape[0]-hh2):
+            for j in range(ww2, out.shape[1]-ww2):
+                if msk[i, j] > 0:
+                    y[k2] = out[i, j]
+                    k2 += 1
+        k = extractor.extract_batch(inp, msk, X, k)
+        assert k2 == k2
+        
     return X, y
 
 @cython.boundscheck(False)

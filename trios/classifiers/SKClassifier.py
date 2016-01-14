@@ -42,6 +42,9 @@ class SKClassifier(Classifier):
     def apply(self, fvector):
         return self.cls.predict(fvector.reshape(1, -1))[0]
 
+    def apply_batch(self, fmatrix):
+        return self.cls.predict(fmatrix)
+
     def write_state(self, obj_dict):
         #obj_dict['cls'] = pickle.dumps(self.cls)
         obj_dict['cls'] = self.cls

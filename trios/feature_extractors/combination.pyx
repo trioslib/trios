@@ -2,7 +2,7 @@ import numpy as np
 
 import cython
 from trios.WOperator import WOperator
-from trios.WOperator cimport FeatureExtractor
+from trios.WOperator cimport FeatureExtractor, Classifier
 import math
 
 import multiprocessing as mp
@@ -19,14 +19,19 @@ cimport numpy as np
 @cython.boundscheck(False)
 @cython.nonecheck(False)
 cpdef extract_pattern(CombinationPattern self, unsigned char[:,:] img, int i, int j, unsigned int [:] pat):
-    cdef int k, sh, byt
+    cdef int k, sh, byt, n
     cdef unsigned char lbl
+    cdef FeatureExtractor fe
+    cdef Classifier cls
     
-    for k in range(len(self)):
+    n = len(self)
+    for k in range(n):
         pat[k] = 0
-    for k in range(len(self.wops)):
-        self.wops[k].extractor.extract(img, i, j, self.fvectors[k])
-        lbl = self.wops[k].classifier.apply(self.fvectors[k])
+    for k in range(n):
+        cls = self.wops[k].classifier
+        fe = self.wops[k].extractor
+        fe.extract(img, i, j, self.fvectors[k])
+        lbl = cls.apply(self.fvectors[k])
         if self.bitpack == False:
             pat[k] = lbl
         else:
@@ -48,7 +53,8 @@ def apply_parallel(t):
     msk = np.frombuffer(msk_par, dtype=np.uint8).reshape((h, w))
     out = np.frombuffer(out_images[i], dtype=np.uint8).reshape((h, w))
     #print('before apply', op, op.window, op.classifier, img.shape, msk.shape)
-    out[:] = op.apply(img, msk)
+    print(True)
+    out[:] = op.apply(img, msk, True)
     #print('end_apply')
     return i
     
@@ -59,7 +65,11 @@ cdef class CombinationPattern(FeatureExtractor):
     cdef public int nprocs
     
     def __init__(self,  *wops, **kwargs):
-        FeatureExtractor.__init__(self, np.ones((len(wops), 1), np.uint8))
+        union = wops[0].window
+        for i in range(len(wops)):
+            union += wops[i].window
+        union[union > 0] = 1
+        FeatureExtractor.__init__(self, union)
         if 'bitpack' in kwargs:
             self.bitpack = kwargs['bitpack']
         else:
@@ -82,14 +92,14 @@ cdef class CombinationPattern(FeatureExtractor):
     
     @cython.boundscheck(False)
     @cython.nonecheck(False)
-    cpdef extract_batch(self, unsigned char[:,:] inp, unsigned char[:,:] out, unsigned char[:,:] msk, np.ndarray _X, unsigned char[:] y, int k):
+    cpdef extract_batch(self, unsigned char[:,:] inp, unsigned char[:,:] msk, np.ndarray _X, int k):
         cdef unsigned int[:,:] X = _X
         cdef unsigned char[:,:] img
-        cdef int i, j, l, sh, byt
+        cdef int i, j, l, sh, byt, ww2, hh2
         cdef long imgsize = inp.shape[0] * inp.shape[1]
         
         if not trios.mp_support or self.nprocs == 1:
-            return FeatureExtractor.extract_batch(self, inp, out, msk, _X, y, k)
+            return FeatureExtractor.extract_batch(self, inp, msk, _X, k)
        
         inp_shared = sharedctypes.RawArray(ctypes.c_ubyte, np.asarray(inp).flat)
         msk_shared = sharedctypes.RawArray(ctypes.c_ubyte, np.asarray(msk).flat)
@@ -109,12 +119,13 @@ cdef class CombinationPattern(FeatureExtractor):
         
         del inp_shared
         del msk_shared 
-        
-        for i in range(inp.shape[0]):
-            for j in range(inp.shape[1]):
+        ww2 = self.window.shape[1]//2
+        hh2 = self.window.shape[0]//2
+        for i in range(hh2, inp.shape[0]-hh2):
+            for j in range(ww2, inp.shape[1]-ww2):
                 if msk[i, j] == 0: continue
                 
-                y[k] = out[i, j]
+                #y[k] = out[i, j]
                 
                 for l in range(len(self.wops)):
                     img = outnp[l]
