@@ -16,7 +16,7 @@ class DTree(Classifier):
     def __init__(self, *a, **kw):
         self.cls = sklearn.tree.DecisionTreeClassifier()
     
-    def train(self, dataset, **kw):
+    def train(self, dataset, kw):
         X, y, C = util.dataset_to_array(dataset, np.float64, True, False)
         self.cls.fit(X, y, C)
     
