@@ -93,7 +93,6 @@ class WOperator(Serializable):
             ypred = self.classifier.apply_batch(X)
             res[y+hh2,x+ww2] = ypred
             return res
-            # put y to result image
         else:
             return apply_loop(self.window, image, mask, self.classifier, self.extractor)
 
@@ -159,7 +158,8 @@ class WOperator(Serializable):
 
 cdef class Classifier(Serializable):
     '''
-    docs for the classifier interface
+    This represents a classifier in TRIOS. Objects of this type are used to classifiy patterns
+    extracted from the images.  
     '''
     def __init__(self, *a, **kw):
         self.minimize = False
@@ -169,6 +169,9 @@ cdef class Classifier(Serializable):
         raise NotImplementedError()
     
     cpdef apply(self, fvector):
+        raise NotImplementedError()
+    
+    cpdef apply_batch(self, fmatrix):
         raise NotImplementedError()
        
 cdef class FeatureExtractor(Serializable):
