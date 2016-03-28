@@ -3,17 +3,10 @@ from distutils.extension import Extension
 from Cython.Build import cythonize
 from Cython.Distutils import build_ext
 
-
-
-from Cython.Compiler.Options import directive_defaults
-
-directive_defaults['linetrace'] = True
-directive_defaults['binding'] = True
-
 import numpy as np
 
-includes = [np.get_include(), 'C:/Users/Igor/Miniconda3/includes']
-libs = ['C:/Users/Igor/Miniconda3/libs']
+includes = [np.get_include()]#, 'C:/Users/Igor/Miniconda3/includes']
+libs = []#['C:/Users/Igor/Miniconda3/libs', 'legacy_stdio_definitions.lib']
 extra_compile_args = ['-fopenmp']
 extra_link_args = ['-fopenmp']
 
