@@ -4,8 +4,6 @@
 #include "paclearn_local.h"
 #include <stdio.h>
 
-#include <sys/time.h>
-#include <unistd.h>
 
 /*#define _DEBUG_*/
 
@@ -14,11 +12,6 @@
 
 /* #define _DEBUG_TIME_ */
 
-#ifdef _DEBUG_TIME_
-#include <sys/types.h>
-#include <sys/times.h>
-#include </usr/include/time.h>
-#endif
 
 
 /* macro to check whether the interval p_new is covered by some interval
@@ -1210,56 +1203,11 @@ int /*+ Purpose: ISI-3 (point case)                            + */ isi_3(
 	trios_debug("isi_3");
 #endif
 
-#ifdef _DEBUG_TIME_
-	unsigned long int tu0, tuf, ts0, tsf, tu0u, tufu, ts0u, tsfu;
-	struct rusage rusage;
-	unsigned long *time_usr;
-	unsigned long *time_sys;
-	int ii3;
-
-	struct tms start_tms;
-	struct tms end_tms;
-	clock_t start_rtime;
-	clock_t end_rtime;
-
-	float *usertime;
-	float *systemtime;
-	float *cusertime;
-	float *csystemtime;
-	float *elapsedtime;
-
-	int nmtm_p;
-
-	unsigned long USERTIME;
-	unsigned long SYSTIME;
-	float USER_TIME;
-	float SYS_TIME;
-	float CUSER_TIME;
-	float CSYS_TIME;
-	float ELAP_TIME;
-	USER_TIME = 0;
-	SYS_TIME = 0;
-	CUSER_TIME = 0;
-	CSYS_TIME = 0;
-	ELAP_TIME = 0;
-	USERTIME = 0;
-	SYSTIME = 0;
-	ii3 = 0;
-#endif
 
 	itv = *itv_i;
 	nmtm = mtm_get_nmtm(mtm_i1);
 	wzip = itv_get_wzip(itv);
 
-#ifdef _DEBUG_TIME_
-	time_usr = (long *)malloc(sizeof(long) * nmtm);
-	time_sys = (long *)malloc(sizeof(long) * nmtm);
-	usertime = (float *)malloc(sizeof(float) * nmtm);
-	systemtime = (float *)malloc(sizeof(float) * nmtm);
-	cusertime = (float *)malloc(sizeof(float) * nmtm);
-	csystemtime = (float *)malloc(sizeof(float) * nmtm);
-	elapsedtime = (float *)malloc(sizeof(float) * nmtm);
-#endif
 
 	/* ----- program logic scheme ---------------------- *
 
@@ -1293,16 +1241,6 @@ int /*+ Purpose: ISI-3 (point case)                            + */ isi_3(
 	/* for each example in "mtm_i1" */
 	q = (mtm_BX *) mtm_i1->mtm_data;
 
-#ifdef _DEBUG_TIME_
-	getrusage(RUSAGE_SELF, &rusage);
-	tu0 = rusage.ru_utime.tv_sec;
-	ts0 = rusage.ru_stime.tv_sec;
-
-	tu0u = rusage.ru_utime.tv_usec;
-	ts0u = rusage.ru_stime.tv_usec;
-
-	start_rtime = times(&start_tms);
-#endif
 
 	for (i = 0; i < nmtm; i++) {
 
@@ -1421,12 +1359,6 @@ int /*+ Purpose: ISI-3 (point case)                            + */ isi_3(
 			   }
 			 */
 
-#ifdef _DEBUG_TIME_
-			nmtm_p = mtm_get_nmtm(mtm_i2);
-			printf("numero de 1s = %d, numbero de intervalos= %d\n",
-			       nmtm_p, itv->nitv);
-			fflush(stdout);
-#endif
 
 			if (!p_cover(mtm_i2, itv)) {
 				return trios_error(MSG,
@@ -1447,53 +1379,6 @@ int /*+ Purpose: ISI-3 (point case)                            + */ isi_3(
 
 	}
 
-#ifdef _DEBUG_TIME_
-	end_rtime = times(&end_tms);
-	getrusage(RUSAGE_SELF, &rusage);
-	tuf = rusage.ru_utime.tv_sec;
-	tsf = rusage.ru_stime.tv_sec;
-	tufu = rusage.ru_utime.tv_usec;
-	tsfu = rusage.ru_stime.tv_usec;
-
-	time_usr[ii3] = 1000000 * (tuf - tu0) + (tufu - tu0u);
-	time_sys[ii3] = 1000000 * (tsf - ts0) + (tsfu - ts0u);
-
-	usertime[ii3] = (float)(end_tms.tms_utime - start_tms.tms_utime) / 100;
-	systemtime[ii3] =
-	    (float)(end_tms.tms_stime - start_tms.tms_stime) / 100;
-	cusertime[ii3] =
-	    (float)(end_tms.tms_cutime - start_tms.tms_cutime) / 100;
-	csystemtime[ii3] =
-	    (float)(end_tms.tms_cstime - start_tms.tms_cstime) / 100;
-
-	printf("  SYSTEM PARAMETERS: \n");
-
-	printf("  TIMES: \n");
-	for (i = 0; i < nmtm; i++) {
-		USERTIME = time_usr[i] + USERTIME;
-		SYSTIME = time_sys[i] + SYSTIME;
-
-		USER_TIME = usertime[i] + USER_TIME;
-		SYS_TIME = systemtime[i] + SYS_TIME;
-		CUSER_TIME = cusertime[i] + CUSER_TIME;
-		CSYS_TIME = csystemtime[i] + CSYS_TIME;
-	}
-
-	printf("    User time             : %d microseg \n", USERTIME);
-	printf("    System time           : %d microseg\n", SYSTIME);
-	printf("    User time             : %8.3f seg \n", USER_TIME);
-	printf("    System time           : %8.3f seg \n", SYS_TIME);
-	printf("    Childs user time      : %8.3f seg \n", CUSER_TIME);
-	printf("    Childs system time    : %8.3f seg\n", CSYS_TIME);
-
-	free(time_usr);
-	free(time_sys);
-	free(usertime);
-	free(systemtime);
-	free(cusertime);
-	free(csystemtime);
-	free(elapsedtime);
-#endif
 
 	return (1);
 }
