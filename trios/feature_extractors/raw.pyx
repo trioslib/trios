@@ -8,26 +8,6 @@ from trios.WOperator cimport FeatureExtractor, raw_data
 from trios.serializable import Serializable
 from trios.serializable cimport Serializable
 
-@cython.boundscheck(False)
-@cython.nonecheck(False)
-cpdef RAWExtract(unsigned char[:,:] win, unsigned char[:,:] img, int i, int j, unsigned int[:] pattern, float mul):
-    cdef int hh = win.shape[0]
-    cdef int ww = win.shape[1]
-    cdef int hh2 = hh/2
-    cdef int ww2 = ww/2
-    cdef int l, m
-    cdef int k = 0
-    
-    for l in range(-hh2, hh2+1):
-        for m in range(-ww2, ww2+1):
-            if win[l+hh2, m+ww2] != 0:
-                pattern[k] = img[i+l,j+m]
-                k += 1
-    if mul != 1:
-        for l in range(pattern.shape[0]):
-            pattern[i] = <unsigned char> (pattern[i] * mul)
-        #pattern *= mul
-
 cdef class RAWFeatureExtractor(FeatureExtractor):
     def __init__(self, unsigned char[:,:] window=None, double mul=1.0):
         FeatureExtractor.__init__(self, window)
@@ -39,8 +19,27 @@ cdef class RAWFeatureExtractor(FeatureExtractor):
     def temp_feature_vector(self):
         return np.zeros(len(self), np.uint32)
         
+    @cython.boundscheck(False)
+    @cython.nonecheck(False)
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
-        RAWExtract(self.window, img, i, j, pat, self.mul)
+        cdef unsigned int [:]pattern = pat
+        cdef unsigned char[:, :] win = self.window
+        cdef int hh = win.shape[0]
+        cdef int ww = win.shape[1]
+        cdef int hh2 = hh/2
+        cdef int ww2 = ww/2
+        cdef int l, m
+        cdef int k = 0
+        
+        for l in range(-hh2, hh2+1):
+            for m in range(-ww2, ww2+1):
+                if win[l+hh2, m+ww2] != 0:
+                    pattern[k] = img[i+l,j+m]
+                    k += 1
+        if self.mul != 1:
+            for l in range(pattern.shape[0]):
+                pattern[l] = <unsigned char> (pattern[l] *self. mul)
+        #RAWExtract(self.window, img, i, j, pat, self.mul)
     
     def write_state(self, obj_dict):
         FeatureExtractor.write_state(self, obj_dict)
