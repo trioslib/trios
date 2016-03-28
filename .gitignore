@@ -3,3 +3,6 @@ build
 cython_debug
 site/cache
 site/output
+trios/*.c
+trios/feature_extractors/*.c
+trios/classifiers/*.c
