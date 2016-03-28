@@ -11,6 +11,8 @@ from trios import util
 
 from trios.WOperator cimport Classifier
 
+from __futures__ import unicode_literals
+
 import tempfile
 import os
 
@@ -79,7 +81,7 @@ cdef class ISI(Classifier):
         ftemp = tempfile.NamedTemporaryFile('w', delete=False)
         fname = ftemp.name
         ftemp.close()
-        v1.itv_write(fname, self.interval_list, self.win)
+        v1.itv_write(bytes(fname), self.interval_list, self.win)
         with open(fname, 'r') as f:
             obj_dict['intervals'] = f.read()
         os.remove(fname)
