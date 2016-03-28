@@ -20,3 +20,4 @@ cdef class Classifier(Serializable):
     
     cpdef train(self, dataset, kw)
     cpdef apply(self, fvector)
+    cpdef apply_batch(self, fmatrix)
