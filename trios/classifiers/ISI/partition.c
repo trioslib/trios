@@ -17,8 +17,6 @@
 #include <unistd.h>
 #endif
 
-#define DEBUG 1
-
 #define MAX_PARTITIONS 768
 
 /*!
@@ -450,10 +448,6 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 #endif
 
 
-    for (i = 0; i < n; i++) {
-        sprintf(cmd, "part.temp-P-%d.mtm", i + 1);
-	   mtm_write(cmd, part_m[i], win, NULL); 
-    }
 
 #pragma omp parallel for
 	for (i = 0; i < n; i++) {
