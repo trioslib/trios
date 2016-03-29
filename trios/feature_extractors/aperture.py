@@ -22,15 +22,14 @@ class Aperture(RAWFeatureExtractor):
     
     def extract(self, img, i, j, pattern):
         RAWFeatureExtractor.extract(self, img, i, j, pattern)
+        center = pattern[self.center]
         for l in range(pattern.shape[0]):
-            if pattern[l] > pattern[self.center]:
-                p = pattern[l] - pattern[self.center]
-                pattern[l] = self.k + p
+            if pattern[l] >= center:
+                p = pattern[l] - center
+                pattern[l] = self.k + min(self.k, p)
             else:
-                p = pattern[self.center] - pattern[l]
-                pattern[l] = self.k - p
-            
-    
+                p = center - pattern[l]
+                pattern[l] = self.k - min(self.k, p)    
     
     def write_state(self, obj_dict):
         RAWFeatureExtractor.write_state(self, obj_dict)
