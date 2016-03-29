@@ -17,12 +17,12 @@ cdef class RAWFeatureExtractor(FeatureExtractor):
         return np.greater(self.window, 0).sum()
     
     def temp_feature_vector(self):
-        return np.zeros(len(self), np.uint32)
+        return np.zeros(len(self), np.uint8)
         
     @cython.boundscheck(False)
     @cython.nonecheck(False)
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
-        cdef unsigned int [:]pattern = pat
+        cdef unsigned char [:]pattern = pat
         cdef unsigned char[:, :] win = self.window
         cdef int hh = win.shape[0]
         cdef int ww = win.shape[1]
@@ -39,7 +39,6 @@ cdef class RAWFeatureExtractor(FeatureExtractor):
         if self.mul != 1:
             for l in range(pattern.shape[0]):
                 pattern[l] = <unsigned char> (pattern[l] *self. mul)
-        #RAWExtract(self.window, img, i, j, pat, self.mul)
     
     def write_state(self, obj_dict):
         FeatureExtractor.write_state(self, obj_dict)

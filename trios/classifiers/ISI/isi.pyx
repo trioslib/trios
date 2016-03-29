@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 cimport cython
 
 cimport trios.v1.definitions as v1
@@ -10,8 +12,6 @@ import sys
 from trios import util
 
 from trios.WOperator cimport Classifier
-
-from __futures__ import unicode_literals
 
 import tempfile
 import os
