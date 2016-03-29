@@ -158,20 +158,39 @@ class WOperator(Serializable):
 
 cdef class Classifier(Serializable):
     '''
-    This represents a classifier in TRIOS. Objects of this type are used to classifiy patterns
-    extracted from the images.  
+    The main purpose of this class is to classify patterns extracted from the images.
+    A Classifier can be trained using the `train` method and classifies a pattern 
+    using the `apply` method. This is an abstract class.
     '''
     def __init__(self, *a, **kw):
+        '''
+        Classifiers have two basic attributes: minimize and ordered. 
+        *. if minimize is True then WOperator modifies all labels in the training set such that
+           `train` receives a training set with only consistent patterns (no $x_i = x_j$ and $y_i \neq y_j$).
+        *. if ordered is True `train` receives as input a tuple $(X, y)$, where $X$ contains input patterns in
+        its rows and $y$ contains the labels. If ordered is False `train` receives a dictionary with patterns and
+        keys and a dictionary with the frequency of each output as values.
+        '''
         self.minimize = False
         self.ordered = False
     
     cpdef train(self, dataset, kw):
+        '''
+        Each classification method must override this method with its training procedure.
+        '''
         raise NotImplementedError()
     
     cpdef apply(self, fvector):
+        '''
+        Override this method with the application procedure for a single pattern.
+        '''
         raise NotImplementedError()
     
     cpdef apply_batch(self, fmatrix):
+        '''
+        Override this method with the application procedure for a batch of patterns.
+        Each pattern is stored in the rows of `fmatrix`.
+        '''
         raise NotImplementedError()
        
 cdef class FeatureExtractor(Serializable):
