@@ -7,7 +7,7 @@ import numpy as np
 
 class Imageset(list):
     """
-    An Imageset is a list of examples (tuples containing two or three strings). Each example contains the path of the input and ideal images and may contain a binary mask. Imageset is a subclass of list.
+An Imageset is a list of examples (tuples containing two or three strings). Each example contains the path of the input and ideal images and may contain a binary mask. Imageset is a subclass of list.
 
 Every place that expects an Imageset will work with a simple list in the following format:
 
