@@ -1,7 +1,11 @@
-from trios.feature_extractors import RAWFeatureExtractor
+from trios.feature_extractors.raw import RAWFeatureExtractor
+from trios.feature_extractors.raw cimport RAWFeatureExtractor
 import numpy as np
 
-class Aperture(RAWFeatureExtractor):
+import cython
+
+
+cdef class Aperture(RAWFeatureExtractor):
     '''
     This feature extractor is based on the work on Aperture operators (or WK-operators, cite). 
     It is used to introduce a 
@@ -13,14 +17,19 @@ class Aperture(RAWFeatureExtractor):
             self.set_center()
     
     def set_center(self):
-        ci = self.window.shape[0] // 2
-        cj = self.window.shape[1] // 2
+        cdef int ci = self.window.shape[0] // 2
+        cdef int cj = self.window.shape[1] // 2
         if self.window[ci, cj] == 0:
             raise Exception('Center point must be in the window')
         self.center = ci * self.window.shape[1] + cj
-        print(self.center, self.window.shape)
     
-    def extract(self, img, i, j, pattern):
+    @cython.boundscheck(False)
+    @cython.nonecheck(False)
+    cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
+        cdef unsigned char [:] pattern = pat
+        cdef int l
+        cdef int center
+        cdef unsigned char p
         RAWFeatureExtractor.extract(self, img, i, j, pattern)
         center = pattern[self.center]
         for l in range(pattern.shape[0]):

@@ -35,7 +35,9 @@ extensions = [
                     'trios/WOperator.pyx']),
             Extension('trios.feature_extractors.raw', [
                     'trios/feature_extractors/raw.pyx']),
-                    Extension('trios.feature_extractors.combination', [
+            Extension('trios.feature_extractors.aperture', [
+                    'trios/feature_extractors/aperture.pyx']),        
+            Extension('trios.feature_extractors.combination', [
                     'trios/feature_extractors/combination.pyx']),            
             Extension('trios.wop_matrix_ops', [
                     'trios/wop_matrix_ops.pyx']),
