@@ -81,7 +81,7 @@ cdef class ISI(Classifier):
         ftemp = tempfile.NamedTemporaryFile('w', delete=False)
         fname = ftemp.name
         ftemp.close()
-        v1.itv_write(bytes(fname), self.interval_list, self.win)
+        v1.itv_write(bytes(fname, 'ascii'), self.interval_list, self.win)
         with open(fname, 'r') as f:
             obj_dict['intervals'] = f.read()
         os.remove(fname)
@@ -94,7 +94,7 @@ cdef class ISI(Classifier):
         
         cdef v1.itv_t *interval_list
         cdef v1.window_t *win
-        interval_list = v1.itv_read(fname, &win)        
+        interval_list = v1.itv_read(bytes(fname, 'ascii'), &win)        
         cdef np.ndarray[unsigned char, ndim=2] win_np = np.zeros((win.height, win.width), np.uint8)    
     
         for i in range(win.height):
