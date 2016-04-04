@@ -21,7 +21,7 @@ cdef class Aperture(RAWFeatureExtractor):
         cdef int cj = self.window.shape[1] // 2
         if self.window[ci, cj] == 0:
             raise Exception('Center point must be in the window')
-        self.center = ci * self.window.shape[1] + cj
+        self.center = np.sum(self.window[:ci]) + np.sum(self.window[ci,:cj])
     
     @cython.boundscheck(False)
     @cython.nonecheck(False)

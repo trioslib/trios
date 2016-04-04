@@ -4,6 +4,6 @@ import numpy as np
 
 
 cdef class Aperture(RAWFeatureExtractor):
-    cdef int k
-    cdef int center
+    cdef public int k
+    cdef public int center
     
