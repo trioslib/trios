@@ -20,6 +20,7 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor)
 
 ctypedef fused raw_data:
     cython.uchar
+    cython.char
     cython.uint
     cython.float
 

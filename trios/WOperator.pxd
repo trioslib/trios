@@ -6,6 +6,7 @@ cimport cython
 
 ctypedef fused raw_data:
     cython.uchar
+    cython.char
     cython.uint
     cython.float
 
