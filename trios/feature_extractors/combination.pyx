@@ -52,10 +52,8 @@ def apply_parallel(t):
     img = np.frombuffer(inp_par, dtype=np.uint8).reshape((h, w))
     msk = np.frombuffer(msk_par, dtype=np.uint8).reshape((h, w))
     out = np.frombuffer(out_images[i], dtype=np.uint8).reshape((h, w))
-    #print('before apply', op, op.window, op.classifier, img.shape, msk.shape)
     print(True)
     out[:] = op.apply(img, msk, True)
-    #print('end_apply')
     return i
     
 cdef class CombinationPattern(FeatureExtractor):
@@ -65,10 +63,13 @@ cdef class CombinationPattern(FeatureExtractor):
     cdef public int nprocs
     
     def __init__(self,  *wops, **kwargs):
-        union = wops[0].window
-        for i in range(len(wops)):
-            union += wops[i].window
-        union[union > 0] = 1
+        if len(wops) > 0:
+            union = wops[0].window
+            for i in range(len(wops)):
+                union += wops[i].window
+            union[union > 0] = 1
+        else:
+            union = None
         FeatureExtractor.__init__(self, union)
         if 'bitpack' in kwargs:
             self.bitpack = kwargs['bitpack']
@@ -124,9 +125,7 @@ cdef class CombinationPattern(FeatureExtractor):
         for i in range(hh2, inp.shape[0]-hh2):
             for j in range(ww2, inp.shape[1]-ww2):
                 if msk[i, j] == 0: continue
-                
-                #y[k] = out[i, j]
-                
+                            
                 for l in range(len(self.wops)):
                     img = outnp[l]
                     if self.bitpack == False:                        
