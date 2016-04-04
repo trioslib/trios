@@ -15,6 +15,14 @@ import pickle
 import inspect
 
 class LinearClassifier(Classifier):
+    '''
+This class is a linear classifier "wrapper" that does not do training. It receives the coeficients and
+bias terms in the constructor and is used mainly to use the weights computed elsewhere
+inside TRIOS. 
+
+This class can be used, for example, to use the weights computed using Linear Regression
+models to do classification. 
+    '''
     def __init__(self, coefs=[], bias=0,  minimize=False):
         self.coefs = coefs
         self.bias = bias

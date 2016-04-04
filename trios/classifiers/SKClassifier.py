@@ -13,6 +13,9 @@ from trios import util
 import inspect
 
 class SKClassifier(Classifier):
+    '''
+This class wraps scikit-learn models. Any classification model should work.     
+    '''
     def __init__(self, cls=None, minimize=False, ordered=False, dtype=np.uint8):
         self.cls = cls
         self.minimize = minimize
@@ -46,11 +49,9 @@ class SKClassifier(Classifier):
         return self.cls.predict(fmatrix)
 
     def write_state(self, obj_dict):
-        #obj_dict['cls'] = pickle.dumps(self.cls)
         obj_dict['cls'] = self.cls
         obj_dict['min'] = self.minimize
         
     def set_state(self, obj_dict):
-        #self.cls = pickle.loads(obj_dict['cls'])
         self.cls = obj_dict['cls']
         self.minimize = obj_dict['min']

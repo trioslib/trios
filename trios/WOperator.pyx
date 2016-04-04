@@ -80,14 +80,13 @@ class WOperator(Serializable):
         self.trained = True
         return dataset
         
-    def apply(self, image, mask, batch_apply=False):
-        if batch_apply:
+    def apply(self, image, mask, batch=False):
+        if batch:
             res = np.zeros(image.shape, np.uint8)
             ww2 = self.window.shape[1]//2
             hh2 = self.window.shape[0]//2
             y, x = np.nonzero(mask[hh2:-hh2, ww2:-ww2])
             temp = self.extractor.temp_feature_vector()
-            print(len(y), count_pixels_mask(mask, self.window))
             X = np.zeros((len(y), len(self.extractor)), temp.dtype)
             self.extractor.extract_batch(image, mask, X, 0)
             ypred = self.classifier.apply_batch(X)

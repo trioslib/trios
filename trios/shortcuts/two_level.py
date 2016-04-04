@@ -19,15 +19,14 @@ def __train_parallel(t):
     return op
 
 
-def train_raw_combination(windows, classifiers, training1, procs=None):
+def train_combination(windows, classifiers, extractors, training1, procs=None):
     '''
-    Build a combination of operators using RAW features. This function
-    trains all operators using the provided windows and classifiers on 
-    training1. 
+    Build a combination of operators using the provided feature extractor and classifiers.
+    The `procs` parameter can be used to tune the number of parallel training jobs.
     '''
     nwins = len(windows)
     ops = [trios.WOperator(windows[i], classifiers[i], 
-                           RAWFeatureExtractor) for i in range(nwins)]
+                           extractors[i]) for i in range(nwins)]
     args = zip(ops, itertools.repeat(training1))
     pool = mp.Pool(procs)
     trained_ops = pool.map(__train_parallel, args)
@@ -36,4 +35,13 @@ def train_raw_combination(windows, classifiers, training1, procs=None):
     del pool 
     
     return CombinationPattern(*trained_ops)
+    
+
+def train_raw_combination(windows, classifiers, training1, procs=None):
+    '''
+    Build a combination of operators using RAW features. This function
+    trains all operators using the provided windows and classifiers on 
+    training1. 
+    '''
+    return train_combination(windows, classifiers, [RAWFeatureExtractor(w) for w in windows], training1, procs)
     
