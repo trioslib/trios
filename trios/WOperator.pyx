@@ -194,16 +194,38 @@ cdef class Classifier(Serializable):
        
 cdef class FeatureExtractor(Serializable):
     '''
-    docs for the feature extractor interface    
+    A FeatureExtractor extracts feature from an Imageset using a finite neighborhood 
+    called *window*. The number and type of features extracted depend on the size of 
+    the window and on which processing each subclass of FeatureExtractor executes.  
     '''
     def __init__(self, unsigned char[:,:] window=None):
+        '''
+        Every FeatureExtractor must receive a window (numpy array of type np.uint8) in
+        its constructor. It is the only required parameter.         
+        '''
         self.window = window
 
     def __len__(self):
-        ''' return feature vector length '''
+        ''' Return feature vector length '''
         return 1
     
     def extract_dataset(self, imgset, ordered=False):
+        '''
+This method extracts patterns from an `trios.imageset.Imageset`. If `ordered=True`, 
+the resulting patterns will be a pair containing a matrix *X* of shape *(M, N)*, where
+*M* is the number of pixels that are in the mask (if there is no mask, the sum of all
+pixels in all images) and *N* is `len(self)`. 
+
+If `ordered=False`, the training set is return in `dict` format. The patterns are 
+stored in the keys as a tuple. Each pattern is associated with a `dict` in which the keys 
+are outputs pixel values and the values are the number of times that a certain output
+co-ocurred with the pattern. See the example below. ::
+
+    { (255, 0, 255): {0: 5, 255: 1},
+      (255, 255, 255): {0: 3, 255: 10}, 
+      ... }
+
+        '''
         if ordered == True:
             return process_image_ordered(imgset, self)
         
@@ -219,6 +241,9 @@ cdef class FeatureExtractor(Serializable):
         return dataset
     
     def temp_feature_vector(self):
+        '''
+        Creates a vector of the correct size and type for a specific FeatureExtractor.
+        '''
         return np.zeros(len(self), np.float)
     
     cpdef extract_batch(self, unsigned char[:,:] inp, unsigned char[:,:] msk, np.ndarray X, int k):
