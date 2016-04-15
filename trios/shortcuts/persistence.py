@@ -10,3 +10,9 @@ def save_operator(op, fname):
 def load_operator(fname):
     with gzip.open(fname, 'rb') as f:
         return pickle.load(f)
+
+def load_image(fname):
+    return sp.ndimage.imread(fname, mode='L')
+
+def save_image(image, fname):
+    sp.misc.imsave(fname, image)
