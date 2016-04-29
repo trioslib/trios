@@ -1,5 +1,12 @@
 *.pyc
+*~
+.vs
+.vscode
 build
+dist
+trios.egg-info
+docs/_build
+test/images
 cython_debug
 site/cache
 site/output
