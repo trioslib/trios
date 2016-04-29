@@ -233,13 +233,10 @@ itv_t *itv_read(char *fname, window_t ** win /*, apert_t **apt */ )
 
 	case GG:
 	case GB:
-		return (itv_t *) trios_error(MSG,
-					     "itv_read: type GG not implemented yet");
+		return (itv_t *) trios_error(MSG, "itv_read: type GG not implemented yet");
 	case WKC:
 	case WKF:{
-			return (itv_t *) trios_error(MSG,
-						     "itv_read: type GG not implemented yet");
-			char *A, *B;
+			return (itv_t *) trios_error(MSG, "itv_read: type GG not implemented yet");
 			/*itv_GX  *p, *last=NULL ;
 
 			   if(NULL==(itv = itv_create(wsize, type, deflabel))) {
