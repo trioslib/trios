@@ -5,6 +5,7 @@ Created on Wed Mar 25 14:40:19 2015
 @author: igordsm
 """
 from __future__ import print_function
+from __future__ import division
 
 cimport cython
 
@@ -29,8 +30,8 @@ import itertools
 def worker_eval(t):
     self, window, imgset, nprocs, procnumber, bin = t
     if not window is None:
-        x_border = window.shape[1]/2
-        y_border = window.shape[0]/2
+        x_border = window.shape[1]//2
+        y_border = window.shape[0]//2
     else:
         x_border = y_border = 0
     idx = [ i  for i in range(len(imgset)) if i % nprocs == procnumber]
@@ -109,8 +110,8 @@ class WOperator(Serializable):
             
         else:
             if not window is None:
-                x_border = window.shape[1]/2
-                y_border = window.shape[0]/2
+                x_border = window.shape[1]//2
+                y_border = window.shape[0]//2
             else:
                 x_border = y_border = 0
             i = 0
