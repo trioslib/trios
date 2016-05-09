@@ -61,7 +61,7 @@ class WOperator(Serializable):
     (i) its neighborhood (Window) of the operator;
     (ii) the classifier used (defined in the Classifier class).
     '''
-    def __init__(self, window=None, cls=None, fext=None):
+    def __init__(self, window=None, cls=None, fext=None, batch=False):
         self.window = window
         if inspect.isclass(cls):
             self.classifier = cls(window)
@@ -74,6 +74,7 @@ class WOperator(Serializable):
             self.extractor = fext
         
         self.trained = False
+        self.batch = batch
     
     def train(self, imgset):
         dataset = self.extractor.extract_dataset(imgset, self.classifier.ordered)
@@ -81,8 +82,8 @@ class WOperator(Serializable):
         self.trained = True
         return dataset
         
-    def apply(self, image, mask, batch=False):
-        if batch:
+    def apply(self, image, mask):
+        if self.batch:
             res = np.zeros(image.shape, np.uint8)
             ww2 = self.window.shape[1]//2
             hh2 = self.window.shape[0]//2
@@ -143,6 +144,7 @@ class WOperator(Serializable):
         
         obj_dict['window'] = np.asarray(self.window)
         obj_dict['trained'] = self.trained
+        obj_dict['batch'] = self.batch
         
     def set_state(self, obj_dict):
         self.classifier = Serializable.read(obj_dict['classifier'])
@@ -153,6 +155,12 @@ class WOperator(Serializable):
             self.trained = obj_dict['trained']
         else:
             self.trained = True
+
+        if 'batch' in obj_dict:
+            self.batch = obj_dict['batch']
+        else:
+            self.batch = False
+            
         if len(self.window.shape) == 1:
             self.window = self.window.reshape((self.window.shape[0], 1))
 

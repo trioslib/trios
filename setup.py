@@ -1,5 +1,5 @@
-from distutils.core import setup
-from distutils.extension import Extension
+from setuptools.extension import Extension
+from setuptools import setup
 from Cython.Build import cythonize
 from Cython.Distutils import build_ext
 
@@ -72,5 +72,5 @@ setup(
     name='trios',
     cmdclass = {'build_ext': build_ext},
     ext_modules = cythonize(extensions),
-    packages = ['trios', 'trios.feature_extractors', 'trios.classifiers.ISI', 'trios.classifiers', 'trios.v1', 'trios.legacy', 'trios.window_determination', 'trios.shortcuts']
+    packages = ['trios', 'trios.feature_extractors', 'trios.classifiers.ISI', 'trios.classifiers', 'trios.v1', 'trios.legacy', 'trios.window_determination', 'trios.shortcuts',]# 'trios.contrib']
 )

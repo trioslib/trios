@@ -52,8 +52,7 @@ def apply_parallel(t):
     img = np.frombuffer(inp_par, dtype=np.uint8).reshape((h, w))
     msk = np.frombuffer(msk_par, dtype=np.uint8).reshape((h, w))
     out = np.frombuffer(out_images[i], dtype=np.uint8).reshape((h, w))
-    print(True)
-    out[:] = op.apply(img, msk, True)
+    out[:] = op.apply(img, msk)
     return i
     
 cdef class CombinationPattern(FeatureExtractor):
