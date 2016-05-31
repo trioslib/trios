@@ -2,6 +2,8 @@
 
 import pickle
 import gzip
+import scipy as sp
+import scipy.ndimage
 
 def save_gzip(op, fname):
     with gzip.open(fname, 'wb') as f:
