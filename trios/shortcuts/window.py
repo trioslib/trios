@@ -17,7 +17,7 @@ def random_win(domain_window, sz, include_center=False, rndstate=np.random):
         win[domain_window.shape[0]//2, domain_window.shape[1]//2] = 1
     return win
 
-def show(win):
+def show(win, fname=None):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     h, w = win.shape
@@ -37,4 +37,7 @@ def show(win):
     for j in range(w):
         l = matplotlib.lines.Line2D([j, j], [0, h], color='black')
         ax.add_line(l)
-    plt.show()
+    if fname == None:
+        plt.show()
+    else:
+        plt.savefig(fname)
