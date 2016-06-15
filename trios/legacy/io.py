@@ -7,8 +7,10 @@ from trios.WOperator import WOperator
 from trios.feature_extractors import RAWBitFeatureExtractor, CombinationPattern
 
 def win_from_old(old_win):
+    print(old_win, dir(old_win), v1.win_get_point(0, 0, 1, old_win))
     h = old_win.height
     w = old_win.width
+    print('asd')
     win = np.zeros((h, w), np.uint8)
     for i in range(h):
         for j in range(w):

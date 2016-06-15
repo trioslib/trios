@@ -4,13 +4,6 @@ c_code = FFI()
 
 sources = ['trios/legacy/' + f for f in ['basic_win.c', 'basic_error.c', 'io_header.c', 'io_win.c', 'basic_itv.c', 'io_itv.c', 'basic_mtm.c', 'basic_common.c']]
 
-c_code.set_source('trios.legacy._legacy', '''
-#include "trios_win.h"
-#include "trios_itv.h"
-#include "trios_error.h"
-#include "trios_mtm.h"
-#include "trios_misc.h"
-''', sources=sources, include_dirs=['trios/legacy/'])
 
 c_code.cdef('''
 typedef struct {
@@ -26,6 +19,16 @@ void win_free(window_t *);
 int win_get_point(int, int, int, window_t *);
 
 ''')
+
+
+c_code.set_source('trios.legacy._legacy', '''
+#include "trios_win.h"
+
+#include "trios_itv.h"
+#include "trios_error.h"
+#include "trios_mtm.h"
+#include "trios_misc.h"
+''', sources=sources, include_dirs=['trios/legacy/'])
 
 if __name__ == '__main__':
     c_code.compile()
