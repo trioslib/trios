@@ -1,5 +1,5 @@
-from _legacy import lib as v1
-from _legacy import ffi
+from ._legacy import lib as v1
+from ._legacy import ffi
 
 import numpy as np
 
