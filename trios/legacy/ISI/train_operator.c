@@ -1,6 +1,7 @@
 #include "trios_mtm.h"
 #include "trios_win.h"
 #include "trios_itv.h"
+#include "trios_learn.h"
 #include "stdlib.h"
 
 itv_t *train_operator_ISI(unsigned int *data, unsigned int *freqs, int wsize, int npat, window_t *win) {

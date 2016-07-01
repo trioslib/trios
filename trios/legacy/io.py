@@ -10,7 +10,6 @@ def win_from_old(old_win):
     print(old_win, dir(old_win), v1.win_get_point(0, 0, 1, old_win))
     h = old_win.height
     w = old_win.width
-    print('asd')
     win = np.zeros((h, w), np.uint8)
     for i in range(h):
         for j in range(w):
@@ -18,6 +17,13 @@ def win_from_old(old_win):
                 win[i, j] = 1
     return win
 
+def win_to_old(win):
+    win_old = v1.win_create(win.shape[0], win.shape[1], 1)
+    for i in range(win.shape[0]):
+        for j in range(win.shape[1]):
+            v1.win_set_point(i, j, 1, win[i, j], win_old)
+    return win_old
+    
 def win_read(fname):
     old_win = v1.win_read(fname)
     win_np = win_from_old(old_win)
