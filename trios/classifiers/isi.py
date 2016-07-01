@@ -1,3 +1,5 @@
+from __future__ import unicode_literals, division
+
 from trios.legacy._legacy import lib as v1
 from trios.legacy._legacy import ffi
 import trios.legacy.io as lio
@@ -5,7 +7,10 @@ from trios.WOperator import Classifier
 import numpy as np
 
 import trios.util
+
 import math
+import os
+import tempfile
 
 class ISI(Classifier):
     '''
@@ -39,7 +44,23 @@ class ISI(Classifier):
         
         
     def write_state(self, obj_dict):
-        pass
+        ftemp = tempfile.NamedTemporaryFile('w', delete=False)
+        fname = bytes(ftemp.name, 'ascii')
+        ftemp.close()
+
+        v1.itv_write(fname, self.itv, self.win_old)
+        with open(fname, 'r') as f:
+            obj_dict['itv'] = f.read()
+        os.remove(fname)
     
     def set_state(self, obj_dict):
-        pass
+        ftemp = tempfile.NamedTemporaryFile('w', delete=False)
+        fname = bytes(ftemp.name, 'ascii')
+        ftemp.write(obj_dict['itv'])
+        ftemp.close()
+
+        win_old = ffi.new('window_t **')
+        self.itv = v1.itv_read(fname, win_old)
+        self.set_win(lio.win_from_old(win_old[0]))
+        
+        os.remove(fname)
