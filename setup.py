@@ -11,7 +11,6 @@ extra_compile_args = ['-fopenmp']
 extra_link_args = ['-fopenmp']
 
 extensions = [
-        
             Extension('trios.WOperator', [
                     'trios/WOperator.pyx']),
             Extension('trios.feature_extractors.raw', [
@@ -26,7 +25,6 @@ extensions = [
                     'trios/util.pyx']),
             Extension('trios.serializable', [
                     'trios/serializable.pyx']),
-            
             Extension('trios.window_determination.relief', [
                     'trios/window_determination/relief.pyx'
                     ])]

@@ -47,6 +47,7 @@ int itv_write(char *fname, itv_t * itv, window_t * win);
 /* add stuff for isi here */
 itv_t *train_operator_ISI(unsigned int *data, unsigned int *freqs, int wsize, int npat, window_t *win);
 int itv_contain(itv_BX *p_itv, unsigned int *wpat, int wzip);
+int itv_list_contain(itv_t *itv, unsigned int *wpat, int wzip);
 
 ''')
 
