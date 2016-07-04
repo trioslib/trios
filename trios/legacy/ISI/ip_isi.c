@@ -1,6 +1,7 @@
 #include "trios_win.h"
 #include "trios_itv.h"
 #include "trios_mtm.h"
+#include "trios_error.h"
 #include "paclearn_local.h"
 #include <stdio.h>
 

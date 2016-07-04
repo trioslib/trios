@@ -6,7 +6,6 @@
 
 itv_t *train_operator_ISI(unsigned int *data, unsigned int *freqs, int wsize, int npat, window_t *win) {
     int i, j, wzip;
-    int shift, b;
     int label, len;
     itv_t *interval_list = NULL;
     unsigned int *zpat = NULL;
@@ -27,9 +26,9 @@ itv_t *train_operator_ISI(unsigned int *data, unsigned int *freqs, int wsize, in
         fq1 = freqs[i*2+1];
         mtm_BX_insert(decision, i, wzip, zpat, label, fq, fq1);
     }
-    mtm_write("teste22.mtm", decision, win);
     /* call isi partitioned !! */
     interval_list = lisi_partitioned(win, decision, 30000);
     mtm_free(decision);
+    free(zpat);
     return interval_list;
 }

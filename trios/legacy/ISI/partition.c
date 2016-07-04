@@ -302,10 +302,7 @@ int lpartition_memory(window_t * win, mtm_t * __mtm, int itv_type,
 		      int threshold, mtm_t *** _mtm_out, itv_t *** _itv_out,
 		      int *n_itv)
 {
-	int r;
 	int i, j, noper, wzip;
-	char temp[100];
-	window_t *tt;
 	mtm_t **mtm_out, *mtm;
 	itv_t **itv_out, *start_itv;
 
@@ -401,22 +398,8 @@ itv_t *litvconcat_memory(itv_t ** in, int n)
  */
 itv_t *solve_partition(mtm_t * part_m, itv_t * part_i, int i, window_t * win)
 {
-	char cmd[100];
-	int pid = 0;
-#ifdef DEBUG
-	printf("Start %d\n", i);
-#endif
-#ifdef __linux__
-	pid = getpid();
-#endif
 	part_i = lisi_memory(part_m, part_i, 3, 20, 0, 0);
-	/*sprintf(cmd, "part.temp%d-%d.itv", pid, i + 1);
-	   itv_write(cmd, part_i, win); */
 	mtm_free(part_m);
-	/*itv_free(part_i); */
-#ifdef DEBUG
-	printf("Finished %d\n", i);
-#endif
 	return part_i;
 }
 
@@ -425,11 +408,7 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 	itv_t *acc = NULL;
 	mtm_t **part_m;
 	itv_t **part_i;
-	int i, n, pid = 0;
-	char cmd[100], cmd2[100];
-#ifdef __linux__
-	pid = getpid();
-#endif
+	int i, n;
 
 	if (mtm->nmtm <= threshold) {
 		itv_t *starting_interval = itv_gen_itv(win, 1, BB, 0, 1, 0);
@@ -437,27 +416,15 @@ itv_t *lisi_partitioned(window_t * win, mtm_t * mtm, int threshold)
 	}
 
 	if (!lpartition_memory(win, mtm, 1, threshold, &part_m, &part_i, &n)) {
-		return (itv_t *) trios_error(MSG, "Error in partition!");
+		trios_error(MSG, "Error in partition!");
+		return NULL;
 	}
-#ifdef DEBUG
-	printf("Number of partitions %d\n", n);
-#if defined(_OPENMP)	
-        printf("OMP NUM PROC %d threads %d\n", omp_get_num_procs(),
-	       omp_get_max_threads());
-#endif 
-#endif
-
-
 
 #pragma omp parallel for
 	for (i = 0; i < n; i++) {
 		part_i[i] = solve_partition(part_m[i], part_i[i], i, win);
 	}
 
-
-#ifdef DEBUG
-	printf("Finished ISI\n");
-#endif
 	acc = litvconcat_memory(part_i, n);
 
 	free(part_m);

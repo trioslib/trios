@@ -1,5 +1,8 @@
 /* Window definition */
 
+#include "stdlib.h"
+#include "stdio.h"
+
 #ifndef _trios_win_h_
 #define _trios_win_h_
 
@@ -136,6 +139,10 @@ void           /*+ Purpose: free the memory area of a window               +*/
     ) ;
 
 window_t *win_read(char *fname);
+
+
+window_t *win_read_data(FILE * fd);
+void win_write_data(FILE * fd, window_t * win);
 
 
 #ifdef __cplusplus

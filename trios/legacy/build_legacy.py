@@ -48,19 +48,22 @@ int itv_write(char *fname, itv_t * itv, window_t * win);
 itv_t *train_operator_ISI(unsigned int *data, unsigned int *freqs, int wsize, int npat, window_t *win);
 int itv_contain(itv_BX *p_itv, unsigned int *wpat, int wzip);
 int itv_list_contain(itv_t *itv, unsigned int *wpat, int wzip);
-
 ''')
 
 
 c_code.set_source('trios.legacy._legacy', '''
 #include "trios_win.h"
-
 #include "trios_itv.h"
 #include "trios_error.h"
 #include "trios_mtm.h"
 #include "trios_misc.h"
 
 #include "trios_learn.h"
+#include "paclearn_local.h"
+
+itv_t *train_operator_ISI(unsigned int *data, unsigned int *freqs, int wsize, int npat, window_t *win);
+
+
 ''', sources=sources, include_dirs=['trios/legacy/', 'trios/legacy/ISI/'])
 
 if __name__ == '__main__':
