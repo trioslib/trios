@@ -63,7 +63,7 @@ cdef class CombinationPattern(FeatureExtractor):
     
     def __init__(self,  *wops, **kwargs):
         if len(wops) > 0:
-            union = wops[0].window[:]
+            union = np.zeros_like(wops[0].window)
             for i in range(len(wops)):
                 union += wops[i].window
             union[union > 0] = 1
