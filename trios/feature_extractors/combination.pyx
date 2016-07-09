@@ -160,5 +160,5 @@ cdef class CombinationPattern(FeatureExtractor):
         for i in range(n):
             op = WOperator.read(obj_dict['operator_%d'%i])
             self.wops.append(op)
-        self.fvectors = [wop.extractor.temp_feature_vector() for wop in self.wops]
+        #self.fvectors = [wop.extractor.temp_feature_vector() for wop in self.wops]
     
