@@ -85,8 +85,8 @@ class WOperator(Serializable):
     def apply(self, image, mask):
         if self.batch:
             res = np.zeros(image.shape, np.uint8)
-            ww2 = self.window.shape[1]//2
-            hh2 = self.window.shape[0]//2
+            ww2 = max(self.window.shape[1]//2, 1)
+            hh2 = max(self.window.shape[0]//2, 1)
             y, x = np.nonzero(mask[hh2:-hh2, ww2:-ww2])
             temp = self.extractor.temp_feature_vector()
             X = np.zeros((len(y), len(self.extractor)), temp.dtype)
