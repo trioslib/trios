@@ -99,34 +99,16 @@ class WOperator(Serializable):
 
     def eval(self, imgset, window=None, per_image=False, binary=False, procs=2):
         errors = []
+        ll = list(zip(itertools.repeat(self), itertools.repeat(window), itertools.repeat(imgset), itertools.repeat(procs), range(procs), itertools.repeat(binary)))
         if trios.mp_support and procs > 1:
             errors_p = multiprocessing.Pool(processes=procs)
-            ll = list(zip(itertools.repeat(self), itertools.repeat(window), itertools.repeat(imgset), itertools.repeat(procs), range(procs), itertools.repeat(binary)))
             errors = errors_p.map(worker_eval, ll)
             errors_p.close()
             errors_p.join()
             del errors_p
-            
             errors = list(itertools.chain(*errors))
-            
         else:
-            if not window is None:
-                x_border = window.shape[1]//2
-                y_border = window.shape[0]//2
-            else:
-                x_border = y_border = 0
-            i = 0
-            for (inp, out, msk) in imgset:
-                print('Testing', i, inp, out, file=sys.stderr)
-                i += 1
-                inp = sp.ndimage.imread(inp, mode='L')
-                out = sp.ndimage.imread(out, mode='L')
-                msk = sp.ndimage.imread(msk, mode='L')
-                res = self.apply(inp, msk)
-                if binary:
-                    errors.append(compare_images_binary(out, msk, res, x_border, y_border))
-                else:
-                    errors.append(compare_images(out, msk, res, x_border, y_border))
+            errors = map(worker_eval, ll)
         if binary:
             TP = sum([err[0] for err in errors])
             TN = sum([err[1] for err in errors])
