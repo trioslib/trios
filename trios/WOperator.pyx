@@ -108,7 +108,7 @@ class WOperator(Serializable):
             del errors_p
             errors = list(itertools.chain(*errors))
         else:
-            errors = map(worker_eval, ll)
+            errors = worker_eval((self, window, imgset, 1, 0, binary))
         if binary:
             TP = sum([err[0] for err in errors])
             TN = sum([err[1] for err in errors])
