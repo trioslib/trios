@@ -16,7 +16,6 @@ If you use *TRIOSlib* in a paper, please cite
 .. toctree::
    :maxdepth: 2
    
-   getting-started-with-trioslib.ipynb
    training-w-operators
    feature-extraction-methods
    classification-methods
