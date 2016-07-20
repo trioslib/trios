@@ -12,5 +12,3 @@ If your paper is not cited here, please email ....
 * Montagner, I. S.; Hirata, R.; Hirata, N.S.T., "TRIOS - an open source toolbox for training image operators from samples". Workshop of Works in Progress (WIP) in SIBGRAPI 2012 (XXV Conference on Graphics, Patterns and Images);
 
 
-
-PAPER list

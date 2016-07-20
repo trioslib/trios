@@ -35,7 +35,7 @@ are 0 (black) in the mask are ignored.
 Window determination
 -----------------------
 
-$W$-operators are local image transformations. The *window* used during training defines
+*W*-operators are local image transformations. The *window* used during training defines
 which raw information is available to feature extraction and classification phases. 
 
 Given a training set, the chosen windows must be big enough to contain discriminative image
@@ -61,7 +61,7 @@ The choice of which Feature Extractor to use depends on many different factors:
 + Does the output depend on the raw values of the pixels or only on the contrast between them?
  
 The most basic choice is the `trios.feature_extractors.RAWFeatureExtractor`, which
-simply copies the pixels observed under $W$ to a flat array. See :ref:`feature-extraction-methods`
+simply copies the pixels observed under *W* to a flat array. See :ref:`feature-extraction-methods`
 for a description of all available feature extractors.
 
 Choosing a Classifier
