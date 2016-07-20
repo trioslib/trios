@@ -40,7 +40,7 @@ class StaffHeuristic(WOperator):
             raise Exception('Method not found: %s', self.nome_metodo)
 
         if self.nome_metodo == 'ltc':
-            ms.remove_staves(symbol_criterion='second_chord')
+            ms.remove_staves(symbol_criterion='secondchord')
         else:
             ms.remove_staves()
         
