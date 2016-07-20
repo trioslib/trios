@@ -32,14 +32,17 @@ class StaffHeuristic(WOperator):
         elif self.nome_metodo == 'rl_carter':
             ms = musicstaves_rl_carter.MusicStaves_rl_carter(image_gamera)
         elif self.nome_metodo == 'ltc':
-            ms = musicstaves_linetracking.MusicStaves_linetracking(image_gamera, symbol_criterion='second_chord')
+            ms = musicstaves_linetracking.MusicStaves_linetracking(image_gamera)
         elif self.nome_metodo == 'lth':
             ms = musicstaves_linetracking.MusicStaves_linetracking(image_gamera)
         
         else:
             raise Exception('Method not found: %s', self.nome_metodo)
 
-        ms.remove_staves(crossing_symbols = 'bars')
+        if self.nome_metodo == 'ltc':
+            ms.remove_staves(symbol_criterion='second_chord')
+        else:
+            ms.remove_staves()
         
         image_out =  ms.image.image_copy()
         image_out_new =  image_out.to_numpy()
