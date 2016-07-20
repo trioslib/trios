@@ -1,5 +1,7 @@
+.. _classification-methods:
+
 Classifiers implemented in TRIOSlib
-=============
+===================================
 
 All classifiers in TRIOSlib inherit from trios.Classifier, documented below. 
 Classifiers should be interchangeable and typically do not depend on a 
