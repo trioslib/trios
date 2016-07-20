@@ -4,7 +4,6 @@ from Cython.Build import cythonize
 from Cython.Distutils import build_ext
 
 import numpy as np
-from IPython.core.release import author_email
 
 includes = [np.get_include()]#, 'C:/Users/Igor/Miniconda3/includes']
 libs = []#['C:/Users/Igor/Miniconda3/libs', 'legacy_stdio_definitions.lib']
