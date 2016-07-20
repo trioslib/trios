@@ -13,7 +13,6 @@ import itertools
 from trios.wop_matrix_ops import process_one_image
 
 import trios
-from scipy.optimize._basinhopping import kwargs
 
 cimport numpy as np
 
