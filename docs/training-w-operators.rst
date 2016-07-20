@@ -101,7 +101,7 @@ possible incompatibilities. ::
 
     window = twin.square(5)
     fext = trios.feature_extractors.RAWFeatureExtractor
-    cls = trios.classifiers.SKClassifier(sklearn.tree.DecisionTree())
+    cls = trios.classifiers.SKClassifier(sklearn.tree.DecisionTreeClassifier())
     wop = trios.WOperator(window, fext, cls)
     wop.train(imgset)
 
@@ -125,6 +125,7 @@ are implemented as part of TRIOSlib and can dramatically increase the performanc
 operators.
 
 * :ref:`two-level`
+* :ref:`aperture`
 
 
 
