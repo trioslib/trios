@@ -11,7 +11,8 @@ still being expressive and easy to use.
 
 If you use *TRIOSlib* in a paper, please cite
 
-** bffgf ** 
+
+*Montagner, I. S.; Hirata, R.; Hirata, N.S.T., "A Machine Learning Based Method for Staff Removal," Pattern Recognition (ICPR), 2014 22nd International Conference on.*
 
 .. toctree::
    :maxdepth: 2
