@@ -1,7 +1,7 @@
 from trios import WOperator
 from gamera import *
 from gamera.core import *
-from gamera.toolkits.musicstaves import musicstaves_rl_simple, musicstaves_rl_roach_tatem, musicstaves_linetracking
+from gamera.toolkits.musicstaves import musicstaves_rl_simple, musicstaves_rl_roach_tatem, musicstaves_linetracking, musicstaves_rl_carter
 from gamera.toolkits.musicstaves.musicstaves import *
 from gamera.toolkits.musicstaves.musicstaves_skeleton import MusicStaves_skeleton
 from trios.feature_extractors import RAWFeatureExtractor
@@ -10,6 +10,8 @@ import numpy as np
 from gamera.plugins import numpy_io
 
 class StaffHeuristic(WOperator):
+
+    all_methods = ['skeleton', 'rl_simple', 'rl_roach', 'rl_carter', 'ltc', 'lth']
 
     def __init__(self,nomeMetodo=None):
         self.nome_metodo = nomeMetodo
@@ -27,10 +29,13 @@ class StaffHeuristic(WOperator):
             ms = musicstaves_rl_simple.MusicStaves_rl_simple(image_gamera)
         elif self.nome_metodo == 'rl_roach':
             ms = musicstaves_rl_roach_tatem.MusicStaves_rl_roach_tatem(image_gamera)
+        elif self.nome_metodo == 'rl_carter':
+            ms = musicstaves_rl_carter.MusicStaves_rl_carter(image_gamera)
         elif self.nome_metodo == 'ltc':
             ms = musicstaves_linetracking.MusicStaves_linetracking(image_gamera, symbol_criterion='second_chord')
         elif self.nome_metodo == 'lth':
             ms = musicstaves_linetracking.MusicStaves_linetracking(image_gamera)
+        
         else:
             raise Exception('Method not found: %s', self.nome_metodo)
 
