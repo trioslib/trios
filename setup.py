@@ -81,5 +81,5 @@ setup(
     
     cmdclass = {'build_ext': build_ext},
     ext_modules = cythonize(extensions),
-    packages = ['trios', 'trios.feature_extractors', 'trios.classifiers.ISI', 'trios.classifiers', 'trios.v1', 'trios.legacy', 'trios.window_determination', 'trios.shortcuts',]# 'trios.contrib']
+    packages = ['trios', 'trios.feature_extractors', 'trios.classifiers.ISI', 'trios.classifiers', 'trios.v1', 'trios.legacy', 'trios.window_determination', 'trios.shortcuts', 'trios.contrib', 'trios.contrib.staffs']
 )
