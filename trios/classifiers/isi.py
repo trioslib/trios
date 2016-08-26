@@ -25,7 +25,7 @@ class ISI(Classifier):
 
     def set_win(self, win):
         self.win = win
-        if win != None:
+        if not win is None:
             self.win_old = lio.win_to_old(win)
             self.wsize = np.sum(win != 0)
             self.wzip = math.ceil(self.wsize / 32)
