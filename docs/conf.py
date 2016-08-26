@@ -38,8 +38,9 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'IPython.sphinxext.ipython_console_highlighting',
-    'nbsphinx',
+#    'nbsphinx',
 ]
+mathjax_path="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 
 autosummary_generate = False
 

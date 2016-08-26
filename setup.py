@@ -37,6 +37,14 @@ for ext in extensions:
 
 setup(
     name='trios',
+    version='2.0.0',
+    author='Igor Montagner, Roberto Hirata Jr, Nina S. T. Hirata',
+    author_email='igordsm+trios@gmail.com',
+    url='http://trioslib.sf.net',
+    classifiers=['Development Status :: 3 - Alpha',
+                 'Programming Language :: Python :: 2',
+                 'Programming Language :: Python :: 3'],
+    
     cmdclass = {'build_ext': build_ext},
     ext_modules = cythonize(extensions),
     cffi_modules = ['trios/legacy/build_legacy.py:c_code'],

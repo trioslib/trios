@@ -59,11 +59,11 @@ cdef class CombinationPattern(FeatureExtractor):
     cdef public list wops
     cdef public bint bitpack
     cdef public list fvectors 
-    cdef public int nprocs
+    cdef public int procs
     
     def __init__(self,  *wops, **kwargs):
         if len(wops) > 0:
-            union = wops[0].window
+            union = np.zeros_like(wops[0].window)
             for i in range(len(wops)):
                 union += wops[i].window
             union[union > 0] = 1
@@ -74,10 +74,15 @@ cdef class CombinationPattern(FeatureExtractor):
             self.bitpack = kwargs['bitpack']
         else:
             self.bitpack = False
+        
+        if 'procs' in kwargs:
+            self.procs = int(kwargs['procs'])
+            if self.procs:
+                assert self.procs > 1
+        else:
+            self.procs = 1
             
         self.wops = list(wops)
-        self.fvectors = [wop.extractor.temp_feature_vector() for wop in wops]
-        self.nprocs = 1
 
     def __len__(self):
         if self.bitpack:
@@ -98,7 +103,8 @@ cdef class CombinationPattern(FeatureExtractor):
         cdef int i, j, l, sh, byt, ww2, hh2
         cdef long imgsize = inp.shape[0] * inp.shape[1]
         
-        if not trios.mp_support or self.nprocs == 1:
+        if not trios.mp_support or self.procs == 1:
+            self.fvectors = [wop.extractor.temp_feature_vector() for wop in self.wops]
             return FeatureExtractor.extract_batch(self, inp, msk, _X, k)
        
         inp_shared = sharedctypes.RawArray(ctypes.c_ubyte, np.asarray(inp).flat)
@@ -107,7 +113,7 @@ cdef class CombinationPattern(FeatureExtractor):
         outnp = [np.frombuffer(out_shared[i], 
                        dtype=np.uint8).reshape((inp.shape[0], inp.shape[1]))
                         for i in range(len(self.wops))]
-        pool = mp.Pool(processes=self.nprocs, initializer=init_pool, 
+        pool = mp.Pool(processes=self.procs, initializer=init_pool, 
                        initargs=(inp_shared, msk_shared, out_shared))
         args = list(zip(self.wops, range(len(self.wops)), 
                         itertools.repeat(inp.shape[0]), 
@@ -149,16 +155,17 @@ cdef class CombinationPattern(FeatureExtractor):
         FeatureExtractor.write_state(self, obj_dict)
         obj_dict['bitpack'] = self.bitpack
         obj_dict['nwops'] = len(self.wops)
+        obj_dict['procs'] = self.procs
         for i in range(len(self.wops)):
             obj_dict['operator_%d'%i] = self.wops[i].write(None)
     
     def set_state(self, obj_dict):
         FeatureExtractor.set_state(self, obj_dict)
         self.bitpack = obj_dict['bitpack']
+        self.procs = obj_dict['procs']
         n = obj_dict['nwops']
         self.wops = []
         for i in range(n):
             op = WOperator.read(obj_dict['operator_%d'%i])
             self.wops.append(op)
-        self.fvectors = [wop.extractor.temp_feature_vector() for wop in self.wops]
     
