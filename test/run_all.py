@@ -8,6 +8,8 @@ if __name__ == '__main__':
                 try:
                     exec(script.read())
                 except Exception as e:
-                    print('FAIL!\nUm erro ocorreu em', file)
+                    print('- FAIL!\nUm erro ocorreu em', file)
                     print(e)
+                else:
+                    print('- OK')
         
