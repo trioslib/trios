@@ -76,9 +76,9 @@ class WOperator(Serializable):
         self.trained = False
         self.batch = batch
     
-    def train(self, imgset):
+    def train(self, imgset, kw={}):
         dataset = self.extractor.extract_dataset(imgset, self.classifier.ordered)
-        self.classifier.train(dataset, {})
+        self.classifier.train(dataset, kw)
         self.trained = True
         return dataset
         

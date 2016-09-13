@@ -8,9 +8,14 @@ Created on Tue Oct 27 15:50:50 2015
 import urllib.request
 import tarfile
 
-import io
+import os
 
-if __name__ == "__main__":
+def check_downloaded():
+    return os.path.isdir('images') and os.path.exists('images/jung-1a.png')
+
+def download_images():
+    if check_downloaded(): return
+    
     with urllib.request.urlopen(
         "http://vision.ime.usp.br/projects/trios/datasets/dataset-character.tar.gz"
         ) as images:
@@ -18,5 +23,7 @@ if __name__ == "__main__":
         
         with tarfile.open(fileobj=images, mode="r|gz") as tgz:
             tgz.extractall(path='images')
-            
+
+if __name__ == "__main__":
+    download_images()
         

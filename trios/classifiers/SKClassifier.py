@@ -51,7 +51,11 @@ This class wraps scikit-learn models. Any classification model should work.
     def write_state(self, obj_dict):
         obj_dict['cls'] = self.cls
         obj_dict['min'] = self.minimize
+        obj_dict['dtype'] = self.dtype
+        obj_dict['ordered'] = self.ordered
         
     def set_state(self, obj_dict):
         self.cls = obj_dict['cls']
         self.minimize = obj_dict['min']
+        self.ordered = obj_dict['ordered']
+        self.dtype = obj_dict['dtype']
