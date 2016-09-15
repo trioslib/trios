@@ -8,8 +8,8 @@ import trios.shortcuts.persistence as p
 import trios.shortcuts.window as w
 
 if __name__ == '__main__':
-    trios.mp_support = True
     images = trios.Imageset.read('images/level1.set')
+    images2 = trios.Imageset.read('images/level2.set')
     domain = np.ones((7, 7), np.uint8)
     
     ops = []
@@ -20,15 +20,15 @@ if __name__ == '__main__':
         op.train(images)
         ops.append(op)
     
-    comb = CombinationPattern(*ops, procs=2)
+    comb = CombinationPattern(*ops)
     wop2 = trios.WOperator(comb.window, SKClassifier(DecisionTreeClassifier(), ordered=True), comb, batch=True) 
     print('Training 2nd level')
-    wop2.train(images)
+    wop2.train(images2)
     
     # save trained operator 
     p.save_gzip(op, 'dt-tl-jung.op')
     # and load it later
-    #op2 = p.load_gzip('dt-tl-jung.op')
+    wop2 = p.load_gzip('dt-tl-jung.op')
     
     # load image and apply operator. Second argument is application mask.
     img= p.load_image('images/jung-1a.png')
