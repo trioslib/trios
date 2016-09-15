@@ -26,4 +26,4 @@ if __name__ == '__main__':
     p.save_image(out, 'out-isi-jung-1a.png')
     
     test = trios.Imageset.read('images/test.set')
-    print('Accuracy', op.eval(test))
+    print('Accuracy', op.eval(test, procs=7))

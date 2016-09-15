@@ -24,7 +24,7 @@ if __name__ == '__main__':
     img= p.load_image('images/jung-1a.png')
     print('Applying to image jung-1a.png')
     out = op.apply(img, img)
-    p.save_image(out, 'out-isi-jung-1a.png')
+    p.save_image(out, 'out-dt-jung-1a.png')
     
     test = trios.Imageset.read('images/test.set')
-    print('Accuracy', op.eval(test))
+    print('Accuracy', op.eval(test, procs=7))
