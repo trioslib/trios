@@ -5,9 +5,30 @@ from keras.models import Sequential
 from trios.WOperator import WOperator
 
 import trios.shortcuts.persistence as p
-from tools.Tools import extractor
 from trios.classifiers.KerasClassifier import KerasClassifier
 from trios.feature_extractors import RAWFeatureExtractor
+
+
+def normalize(array, normalize_by=255.0):
+    return array / normalize_by
+
+
+def denormalize(array, denormalize_by=255):
+    return array * denormalize_by
+
+
+def extractor(window, imageset_dir='input/my_training.set', extractor=None, to_normalize=True):
+    train_imageset = trios.Imageset.read(imageset_dir)
+    x, y = extractor(window).extract_dataset(train_imageset, True)
+
+    x = x.astype(np.float32)
+    y = y.astype(np.float32)
+
+    if to_normalize:
+        x = normalize(x)
+        y = normalize(y)
+
+    return x, y
 
 
 def getWindow():
