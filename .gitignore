@@ -1,7 +1,10 @@
 *.pyc
 *~
+*.iml
 .vs
 .vscode
+.idea
+
 build
 dist
 trios.egg-info
@@ -13,3 +16,4 @@ site/output
 trios/*.c
 trios/feature_extractors/*.c
 trios/classifiers/*.c
+/.idea/*.iml
