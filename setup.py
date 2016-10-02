@@ -52,7 +52,7 @@ if use_cython:
 
 setup(
     name='trios',
-    version='2.0.4',
+    version='2.0.5',
     author='Igor Montagner, Roberto Hirata Jr, Nina S. T. Hirata',
     author_email='igordsm+trios@gmail.com',
     url='http://trioslib.sf.net',
@@ -60,7 +60,7 @@ setup(
                  'Programming Language :: Python :: 2',
                  'Programming Language :: Python :: 3'],
     install_requires=[
-        'cython', 'cffi', 'numpy', 'scikit-learn', 'scipy'
+        'cython', 'cffi', 'numpy', 'scikit-learn', 'scipy', 'pillow'
     ], 
     ext_modules = extensions,
     cffi_modules = ['trios/legacy/build_legacy.py:c_code'],
