@@ -6,6 +6,7 @@ Created on Wed Mar 25 14:40:19 2015
 """
 from __future__ import print_function
 from __future__ import division
+from theano.sandbox.cuda.basic_ops import fmatrix
 
 cimport cython
 
@@ -144,7 +145,7 @@ class WOperator(Serializable):
         if 'batch' in obj_dict:
             self.batch = obj_dict['batch']
         else:
-            self.batch = False
+            self.batch = True
             
         if len(self.window.shape) == 1:
             self.window = self.window.reshape((self.window.shape[0], 1))
@@ -184,7 +185,10 @@ cdef class Classifier(Serializable):
         Override this method with the application procedure for a batch of patterns.
         Each pattern is stored in the rows of `fmatrix`.
         '''
-        raise NotImplementedError()
+        y = np.zeros(fmatrix.shape[0], np.uint8)
+        for i in range(fmatrix.shape[0]):
+            y[i] = self.apply(fmatrix[i])
+        return y
        
 cdef class FeatureExtractor(Serializable):
     '''

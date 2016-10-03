@@ -7,7 +7,6 @@ import numpy as np
 import trios.shortcuts.persistence as p
 
 if __name__ == '__main__':
-    trios.mp_support = True
     images = trios.Imageset([('images_gl/einstein-noise.png', 'images_gl/einstein-original.png', None)])
     win = np.ones((7, 7), np.uint8)
     
