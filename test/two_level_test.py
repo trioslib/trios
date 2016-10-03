@@ -21,8 +21,9 @@ if __name__ == '__main__':
         op.train(images)
         ops.append(op)
     
-    comb = CombinationPattern(*ops, procs=5)
-    wop2 = trios.WOperator(comb.window, SKClassifier(DecisionTreeClassifier(), ordered=True), comb, batch=True) 
+    comb = CombinationPattern(*ops, procs=2)
+    wop2 = trios.WOperator(comb.window, SKClassifier(DecisionTreeClassifier()), comb)
+    print(wop2.batch, wop2.classifier.ordered)
     print('Training 2nd level')
     wop2.train(images)
     
