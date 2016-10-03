@@ -6,7 +6,6 @@ Created on Wed Mar 25 14:40:19 2015
 """
 from __future__ import print_function
 from __future__ import division
-from theano.sandbox.cuda.basic_ops import fmatrix
 
 cimport cython
 

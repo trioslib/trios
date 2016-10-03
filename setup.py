@@ -52,7 +52,7 @@ if use_cython:
 
 setup(
     name='trios',
-    version='2.0.5',
+    version='2.0.7',
     author='Igor Montagner, Roberto Hirata Jr, Nina S. T. Hirata',
     author_email='igordsm+trios@gmail.com',
     url='http://trioslib.sf.net',
