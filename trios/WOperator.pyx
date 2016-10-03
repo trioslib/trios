@@ -61,7 +61,7 @@ class WOperator(Serializable):
     (i) its neighborhood (Window) of the operator;
     (ii) the classifier used (defined in the Classifier class).
     '''
-    def __init__(self, window=None, cls=None, fext=None, batch=False):
+    def __init__(self, window=None, cls=None, fext=None, batch=True):
         self.window = window
         if inspect.isclass(cls):
             self.classifier = cls(window)
@@ -165,7 +165,7 @@ cdef class Classifier(Serializable):
         keys and a dictionary with the frequency of each output as values.
         '''
         self.minimize = False
-        self.ordered = False
+        self.ordered = True
     
     cpdef train(self, dataset, kw):
         '''

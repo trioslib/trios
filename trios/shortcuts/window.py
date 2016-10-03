@@ -1,6 +1,4 @@
 import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
 
 def square(sz):
     return np.ones((sz, sz), np.uint8)
@@ -19,6 +17,9 @@ def random_win(domain_window, sz, include_center=False, rndstate=np.random):
     return win
 
 def show(win, fname=None):
+    import matplotlib # matplotlit is an optional dependency
+    import matplotlib.pyplot as plt
+    
     fig = plt.figure()
     ax = fig.add_subplot(111)
     h, w = win.shape
@@ -42,3 +43,4 @@ def show(win, fname=None):
         plt.show()
     else:
         plt.savefig(fname)
+

@@ -1,5 +1,6 @@
 import os
 import download_test_images
+import gc
 
 if __name__ == '__main__':
     download_test_images.download_images()
@@ -9,6 +10,7 @@ if __name__ == '__main__':
             with open(file) as script:
                 try:
                     exec(script.read())
+                    gc.collect()
                 except Exception as e:
                     print('- FAIL!\nUm erro ocorreu em', file)
                     print(e)

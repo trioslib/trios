@@ -1,52 +1,68 @@
 from setuptools.extension import Extension
 from setuptools import setup
-from Cython.Build import cythonize
-from Cython.Distutils import build_ext
+import os
+import platform
+
+try:
+    import Cython
+    use_cython = True
+except ImportError:
+    use_cython = False
+
+if os.path.exists('trios/WOperator.pyx'):
+    ext = '.pyx'
+else:
+    ext = '.c'
 
 import numpy as np
 
 includes = [np.get_include()]#, 'C:/Users/Igor/Miniconda3/includes']
-libs = []#['C:/Users/Igor/Miniconda3/libs', 'legacy_stdio_definitions.lib']
-extra_compile_args = ['-fopenmp']
-extra_link_args = ['-fopenmp']
+if platform.system() != 'Windows':
+    extra_compile_args = ['-fopenmp']
+    extra_link_args = ['-fopenmp']
 
 extensions = [
             Extension('trios.WOperator', [
-                    'trios/WOperator.pyx']),
+                    'trios/WOperator'+ext]),
             Extension('trios.feature_extractors.raw', [
-                    'trios/feature_extractors/raw.pyx']),
+                    'trios/feature_extractors/raw'+ext]),
             Extension('trios.feature_extractors.aperture', [
-                    'trios/feature_extractors/aperture.pyx']),        
+                    'trios/feature_extractors/aperture'+ext]),        
             Extension('trios.feature_extractors.combination', [
-                    'trios/feature_extractors/combination.pyx']),            
+                    'trios/feature_extractors/combination'+ext]),            
             Extension('trios.wop_matrix_ops', [
-                    'trios/wop_matrix_ops.pyx']),
+                    'trios/wop_matrix_ops'+ext]),
             Extension('trios.util', [
-                    'trios/util.pyx']),
+                    'trios/util'+ext]),
             Extension('trios.serializable', [
-                    'trios/serializable.pyx']),
+                    'trios/serializable'+ext]),
             Extension('trios.window_determination.relief', [
-                    'trios/window_determination/relief.pyx'
+                    'trios/window_determination/relief'+ext
                     ])]
 
-for ext in extensions:
-    ext.include_dirs += includes
-    ext.library_dirs += libs
-    ext.extra_compile_args += extra_compile_args
-    ext.extra_link_args += extra_link_args
+for extt in extensions:
+    extt.include_dirs += includes
+    if platform.system() != 'Windows':
+        extt.extra_compile_args += extra_compile_args
+        extt.extra_link_args += extra_link_args
+
+if use_cython:
+    from Cython.Build import cythonize
+    extensions = cythonize(extensions)
 
 setup(
     name='trios',
-    version='2.0.0',
+    version='2.0.5',
     author='Igor Montagner, Roberto Hirata Jr, Nina S. T. Hirata',
     author_email='igordsm+trios@gmail.com',
     url='http://trioslib.sf.net',
-    classifiers=['Development Status :: 3 - Alpha',
+    classifiers=['Development Status :: 4 - Beta',
                  'Programming Language :: Python :: 2',
                  'Programming Language :: Python :: 3'],
-    
-    cmdclass = {'build_ext': build_ext},
-    ext_modules = cythonize(extensions),
+    install_requires=[
+        'cython', 'cffi', 'numpy', 'scikit-learn', 'scipy', 'pillow'
+    ], 
+    ext_modules = extensions,
     cffi_modules = ['trios/legacy/build_legacy.py:c_code'],
     packages = ['trios', 'trios.feature_extractors', 'trios.classifiers', 'trios.legacy', 'trios.window_determination', 'trios.shortcuts',]# 'trios.contrib']
 )
