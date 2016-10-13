@@ -1,7 +1,7 @@
 Publications using TRIOSlib
 ================================
 
-If your paper is not cited here, please email ....
+If your paper is not cited here, please contact the project maintainers.
 
 
 * Montagner, I. S.; Canu, S.; Hirata, N.S.T.; Hirata Jr., R.; "Kernel approximations for $W$-operator learning", Conference on Graphics, Patterns and Images (SIBGRAPI), 2016;
