@@ -87,31 +87,9 @@ to transform images. It contains all the glue code necessary to
 extract patterns from images, classify them and assemble result
 images. Although all FeatureExtractor/Classifiers combinations should work, 
 it is recommended to look at the docs of the used classes for
-possible incompatibilities. ::
+possible incompatibilities. 
 
-    import trios
-    import trios.feature_extractors
-    import trios.classifiers
-
-    import sklearn.tree
-    import trios.shortcuts.window as twin
-    import trios.shortcuts.persistence as pio
-
-    training_set = trios.Imageset([('input.png', 'output.png', 'mask.png'), ])
-
-    window = twin.square(5)
-    fext = trios.feature_extractors.RAWFeatureExtractor
-    cls = trios.classifiers.SKClassifier(sklearn.tree.DecisionTreeClassifier())
-    wop = trios.WOperator(window, fext, cls)
-    wop.train(imgset)
-
-    # Transform one image
-    img = pio.load_image('input2.png')
-    mask = pio.load('mask2.png')
-    res = wop.apply(img, mask)
-    pio.save_image(res, 'result.png')
-    # and save the trained operator.
-    pio.save_gzip(wop, 'saved.wop')
+.. literalinclude:: ../test/basic_test.py
 
 
 See :ref:`performance-eval` for a guide on performance evaluation on TRIOS.

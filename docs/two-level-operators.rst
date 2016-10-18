@@ -13,29 +13,9 @@ all operators combined. More information about two level operators can be found 
 
 In *TRIOSlib* two-level operators can be implemented using the *CombinationPattern* *Feature Extractors*.
 This class receives as input a set of WOperators and assembles the second level pattern with their
-outputs. 
+outputs. In the example below we combine windows generated randomly, but more interesting and powerful
+combination methods are available in the literature.
 
-Example of use: ::
 
-    from trios.shortcuts import window
-    from trios.feature_extractors import RAWFeatureExtractor
-    from trios.classifiers import SKClassifier
-    from sklearn.tree import DecisionTreeClassifier
-    import numpy as np
-
-    domain = np.ones((9, 9), np.uint8)
-
-    wins = []
-    ops = []
-    for i in range(6):
-        wins.append(window.random(domain, 30))
-        ops.append(WOperator(wins, RAWFeatureExtractor, SKClassifier(DecisionTreeClassifier())))
-        ops[-1].train(trset)
-
-    comb = CombinationPattern(ops)
-    two_level = WOperator(comb.window, comb, SKClassifier(DecisionTreeClassifier()))
-    two_level.train(trset)
-
-Two level operators are just standard WOperators and the evaluation methods work
-just the same. See :ref:`evaluating-performance` for more details.
+.. literalinclude:: ../test/two_level_test.py
 
