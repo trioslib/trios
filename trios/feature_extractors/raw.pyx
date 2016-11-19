@@ -11,14 +11,12 @@ from trios.serializable cimport Serializable
 cdef class RAWFeatureExtractor(FeatureExtractor):
     def __init__(self, unsigned char[:,:] window=None, double mul=1.0):
         FeatureExtractor.__init__(self, window)
+        self.dtype = np.uint8
         self.mul = mul
 
     def __len__(self):
         return np.greater(self.window, 0).sum()
     
-    def temp_feature_vector(self):
-        return np.zeros(len(self), np.uint8)
-        
     @cython.boundscheck(False)
     @cython.nonecheck(False)
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):

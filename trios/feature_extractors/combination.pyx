@@ -97,7 +97,7 @@ cdef class CombinationPattern(FeatureExtractor):
     
     @cython.boundscheck(False)
     @cython.nonecheck(False)
-    cpdef extract_batch(self, unsigned char[:,:] inp, unsigned char[:,:] msk, np.ndarray _X, int k):
+    cpdef extract_image(self, unsigned char[:,:] inp, unsigned char[:,:] msk, np.ndarray _X, int k):
         cdef unsigned int[:,:] X = _X
         cdef unsigned char[:,:] img
         cdef int i, j, l, sh, byt, ww2, hh2
@@ -105,7 +105,7 @@ cdef class CombinationPattern(FeatureExtractor):
         
         if not trios.mp_support or self.procs == 1:
             self.fvectors = [wop.extractor.temp_feature_vector() for wop in self.wops]
-            return FeatureExtractor.extract_batch(self, inp, msk, _X, k)
+            return FeatureExtractor.extract_image(self, inp, msk, _X, k)
        
         inp_shared = sharedctypes.RawArray(ctypes.c_ubyte, np.asarray(inp).flat)
         msk_shared = sharedctypes.RawArray(ctypes.c_ubyte, np.asarray(msk).flat)

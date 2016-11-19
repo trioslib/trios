@@ -12,13 +12,17 @@ ctypedef fused raw_data:
 
 cdef class FeatureExtractor(Serializable):
     cdef public unsigned char[:,:] window
-    
+    cdef public int batch_size
+    cdef public type dtype
+
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat)
-    cpdef extract_batch(self, unsigned char[:,:] inp, unsigned char[:,:] msk, np.ndarray X, int k)
-    
+    cpdef extract_batch(self, unsigned char[:,:] inp, idx_i, idx_j, np.ndarray X)
+    cpdef extract_image(self, unsigned char[:,:] inp, unsigned char[:,:] msk, np.ndarray X, int k)
+
 cdef class Classifier(Serializable):
-    cdef bint minimize, ordered
-    
+    cdef public bint minimize, ordered, partial
+
     cpdef train(self, dataset, kw)
+    cpdef partial_train(self, X, y, kw)
     cpdef apply(self, fvector)
     cpdef apply_batch(self, fmatrix)

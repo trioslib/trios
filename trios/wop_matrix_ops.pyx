@@ -141,7 +141,7 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
                 if msk[i, j] > 0:
                     y[k2] = out[i, j]
                     k2 += 1
-        k = extractor.extract_batch(inp, msk, X, k)
+        k = extractor.extract_image(inp, msk, X, k)
         assert k2 == k2
         
     return X, y
