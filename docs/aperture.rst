@@ -15,22 +15,8 @@ It is defined as follows, where :math:`w_{i,j}` is the raw pixel value in `W`.
     max(-k, min(k, w_{i,j} - w_{m/2,n/2})) & \text{otherwise}
     \end{cases}
 
-Example of use: ::
-     
-    import trios
-    from trios.feature_extractors import Aperture
-    import trios.shortcuts.window as twin
-    from trios.classifiers import SKClassifier
-    from sklearn.tree import DecisionTreeClassifier
-    import numpy as np
-
-    training_set = trios.Imageset([('input.png', 'output.png', 'mask.png'), ])
-    
-    win = twin.square(5)
-    aper = Aperture(win, k=10)
-    clasf = SKClassifier(DecisionTreeClassifier())
-
-    wop = trios.WOperator(win, clasf, aper)
-    wop.train(training_set)
 
 
+Example of use: 
+
+.. literalinclude:: ../test/aperture_test.py

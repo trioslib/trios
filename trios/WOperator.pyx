@@ -61,7 +61,7 @@ class WOperator(Serializable):
     (i) its neighborhood (Window) of the operator;
     (ii) the classifier used (defined in the Classifier class).
     '''
-    def __init__(self, window=None, cls=None, fext=None, batch=False):
+    def __init__(self, window=None, cls=None, fext=None, batch=True):
         self.window = window
         if inspect.isclass(cls):
             self.classifier = cls(window)
@@ -144,28 +144,29 @@ class WOperator(Serializable):
         if 'batch' in obj_dict:
             self.batch = obj_dict['batch']
         else:
-            self.batch = False
+            self.batch = True
             
         if len(self.window.shape) == 1:
             self.window = self.window.reshape((self.window.shape[0], 1))
 
 cdef class Classifier(Serializable):
     '''
-    The main purpose of this class is to classify patterns extracted from the images.
-    A Classifier can be trained using the `train` method and classifies a pattern 
-    using the `apply` method. This is an abstract class.
+    Classifies patterns extracted from the images. This is an abstract class.
     '''
     def __init__(self, *a, **kw):
-        '''
+        r'''
         Classifiers have two basic attributes: minimize and ordered. 
-        *. if minimize is True then WOperator modifies all labels in the training set such that
-           `train` receives a training set with only consistent patterns (no $x_i = x_j$ and $y_i \neq y_j$).
-        *. if ordered is True `train` receives as input a tuple $(X, y)$, where $X$ contains input patterns in
-        its rows and $y$ contains the labels. If ordered is False `train` receives a dictionary with patterns and
-        keys and a dictionary with the frequency of each output as values.
+        
+        * if minimize is True then WOperator modifies all labels in the training set such that
+          `train` receives a training set with only consistent patterns (no :math:`x_i = x_j` and :math:`y_i \neq y_j`).
+        
+        * if ordered is True `train` receives as input a tuple :math:`(X, y)`, where :math:`X` contains input patterns in
+          its rows and :math:`y` contains the labels. If ordered is False `train` receives a dictionary with patterns and
+          keys and a dictionary with the frequency of each output as values.
+        
         '''
         self.minimize = False
-        self.ordered = False
+        self.ordered = True
     
     cpdef train(self, dataset, kw):
         '''
@@ -181,10 +182,15 @@ cdef class Classifier(Serializable):
     
     cpdef apply_batch(self, fmatrix):
         '''
-        Override this method with the application procedure for a batch of patterns.
-        Each pattern is stored in the rows of `fmatrix`.
+        Classifies a batch of patterns. Each one is stored on the rows of `fmatrix`.
+        
+        Override this method if the classifier can do batch classification faster than
+        classifiyng each pattern individually in a loop.
         '''
-        raise NotImplementedError()
+        y = np.zeros(fmatrix.shape[0], np.uint8)
+        for i in range(fmatrix.shape[0]):
+            y[i] = self.apply(fmatrix[i])
+        return y
        
 cdef class FeatureExtractor(Serializable):
     '''

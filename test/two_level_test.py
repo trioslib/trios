@@ -8,27 +8,28 @@ import trios.shortcuts.persistence as p
 import trios.shortcuts.window as w
 
 if __name__ == '__main__':
-    trios.mp_support = True
     images = trios.Imageset.read('images/level1.set')
+    images2 = trios.Imageset.read('images/level2.set')
+    test = trios.Imageset.read('images/test.set')
+
     domain = np.ones((7, 7), np.uint8)
-    
     ops = []
-    for i in range(7):
-        win = w.random_win(domain, 21, True)
+    for i in range(5):
+        win = w.random_win(domain, 40, True)
         op = trios.WOperator(win, SKClassifier(DecisionTreeClassifier()), RAWFeatureExtractor)
         print('Training...', i)
         op.train(images)
         ops.append(op)
     
-    comb = CombinationPattern(*ops, procs=2)
+    comb = CombinationPattern(*ops)
     wop2 = trios.WOperator(comb.window, SKClassifier(DecisionTreeClassifier(), ordered=True), comb, batch=True) 
     print('Training 2nd level')
-    wop2.train(images)
+    wop2.train(images2)
     
     # save trained operator 
-    p.save_gzip(op, 'dt-tl-jung.op')
+    p.save_gzip(wop2, 'dt-tl-jung.op')
     # and load it later
-    #op2 = p.load_gzip('dt-tl-jung.op')
+    wop2 = p.load_gzip('dt-tl-jung.op')
     
     # load image and apply operator. Second argument is application mask.
     img= p.load_image('images/jung-1a.png')
@@ -36,5 +37,4 @@ if __name__ == '__main__':
     out = wop2.apply(img, img)
     p.save_image(out, 'out-isi-jung-1a.png')
     
-    test = trios.Imageset.read('images/test.set')
-    print('Accuracy', op.eval(test))
+    print('Accuracy', wop2.eval(test, procs=1))
