@@ -4,4 +4,6 @@ cython
 scipy
 scikit-learn
 nose
+theano
 keras
+lasagne

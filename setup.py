@@ -53,7 +53,7 @@ if use_cython:
 setup(
     name='trios',
     version='2.0.7',
-    author='Igor Montagner, Roberto Hirata Jr, Nina S. T. Hirata',
+    author='Igor Montagner, Roberto Hirata Jr, Nina S. T. Hirata, Andre V. Lopes',
     author_email='igordsm+trios@gmail.com',
     url='http://trioslib.sf.net',
     classifiers=['Development Status :: 4 - Beta',
