@@ -6,7 +6,9 @@ if __name__ == '__main__':
     download_test_images.download_images()
     for file in os.listdir(path='.'):
         if file.endswith('test.py'):
-            print('Executando', file, end=' ')
+
+            print('Executando ' + str(file))
+
             with open(file) as script:
                 try:
                     exec(script.read())

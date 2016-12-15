@@ -9,6 +9,7 @@ from trios.classifiers.KerasClassifier import KerasClassifier
 from trios.feature_extractors import RAWFeatureExtractor
 
 
+
 def extractor(window, imageset_dir='training.set', extractor=None):
     train_imageset = trios.Imageset.read(imageset_dir)
     x, y = extractor(window).extract_dataset(train_imageset, True)
