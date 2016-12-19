@@ -10,6 +10,7 @@ import numpy as np
 cimport cython
 
 from WOperator cimport FeatureExtractor, Classifier
+import trios.shortcuts.persistence as p
 
 import scipy as sp
 
@@ -116,7 +117,7 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
             # if there is no mask we take the shape from the input image
             # and check for m != 0 below.
             msk = sp.ndimage.imread(_i, mode='L')
-            
+
         for i in range(hh2, msk.shape[0]-hh2):
             for j in range(ww2, msk.shape[1]-ww2):
                 if m is None or msk[i, j] != 0:
@@ -127,14 +128,7 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
     y = np.zeros(npixels, np.uint8)
     
     k = 0
-    for (inp_, out_, msk_) in imageset:
-        inp = sp.ndimage.imread(inp_, mode='L')
-        out = sp.ndimage.imread(out_, mode='L')
-        if msk_ != None:
-            msk = sp.ndimage.imread(msk_, mode='L')
-        else:
-            msk = np.ones((inp.shape[0], inp.shape[1]), np.uint8)
-        
+    for (inp, out, msk) in p.load_imageset(imageset, win):
         k2 = k
         for i in range(hh2, out.shape[0]-hh2):
             for j in range(ww2, out.shape[1]-ww2):
