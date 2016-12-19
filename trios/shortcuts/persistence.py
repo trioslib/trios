@@ -20,6 +20,17 @@ def load_gzip(fname):
 def load_image(fname):
     return sp.ndimage.imread(fname, mode='L')
 
+def load_mask_image(fname, shape, win):
+    if fname is not None:
+        msk = load_image(fname)
+    else:
+        msk = np.ones(shape, np.uint8)
+    hh2 = win.shape[0] // 2
+    ww2 = win.shape[1] // 2
+    h, w = shape
+    msk[:hh2] = msk[h-hh2:] = msk[:,:ww2] = msk[:, w-ww2:] = 0
+    return msk
+
 
 def save_image(image, fname):
     sp.misc.imsave(fname, image)
@@ -29,14 +40,7 @@ def load_imageset(imgset, win):
     for (inp, out, msk) in imgset:
         inp = load_image(inp)
         out = load_image(out)
-        if msk is not None:
-            msk = load_image(msk)
-        else:
-            msk = np.ones_like(inp)
-        hh2 = win.shape[0] // 2
-        ww2 = win.shape[1] // 2
-        h, w = inp.shape
-        msk[:hh2] = msk[h-hh2:] = msk[ww2:] = msk[w-ww2:] = 0
+        msk = load_mask_image(msk, inp.shape, win)
         yield (inp, out, msk)
 
 
