@@ -24,6 +24,8 @@ import scipy.ndimage
 import inspect
 import sys
 
+import math
+
 import multiprocessing
 from functools import partial
 import itertools
@@ -79,13 +81,9 @@ class WOperator(Serializable):
 
     def train(self, imgset, kw={}):
         if self.classifier.partial:
-            np.random.shuffle(imgset)
-            for (inp, out, msk) in p.load_imageset(imgset, self.window):
-                patterns = self.extractor.extract_ordered(inp, msk, out, True)
-                for i in range(1):
-                    X, y = next(patterns)
-                #for X, y in patterns:
-                    self.classifier.partial_train(X, y, kw)
+            for i in range(1): #niters
+                X, y = self.extractor.extract_dataset_batch(imgset)
+                self.classifier.partial_train(X , y, kw)
         else:
             dataset = self.extractor.extract_dataset(imgset, self.classifier.ordered)
             self.classifier.train(dataset, kw)
@@ -229,6 +227,31 @@ cdef class FeatureExtractor(Serializable):
         ''' Return feature vector length '''
         return 1
 
+    def extract_dataset_batch(self, imgset):
+        npixels = []
+        total_pixels = 0
+        for (inp, out, msk) in p.load_imageset(imgset, self.window):
+            nmsk = np.sum(msk != 0)
+            total_pixels += nmsk
+            npixels.append(nmsk)
+        
+        npixels = [math.floor(self.batch_size * npi / total_pixels) for npi in npixels]
+        npixels[-1] += self.batch_size - sum(npixels)
+        assert sum(npixels) == self.batch_size
+
+        k = 0
+        X = np.zeros((self.batch_size, len(self)), self.dtype)
+        y = np.zeros(self.batch_size, np.uint8)
+        for i, (inp, out, msk) in enumerate(p.load_imageset(imgset, self.window)):
+            idx_i, idx_j = np.nonzero(msk)
+            idx = np.random.permutation(idx_i.shape[0])[:npixels[i]]
+            self.extract_batch(inp, idx_i[idx], idx_j[idx], X[k:k+npixels[i]])
+            y[k:k+npixels[i]] = out[idx_i[idx], idx_j[idx]]
+            k += npixels[i]
+        
+        return X, y
+
+
     def extract_dataset(self, imgset, ordered=False):
         '''
 This method extracts patterns from an `trios.imageset.Imageset`. If `ordered=True`,
@@ -244,7 +267,6 @@ co-ocurred with the pattern. See the example below. ::
     { (255, 0, 255): {0: 5, 255: 1},
       (255, 255, 255): {0: 3, 255: 10},
       ... }
-
         '''
         if ordered == True:
             return process_image_ordered(imgset, self)
@@ -312,11 +334,6 @@ co-ocurred with the pattern. See the example below. ::
         idx_i, idx_j = np.where(msk_np != 0)
         k2 = idx_i.shape[0]
         self.extract_batch(inp, idx_i, idx_j, X[k:])
-
-        #cdef np.ndarray temp = self.temp_feature_vector()
-        #k3 = process_one_image(self.window, inp, msk, X, self, temp, k)
-        #print(k2, k3)
-        #assert k2 + k == k3
         return k2 + k
 
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
