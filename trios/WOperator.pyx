@@ -43,7 +43,7 @@ def worker_eval(t):
 
         inp = sp.ndimage.imread(inp, mode='L')
         out = sp.ndimage.imread(out, mode='L')
-        msk = sp.ndimage.imread(msk, mode='L')
+        msk = p.load_mask_image(msk, inp.shape, self.window)
         res = self.apply(inp, msk)
         if bin:
             errs.append(compare_images_binary(out, msk, res, x_border, y_border))
@@ -79,14 +79,17 @@ class WOperator(Serializable):
 
     def train(self, imgset, kw={}):
         if self.classifier.partial:
-            for (inp, out, msk) in p.load_imageset(imgset):
-                for X, y in self.extractor.extract_ordered(inp, msk, out):
+            np.random.shuffle(imgset)
+            for (inp, out, msk) in p.load_imageset(imgset, self.window):
+                patterns = self.extractor.extract_ordered(inp, msk, out, True)
+                for i in range(1):
+                    X, y = next(patterns)
+                #for X, y in patterns:
                     self.classifier.partial_train(X, y, kw)
         else:
             dataset = self.extractor.extract_dataset(imgset, self.classifier.ordered)
             self.classifier.train(dataset, kw)
         self.trained = True
-        return dataset
 
     def apply(self, image, mask):
         if self.batch:
@@ -266,16 +269,23 @@ co-ocurred with the pattern. See the example below. ::
         If random the generator yields patterns in random order.
         '''
         nmsk = np.sum(msk != 0)
-        bs = nmsk if self.batch_size == 0 else self.batch_size
+        bs = nmsk if self.batch_size == 0 else min(self.batch_size, nmsk)
         idx_i, idx_j = np.where(msk != 0)
+        if random:
+            idx = np.random.permutation(nmsk)
+            idx_ir = idx_i[idx]
+            idx_jr = idx_j[idx]
+        else:
+            idx_ir = idx_i
+            idx_jr = idx_j
         batch_X = np.zeros((bs, len(self)), self.dtype)
         if out is not None: # extract training data
             batch_y = np.zeros(bs, np.uint8)
             for k in range(0, idx_i.shape[0], bs):
-                self.extract_batch(inp, idx_i[k:k+bs], idx_j[k:k+bs], batch_X)
-                lim = min(bs, idx_i.shape[0] - k)
+                lim = min(bs, idx_ir.shape[0] - k)
+                self.extract_batch(inp, idx_ir[k:k+bs], idx_jr[k:k+bs], batch_X[:lim])
                 for l in range(lim):
-                    batch_y[l] = out[idx_i[k+l], idx_j[k+l]]
+                    batch_y[l] = out[idx_ir[k+l], idx_jr[k+l]]
 
                 yield batch_X[:lim], batch_y[:lim]
 
@@ -296,9 +306,18 @@ co-ocurred with the pattern. See the example below. ::
             self.extract(inp, idx_i[l], idx_j[l], X[l])
 
     cpdef extract_image(self, unsigned char[:,:] inp, unsigned char[:,:] msk, np.ndarray X, int k):
-        cdef np.ndarray temp = self.temp_feature_vector()
-        k = process_one_image(self.window, inp, msk, X, self, temp, k)
-        return k
+        cdef np.ndarray msk_np = np.asarray(msk, dtype=np.uint8)
+        cdef int ww2 = self.window.shape[1]//2
+        cdef int hh2 = self.window.shape[0]//2
+        idx_i, idx_j = np.where(msk_np != 0)
+        k2 = idx_i.shape[0]
+        self.extract_batch(inp, idx_i, idx_j, X[k:])
+
+        #cdef np.ndarray temp = self.temp_feature_vector()
+        #k3 = process_one_image(self.window, inp, msk, X, self, temp, k)
+        #print(k2, k3)
+        #assert k2 + k == k3
+        return k2 + k
 
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
         raise NotImplementedError('extract needs to be implemented.')
