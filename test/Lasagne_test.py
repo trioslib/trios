@@ -87,6 +87,7 @@ imgset = trios.Imageset.read('jung/level1.set')
 
 # Start Training
 model_params = {'epochs': 20,
+                'max_patience':5,
                 'test_loss': test_loss,
                 'test_acc': test_acc,
                 'update': updates,

@@ -1,3 +1,5 @@
+# coding=utf-8
+# coding=utf-8
 """
 
 @author: André V Lopes
@@ -29,6 +31,18 @@ class LasagneClassifier():
         self.input_var = kw['input_var']
         self.target_var = kw['target_var']
 
+    def setWeights(self, network, param_values):
+        try:
+            lasagne.layers.set_all_param_values(network, param_values)
+        except Exception as ex:
+            print 'Failure to load Weights , Reason :' + str(ex.message)
+
+    def getNetworkWeights(self, network):
+        try:
+            return lasagne.layers.get_all_param_values(network)
+        except Exception as ex:
+            print 'Failure to get Weights , Reason :' + str(ex.message)
+
     def normalize(self, data):
         data = data / 255
         return data
@@ -54,13 +68,13 @@ class LasagneClassifier():
             yield inputs[excerpt]
 
     def get_validation_data(self, x, y, validation_percentage=0, random_state=1):
-        # train_test_split
         x, x_val, y, y_val = train_test_split(x, y, test_size=validation_percentage / 100.00, random_state=random_state)
 
         return x, y, x_val, y_val
 
     def train(self, dataset, kw):
         max_epochs = kw.get('epochs', 10)
+        max_patience = kw.get('max_patience', int((10 * max_epochs) / 100))
         test_loss = kw.get('test_loss')
         test_acc = kw.get('test_acc')
         updates = kw.get('update')
@@ -102,6 +116,22 @@ class LasagneClassifier():
         train_fn = theano.function([self.input_var, self.target_var], loss_or_grads, updates=updates)
         val_fn = theano.function([self.input_var, self.target_var], [test_loss, test_acc])
 
+        # Save epochs in which nan's ocurred.
+        nan_occurrences = []
+
+        # Prepare the patience variables
+        if max_patience != -1:
+
+            # Do not allow max_patience to be 0. It can be -1 to disable patience, but not 0.
+            if max_patience == 0:
+                max_patience = 1
+
+            current_patience = int(max_patience)
+            best_validation_loss = float('inf')
+
+            best_acc = -1
+            best_weights = None
+
         # Finally, launch the training loop.
         print("Starting training...")
 
@@ -126,11 +156,64 @@ class LasagneClassifier():
                 val_acc += acc
                 val_batches += 1
 
+            #Calculate Results
+            trainingLoss = (train_err / train_batches)
+            validationLoss = (val_err / val_batches)
+            validationAccuracy = (val_acc / val_batches * 100)
+
             # Then print the results for this epoch:
             print("Epoch {} of {} took {:.3f}s".format(epoch + 1, max_epochs, time.time() - start_time))
-            print("  training loss:\t\t{:.6f}".format(train_err / train_batches))
-            print("  validation loss:\t\t{:.6f}".format(val_err / val_batches))
-            print("  validation accuracy:\t\t{:.2f} %".format(val_acc / val_batches * 100))
+            print("  Training Loss:\t\t{:.6f}".format(trainingLoss))
+            print("  Validation Loss:\t\t{:.6f}".format(validationLoss))
+            print("  Validation Accuracy:\t\t{:.4f} %".format(validationAccuracy))
+
+            ##Check for NAN and append NAN warnings to HTML LOG.
+            if np.isnan(trainingLoss):
+                nan_occurrences.append("Training Loss is NaN at epoch :" + str(epoch))
+
+            if np.isnan(validationLoss):
+                nan_occurrences.append("Validation Loss is NaN at epoch :" + str(epoch))
+
+            if np.isnan(validationAccuracy):
+                nan_occurrences.append("Validation Accuracy is NaN at epoch :" + str(epoch))
+
+            # Patience
+
+            # If patience Is ENABLED then go through the patience-logic
+            if max_patience != -1:
+
+                if epoch == 0 or best_validation_loss == -1 or best_validation_loss is None or best_acc == -1 or best_acc is None:
+                    best_validation_loss = validationLoss
+                    best_acc = validationAccuracy
+                    best_weights = self.getNetworkWeights(self.network)
+
+                    ##First verify when to decrease patience count. Decreasing means losing patience.
+                if epoch >= 1:
+
+                    # If validation loss is WORSE than best loss, LOSE patience
+                    if validationLoss > best_validation_loss:
+                        current_patience = current_patience - 1
+
+                    else:
+                        # if the current loss is BETTER than best, RESET patience
+                        if validationLoss <= best_validation_loss:
+                            best_validation_loss = validationLoss
+                            best_acc = validationAccuracy
+                            current_patience = int(max_patience)
+                            best_weights = self.getNetworkWeights(self.network)
+
+
+                    # Check if theres no more patience and if its time to stop.
+                    if current_patience <= 0:
+                        print "\nNo more patience. Stopping training...\n"
+                        if best_weights != None:
+                            self.setWeights(network=self.network, param_values=best_weights)
+                        break
+
+
+                print "  Current Patience : " + str(current_patience) + " | Max Patience : " + str(max_patience) + "\n"
+
+
 
         # After training, we compute and print the test error:
         test_err = 0
@@ -144,8 +227,12 @@ class LasagneClassifier():
             test_batches += 1
 
         print("Final results:")
-        print("  test loss:\t\t\t{:.6f}".format(test_err / test_batches))
-        print("  test accuracy:\t\t{:.2f} %".format(test_acc / test_batches * 100))
+        print("  Test Loss:\t\t\t{:.6f}".format(test_err / test_batches))
+        print("  Test Accuracy:\t\t{:.4f} %".format(test_acc / test_batches * 100))
+
+        # Print nan_occurences
+        for occurrence in nan_occurrences:
+            print(str(occurrence))
 
         score = [(test_err / test_batches), (test_acc / test_batches * 100)]
 
@@ -161,7 +248,6 @@ class LasagneClassifier():
         x = x.reshape((-1, 1, self.network.input_layer.shape[2], self.network.input_layer.shape[3]))
 
         # Predict
-
         predict_function = theano.function([self.input_var], lasagne.layers.get_output(self.network, deterministic=True))
 
         prediction = np.empty((x.shape[0], 1), dtype=np.float32)

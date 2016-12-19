@@ -98,7 +98,7 @@ class XgBoostClassifier():
 
         # Train Model
         self.cls.fit(X, Y, sample_weight=sample_weight, eval_set=eval_set, eval_metric=eval_metric, early_stopping_rounds=early_stopping_rounds, verbose=verbose)
-        print(self.cls)
+        # print(self.cls)
 
         # Evaluate
         if X_test is not None and Y_test is not None:
