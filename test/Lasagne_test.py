@@ -69,12 +69,16 @@ loss_or_grads = lasagne.objectives.binary_crossentropy(lasagne.layers.get_output
 
 updates = lasagne.updates.nesterov_momentum(loss_or_grads=loss_or_grads, params=lasagne.layers.get_all_params(network, trainable=True), learning_rate=0.2, momentum=0.90)
 
-
 test_loss = lasagne.objectives.binary_crossentropy(lasagne.layers.get_output(network, deterministic=True), target_var).mean()
 test_acc = lasagne.objectives.binary_accuracy(lasagne.layers.get_output(network, deterministic=True), target_var).mean()
 
 # Initiate LasagneClassifier
 classifier = LasagneClassifier(verbose=1, input_var=input_var, target_var=target_var, network=network, batch_size=batch_size, minimize=False, ordered=True)
+
+firstInfo, layer_info, legend = classifier.getNetworkInfo(network=network)
+
+print firstInfo,layer_info
+print legend
 
 # Initiate WOperator
 op = WOperator(getWindow(), classifier, RAWFeatureExtractor)
@@ -87,7 +91,7 @@ imgset = trios.Imageset.read('jung/level1.set')
 
 # Start Training
 model_params = {'epochs': 20,
-                'max_patience':5,
+                'max_patience': 5,
                 'test_loss': test_loss,
                 'test_acc': test_acc,
                 'update': updates,

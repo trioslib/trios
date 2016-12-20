@@ -1,15 +1,15 @@
 # coding=utf-8
-# coding=utf-8
 """
 
 @author: André V Lopes
 """
 
 import time
-
 import lasagne
+import nolearn
 import numpy as np
 import theano
+from nolearn.lasagne import NeuralNet
 from sklearn.model_selection import train_test_split
 
 
@@ -156,7 +156,7 @@ class LasagneClassifier():
                 val_acc += acc
                 val_batches += 1
 
-            #Calculate Results
+            # Calculate Results
             trainingLoss = (train_err / train_batches)
             validationLoss = (val_err / val_batches)
             validationAccuracy = (val_acc / val_batches * 100)
@@ -202,7 +202,6 @@ class LasagneClassifier():
                             current_patience = int(max_patience)
                             best_weights = self.getNetworkWeights(self.network)
 
-
                     # Check if theres no more patience and if its time to stop.
                     if current_patience <= 0:
                         print "\nNo more patience. Stopping training...\n"
@@ -210,10 +209,7 @@ class LasagneClassifier():
                             self.setWeights(network=self.network, param_values=best_weights)
                         break
 
-
                 print "  Current Patience : " + str(current_patience) + " | Max Patience : " + str(max_patience) + "\n"
-
-
 
         # After training, we compute and print the test error:
         test_err = 0
@@ -316,3 +312,229 @@ class LasagneClassifier():
             print('Error when attempting to load Weights , Reason :', ex.message)
 
         return self.network
+
+    def getNetworkInfo(self, network):
+
+        if network == None:
+            print "Failure to Print Network , reason : Parameter == none"
+            raise TypeError("Parameter 'network' cannot be None")
+
+        nolearnNetwork = NeuralNet(layers=network, update=lasagne.updates.adam)
+        nolearnNetwork.initialize()
+
+        layer_info = nolearn.lasagne.PrintLayerInfo()
+        firstInfo = layer_info._get_greeting(nolearnNetwork)
+
+        layer_info, legend = layer_info._get_layer_info_conv(nolearnNetwork)
+
+        # Split it
+        splitted_layer_info = layer_info.splitlines()
+
+        # Add The Num Filters
+        justify_size = 14
+        splitted_layer_info[0] = splitted_layer_info[0] + "FilterSize".rjust(justify_size)
+        splitted_layer_info[1] = splitted_layer_info[1] + "------------".rjust(justify_size)
+
+        all_layers = lasagne.layers.get_all_layers(network)
+        for x in xrange(0, len(all_layers)):
+            layer = all_layers[x]
+
+            if isinstance(layer, lasagne.layers.InputLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "----------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.Conv2DLayer):
+                fs = str(layer.filter_size).replace(",", "x")
+                fs = fs.replace("(", "")
+                fs = fs.replace(")", "")
+                fs = fs.replace(" ", "")
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + fs.rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DilatedConv2DLayer):
+                fs = str(layer.filter_size).replace(",", "x")
+                fs = fs.replace("(", "")
+                fs = fs.replace(")", "")
+                fs = fs.replace(" ", "")
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + fs.rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.TransposedConv2DLayer):
+                fs = str(layer.filter_size).replace(",", "x")
+                fs = fs.replace("(", "")
+                fs = fs.replace(")", "")
+                fs = fs.replace(" ", "")
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + fs.rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.MaxPool2DLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "----------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DenseLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "----------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.ConcatLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "----------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DropoutLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "----------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.NonlinearityLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "----------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.BatchNormLayer) and not isinstance(layer.input_layer, lasagne.layers.InputLayer):
+                # network.input_layer.input_layer.filter_size
+                fs = str(layer.input_layer.filter_size).replace(",", "x")
+                fs = fs.replace("(", "")
+                fs = fs.replace(")", "")
+                # strip wont work here. Probably due to unicode str type
+                fs = fs.replace(" ", "")
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + fs.rjust(justify_size)
+
+        # After added the num filters , now add the pad info
+        # Add The pad info
+        justify_size = 14
+        splitted_layer_info[0] = splitted_layer_info[0] + "Padding".rjust(justify_size)
+        splitted_layer_info[1] = splitted_layer_info[1] + "------------".rjust(justify_size)
+
+        all_layers = lasagne.layers.get_all_layers(network)
+        for x in xrange(0, len(all_layers)):
+            layer = all_layers[x]
+
+            if isinstance(layer, lasagne.layers.InputLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.Conv2DLayer):
+                layerpad = str(layer.pad)
+                layerpad = layerpad.replace(",", "x")
+                layerpad = layerpad.replace("(", "")
+                layerpad = layerpad.replace(")", "")
+                layerpad = layerpad.replace(" ", "")
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + layerpad.rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DilatedConv2DLayer):
+                layerpad = str(layer.pad)
+                layerpad = layerpad.replace(",", "x")
+                layerpad = layerpad.replace("(", "")
+                layerpad = layerpad.replace(")", "")
+                layerpad = layerpad.replace(" ", "")
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + layerpad.rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.TransposedConv2DLayer):
+                layerpad = str(layer.pad)
+                layerpad = layerpad.replace(",", "x")
+                layerpad = layerpad.replace("(", "")
+                layerpad = layerpad.replace(")", "")
+                layerpad = layerpad.replace(" ", "")
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + layerpad.rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.BatchNormLayer) and not isinstance(layer.input_layer, lasagne.layers.InputLayer):
+                layerpad = str(layer.input_layer.pad)
+                layerpad = layerpad.replace(",", "x")
+                layerpad = layerpad.replace("(", "")
+                layerpad = layerpad.replace(")", "")
+                layerpad = layerpad.replace(" ", "")
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + layerpad.rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.MaxPool2DLayer):
+                layerpad = str(layer.pad)
+                layerpad = layerpad.replace(",", "x")
+                layerpad = layerpad.replace("(", "")
+                layerpad = layerpad.replace(")", "")
+                layerpad = layerpad.replace(" ", "")
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + layerpad.rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DenseLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.ConcatLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DropoutLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.NonlinearityLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+        # After added the pad size , now add the dropout info
+        # Add The pad info
+        justify_size = 14
+        splitted_layer_info[0] = splitted_layer_info[0] + "Dropout".rjust(justify_size)
+        splitted_layer_info[1] = splitted_layer_info[1] + "------------".rjust(justify_size)
+
+        all_layers = lasagne.layers.get_all_layers(network)
+        for x in xrange(0, len(all_layers)):
+            layer = all_layers[x]
+
+            if isinstance(layer, lasagne.layers.InputLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.Conv2DLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.TransposedConv2DLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DilatedConv2DLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.BatchNormLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.MaxPool2DLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DenseLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DropoutLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + str(layer.p).rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.NonlinearityLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.ConcatLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+        # After added the dropout info , now add the neurons info
+        # Add The pad info
+        justify_size = 16
+        splitted_layer_info[0] = splitted_layer_info[0] + "NonLinearity".rjust(justify_size)
+        splitted_layer_info[1] = splitted_layer_info[1] + "--------------".rjust(justify_size)
+
+        all_layers = lasagne.layers.get_all_layers(network)
+        for x in xrange(0, len(all_layers)):
+            layer = all_layers[x]
+
+            if isinstance(layer, lasagne.layers.InputLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.Conv2DLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + str(str(layer.nonlinearity).split()[1]).rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.TransposedConv2DLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + str(str(layer.nonlinearity).split()[1]).rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DilatedConv2DLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + str(str(layer.nonlinearity).split()[1]).rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.NonlinearityLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + str(str(layer.nonlinearity).split()[1]).rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.BatchNormLayer) and not isinstance(layer.input_layer, lasagne.layers.InputLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + str(str(layer.input_layer.nonlinearity).split()[1]).rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.MaxPool2DLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DenseLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + str(str(layer.nonlinearity).split()[1]).rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.ConcatLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+            if isinstance(layer, lasagne.layers.DropoutLayer):
+                splitted_layer_info[x + 2] = splitted_layer_info[x + 2] + "-------".rjust(justify_size)
+
+        # join the lines
+        layer_info = ""
+        for line in splitted_layer_info:
+            layer_info = layer_info + "\n" + line
+
+        return firstInfo, layer_info, legend

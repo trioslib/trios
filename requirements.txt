@@ -1,3 +1,4 @@
+sklearn
 numpy
 pillow
 cython
@@ -8,3 +9,4 @@ theano
 keras
 lasagne
 xgboost
+nolearn

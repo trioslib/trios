@@ -27,9 +27,9 @@ extensions = [
             Extension('trios.feature_extractors.raw', [
                     'trios/feature_extractors/raw'+ext]),
             Extension('trios.feature_extractors.aperture', [
-                    'trios/feature_extractors/aperture'+ext]),        
+                    'trios/feature_extractors/aperture'+ext]),
             Extension('trios.feature_extractors.combination', [
-                    'trios/feature_extractors/combination'+ext]),            
+                    'trios/feature_extractors/combination'+ext]),
             Extension('trios.wop_matrix_ops', [
                     'trios/wop_matrix_ops'+ext]),
             Extension('trios.util', [
@@ -61,7 +61,7 @@ setup(
                  'Programming Language :: Python :: 3'],
     install_requires=[
         'cython', 'cffi', 'numpy', 'scikit-learn', 'scipy', 'pillow'
-    ], 
+    ],
     ext_modules = extensions,
     cffi_modules = ['trios/legacy/build_legacy.py:c_code'],
     packages = ['trios', 'trios.feature_extractors', 'trios.classifiers', 'trios.legacy', 'trios.window_determination', 'trios.shortcuts',]# 'trios.contrib']
