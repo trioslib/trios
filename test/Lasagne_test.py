@@ -90,7 +90,7 @@ X_test, Y_test = getTestSet()
 imgset = trios.Imageset.read('jung/level1.set')
 
 # Start Training
-model_params = {'epochs': 20,
+model_params = {'epochs': 10,
                 'max_patience': 5,
                 'test_loss': test_loss,
                 'test_acc': test_acc,
