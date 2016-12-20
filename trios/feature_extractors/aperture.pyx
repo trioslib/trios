@@ -7,22 +7,22 @@ import cython
 
 cdef class Aperture(RAWFeatureExtractor):
     '''
-    This feature extractor is based on the work on Aperture operators (or WK-operators, cite).
-    It is used to introduce a
+    This feature extractor is based on the work on Aperture operators (or WK-operators, cite). 
+    It is used to introduce a 
     '''
-    def __init__(self, window=None, k=1, center=None, mul=1.0, **kw):
-        RAWFeatureExtractor.__init__(self, window, mul, **kw)
-        self.k = k
+    def __init__(self, window=None, k=1, center=None, mul=1.0):
+        RAWFeatureExtractor.__init__(self, window, mul)
+        self.k = k        
         if window is not None:
             self.set_center()
-
+    
     def set_center(self):
         cdef int ci = self.window.shape[0] // 2
         cdef int cj = self.window.shape[1] // 2
         if self.window[ci, cj] == 0:
             raise Exception('Center point must be in the window')
         self.center = np.sum(self.window[:ci]) + np.sum(self.window[ci,:cj])
-
+    
     @cython.boundscheck(False)
     @cython.nonecheck(False)
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
@@ -38,12 +38,12 @@ cdef class Aperture(RAWFeatureExtractor):
                 pattern[l] = self.k + min(self.k, p)
             else:
                 p = center - pattern[l]
-                pattern[l] = self.k - min(self.k, p)
-
+                pattern[l] = self.k - min(self.k, p)    
+    
     def write_state(self, obj_dict):
         RAWFeatureExtractor.write_state(self, obj_dict)
         obj_dict['k'] = self.k
-
+    
     def set_state(self, obj_dict):
         RAWFeatureExtractor.set_state(self, obj_dict)
         self.k = int(obj_dict['k'])

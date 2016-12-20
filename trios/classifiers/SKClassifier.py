@@ -14,16 +14,17 @@ import inspect
 
 class SKClassifier(Classifier):
     '''
-This class wraps scikit-learn models. Any classification model should work.
+This class wraps scikit-learn models. Any classification model should work.     
     '''
-    def __init__(self, cls=None, dtype=np.uint8, **kw):
-        super().__init__(self, **kw)
+    def __init__(self, cls=None, minimize=False, ordered=True, dtype=np.uint8):
         self.cls = cls
+        self.minimize = minimize
+        self.ordered = ordered
         self.dtype = dtype
-
+    
     def train(self, dataset, kw):
         if not self.ordered:
-            X, y, C = util.dataset_to_array(dataset, self.dtype, True, False)
+            X, y, C = util.dataset_to_array(dataset, self.dtype, True, False)            
         else:
             if len(dataset) == 2:
                 X, y = dataset
@@ -40,7 +41,7 @@ This class wraps scikit-learn models. Any classification model should work.
                 self.cls.fit(X2, y2)
             else:
                 self.cls.fit(X, y)
-
+    
     def apply(self, fvector):
         return self.cls.predict(fvector.reshape(1, -1))[0]
 
@@ -52,7 +53,7 @@ This class wraps scikit-learn models. Any classification model should work.
         obj_dict['min'] = self.minimize
         obj_dict['dtype'] = self.dtype
         obj_dict['ordered'] = self.ordered
-
+        
     def set_state(self, obj_dict):
         self.cls = obj_dict['cls']
         self.minimize = obj_dict['min']

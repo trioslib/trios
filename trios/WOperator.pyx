@@ -14,7 +14,6 @@ from trios.serializable import Serializable
 from trios.serializable cimport Serializable
 
 import trios
-import trios.shortcuts.persistence as p
 
 import numpy as np
 cimport numpy as np
@@ -23,8 +22,6 @@ import scipy.ndimage
 
 import inspect
 import sys
-
-import math
 
 import multiprocessing
 from functools import partial
@@ -42,10 +39,10 @@ def worker_eval(t):
     for i in idx:
         inp, out, msk = imgset[i]
         print('Testing', i, inp, out, file=sys.stderr)
-
+        
         inp = sp.ndimage.imread(inp, mode='L')
         out = sp.ndimage.imread(out, mode='L')
-        msk = p.load_mask_image(msk, inp.shape, self.window)
+        msk = sp.ndimage.imread(msk, mode='L')
         res = self.apply(inp, msk)
         if bin:
             errs.append(compare_images_binary(out, msk, res, x_border, y_border))
@@ -53,14 +50,14 @@ def worker_eval(t):
             errs.append(compare_images(out, msk, res, x_border, y_border))
         del inp, out, msk, res
     return errs
-
+    
 
 class WOperator(Serializable):
     '''
     The WOperator class contains all the elements necessary to train and
     apply a local image operator to an image. The most important parts of
     a WOperator are:
-
+    
     (i) its neighborhood (Window) of the operator;
     (ii) the classifier used (defined in the Classifier class).
     '''
@@ -70,25 +67,21 @@ class WOperator(Serializable):
             self.classifier = cls(window)
         else:
             self.classifier = cls
-
+            
         if inspect.isclass(fext):
             self.extractor = fext(window)
         else:
             self.extractor = fext
-
+        
         self.trained = False
         self.batch = batch
-
+    
     def train(self, imgset, kw={}):
-        if self.classifier.partial:
-            for i in range(1): #niters
-                X, y = self.extractor.extract_dataset_batch(imgset)
-                self.classifier.partial_train(X , y, kw)
-        else:
-            dataset = self.extractor.extract_dataset(imgset, self.classifier.ordered)
-            self.classifier.train(dataset, kw)
+        dataset = self.extractor.extract_dataset(imgset, self.classifier.ordered)
+        self.classifier.train(dataset, kw)
         self.trained = True
-
+        return dataset
+        
     def apply(self, image, mask):
         if self.batch:
             res = np.zeros(image.shape, np.uint8)
@@ -97,7 +90,7 @@ class WOperator(Serializable):
             y, x = np.nonzero(mask[hh2:-hh2, ww2:-ww2])
             temp = self.extractor.temp_feature_vector()
             X = np.zeros((len(y), len(self.extractor)), temp.dtype)
-            self.extractor.extract_image(image, mask, X, 0)
+            self.extractor.extract_batch(image, mask, X, 0)
             ypred = self.classifier.apply_batch(X)
             res[y+hh2,x+ww2] = ypred
             return res
@@ -122,26 +115,26 @@ class WOperator(Serializable):
             FP = sum([err[2] for err in errors])
             FN = sum([err[3] for err in errors])
             return TP, TN, FP, FN
-        else:
+        else: 
             total_pixels = sum([err[1] for err in errors])
             total_errors = sum([err[0] for err in errors])
             if per_image:
                 return float(total_errors)/total_pixels, errors
             return float(total_errors)/total_pixels
-
-
+        
+    
     def write_state(self, obj_dict):
         obj_dict['classifier'] = self.classifier.write(None)
         obj_dict['extractor'] = self.extractor.write(None)
-
+        
         obj_dict['window'] = np.asarray(self.window)
         obj_dict['trained'] = self.trained
         obj_dict['batch'] = self.batch
-
+        
     def set_state(self, obj_dict):
         self.classifier = Serializable.read(obj_dict['classifier'])
         self.extractor = Serializable.read(obj_dict['extractor'])
-
+        
         self.window = obj_dict['window']
         if 'trained' in obj_dict:
             self.trained = obj_dict['trained']
@@ -152,7 +145,7 @@ class WOperator(Serializable):
             self.batch = obj_dict['batch']
         else:
             self.batch = True
-
+            
         if len(self.window.shape) == 1:
             self.window = self.window.reshape((self.window.shape[0], 1))
 
@@ -162,42 +155,35 @@ cdef class Classifier(Serializable):
     '''
     def __init__(self, *a, **kw):
         r'''
-        Classifiers have two basic attributes: minimize and ordered.
-
+        Classifiers have two basic attributes: minimize and ordered. 
+        
         * if minimize is True then WOperator modifies all labels in the training set such that
           `train` receives a training set with only consistent patterns (no :math:`x_i = x_j` and :math:`y_i \neq y_j`).
-
+        
         * if ordered is True `train` receives as input a tuple :math:`(X, y)`, where :math:`X` contains input patterns in
           its rows and :math:`y` contains the labels. If ordered is False `train` receives a dictionary with patterns and
           keys and a dictionary with the frequency of each output as values.
-
+        
         '''
         self.minimize = False
         self.ordered = True
-        self.partial = False
-
+    
     cpdef train(self, dataset, kw):
         '''
         Each classification method must override this method with its training procedure.
         '''
         raise NotImplementedError()
-
-    cpdef partial_train(self, X, y, kw):
-        '''
-        Executes one training iteration using inputs X and labels y.
-        '''
-        raise NotImplementedError()
-
+    
     cpdef apply(self, fvector):
         '''
         Override this method with the application procedure for a single pattern.
         '''
         raise NotImplementedError()
-
+    
     cpdef apply_batch(self, fmatrix):
         '''
         Classifies a batch of patterns. Each one is stored on the rows of `fmatrix`.
-
+        
         Override this method if the classifier can do batch classification faster than
         classifiyng each pattern individually in a loop.
         '''
@@ -205,152 +191,76 @@ cdef class Classifier(Serializable):
         for i in range(fmatrix.shape[0]):
             y[i] = self.apply(fmatrix[i])
         return y
-
+       
 cdef class FeatureExtractor(Serializable):
     '''
-    A FeatureExtractor extracts feature from an Imageset using a finite neighborhood
-    called *window*. The number and type of features extracted depend on the size of
-    the window and on which processing each subclass of FeatureExtractor executes.
+    A FeatureExtractor extracts feature from an Imageset using a finite neighborhood 
+    called *window*. The number and type of features extracted depend on the size of 
+    the window and on which processing each subclass of FeatureExtractor executes.  
     '''
-    def __init__(self, unsigned char[:,:] window=None, batch_size=0, dtype=np.float):
+    def __init__(self, unsigned char[:,:] window=None):
         '''
         Every FeatureExtractor must receive a window (numpy array of type np.uint8) in
-        its constructor. It is the only required parameter.
-
-        Typically dtype is fixed in the constructor of subclasses.
+        its constructor. It is the only required parameter.         
         '''
         self.window = window
-        self.batch_size = batch_size
-        self.dtype = dtype
 
     def __len__(self):
         ''' Return feature vector length '''
         return 1
-
-    def extract_dataset_batch(self, imgset):
-        npixels = []
-        total_pixels = 0
-        for (inp, out, msk) in p.load_imageset(imgset, self.window):
-            nmsk = np.sum(msk != 0)
-            total_pixels += nmsk
-            npixels.append(nmsk)
-        
-        npixels = [math.floor(self.batch_size * npi / total_pixels) for npi in npixels]
-        npixels[-1] += self.batch_size - sum(npixels)
-        assert sum(npixels) == self.batch_size
-
-        k = 0
-        X = np.zeros((self.batch_size, len(self)), self.dtype)
-        y = np.zeros(self.batch_size, np.uint8)
-        for i, (inp, out, msk) in enumerate(p.load_imageset(imgset, self.window)):
-            idx_i, idx_j = np.nonzero(msk)
-            idx = np.random.permutation(idx_i.shape[0])[:npixels[i]]
-            self.extract_batch(inp, idx_i[idx], idx_j[idx], X[k:k+npixels[i]])
-            y[k:k+npixels[i]] = out[idx_i[idx], idx_j[idx]]
-            k += npixels[i]
-        
-        return X, y
-
-
+    
     def extract_dataset(self, imgset, ordered=False):
         '''
-This method extracts patterns from an `trios.imageset.Imageset`. If `ordered=True`,
+This method extracts patterns from an `trios.imageset.Imageset`. If `ordered=True`, 
 the resulting patterns will be a pair containing a matrix *X* of shape *(M, N)*, where
 *M* is the number of pixels that are in the mask (if there is no mask, the sum of all
-pixels in all images) and *N* is `len(self)`.
+pixels in all images) and *N* is `len(self)`. 
 
-If `ordered=False`, the training set is return in `dict` format. The patterns are
-stored in the keys as a tuple. Each pattern is associated with a `dict` in which the keys
+If `ordered=False`, the training set is return in `dict` format. The patterns are 
+stored in the keys as a tuple. Each pattern is associated with a `dict` in which the keys 
 are outputs pixel values and the values are the number of times that a certain output
 co-ocurred with the pattern. See the example below. ::
 
     { (255, 0, 255): {0: 5, 255: 1},
-      (255, 255, 255): {0: 3, 255: 10},
+      (255, 255, 255): {0: 3, 255: 10}, 
       ... }
+
         '''
         if ordered == True:
             return process_image_ordered(imgset, self)
-
+        
         dataset = {}
         for (inp, out, msk) in imgset:
             inp = sp.ndimage.imread(inp, mode='L')
             out = sp.ndimage.imread(out, mode='L')
-            if msk is not None:
+            if msk != None:
                 msk = sp.ndimage.imread(msk, mode='L')
             else:
                 msk = np.ones(inp.shape, inp.dtype)
-            #TODO: assign 0 to all pixels in the border (depends on mask)
             process_image(dataset, self.window, inp, out, msk, self)
         return dataset
-
-    def extract_ordered(self, inp, msk, out=None, random=False):
-        ''' extract all the patterns from inp image (limited to msk)
-        if batch_size == None it returns all patterns found.
-        otherwise it returns a generator that yields batch_size patterns per iteration.
-
-        If random the generator yields patterns in random order.
-        '''
-        nmsk = np.sum(msk != 0)
-        bs = nmsk if self.batch_size == 0 else min(self.batch_size, nmsk)
-        idx_i, idx_j = np.where(msk != 0)
-        if random:
-            idx = np.random.permutation(nmsk)
-            idx_ir = idx_i[idx]
-            idx_jr = idx_j[idx]
-        else:
-            idx_ir = idx_i
-            idx_jr = idx_j
-        batch_X = np.zeros((bs, len(self)), self.dtype)
-        if out is not None: # extract training data
-            batch_y = np.zeros(bs, np.uint8)
-            for k in range(0, idx_i.shape[0], bs):
-                lim = min(bs, idx_ir.shape[0] - k)
-                self.extract_batch(inp, idx_ir[k:k+bs], idx_jr[k:k+bs], batch_X[:lim])
-                for l in range(lim):
-                    batch_y[l] = out[idx_ir[k+l], idx_jr[k+l]]
-
-                yield batch_X[:lim], batch_y[:lim]
-
-        else: # extract test/application data
-            for k in range(0, idx_i.shape[0], bs):
-                for l in range(bs):
-                    self.extract(inp, idx_i[k], idx_j[k], batch_X[k+l])
-                yield batch_X
-
+    
     def temp_feature_vector(self):
         '''
         Creates a vector of the correct size and type for a specific FeatureExtractor.
         '''
-        return np.zeros(len(self), self.dtype)
-
-    cpdef extract_batch(self, unsigned char[:,:] inp, idx_i, idx_j, np.ndarray X):
-        for l in range(idx_i.shape[0]):
-            self.extract(inp, idx_i[l], idx_j[l], X[l])
-
-    cpdef extract_image(self, unsigned char[:,:] inp, unsigned char[:,:] msk, np.ndarray X, int k):
-        cdef np.ndarray msk_np = np.asarray(msk, dtype=np.uint8)
-        cdef int ww2 = self.window.shape[1]//2
-        cdef int hh2 = self.window.shape[0]//2
-        idx_i, idx_j = np.where(msk_np != 0)
-        k2 = idx_i.shape[0]
-        self.extract_batch(inp, idx_i, idx_j, X[k:])
-        return k2 + k
-
+        return np.zeros(len(self), np.float)
+    
+    cpdef extract_batch(self, unsigned char[:,:] inp, unsigned char[:,:] msk, np.ndarray X, int k):
+        cdef np.ndarray temp = self.temp_feature_vector()
+        k = process_one_image(self.window, inp, msk, X, self, temp, k)
+        return k
+    
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
-        raise NotImplementedError('extract needs to be implemented.')
-
+        pat[0] = 0
+        
     def train(self, dataset):
         pass
-
+    
     def write_state(self, obj_dict):
         win = np.asarray(self.window)
         obj_dict['window'] = win
-        obj_dict['batch_size'] = self.batch_size
-
+    
     def set_state(self, obj_dict):
         self.window = np.asarray(obj_dict['window'])
-        if 'batch_extract' in obj_dict:
-            self.batch_size = obj_dict['batch_size']
-        else:
-            self.batch_size = 0
-
+        
