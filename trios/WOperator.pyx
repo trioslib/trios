@@ -234,21 +234,30 @@ cdef class FeatureExtractor(Serializable):
             nmsk = np.sum(msk != 0)
             total_pixels += nmsk
             npixels.append(nmsk)
+            
+        sample = np.random.randint(low=0, high=total_pixels, size=self.batch_size)
+        sample.sort()
         
-        npixels = [math.floor(self.batch_size * npi / total_pixels) for npi in npixels]
-        npixels[-1] += self.batch_size - sum(npixels)
-        assert sum(npixels) == self.batch_size
-
+        
         k = 0
+        idx_sample = 0
+        last_idx_sample = 0
         X = np.zeros((self.batch_size, len(self)), self.dtype)
         y = np.zeros(self.batch_size, np.uint8)
         for i, (inp, out, msk) in enumerate(p.load_imageset(imgset, self.window)):
+            while idx_sample < self.batch_size and sample[idx_sample] < npixels[i] + k:
+                idx_sample += 1
             idx_i, idx_j = np.nonzero(msk)
-            idx = np.random.permutation(idx_i.shape[0])[:npixels[i]]
-            self.extract_batch(inp, idx_i[idx], idx_j[idx], X[k:k+npixels[i]])
-            y[k:k+npixels[i]] = out[idx_i[idx], idx_j[idx]]
+            
+            idx = sample[last_idx_sample:idx_sample] - k
+            #print(i, k, idx_sample, npixels[i], len(idx))
+            
+            self.extract_batch(inp, idx_i[idx], idx_j[idx], X[last_idx_sample:idx_sample])
+            y[last_idx_sample:idx_sample] = out[idx_i[idx], idx_j[idx]]
             k += npixels[i]
+            last_idx_sample = idx_sample
         
+        assert idx_sample == self.batch_size
         return X, y
 
 
