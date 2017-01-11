@@ -46,6 +46,9 @@ extensions = [
                     'trios/util.pyx']),
             Extension('trios.serializable', [
                     'trios/serializable.pyx']),
+            Extension('trios.contrib.kern_approx.nystrom_features', [
+                    'trios/contrib/kern_approx/nystrom_features.pyx'
+            ]),
             Extension('trios.legacy.io', [
                       'trios/legacy/io.pyx',
                         'trios/v1/definitions.pxd',
@@ -81,5 +84,7 @@ setup(
     
     cmdclass = {'build_ext': build_ext},
     ext_modules = cythonize(extensions),
-    packages = ['trios', 'trios.feature_extractors', 'trios.classifiers.ISI', 'trios.classifiers', 'trios.v1', 'trios.legacy', 'trios.window_determination', 'trios.shortcuts',]# 'trios.contrib']
+    packages = ['trios', 'trios.feature_extractors', 'trios.classifiers.ISI', 
+                'trios.classifiers', 'trios.v1', 'trios.legacy', 'trios.window_determination', 
+                'trios.shortcuts', 'trios.contrib', 'trios.contrib.kern_approx']
 )
