@@ -1,6 +1,7 @@
 #include "trios_win.h"
 #include "trios_itv.h"
 #include "trios_mtm.h"
+#include "trios_error.h"
 
 #include "paclearn_local.h"
 #include <stdio.h>
@@ -98,12 +99,6 @@ int				/*+ Purpose: compute the minimun cover of a set of minterms.
 						   "p_cover: itv_add() failed.");
 			}
 		}
-#ifdef _DEBUG_
-		if (!all_covered2(itv, mx_head, mtm)) {
-			(void)trios_error(MSG,
-					  "p_cover after essential_sel : OOOPPSSSS !! ");
-		}
-#endif
 
 		if (ll_head) {
 
@@ -112,12 +107,6 @@ int				/*+ Purpose: compute the minimun cover of a set of minterms.
 				return trios_error(MSG,
 						   "p_cover: del_dominated() failed.");
 			}
-#ifdef _DEBUG_
-			if (!all_covered2(itv, mx_head, mtm)) {
-				(void)trios_error(MSG,
-						  "p_cover after del_dominated : OOOPPSSSS !! ");
-			}
-#endif
 
 			if (st == 2)
 				stop = 1;
@@ -154,11 +143,7 @@ int				/*+ Purpose: compute the minimun cover of a set of minterms.
 		mx_head = mx;
 	}
 
-#ifdef _DEBUG_
-	if (!all_covered(itv, mtm)) {
-		(void)trios_error(MSG, "p_cover After all : OOOPPSSSS !!");
-	}
-#endif
+
 
 	return (1);
 }
@@ -185,8 +170,9 @@ mtm_tbl2ll(mtm_t * mtm		/*+ In: classified examples set                     + */
 	for (i = mtm->nmtm - 1; i >= 0; i--) {
 		p = (idx_ll *) malloc(sizeof(idx_ll));
 		if (!p) {
-			return (idx_ll *) trios_error(1,
+			trios_error(1,
 						      "mtm_tbl2ll: memory allocation failed.");
+			return NULL;
 		}
 		p->idx = i;
 		p->next = head;
@@ -760,8 +746,9 @@ greedy_sel(mtx_t ** mx_head,	/*+ In/Out: list pointing to the intervals         
 		mtx_free(mp);
 
 		if (!del_covered(mtm, &cur, essen)) {
-			return (itv_BX *) trios_error(MSG,
+			trios_error(MSG,
 						      "greedy_sel: del_covered() failed.");
+			return NULL;
 		}
 
 	}

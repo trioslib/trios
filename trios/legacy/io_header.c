@@ -1,5 +1,9 @@
 #include "string.h"
 #include "io_header.h"
+#include "trios_error.h"
+
+#include "stdlib.h"
+
 
 /* #define _DEBUG_ */
 
@@ -20,13 +24,14 @@ header_t *header_read(FILE * fd)
 		buffer[index1++] = (char)getc(fd);
 	while ((buffer[index1 - 1] != EOF) && (index1 < 64));
 
-	if (index1 != 64)
-		return (header_t *) trios_error(1,
-						"header_read: file is too short.");
+	if (index1 != 64) {
+		trios_error(1, "header_read: file is too short.");
+		return NULL;
+	}
 
 	if (!(aHeader = (header_t *) malloc(sizeof(header_t)))) {
-		return (header_t *) trios_error(1,
-						"header_read: memory alocation error.");
+		trios_error(1, "header_read: memory alocation error.");
+		return NULL;
 	}
 	strncpy(aHeader->fileType, buffer, 8);
 	aHeader->fileType[8] = 0;
@@ -96,8 +101,7 @@ int header_match(FILE * fd, const char *keyword)
 	/* read file header */
 	aHeader = header_read(fd);
 	if (!aHeader) {
-		return /*(apert_t *) */ trios_error(1,
-						    "header_match: header_head() failed.");
+		return trios_error(1, "header_match: header_head() failed.");
 	}
 #ifdef _DEBUG_
 	trios_debug("header_read() done");

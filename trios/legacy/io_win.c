@@ -1,6 +1,7 @@
 #include "trios_win.h"
 #include "trios_misc.h"
 #include "io_header.h"
+#include "trios_error.h"
 
 /* #define _DEBUG_ */
 /* #define _DEBUG_1_ */
@@ -26,13 +27,12 @@ window_t *win_read(char *fname)
 		return (window_t *) trios_error(1, "File (%s) open failed.",
 						fname);
 	}
-
 	/* read & check file header ------------------------------------------- */
 	if (!header_match(fd, "WINSPEC ")) {
 		fclose(fd);
 		return (window_t *) trios_error(1,
 						"File header does not match.");
-	}
+	} 
 #ifdef _DEBUG_
 	trios_debug("Leu header");
 #endif
@@ -40,13 +40,11 @@ window_t *win_read(char *fname)
 #ifdef _DEBUG_
 	trios_debug("vai entrar no read_win_data");
 #endif
-
 	if (NULL == (win = win_read_data(fd))) {
 		fclose(fd);
 		return (window_t *) trios_error(MSG,
 						"win_read: win_read_data() failed.");
 	}
-
 	fclose(fd);
 	return (win);
 }
@@ -70,13 +68,12 @@ window_t *win_read_data(FILE * fd)
 	nbands = 1;		/* default value */
 
 	while (!stop) {
-
 		while (((dot = (char)fgetc(fd)) != '.') && (dot != (char)EOF)) ;
 
 		if (dot == (char)EOF) {
 			fclose(fd);
-			return (window_t *) trios_error(1,
-							"Unexpected end of file. No tag found.");
+			trios_error(1, "Unexpected end of file. No tag found.");
+			return NULL;
 		}
 
 		tag = (char)fgetc(fd);
@@ -116,17 +113,14 @@ window_t *win_read_data(FILE * fd)
 							" File format error");
 		}
 	}
-
 	if (tags_read != 2) {
 		return (window_t *) trios_error(1,
 						"Window width or height is missing.");
 	}
-
 	if (NULL == (win = win_create(height, width, nbands))) {
 		return (window_t *) trios_error(MSG,
 						"win_read_data: win_create() failed.");
 	}
-
 	/* data reading */
 	for (k = 1; k <= nbands; k++) {
 		for (i = 0; i < height; i++) {
@@ -144,7 +138,6 @@ window_t *win_read_data(FILE * fd)
 					return (window_t *) trios_error(1,
 									"Data must be 0 or 1.");
 				}
-
 				if (!win_set_point(i, j, k, pt, win)) {
 					win_free(win);
 					return (window_t *) trios_error(MSG,

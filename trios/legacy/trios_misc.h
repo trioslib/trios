@@ -47,4 +47,7 @@ int set_freq(freq_node * freqlstin, freq_node ** freqlist);
 freq_node *freq_node_create(int label, unsigned int freq);
 void freqlist_free(freq_node * freq_list);
 
+int size_of_zpat(int wsize);
+
+
 #endif

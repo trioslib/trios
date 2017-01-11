@@ -1,5 +1,6 @@
 #include "trios_mtm.h"
 #include "trios_win.h"
+#include "trios_error.h"
 #include "io_header.h"
 
 /*!

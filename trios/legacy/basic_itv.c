@@ -3,6 +3,8 @@
 #include "trios_itv.h"
 #include "trios_misc.h"
 
+#include "trios_error.h"
+
  /*#define _DEBUG_ */
 
 /*

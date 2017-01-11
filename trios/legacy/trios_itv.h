@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include <trios_win.h>
+#include "trios_win.h"
 
 #define ISI_0 0
 #define ISI_1 1
