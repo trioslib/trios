@@ -31,7 +31,7 @@ cpdef np.ndarray fast_poly_kernel(double[:,:] X, double[:,:] Y, int degree=3):
 
 
 class NystromFeatures(FeatureExtractor):
-    def __init__(self, fext=None, imgset=None, n_components=100, kernel='poly', degree=3, gamma=1, **kw):
+    def __init__(self, fext=None, imageset=None, n_components=100, kernel='poly', degree=3, gamma=1, **kw):
         if fext is not None:
             super().__init__(fext.window, **kw)
         else:
@@ -42,9 +42,10 @@ class NystromFeatures(FeatureExtractor):
         self.degree = degree
         self.gamma = gamma
         self.dtype = np.float32
+        self.fext = fext
 
         if self.window is not None:
-            self.estimate_phi(imgset)
+            self.estimate_phi(imageset)
 
 
     def estimate_phi(self, imgset):
