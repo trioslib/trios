@@ -87,7 +87,13 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
             super(Imageset, self).append(example)
         elif len(example) == len(self[0]):
             super(Imageset, self).append(example) 
-        
+
+    def num_samples(self, win):
+        total = 0
+        for (_, _, m) in p.load_imageset(self, win):
+            total += len(np.nonzeros(m)[0])
+        return total
+
     def write(self, fname):
         """
         Writes Imageset to disk.
