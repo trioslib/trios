@@ -4,6 +4,7 @@ Contains Imageset related functions.
 
 import os.path
 import numpy as np
+import trios.shortcuts.persistence as p
 
 class Imageset(list):
     """
@@ -91,7 +92,7 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
     def num_samples(self, win):
         total = 0
         for (_, _, m) in p.load_imageset(self, win):
-            total += len(np.nonzeros(m)[0])
+            total += len(np.nonzero(m)[0])
         return total
 
     def write(self, fname):
