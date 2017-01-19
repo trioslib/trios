@@ -5,8 +5,11 @@ Contains Imageset related functions.
 import os.path
 import numpy as np
 import trios.shortcuts.persistence as p
+import collections
 
-class Imageset(list):
+ImagePair = collections.namedtuple('ImagePair', ['input', 'output', 'mask'])
+
+class Imageset:
     """
 An Imageset is a list of examples (tuples containing two or three strings). Each example contains the path of the input and ideal images and may contain a binary mask. Imageset is a subclass of list.
 
@@ -21,6 +24,46 @@ Every place that expects an Imageset will work with a simple list in the followi
 
 Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) converts the list to an Imageset.
     """
+    
+    def __init__(self, initial_iter=None, training_preffix='', test_preffix='',
+                 maks_preffix=''):
+        self.image_list = []
+        self.training_preffix = training_preffix
+        self.test_preffix = test_preffix
+        self.mask_preffix= maks_preffix
+        if initial_iter != None:
+            for pair in initial_iter:
+                self.append(pair)
+            
+    
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            return Imageset(self.image_list[key], self.training_preffix, 
+                            self.test_preffix, self.mask_preffix)
+        else:
+            return self.image_list[key]
+    
+    def get_full_path(self, i):
+        return (os.path.join(self.training_preffix, self.image_list[i][0]),
+                os.path.join(self.test_preffix, self.image_list[i][1]),
+                os.path.join(self.mask_preffix, self.image_list[i][2]))
+            
+    def append(self, example):
+        """
+        Adds an example to the Imageset. All examples must have the same number of images.
+        """
+        try:
+            example = ImagePair(example)
+        except TypeError:
+            raise TypeError('Object must be a tuple with three file names')
+    
+        self.image_list.append(example)
+    
+    def num_samples(self, win):
+        total = 0
+        for (_, _, m) in p.load_imageset(self, win):
+            total += len(np.nonzero(m)[0])
+        return total
     
     @staticmethod
     def __skip_blank(lines, count):
@@ -76,24 +119,7 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
         
         f.close()
         return imgset
-        
-    def append(self, example):
-        """
-        Adds an example to the Imageset. All examples must have the same number of images.
-        """
-        if len(example) != 2 and len(example) != 3:
-            return 
-    
-        if len(self) == 0:
-            super(Imageset, self).append(example)
-        elif len(example) == len(self[0]):
-            super(Imageset, self).append(example) 
 
-    def num_samples(self, win):
-        total = 0
-        for (_, _, m) in p.load_imageset(self, win):
-            total += len(np.nonzero(m)[0])
-        return total
 
     def write(self, fname):
         """
@@ -114,5 +140,3 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
             f.write('\n\n')
         
         f.close()
-        #Show?
-    
