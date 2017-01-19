@@ -53,7 +53,7 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
         Adds an example to the Imageset. All examples must have the same number of images.
         """
         try:
-            example = ImagePair(example)
+            example = ImagePair(*example)
         except TypeError:
             raise TypeError('Object must be a tuple with three file names')
     
