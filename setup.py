@@ -63,7 +63,9 @@ setup(
                  'Programming Language :: Python :: 2',
                  'Programming Language :: Python :: 3'],
     packages = ['trios', 'trios.feature_extractors', 'trios.classifiers', 'trios.legacy', 
-                'trios.window_determination', 'trios.shortcuts', 'trios.contrib', 'trios.contrib.kern_approx'],
+                'trios.window_determination', 'trios.shortcuts', 'trios.contrib', 'trios.contrib.kern_approx',
+                'trios.contrib.nilc'
+                ],
     install_requires=[
         'cython', 'cffi', 'numpy', 'scikit-learn', 'scipy', 'pillow'
     ], 
