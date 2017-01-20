@@ -151,6 +151,7 @@ def nilc(training_set1, training_set2, operator_generator, domain, lamb=1, max_i
     
     model_cv = LogisticRegressionCV(Cs=24, n_jobs=-1, penalty='l1', solver='liblinear')
     model_cv.fit(Z[:, nonzeros], y)
+    print('errCV', 1-model_cv.score(Z[:, nonzeros], y))
     
     # generates/takes first two operators. 
     # loop
