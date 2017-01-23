@@ -43,6 +43,9 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
         else:
             return self.image_list[key]
     
+    def __len__(self):
+        return len(self.image_list)
+    
     def get_full_path(self, i):
         return (os.path.join(self.input_preffix, self.image_list[i][0]),
                 os.path.join(self.output_preffix, self.image_list[i][1]),
