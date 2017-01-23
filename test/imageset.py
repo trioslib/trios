@@ -38,6 +38,12 @@ class ImagesetTest(unittest.TestCase):
         self.assertEqual(img2.input_preffix, img.input_preffix)
         self.assertEqual(img2.output_preffix, img.output_preffix)
         self.assertEqual(img2.mask_preffix, img.mask_preffix)
+        
+    def test_len(self):
+        imgset = trios.Imageset()
+        self.assertEqual(len(imgset), 0)
+        imgset.append(('asdl', '1sdf', 'ldkasl'))
+        self.assertEqual(len(imgset), 1)
     
 if __name__ == '__main__':
     unittest.main()
