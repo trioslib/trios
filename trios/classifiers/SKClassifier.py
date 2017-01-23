@@ -40,6 +40,9 @@ This class wraps scikit-learn models. Any classification model should work.
                 self.cls.fit(X2, y2)
             else:
                 self.cls.fit(X, y)
+    
+    def partial_train(self, X, y, kw):
+        return self.train((X, y), kw)
 
     def apply(self, fvector):
         return self.cls.predict(fvector.reshape(1, -1))[0]
