@@ -150,15 +150,6 @@ def nilc(training_set1, training_set2, operator_generator, domain, lamb=1, max_i
             assert operators[i] == all_ops[we[i]]
     
     model_cv = LogisticRegressionCV(Cs=24, n_jobs=-1, penalty='l1', solver='liblinear')
-    model_cv.fit(Z[:, nonzeros], y)
-    print('errCV', 1-model_cv.score(Z[:, nonzeros], y))
+    model_cv.fit(Z[:, valstate.nonzeros], y)
+    print('errCV', 1-model_cv.score(Z[:, valstate.nonzeros], y))
     
-    # generates/takes first two operators. 
-    # loop
-    # generates/takes new operator
-    # call nilc_iteration
-    # call stop_criteria to break the loop
-
-    # after all this computes a combination pattern with the selected operators
-    # and create a logistic regression CV object for the final classification.
-
