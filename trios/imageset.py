@@ -25,11 +25,11 @@ Every place that expects an Imageset will work with a simple list in the followi
 Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) converts the list to an Imageset.
     """
     
-    def __init__(self, initial_iter=None, training_preffix='', test_preffix='',
+    def __init__(self, initial_iter=None, input_preffix='', output_preffix='',
                  maks_preffix=''):
         self.image_list = []
-        self.training_preffix = training_preffix
-        self.test_preffix = test_preffix
+        self.input_preffix = input_preffix
+        self.output_preffix = output_preffix
         self.mask_preffix= maks_preffix
         if initial_iter != None:
             for pair in initial_iter:
@@ -38,14 +38,17 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
     
     def __getitem__(self, key):
         if isinstance(key, slice):
-            return Imageset(self.image_list[key], self.training_preffix, 
-                            self.test_preffix, self.mask_preffix)
+            return Imageset(self.image_list[key], self.input_preffix, 
+                            self.output_preffix, self.mask_preffix)
         else:
             return self.image_list[key]
     
+    def __len__(self):
+        return len(self.image_list)
+    
     def get_full_path(self, i):
-        return (os.path.join(self.training_preffix, self.image_list[i][0]),
-                os.path.join(self.test_preffix, self.image_list[i][1]),
+        return (os.path.join(self.input_preffix, self.image_list[i][0]),
+                os.path.join(self.output_preffix, self.image_list[i][1]),
                 os.path.join(self.mask_preffix, self.image_list[i][2]))
             
     def append(self, example):
