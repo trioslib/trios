@@ -30,6 +30,10 @@ import multiprocessing
 from functools import partial
 import itertools
 
+import logging
+logger = logging.getLogger('trios.WOperator')
+
+
 def worker_eval(t):
     self, window, imgset, nprocs, procnumber, bin = t
     if not window is None:
@@ -41,7 +45,8 @@ def worker_eval(t):
     errs = []
     for i in idx:
         inp, out, msk = imgset[i]
-        print('Testing', i, inp, out, file=sys.stderr)
+        if trios.show_eval_progress:
+            print('Testing', i, inp, out, file=sys.stderr)
 
         inp = sp.ndimage.imread(inp, mode='L')
         out = sp.ndimage.imread(out, mode='L')
@@ -97,7 +102,7 @@ class WOperator(Serializable):
             y, x = np.nonzero(mask[hh2:-hh2, ww2:-ww2])
             temp = self.extractor.temp_feature_vector()
             X = np.zeros((len(y), len(self.extractor)), temp.dtype)
-            self.extractor.extract_image(image, mask, X, 0)
+            self.extractor.extract_batch(image[hh2:-hh2, ww2:-ww2], y, x, X)
             ypred = self.classifier.apply_batch(X)
             res[y+hh2,x+ww2] = ypred
             return res
@@ -250,7 +255,6 @@ cdef class FeatureExtractor(Serializable):
             idx_i, idx_j = np.nonzero(msk)
             
             idx = sample[last_idx_sample:idx_sample] - k
-            #print(i, k, idx_sample, npixels[i], len(idx))
             
             self.extract_batch(inp, idx_i[idx], idx_j[idx], X[last_idx_sample:idx_sample])
             y[last_idx_sample:idx_sample] = out[idx_i[idx], idx_j[idx]]
@@ -346,7 +350,7 @@ co-ocurred with the pattern. See the example below. ::
         return k2 + k
 
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
-        raise NotImplementedError('extract needs to be implemented.')
+        raise NotImplementedError('Extract needs to be implemented.')
 
     def train(self, dataset):
         pass
