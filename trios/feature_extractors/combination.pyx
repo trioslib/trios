@@ -83,6 +83,7 @@ cdef class CombinationPattern(FeatureExtractor):
             self.procs = 1
 
         self.wops = list(wops)
+        self.fvectors = None
 
     def __len__(self):
         if self.bitpack:
@@ -147,6 +148,14 @@ cdef class CombinationPattern(FeatureExtractor):
 
         return k
 
+    @cython.boundscheck(False)
+    @cython.nonecheck(False)
+    cpdef extract_batch(self, unsigned char[:,:] inp, idx_i, idx_j, np.ndarray X):
+        if self.fvectors is None:
+            self.fvectors = [wop.extractor.temp_feature_vector() for wop in self.wops]
+            
+        for l in range(idx_i.shape[0]):
+            self.extract(inp, idx_i[l], idx_j[l], X[l])
 
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
         extract_pattern(self, img, i, j, pat)

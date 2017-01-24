@@ -113,7 +113,8 @@ class WOperator(Serializable):
         errors = []
         ll = list(zip(itertools.repeat(self), itertools.repeat(window), itertools.repeat(imgset), itertools.repeat(procs), range(procs), itertools.repeat(binary)))
         if trios.mp_support and procs > 1:
-            errors_p = multiprocessing.Pool(processes=procs)
+            ctx = multiprocessing.get_context('forkserver')
+            errors_p = ctx.Pool(processes=procs)
             errors = errors_p.map(worker_eval, ll)
             errors_p.close()
             errors_p.join()
@@ -346,7 +347,7 @@ co-ocurred with the pattern. See the example below. ::
         cdef int hh2 = self.window.shape[0]//2
         idx_i, idx_j = np.where(msk_np != 0)
         k2 = idx_i.shape[0]
-        self.extract_batch(inp, idx_i, idx_j, X[k:])
+        self.extract_batch(inp, idx_i, idx_j, X[k:k+k2])
         return k2 + k
 
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat):
