@@ -233,7 +233,7 @@ cdef class FeatureExtractor(Serializable):
         ''' Return feature vector length '''
         return 1
 
-    def extract_dataset_batch(self, imgset):
+    def extract_dataset_batch(self, imgset, with_reposition=False):
         npixels = []
         total_pixels = 0
         for (inp, out, msk) in p.load_imageset(imgset, self.window):
@@ -241,9 +241,12 @@ cdef class FeatureExtractor(Serializable):
             total_pixels += nmsk
             npixels.append(nmsk)
             
-        sample = np.random.randint(low=0, high=total_pixels, size=self.batch_size)
-        sample.sort()
-        
+        if with_reposition:
+            sample = np.random.randint(low=0, high=total_pixels, size=self.batch_size)
+            sample.sort()
+        else:
+            sample = np.random.permutation(total_pixels)[:self.batch_size]
+            sample.sort()
         
         k = 0
         idx_sample = 0
