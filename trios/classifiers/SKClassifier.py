@@ -16,8 +16,12 @@ class SKClassifier(Classifier):
     '''
 This class wraps scikit-learn models. Any classification model should work.
     '''
-    def __init__(self, cls=None, dtype=np.uint8, **kw):
+    def __init__(self, cls=None, dtype=np.uint8, minimize=False, ordered=True, 
+                 partial=False, **kw):
         super().__init__(self, **kw)
+        self.minimize = minimize
+        self.ordered = ordered
+        self.partial = partial
         self.cls = cls
         self.dtype = dtype
 
