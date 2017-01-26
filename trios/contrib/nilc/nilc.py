@@ -5,7 +5,7 @@ Hirata, N. S.T., Hirata Jr., R., ....*.
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
-from trios.classifiers import SKClassifier, LinearClassifier
+from trios.classifiers import LinearClassifier
 import collections
 import logging
 
@@ -13,7 +13,13 @@ from trios import WOperator
 from trios.feature_extractors import CombinationPattern
 
 logger = logging.getLogger('trios.contrib.nilc')
-ValState = collections.namedtuple('ValState', ['err', 'nonzeros', 'operators', 'age'])
+
+ValState = collections.namedtuple('ValState', ['err', 'nonzeros', 'operators', 
+'age'])
+
+ProgressInfo = collections.namedtuple('ProgressInfo', ['val_error', 
+                                                       'num_operators', 
+                                                       'best_iteration'])
 
 def stop_criteria(j):
     '''
@@ -30,48 +36,72 @@ def opt_condition(Z, y, w, lamb, j):
     logger.info('Optimality condition: %f', opt)
     return abs(opt) > 1
     
-def nilc_iteration(Z, y, w, nonzeros_plus_bias, j, operator, lamb, valstate, operators):
+def nilc_iteration(Z, y, w, nonzeros_plus_bias, j, operator, lamb, valstate, 
+                   operators, progress_info):
     '''
-    X: second-level patterns. 
+    |: second-level patterns. 
     y: labels
     w: weight vector
-    nonzeros: selected operators    
+    nonzeros_plus_bias: selected operators    
+    j: current operator/column
+    operator: current w-operator
     lamb: regularization parameter. C=1/lamb in sklearn
+    valstate: best validation performance
+    operators: current  combination of operators
+    progress_info: information about the progress of the method. useful for plots
     '''
     model = LogisticRegression(penalty='l1', C=1/lamb, fit_intercept=True)
     nonzeros = nonzeros_plus_bias[:-1]
-    if opt_condition(Z, y, w, lamb, j):
-        nonzeros[j] = True
-        operators.append(operator)
+
+    if j == 0:
+        nonzeros[0] = True
         model.fit(Z[:, nonzeros], y)
-        w[nonzeros_plus_bias] = model.coef_
+        w[0] = model.coef_
         w[-1] = model.intercept_
-        
-        ww = np.where(nonzeros)[0]
-        assert ww.shape[0] == len(operators)
-        operators_new = [op for i, op in enumerate(operators) if w[ww[i]] != 0]
-        operators.clear()
-        operators.extend(operators_new)
-        nonzeros_plus_bias[:-1] = w[:-1] != 0
-        
-        logger.info('Operator %d decreases the cost', j)
-        valstate = validation_step(Z, y, operators, nonzeros, valstate)
+        operators.append(operator)
+        progress_info.val_error.append(1-model.score(Z[:,[0]], y))
     else:
-        logger.info('Operator %d does not decrease the cost', j)
-        valstate = ValState(valstate.err, valstate.nonzeros, 
-                            valstate.operators, valstate.age+1)
+        if opt_condition(Z, y, w, lamb, j):
+            nonzeros[j] = True
+            operators.append(operator)
+            model.fit(Z[:, nonzeros], y)
+            w[nonzeros_plus_bias] = model.coef_
+            w[-1] = model.intercept_
+            
+            ww = np.where(nonzeros)[0]
+            operators_new = [op for i, op in enumerate(operators) if w[ww[i]] != 0]
+            operators.clear()
+            operators.extend(operators_new)
+            nonzeros_plus_bias[:-1] = w[:-1] != 0
+            
+            logger.info('Operator %d decreases the cost', j)
+            valstate, j_err = validation_step(Z, y, operators, nonzeros, valstate)
+            progress_info.val_error.append(j_err)
+        else:
+            logger.info('Operator %d does not decrease the cost', j)
+            valstate = ValState(valstate.err, valstate.nonzeros, 
+                                valstate.operators, valstate.age+1)
+    
+    progress_info.num_operators.append(np.sum(w!=0) - 1)
+    if valstate.age == 0:
+        progress_info.best_iteration.append(j)
+    else:
+        progress_info.best_iteration.append(progress_info.best_iteration[-1])
     return valstate
 
 
 def validation_step(Z, y, operators, nonzeros, valstate):
+    '''
+    Checkes if the last addition to w improves the results on a validation set.
+    '''
     model_no_reg = LogisticRegression(penalty='l1', C=1)
     model_no_reg.fit(Z[:, nonzeros], y)
     err = 1 - model_no_reg.score(Z[:, nonzeros], y)    
     if err < valstate.err:
-        return ValState(err, nonzeros.copy(), operators[:], 0)
+        return ValState(err, nonzeros.copy(), operators[:], 0), err
     
     return ValState(valstate.err, valstate.nonzeros, 
-                    valstate.operators, valstate.age+1)
+                    valstate.operators, valstate.age+1), err
 
 
 def nilc(training_set1, training_set2, operator_generator, domain, lamb=1, max_iter=100, max_age=5):
@@ -86,63 +116,31 @@ def nilc(training_set1, training_set2, operator_generator, domain, lamb=1, max_i
     nonzeros_plus_bias[-1] = True
     nonzeros = nonzeros_plus_bias[:-1]
     operators = []
-    all_ops = []
-    
-    model = LogisticRegression(penalty='l1', C=1/lamb, fit_intercept=True)
+
+    progress_info = ProgressInfo([], [], [])
     valstate = ValState(1.0, None, None, 0)
     
     for j, operator in enumerate(operator_generator(training_set1, domain)):
-        all_ops.append(operator)
         logger.info('Iteration %d', j)
         
         __X, y = operator.extractor.extract_dataset(training_set2, True)
         y = y/255
         Z[:, j] = operator.classifier.apply_batch(__X)
-
-        print(valstate)
-        if j == 0:
-            nonzeros[0] = True
-            model.fit(Z[:, nonzeros], y)
-            w[0] = model.coef_
-            w[-1] = model.intercept_
-            operators.append(operator)
-        else:
-            if opt_condition(Z, y, w, lamb, j):
-                nonzeros[j] = True
-                operators.append(operator)
-                model.fit(Z[:, nonzeros], y)
-                w[nonzeros_plus_bias] = model.coef_
-                w[-1] = model.intercept_
-                
-                ww = np.where(nonzeros)[0]
-                assert ww.shape[0] == len(operators)
-                operators = [op for i, op in enumerate(operators) if w[ww[i]] != 0]
-                nonzeros[:] = w[:-1] != 0
-                
-                logger.info('Operator %d decreases the cost', j)
-                valstate = validation_step(Z, y, operators, nonzeros, valstate)
-            else:
-                logger.info('Operator %d does not decrease the cost', j)
-                valstate = ValState(valstate.err, valstate.nonzeros, 
-                                    valstate.operators, valstate.age+1)
-
+        valstate = nilc_iteration(Z, y, w, nonzeros_plus_bias, j, operator, 
+                                  lamb, valstate, operators, progress_info)
+                                  
         logger.info('%d operators selected', nonzeros.sum())
+
         if j == max_iter-1 or valstate.age > max_age:
             break
 
-        we = np.where(nonzeros)[0]
-        print(nonzeros, we)
-        for i in range(we.shape[0]):
-            assert operators[i] == all_ops[we[i]]
-    print(valstate.nonzeros.shape, len(valstate.operators), Z.shape)
     model_cv = LogisticRegressionCV(Cs=24, n_jobs=-1, penalty='l1', solver='liblinear')
     model_cv.fit(Z[:, valstate.nonzeros], y)
-    print('errCV', 1-model_cv.score(Z[:, valstate.nonzeros], y))
-         
-    second_level_pattern = CombinationPattern(*valstate.operators)
     lin = LinearClassifier(model_cv.coef_.reshape(-1), model_cv.intercept_)
+     
+    second_level_pattern = CombinationPattern(*valstate.operators)    
     wop2 = WOperator(domain, lin, second_level_pattern)
     wop2.trained = True
     
-    return wop2
+    return wop2, progress_info
     
