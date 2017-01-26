@@ -29,10 +29,11 @@ def stop_criteria(j):
     return False
 
 def opt_condition(Z, y, w, lamb, j):
+    C = 1/(lamb*Z.shape[0])
     lin = Z.dot(w[:-1]) + w[-1]
     exp = np.exp(lin)
     p = exp/(1+exp)
-    opt = (1/lamb)*np.inner(Z[:, j], y-p)
+    opt = C*np.inner(Z[:, j], y-p)
     logger.info('Optimality condition: %f', opt)
     return abs(opt) > 1
     
@@ -50,7 +51,8 @@ def nilc_iteration(Z, y, w, nonzeros_plus_bias, j, operator, lamb, valstate,
     operators: current  combination of operators
     progress_info: information about the progress of the method. useful for plots
     '''
-    model = LogisticRegression(penalty='l1', C=1/lamb, fit_intercept=True)
+    C=1/(lamb*Z.shape[0])
+    model = LogisticRegression(penalty='l1', C=C, fit_intercept=True)
     nonzeros = nonzeros_plus_bias[:-1]
 
     if j == 0:
@@ -131,10 +133,10 @@ def nilc(training_set1, training_set2, operator_generator, domain, lamb=1, max_i
                                   
         logger.info('%d operators selected', nonzeros.sum())
 
-        if j == max_iter-1 or valstate.age > max_age:
+        if j == max_iter-1 or valstate.age >= max_age:
             break
 
-    model_cv = LogisticRegressionCV(Cs=24, n_jobs=-1, penalty='l1', solver='liblinear')
+    model_cv = LogisticRegressionCV(Cs=10, n_jobs=1, penalty='l1', solver='liblinear')
     model_cv.fit(Z[:, valstate.nonzeros], y)
     lin = LinearClassifier(model_cv.coef_.reshape(-1), model_cv.intercept_)
      
