@@ -118,7 +118,7 @@ def nilc_precomputed(Z, y, lamb=1, max_age=5):
     progress_info = ProgressInfo([], [], [])
     valstate = ValState(1.0, None, None, 0)
     
-    for j in Z.shape[1]:
+    for j in range(max_iter):
         logger.info('Iteration %d', j)
         
         valstate = nilc_iteration(Z, y, w, nonzeros_plus_bias, j, j, lamb, 
