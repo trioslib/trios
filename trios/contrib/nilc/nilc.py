@@ -85,7 +85,7 @@ def nilc_iteration(Z, y, w, nonzeros_plus_bias, j, operator, lamb, valstate,
                                 valstate.operators, valstate.age+1)
             progress_info.val_error.append(progress_info.val_error[-1])
     
-    progress_info.num_operators.append(np.sum(w!=0) - 1)
+    progress_info.num_operators.append(np.sum(w!=0) - 1*(w[-1] != 0))
     if valstate.age == 0:
         progress_info.best_iteration.append(j)
     else:
