@@ -8,6 +8,7 @@ import trios.shortcuts.persistence as p
 import trios.shortcuts.window as w
 
 if __name__ == '__main__':
+    np.random.seed(10)
     images = trios.Imageset.read('images/level1.set')
     images2 = trios.Imageset.read('images/level2.set')
     test = trios.Imageset.read('images/test.set')
