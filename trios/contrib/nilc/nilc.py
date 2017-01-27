@@ -133,7 +133,7 @@ def nilc_precomputed(Z, y, lamb=1, max_age=5):
     model_cv.fit(Z[:, valstate.nonzeros], y)
     lin = LinearClassifier(model_cv.coef_.reshape(-1), model_cv.intercept_)
     
-    return operators, lin, progress_info
+    return valstate.operators, lin, progress_info
 
 
 
