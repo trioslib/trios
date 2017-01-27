@@ -83,6 +83,7 @@ def nilc_iteration(Z, y, w, nonzeros_plus_bias, j, operator, lamb, valstate,
             logger.info('Operator %d does not decrease the cost', j)
             valstate = ValState(valstate.err, valstate.nonzeros, 
                                 valstate.operators, valstate.age+1)
+            progress_info.val_error.append(progress_info.val_error[-1])
     
     progress_info.num_operators.append(np.sum(w!=0) - 1)
     if valstate.age == 0:
