@@ -107,6 +107,36 @@ def validation_step(Z, y, operators, nonzeros, valstate):
                     valstate.operators, valstate.age+1), err
 
 
+def nilc_precomputed(Z, y, lamb=1, max_age=5):
+    max_iter = Z.shape[1]
+    w = np.zeros(max_iter+1)
+    nonzeros_plus_bias = np.zeros(max_iter+1, np.bool)
+    nonzeros_plus_bias[-1] = True
+    nonzeros = nonzeros_plus_bias[:-1]
+    operators = []
+
+    progress_info = ProgressInfo([], [], [])
+    valstate = ValState(1.0, None, None, 0)
+    
+    for j in Z.shape[1]:
+        logger.info('Iteration %d', j)
+        
+        valstate = nilc_iteration(Z, y, w, nonzeros_plus_bias, j, j, lamb, 
+                                  valstate, operators, progress_info)
+        
+        logger.info('%d operators selected', nonzeros.sum())
+
+        if j == max_iter-1 or valstate.age >= max_age:
+            break
+        
+    model_cv = LogisticRegressionCV(Cs=10, n_jobs=1, penalty='l1', solver='liblinear')
+    model_cv.fit(Z[:, valstate.nonzeros], y)
+    lin = LinearClassifier(model_cv.coef_.reshape(-1), model_cv.intercept_)
+    
+    return operators, lin, progress_info
+
+
+
 def nilc(training_set1, training_set2, operator_generator, domain, lamb=1, max_iter=100, max_age=5):
     '''
     Executes the NILC algorithm. Can be done with 
@@ -122,7 +152,7 @@ def nilc(training_set1, training_set2, operator_generator, domain, lamb=1, max_i
 
     progress_info = ProgressInfo([], [], [])
     valstate = ValState(1.0, None, None, 0)
-    
+
     for j, operator in enumerate(operator_generator(training_set1, domain)):
         logger.info('Iteration %d', j)
         
