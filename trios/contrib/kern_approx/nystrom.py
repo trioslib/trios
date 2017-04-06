@@ -18,22 +18,6 @@ def fast_poly_kernel(X, Y, degree=3):
     mat = power_elementwise(mat, X.shape[1], degree)
     return mat
 
-'''@cython.boundscheck(False)
-@cython.wraparound(False)
-@cython.cdivision(True)
-cpdef np.ndarray fast_poly_kernel(double[:,:] X, double[:,:] Y, int degree=3):
-    cdef int total_pix = X.shape[0] * Y.shape[0]
-    cdef int i, j, k
-    cdef double[:,:] mat = np.dot(X, Y.T)
-
-    with nogil:
-        for k in prange(total_pix):
-            i = k / Y.shape[0]
-            j = k % Y.shape[0]
-            mat[i, j] = cpow(mat[i, j]/X.shape[1] + 1, degree)
-    return np.asarray(mat)
-'''
-
 class NystromFeatures(FeatureExtractor):
     def __init__(self, fext=None, imageset=None, n_components=100, kernel='poly', degree=3, gamma=1, **kw):
         if fext is not None:
@@ -58,16 +42,6 @@ class NystromFeatures(FeatureExtractor):
         self.cached_rawbatch = None
         self.scaled = np.zeros(self.fext_pat.shape[0], np.float32)
 
-        '''Xtr, y = self.fext.extract_dataset(imgset, ordered=True)
-
-        self.mean = Xtr.mean(axis=0)
-        self.std = Xtr.std(axis=0)
-        self.std[self.std == 0] = 1e-12
-
-        # get n_components random rows from Xtr
-        idx = np.random.permutation(Xtr.shape[0])
-        Xbasis = (Xtr[idx[:self.n_components]] - self.mean)/self.std'''
-        
         Xtr, ytr = self.fext.extract_dataset_batch(imgset, False)
         self.mean = Xtr.mean(axis=0)
         self.std = Xtr.std(axis=0)
@@ -126,7 +100,6 @@ class NystromFeatures(FeatureExtractor):
         self.scaled = (self.fext_pat - self.mean)/self.std
         # compute kernel between self.fext_pat and Xtr
         if self.kernel == 'poly':
-            #K_y = polynomial_kernel(self.basis, self.scaled.reshape(1, -1), degree=self.degree).astype(np.float32)
             K_y = fast_poly_kernel(self.basis, self.scaled.reshape(1, -1), degree=self.degree).astype(self.dtype)
         else:
             K_y = rbf_kernel(self.basis, self.scaled.reshape(1, -1), gamma=self.gamma).astype(self.dtype)
@@ -146,9 +119,7 @@ class NystromFeatures(FeatureExtractor):
         Xscaled = rawbatch.astype(np.float64)
         Xscaled -= self.mean
         Xscaled /= self.std
-        #Xscaled = (Xscaled - self.mean)/self.std
         if self.kernel == 'poly':
-            #K_y2 = polynomial_kernel(Xscaled, self.basis, degree=self.degree).astype(np.float32)
             K_y = fast_poly_kernel(Xscaled, self.basis, degree=self.degree).astype(self.dtype)
         else:
             K_y = rbf_kernel(Xscaled, self.basis, gamma=self.gamma).astype(self.dtype)
