@@ -1,1 +1,1 @@
-from .nystrom_features import NystromFeatures
+from .nystrom import NystromFeatures

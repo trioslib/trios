@@ -67,7 +67,7 @@ setup(
                 'trios.contrib.nilc'
                 ],
     install_requires=[
-        'cython', 'cffi', 'numpy', 'scikit-learn', 'scipy', 'pillow'
+        'cython', 'cffi', 'numpy', 'scikit-learn', 'scipy', 'pillow', 'numba'
     ], 
     ext_modules = extensions,
     cffi_modules = ['trios/legacy/build_legacy.py:c_code'],
