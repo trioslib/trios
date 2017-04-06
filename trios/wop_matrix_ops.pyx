@@ -104,6 +104,7 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
     
     cdef np.ndarray X
     cdef np.ndarray temp
+    cdef np.ndarray msk_np
     cdef unsigned char[:,:] win = extractor.window
     
     hh = win.shape[0]; ww = win.shape[1]
@@ -135,8 +136,14 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
                 if msk[i, j] > 0:
                     y[k2] = out[i, j]
                     k2 += 1
-        k = extractor.extract_image(inp, msk, X, k)
-        assert k2 == k2
+        
+
+        msk_np = np.asarray(msk, dtype=np.uint8)
+        idx_i, idx_j = np.where(msk_np != 0)
+        #y[k:k+idx_i.shape[0]] = out[idx_i,idx_j]
+        extractor.extract_batch(inp, idx_i, idx_j, X[k:k+idx_i.shape[0]])
+        #k = extractor.extract_image(inp, msk, X, k)
+        assert k2 == k+idx_i.shape[0]
         
     return X, y
 

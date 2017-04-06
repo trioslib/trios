@@ -300,40 +300,6 @@ co-ocurred with the pattern. See the example below. ::
             process_image(dataset, self.window, inp, out, msk, self)
         return dataset
 
-    def extract_ordered(self, inp, msk, out=None, random=False):
-        ''' extract all the patterns from inp image (limited to msk)
-        if batch_size == None it returns all patterns found.
-        otherwise it returns a generator that yields batch_size patterns per iteration.
-
-        If random the generator yields patterns in random order.
-        '''
-        nmsk = np.sum(msk != 0)
-        bs = nmsk if self.batch_size == 0 else min(self.batch_size, nmsk)
-        idx_i, idx_j = np.where(msk != 0)
-        if random:
-            idx = np.random.permutation(nmsk)
-            idx_ir = idx_i[idx]
-            idx_jr = idx_j[idx]
-        else:
-            idx_ir = idx_i
-            idx_jr = idx_j
-        batch_X = np.zeros((bs, len(self)), self.dtype)
-        if out is not None: # extract training data
-            batch_y = np.zeros(bs, np.uint8)
-            for k in range(0, idx_i.shape[0], bs):
-                lim = min(bs, idx_ir.shape[0] - k)
-                self.extract_batch(inp, idx_ir[k:k+bs], idx_jr[k:k+bs], batch_X[:lim])
-                for l in range(lim):
-                    batch_y[l] = out[idx_ir[k+l], idx_jr[k+l]]
-
-                yield batch_X[:lim], batch_y[:lim]
-
-        else: # extract test/application data
-            for k in range(0, idx_i.shape[0], bs):
-                for l in range(bs):
-                    self.extract(inp, idx_i[k], idx_j[k], batch_X[k+l])
-                yield batch_X
-
     def temp_feature_vector(self):
         '''
         Creates a vector of the correct size and type for a specific FeatureExtractor.
