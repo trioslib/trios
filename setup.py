@@ -16,7 +16,7 @@ else:
 
 import numpy as np
 
-includes = [np.get_include()]#, 'C:/Users/Igor/Miniconda3/includes']
+includes = [np.get_include()]
 if platform.system() != 'Windows':
     extra_compile_args = ['-fopenmp']
     extra_link_args = ['-fopenmp']
@@ -36,9 +36,6 @@ extensions = [
                     'trios/util'+ext]),
             Extension('trios.serializable', [
                     'trios/serializable'+ext]),
-            Extension('trios.contrib.kern_approx.nystrom_features', [
-                    'trios/contrib/kern_approx/nystrom_features'+ext
-            ]),
             Extension('trios.window_determination.relief', [
                     'trios/window_determination/relief'+ext
                     ])]
