@@ -5,3 +5,4 @@ except:
 	pass
 from .combination import CombinationPattern
 from .aperture import *
+from .lbp import *
