@@ -127,23 +127,15 @@ cpdef process_image_ordered(imageset, FeatureExtractor extractor):
     temp = extractor.temp_feature_vector()
     X = np.zeros((npixels, len(extractor)), temp.dtype)
     y = np.zeros(npixels, np.uint8)
-    
     k = 0
     for (inp, out, msk) in p.load_imageset(imageset, win):
-        k2 = k
-        for i in range(hh2, out.shape[0]-hh2):
-            for j in range(ww2, out.shape[1]-ww2):
-                if msk[i, j] > 0:
-                    y[k2] = out[i, j]
-                    k2 += 1
-        
-
         msk_np = np.asarray(msk, dtype=np.uint8)
-        idx_i, idx_j = np.where(msk_np != 0)
-        #y[k:k+idx_i.shape[0]] = out[idx_i,idx_j]
+        out_np = np.asarray(out, dtype=np.uint8)
+        idx_i, idx_j = np.nonzero(msk_np)
+        y[k:k+idx_i.shape[0]] = out_np[idx_i,idx_j]
         extractor.extract_batch(inp, idx_i, idx_j, X[k:k+idx_i.shape[0]])
-        #k = extractor.extract_image(inp, msk, X, k)
-        assert k2 == k+idx_i.shape[0]
+        k += idx_i.shape[0]
+        
         
     return X, y
 
