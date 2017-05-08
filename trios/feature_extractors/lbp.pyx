@@ -8,7 +8,6 @@ from trios.WOperator cimport FeatureExtractor, raw_data
 from trios.serializable import Serializable
 from trios.serializable cimport Serializable
 from trios.feature_extractors.raw cimport RAWFeatureExtractor
-import trios.shortcuts.persistence as p
 
 cdef class LBPExtractor(RAWFeatureExtractor):
 
@@ -33,7 +32,6 @@ cdef class LBPExtractor(RAWFeatureExtractor):
 
         for l in range(idx_im.shape[0]):
             lbp_img[idx_im[l], idx_jm[l]] = self.calculate_lbp(inp, idx_im[l], idx_jm[l])
-        p.save_image(lbp_img, "lbp.png")
         for l in range(idx_i.shape[0]):
             self.extract(lbp_img, idx_i[l], idx_j[l], X[l])
 
