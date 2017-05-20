@@ -11,6 +11,12 @@ from trios.feature_extractors.raw cimport RAWFeatureExtractor
 
 cdef class LBPExtractor(RAWFeatureExtractor):
 
+    def __init__(self, unsigned char[:,:] window=None, double mul=1.0, **kw):
+        cdef unsigned char[:,:] new_window = window[1:-1, 1:-1]
+        FeatureExtractor.__init__(self, new_window, **kw)
+        self.dtype = np.uint8
+        self.mul = mul
+
     def calculate_lbp(self, unsigned char[:,:] img, int i, int j):
         cdef int lbp[8]
         H = img.shape[0]
