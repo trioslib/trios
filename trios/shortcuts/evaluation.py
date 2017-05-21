@@ -59,4 +59,16 @@ def compare_folders(testset, res_folder, binary=True):
     else:
         return perf[0] / perf[1]
     
+def binary_evaluation(op, test):
+    '''
+    Computes the Recall, precision, specificity and F1 measures
+    for the given operator and the given testset
+    '''
+    TP, TN, FP, FN = op.eval(test, binary=True)
+    recall = TP / (TP + FN)
+    precision = TP / (TP + FP)
+    specificity = TN / (TN + FP)
+    F1 = 2 * (precision * recall) / (precision + recall)
+    return recall, precision, specificity, F1
     
+
