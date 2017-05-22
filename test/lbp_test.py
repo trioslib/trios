@@ -1,8 +1,4 @@
-import pyximport
-pyximport.install()
-
 from trios.classifiers import SKClassifier
-from trios.classifiers.svm import SVM
 from sklearn.tree import DecisionTreeClassifier
 from trios.feature_extractors import LBPExtractor
 import trios
