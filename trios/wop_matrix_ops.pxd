@@ -9,7 +9,7 @@ import numpy as np
 
 cimport cython
 
-from WOperator cimport FeatureExtractor
+from trios.feature_extractors.base_extractor cimport FeatureExtractor
 from trios.classifiers.base_classifier cimport Classifier
 
 cpdef unsigned char[:,:] apply_loop(unsigned char[:,:] window, np.ndarray[unsigned char, ndim=2] image, np.ndarray[unsigned char, ndim=2] mask, Classifier classifier, FeatureExtractor extractor)

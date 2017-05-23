@@ -1,8 +1,8 @@
 import numpy as np
 
 import cython
-from trios.WOperator import WOperator
-from trios.WOperator cimport FeatureExtractor
+import trios.woperator
+from trios.feature_extractors.base_extractor cimport FeatureExtractor, raw_data
 from trios.classifiers.base_classifier cimport Classifier
 import math
 
@@ -10,8 +10,6 @@ import multiprocessing as mp
 from multiprocessing import sharedctypes
 import ctypes
 import itertools
-
-from trios.wop_matrix_ops import process_one_image
 
 import trios
 
@@ -180,6 +178,6 @@ cdef class CombinationPattern(FeatureExtractor):
         n = obj_dict['nwops']
         self.wops = []
         for i in range(n):
-            op = WOperator.read(obj_dict['operator_%d'%i])
+            op = trios.woperator.WOperator.read(obj_dict['operator_%d'%i])
             self.wops.append(op)
 

@@ -1,6 +1,5 @@
 import cython
-from serializable cimport Serializable
-
+from trios.serializable cimport Serializable
 cimport numpy as np
 cimport cython
 

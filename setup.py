@@ -9,7 +9,7 @@ try:
 except ImportError:
     use_cython = False
 
-if os.path.exists('trios/WOperator.pyx'):
+if os.path.exists('trios/util.pyx'):
     ext = '.pyx'
 else:
     ext = '.c'
@@ -22,10 +22,12 @@ if platform.system() != 'Windows':
     extra_link_args = ['-fopenmp']
 
 extensions = [
-            Extension('trios.WOperator', [
-                    'trios/WOperator'+ext]),
+            #Extension('trios.woperator', [
+            #        'trios/woperator'+ext]),
             Extension('trios.classifiers.base_classifier', [
                     'trios/classifiers/base_classifier'+ext]),                    
+            Extension('trios.feature_extractors.base_extractor', [
+                    'trios/feature_extractors/base_extractor'+ext]),
             Extension('trios.feature_extractors.raw', [
                     'trios/feature_extractors/raw'+ext]),
             Extension('trios.feature_extractors.aperture', [
