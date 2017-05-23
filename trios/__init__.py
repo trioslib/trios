@@ -1,5 +1,5 @@
 from trios.imageset import *
-from trios.WOperator import *
+from trios.woperator import WOperator
 
 import platform
 

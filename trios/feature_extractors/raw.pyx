@@ -3,8 +3,7 @@ cimport numpy as np
 import numpy as np
 cimport cython
 
-from trios.WOperator import FeatureExtractor
-from trios.WOperator cimport FeatureExtractor, raw_data
+from trios.feature_extractors.base_extractor cimport FeatureExtractor, raw_data
 from trios.serializable import Serializable
 from trios.serializable cimport Serializable
 

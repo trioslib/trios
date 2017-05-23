@@ -8,7 +8,7 @@ Created on Fri May 15 12:22:04 2015
 
 import numpy as np
 import sklearn
-from trios.WOperator import Classifier
+from .base_classifier import Classifier
 from trios import util
 import pickle
 

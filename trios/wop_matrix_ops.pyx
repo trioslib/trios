@@ -8,8 +8,8 @@ from __future__ import print_function
 cimport numpy as np
 import numpy as np
 cimport cython
-
-from WOperator cimport FeatureExtractor, Classifier
+from trios.feature_extractors.base_extractor cimport FeatureExtractor
+from trios.classifiers.base_classifier cimport Classifier
 import trios.shortcuts.persistence as p
 
 import scipy as sp

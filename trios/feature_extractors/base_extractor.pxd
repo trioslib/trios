@@ -1,6 +1,5 @@
 import cython
-from serializable cimport Serializable
-
+from trios.serializable cimport Serializable
 cimport numpy as np
 cimport cython
 
@@ -18,11 +17,3 @@ cdef class FeatureExtractor(Serializable):
     cpdef extract(self, unsigned char[:,:] img, int i, int j, pat)
     cpdef extract_batch(self, unsigned char[:,:] inp, idx_i, idx_j, np.ndarray X)
     cpdef extract_image(self, unsigned char[:,:] inp, unsigned char[:,:] msk, np.ndarray X, int k)
-
-cdef class Classifier(Serializable):
-    cdef public bint minimize, ordered, partial
-
-    cpdef train(self, dataset, kw)
-    cpdef partial_train(self, X, y, kw)
-    cpdef apply(self, fvector)
-    cpdef apply_batch(self, fmatrix)
