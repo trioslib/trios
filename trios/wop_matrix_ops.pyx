@@ -9,7 +9,8 @@ cimport numpy as np
 import numpy as np
 cimport cython
 
-from WOperator cimport FeatureExtractor, Classifier
+from WOperator cimport FeatureExtractor
+from trios.classifiers.base_classifier cimport Classifier
 import trios.shortcuts.persistence as p
 
 import scipy as sp

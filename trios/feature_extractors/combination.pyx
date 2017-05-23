@@ -2,7 +2,8 @@ import numpy as np
 
 import cython
 from trios.WOperator import WOperator
-from trios.WOperator cimport FeatureExtractor, Classifier
+from trios.WOperator cimport FeatureExtractor
+from trios.classifiers.base_classifier cimport Classifier
 import math
 
 import multiprocessing as mp

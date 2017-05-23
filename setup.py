@@ -24,6 +24,8 @@ if platform.system() != 'Windows':
 extensions = [
             Extension('trios.WOperator', [
                     'trios/WOperator'+ext]),
+            Extension('trios.classifiers.base_classifier', [
+                    'trios/classifiers/base_classifier'+ext]),                    
             Extension('trios.feature_extractors.raw', [
                     'trios/feature_extractors/raw'+ext]),
             Extension('trios.feature_extractors.aperture', [
