@@ -31,7 +31,7 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
         self.input_preffix = input_preffix
         self.output_preffix = output_preffix
         self.mask_preffix= maks_preffix
-        if initial_iter != None:
+        if not initial_iter is None:
             for pair in initial_iter:
                 self.append(pair)
             
