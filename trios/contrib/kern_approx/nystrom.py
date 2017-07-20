@@ -1,6 +1,7 @@
 from trios.feature_extractors import RAWFeatureExtractor
-from trios.feature_extractors.base_extractor cimport FeatureExtractor, raw_data
+from trios.feature_extractors.base_extractor import FeatureExtractor
 from sklearn.metrics.pairwise import rbf_kernel
+
 from numpy.linalg import eigh
 import numpy as np
 import numpy.random
