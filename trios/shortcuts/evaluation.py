@@ -69,7 +69,8 @@ def binary_evaluation(op, test, procs=2):
     recall = TP / (TP + FN)
     precision = TP / (TP + FP)
     specificity = TN / (TN + FP)
+    neg_pred = TN / (TN + FN)
     F1 = 2 * (precision * recall) / (precision + recall)
-    return acc, recall, precision, specificity, F1
+    return acc, recall, precision, specificity, neg_pred, F1
     
 
