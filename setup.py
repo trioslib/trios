@@ -38,8 +38,8 @@ extensions = [
                     'trios/serializable'+ext]),
             Extension('trios.window_determination.relief', [
                     'trios/window_determination/relief'+ext]),
-            Extension('trios.feature_extractors.lbp',[ 
-                'trios/feature_extractors/lbp'+ext])]
+            Extension('trios.contrib.features.lbp',[ 
+                'trios/contrib/features/lbp'+ext])]
 
 for extt in extensions:
     extt.include_dirs += includes
