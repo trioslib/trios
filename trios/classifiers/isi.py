@@ -3,7 +3,7 @@ from __future__ import unicode_literals, division
 from trios.legacy._legacy import lib as v1
 from trios.legacy._legacy import ffi
 import trios.legacy.io as lio
-from trios.WOperator import Classifier
+from .base_classifier import Classifier
 import numpy as np
 
 import trios.util
