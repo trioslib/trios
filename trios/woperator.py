@@ -94,6 +94,8 @@ class WOperator(Serializable):
 
     def apply(self, image, mask):
         if self.batch:
+            if mask is None:
+                mask = np.ones_like(image)
             res = np.zeros(image.shape, np.uint8)
             ww2 = max(self.window.shape[1]//2, 1)
             hh2 = max(self.window.shape[0]//2, 1)
