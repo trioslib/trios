@@ -3,8 +3,8 @@ import numpy as np
 cimport cython
 import skimage.morphology as sk
 
-from trios.WOperator import FeatureExtractor
-from trios.WOperator cimport FeatureExtractor, raw_data
+
+from trios.feature_extractors.base_extractor cimport FeatureExtractor, raw_data
 from trios.serializable import Serializable
 from trios.serializable cimport Serializable
 from trios.feature_extractors.raw cimport RAWFeatureExtractor
