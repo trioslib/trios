@@ -1,6 +1,6 @@
 from trios.classifiers import SKClassifier
 from sklearn.tree import DecisionTreeClassifier
-from trios.feature_extractors import LBPExtractor
+from trios.contrib.features.lbp import LBPExtractor
 import trios
 import numpy as np
 import trios.shortcuts.persistence as p
