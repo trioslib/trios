@@ -65,10 +65,11 @@ def binary_evaluation(op, test, procs=2):
     for the given operator and the given testset
     '''
     TP, TN, FP, FN = op.eval(test, binary=True, procs=procs)
+    acc = (TP + TN)/(TP + TN + FP + FN)
     recall = TP / (TP + FN)
     precision = TP / (TP + FP)
     specificity = TN / (TN + FP)
     F1 = 2 * (precision * recall) / (precision + recall)
-    return recall, precision, specificity, F1
+    return acc, recall, precision, specificity, F1
     
 
