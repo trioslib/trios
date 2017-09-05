@@ -8,12 +8,18 @@ import scipy.ndimage
 
 from trios.wop_matrix_ops import process_image, process_image_ordered
 
+import sys
+
 cdef class FeatureExtractor(Serializable):
     '''
     A FeatureExtractor extracts feature from an Imageset using a finite neighborhood
     called *window*. The number and type of features extracted depend on the size of
     the window and on which processing each subclass of FeatureExtractor executes.
     '''
+    
+    bibtex_citation = '''
+'''
+    
     def __init__(self, unsigned char[:,:] window=None, batch_size=0, dtype=np.float):
         '''
         Every FeatureExtractor must receive a window (numpy array of type np.uint8) in
@@ -132,4 +138,4 @@ co-ocurred with the pattern. See the example below. ::
             self.batch_size = obj_dict['batch_size']
         else:
             self.batch_size = 0
-
+            

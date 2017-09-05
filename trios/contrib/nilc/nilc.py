@@ -3,6 +3,16 @@ This module execute the NILC algorithm as proposed in *Montagner, I. S.,
 Hirata, N. S.T., Hirata Jr., R., ....*.
 '''
 
+bibtex_citation = '''
+@inproceedings{montagner2016nilc,
+  title={NILC: a two level learning algorithm with operator selection},
+  author={Montagner, Igor S and Hirata, Nina ST and Hirata, Roberto and Canu, St{\'e}phane},
+  booktitle={Image Processing (ICIP), 2016 IEEE International Conference on},
+  pages={1873--1877},
+  year={2016},
+  organization={IEEE}
+}'''
+
 import numpy as np
 from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
 from trios.classifiers import LinearClassifier
@@ -132,6 +142,7 @@ def nilc_precomputed(Z, y, lamb=1, max_age=5):
     model_cv = LogisticRegressionCV(Cs=10, n_jobs=1, penalty='l1', solver='liblinear')
     model_cv.fit(Z[:, valstate.nonzeros], y)
     lin = LinearClassifier(model_cv.coef_.reshape(-1), model_cv.intercept_)
+    lin.bibtex_citation += bibtex_citation
     
     return valstate.operators, lin, progress_info
 
@@ -173,6 +184,7 @@ def nilc(training_set1, training_set2, operator_generator, domain, lamb=1, max_i
      
     second_level_pattern = CombinationPattern(*valstate.operators)    
     wop2 = WOperator(domain, lin, second_level_pattern)
+    wop2.bibtex_citation += bibtex_citation
     wop2.trained = True
     
     return wop2, progress_info

@@ -8,6 +8,9 @@ cdef class Classifier(Serializable):
     '''
     Classifies patterns extracted from the images. This is an abstract class.
     '''
+    
+    bibtex_citation = ''
+    
     def __init__(self, *a, **kw):
         r'''
         Classifiers have two basic attributes: minimize and ordered.
@@ -53,3 +56,4 @@ cdef class Classifier(Serializable):
         for i in range(fmatrix.shape[0]):
             y[i] = self.apply(fmatrix[i])
         return y
+    

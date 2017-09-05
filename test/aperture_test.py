@@ -27,3 +27,4 @@ if __name__ == '__main__':
     out = op.apply(img, img)
     p.save_image(out, 'out-ap-einstein.png')
     
+    print(op2.cite_me())

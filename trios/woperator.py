@@ -67,6 +67,23 @@ class WOperator(Serializable):
     (i) its neighborhood (Window) of the operator;
     (ii) the classifier used (defined in the Classifier class).
     '''
+    
+    bibtex_citation = '''
+@inproceedings{montagner2016image,
+  title={Image operator learning and applications},
+  author={Montagner, Igor S and Hirata, Nina ST and Hirata, Roberto},
+  booktitle={Graphics, Patterns and Images Tutorials (SIBGRAPI-T), SIBGRAPI Conference on},
+  pages={38--50},
+  year={2016},
+  organization={IEEE}
+}
+'''
+
+    
+    def cite_me(self):
+        return '\n'.join([self.bibtex_citation, self.extractor.bibtex_citation,
+                         self.classifier.bibtex_citation])
+    
     def __init__(self, window=None, cls=None, fext=None, batch=True):
         self.window = window
         if inspect.isclass(cls):

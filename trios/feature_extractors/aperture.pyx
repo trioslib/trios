@@ -10,6 +10,17 @@ cdef class Aperture(RAWFeatureExtractor):
     This feature extractor is based on the work on Aperture operators (or WK-operators, cite).
     It is used to introduce a
     '''
+    
+    bibtex_citation = '''
+@article{hirata2006aperture,
+  title={Aperture filters: theory, application, and multiresolution analysis},
+  author={Hirata Jr, Roberto and Brun, Marcel and Barrera, Junior and Dougherty, Edward R},
+  journal={Advances in Nonlinear Signal and Image Processing},
+  pages={15--45},
+  year={2006}
+}
+    '''
+    
     def __init__(self, window=None, k=1, center=None, mul=1.0, **kw):
         RAWFeatureExtractor.__init__(self, window, mul, **kw)
         self.k = k

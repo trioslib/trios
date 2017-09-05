@@ -27,3 +27,5 @@ if __name__ == '__main__':
     
     test = trios.Imageset.read('images/test.set')
     print('Accuracy', op.eval(test, procs=7))
+    
+    print(op2.cite_me())

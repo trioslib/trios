@@ -60,6 +60,21 @@ cdef class CombinationPattern(FeatureExtractor):
     cdef public list fvectors
     cdef public int procs
 
+
+    bibtex_citation = '''
+@article{hirata2009multilevel,
+  title={Multilevel training of binary morphological operators},
+  author={Hirata, Nina ST},
+  journal={IEEE Transactions on pattern analysis and machine intelligence},
+  volume={31},
+  number={4},
+  pages={707--720},
+  year={2009},
+  publisher={IEEE}
+}
+
+    '''
+
     def __init__(self,  *wops, **kwargs):
         if len(wops) > 0:
             union = np.zeros_like(wops[0].window)
