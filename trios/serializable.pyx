@@ -13,7 +13,6 @@ except ImportError:
 import importlib
 
 def rebuild_serializable(obj_dict):
-    #print(obj_dict, type(obj_dict))
     return Serializable.read(obj_dict)
 
 cdef class Serializable:
@@ -30,6 +29,11 @@ cdef class Serializable:
         obj_dict = {}
         obj_dict['class_name'] = self.__class__.__name__
         obj_dict['class_module'] = self.__class__.__module__
+        
+        try:
+            obj_dict['bibtex_citation'] = self.bibtex_citation
+        except AttributeError:
+            pass
         
         obj_dict['state'] = {}
         self.write_state(obj_dict['state'])
@@ -57,6 +61,10 @@ cdef class Serializable:
         module = importlib.import_module(obj_dict['class_module'])
         class_obj = getattr(module, obj_dict['class_name'])
         obj = class_obj()
+
+        if 'bibtex_citation' in obj_dict:
+            obj.bibtex_citation = obj_dict['bibtex_citation']
+
         obj.set_state(obj_dict['state'])
         
         return obj

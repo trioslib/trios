@@ -68,16 +68,14 @@ class WOperator(Serializable):
     (ii) the classifier used (defined in the Classifier class).
     '''
     
-    bibtex_citation = '''
-@inproceedings{montagner2016image,
+    bibtex_citation = '''@inproceedings{montagner2016image,
   title={Image operator learning and applications},
   author={Montagner, Igor S and Hirata, Nina ST and Hirata, Roberto},
   booktitle={Graphics, Patterns and Images Tutorials (SIBGRAPI-T), SIBGRAPI Conference on},
   pages={38--50},
   year={2016},
   organization={IEEE}
-}
-'''
+}'''
 
     
     def cite_me(self):
