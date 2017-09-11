@@ -63,7 +63,10 @@ cdef class Serializable:
         obj = class_obj()
 
         if 'bibtex_citation' in obj_dict:
-            obj.bibtex_citation = obj_dict['bibtex_citation']
+            try:
+                obj.bibtex_citation = obj_dict['bibtex_citation']
+            except AttributeError:
+                pass
 
         obj.set_state(obj_dict['state'])
         

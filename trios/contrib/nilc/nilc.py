@@ -3,8 +3,7 @@ This module execute the NILC algorithm as proposed in *Montagner, I. S.,
 Hirata, N. S.T., Hirata Jr., R., ....*.
 '''
 
-bibtex_citation = '''
-@inproceedings{montagner2016nilc,
+bibtex_citation = '''@inproceedings{montagner2016nilc,
   title={NILC: a two level learning algorithm with operator selection},
   author={Montagner, Igor S and Hirata, Nina ST and Hirata, Roberto and Canu, St{\'e}phane},
   booktitle={Image Processing (ICIP), 2016 IEEE International Conference on},
