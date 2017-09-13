@@ -14,7 +14,6 @@ if __name__ == '__main__':
 
     img= p.load_image('images/jung-1a.png')
     lbp = op.apply(img, img)
-    p.save_image(lbp, 'lbp-out.png')
 
     test = trios.Imageset.read('images/test.set')
     print('Accuracy', op.eval(test, procs=7))
