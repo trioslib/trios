@@ -29,7 +29,7 @@ def apply_and_save(operator, testset, folder_prefix, procs=None):
     
     pass
 
-def compare_folders(testset, res_folder, binary=True):
+def compare_folders(testset, res_folder, binary=True, per_image=False):
     '''
     Computes the accuracy of a set of processed images saved
     on the disk. Takes as input a testset and the folder where the
@@ -37,6 +37,7 @@ def compare_folders(testset, res_folder, binary=True):
     the accuracy.
     '''
     
+    err_images = []
     if binary:
         perf = np.zeros(5, np.uint32)
     else:
@@ -52,8 +53,13 @@ def compare_folders(testset, res_folder, binary=True):
             perf_i = compare_images_binary(out, msk, res, 0, 0)
         else:
             perf_i = compare_images(out, msk, res, 0, 0)
+
+        if per_image:
+            err_images.append(perf_i)
         perf = perf + np.asarray(perf_i)
     
+    if per_image:
+        return err_images
     if binary:
         return perf[:4]
     else:
