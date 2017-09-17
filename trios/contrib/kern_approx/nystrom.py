@@ -1,3 +1,7 @@
+
+
+
+
 from trios.feature_extractors import RAWFeatureExtractor
 from trios.feature_extractors.base_extractor import FeatureExtractor
 from sklearn.metrics.pairwise import rbf_kernel
@@ -20,6 +24,17 @@ def fast_poly_kernel(X, Y, degree=3):
     return mat
 
 class NystromFeatures(FeatureExtractor):
+    bibtex_citation = '''
+@inproceedings{montagner2016kernel,
+  title={Kernel Approximations for W-operator learning},
+  author={Montagner, Igor S and Hirata, Roberto and Hirata, Nina ST and Canu, St{\'e}phane},
+  booktitle={Graphics, Patterns and Images (SIBGRAPI), 2016 29th SIBGRAPI Conference on},
+  pages={386--393},
+  year={2016},
+  organization={IEEE}
+}'''
+    
+    
     def __init__(self, fext=None, imageset=None, n_components=100, kernel='poly', degree=3, gamma=1, **kw):
         if fext is not None:
             super().__init__(fext.window, **kw)

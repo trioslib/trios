@@ -39,3 +39,5 @@ if __name__ == '__main__':
     p.save_image(out, 'out-isi-jung-1a.png')
     
     print('Accuracy', wop2.eval(test, procs=1))
+
+    print(wop2.cite_me())
