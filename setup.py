@@ -49,8 +49,9 @@ extensions = [
             Extension('trios.contrib.features.fourier',[ 
                 'trios/contrib/features/fourier'+ext]),
             Extension('trios.contrib.features.sobel',[ 
-                'trios/contrib/features/sobel'+ext])
-            ]
+                'trios/contrib/features/sobel'+ext]),
+            Extension('trios.contrib.features.featurecombination', [
+                'trios/contrib/features/featurecombination'+ext])]
 
 for extt in extensions:
     extt.include_dirs += includes
