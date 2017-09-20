@@ -13,3 +13,5 @@ site/output
 trios/*.c
 trios/feature_extractors/*.c
 trios/classifiers/*.c
+trios/contrib/features/*.c
+trios/window_determination/*.c
