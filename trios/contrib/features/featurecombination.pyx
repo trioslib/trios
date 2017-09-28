@@ -14,7 +14,8 @@ cdef class FeatureCombinationExtractor(FeatureExtractor):
         self.features = list(features)
         # win = max window size from features.windows
         win = self.features[0].window
-        FeatureExtractor.__init__(self, win, **kwargs, dtype=np.uint8)
+        FeatureExtractor.__init__(self, win, **kwargs)
+        self.dtype=np.uint8
 
     def __len__(self):
         n = 0
