@@ -11,8 +11,6 @@ if platform.system() != 'Windows':
     extra_link_args = ['-fopenmp']
 
 extensions = [
-            #Extension('trios.woperator', [
-            #        'trios/woperator.pyx']),
             Extension('trios.classifiers.base_classifier', [
                     'trios/classifiers/base_classifier.pyx']),                    
             Extension('trios.feature_extractors.base_extractor', [
@@ -53,8 +51,13 @@ setup(
     author='Igor Montagner, Roberto Hirata Jr, Nina S. T. Hirata',
     author_email='igordsm+trios@gmail.com',
     url='http://trioslib.github.io',
-    classifiers=['Development Status :: 4 - Beta',
-                 'Programming Language :: Python :: 3'],
+    classifiers=['Development Status :: 5 - Production/Stable',
+                 'Intended Audience :: Science/Research',
+                 'License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)',
+                 'Operating System :: POSIX :: Linux',
+                 'Programming Language :: Python :: 3',
+                 'Programming Language :: Cython'
+                 ],
     packages = ['trios', 'trios.feature_extractors', 'trios.classifiers', 'trios.legacy', 
                 'trios.window_determination', 'trios.shortcuts', 'trios.contrib', 'trios.contrib.kern_approx',
                 'trios.contrib.nilc', 'trios.contrib.features',
