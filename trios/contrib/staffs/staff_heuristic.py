@@ -1,12 +1,21 @@
+raise NotImplementedError('Staff Heuristic is not supported in python3.')
+
+
+
+
+"""
 from trios import WOperator
-from gamera import *
-from gamera.core import *
-from gamera.toolkits.musicstaves import musicstaves_rl_simple, musicstaves_rl_roach_tatem, musicstaves_linetracking, musicstaves_rl_carter
-from gamera.toolkits.musicstaves.musicstaves import *
-from gamera.toolkits.musicstaves.musicstaves_skeleton import MusicStaves_skeleton
+import numpy as np
+try:
+    from gamera import *
+    from gamera.core import *
+    from gamera.toolkits.musicstaves import musicstaves_rl_simple, musicstaves_rl_roach_tatem, musicstaves_linetracking, musicstaves_rl_carter
+    from gamera.toolkits.musicstaves.musicstaves import *
+    from gamera.toolkits.musicstaves.musicstaves_skeleton import MusicStaves_skeleton
+    
 from trios.feature_extractors import RAWFeatureExtractor
 
-import numpy as np
+
 from gamera.plugins import numpy_io
 
 class StaffHeuristic(WOperator):
@@ -14,6 +23,8 @@ class StaffHeuristic(WOperator):
     all_methods = ['skeleton', 'rl_simple', 'rl_roach', 'rl_carter', 'ltc', 'lth']
 
     def __init__(self,nomeMetodo=None):
+        
+        raise NotImplementedError('Staff Heuristic is not supported in python3.')
         self.nome_metodo = nomeMetodo
         self.window = np.zeros((1, 1), dtype=np.uint8)
         init_gamera()
@@ -88,3 +99,4 @@ class StaffHeuristic(WOperator):
         
     def set_state(self, obj_dict):
         self.nome_metodo = obj_dict['nome_metodo']
+"""
