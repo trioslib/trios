@@ -9,7 +9,7 @@ to allow users to combine and extend each of its parts.
 Developed in Cython, TRIOSlib is many times faster than equivalent pure Python code, while 
 still being expressive and easy to use.
 
-If you use *TRIOSlib* in a paper, please cite
+We do not have yet a research paper specifically on TRIOSlib, so if you use it in a paper, please cite
 
 
 *Montagner, I. S.; Hirata, R.; Hirata, N.S.T., "A Machine Learning Based Method for Staff Removal," Pattern Recognition (ICPR), 2014 22nd International Conference on.*

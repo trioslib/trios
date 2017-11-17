@@ -8,7 +8,7 @@ Created on Fri May 15 12:22:04 2015
 
 import numpy as np
 import sklearn
-from trios.WOperator import Classifier
+from .base_classifier import Classifier
 from trios import util
 import pickle
 
@@ -23,6 +23,9 @@ inside TRIOS.
 This class can be used, for example, to use the weights computed using Linear Regression
 models to do classification. 
     '''
+    
+    bibtex_citation = ''
+    
     def __init__(self, coefs=[], bias=0,  minimize=False):
         self.coefs = coefs
         self.bias = bias

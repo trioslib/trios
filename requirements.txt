@@ -4,3 +4,4 @@ cython
 scipy
 scikit-learn
 nose
+numba
