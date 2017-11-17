@@ -47,7 +47,7 @@ except ImportError:
 
 setup(
     name='trios',
-    version='2.2',
+    version='2.1',
     author='Igor Montagner, Roberto Hirata Jr, Nina S. T. Hirata',
     author_email='igordsm+trios@gmail.com',
     url='http://trioslib.github.io',
