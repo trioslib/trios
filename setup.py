@@ -3,12 +3,6 @@ from setuptools import setup
 import os
 import platform
 
-import numpy as np
-
-includes = [np.get_include()]
-if platform.system() != 'Windows':
-    extra_compile_args = ['-fopenmp']
-    extra_link_args = ['-fopenmp']
 
 extensions = [
             Extension('trios.classifiers.base_classifier', [
@@ -31,14 +25,23 @@ extensions = [
                     'trios/window_determination/relief.pyx']),
             Extension('trios.contrib.features.lbp',[ 
                 'trios/contrib/features/lbp.pyx'])]
-
-for extt in extensions:
-    extt.include_dirs += includes
-    if platform.system() != 'Windows':
-        extt.extra_compile_args += extra_compile_args
-        extt.extra_link_args += extra_link_args
-
 try:
+    
+    import numpy as np
+
+    includes = [np.get_include()]
+    if platform.system() != 'Windows':
+        extra_compile_args = ['-fopenmp']
+        extra_link_args = ['-fopenmp']
+
+    
+    for extt in extensions:
+            extt.include_dirs += includes
+            if platform.system() != 'Windows':
+                extt.extra_compile_args += extra_compile_args
+                extt.extra_link_args += extra_link_args
+
+    
     from Cython.Build import cythonize
     extensions = cythonize(extensions)
 except ImportError:
@@ -64,6 +67,7 @@ setup(
                 ],
     setup_requires=[
             'cython==0.26.1',
+            'numpy==1.13.3', 
             ],
     install_requires=[
         'cython==0.26.1',
@@ -71,7 +75,7 @@ setup(
         'numpy==1.13.3', 
         'scikit-learn==0.19.1', 
         'scipy==0.19.1', 
-        'pillow==4.3.0', 
+        'pillow', 
         'numba==0.35.0'
     ], 
     ext_modules = extensions,
