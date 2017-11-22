@@ -1,0 +1,5 @@
+site_name: TRIOSlib Documentation
+pages:
+    - Home: 'index.md'
+    - User Guide: 
+        - 'Training operators': user_guide/training_operators.md
