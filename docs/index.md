@@ -29,7 +29,8 @@ To install from source first clone the repository and then run setup.py install.
 
 We recommend using trios with [Anaconda Python](https://www.anaconda.com/download/#linux).
 
-## Quick start
+
+## Quickstart
 
 If you are new to Image Operator Learning we recommend reading our review
 entitled [*Image Operator Learning and Applications*](http://ieeexplore.ieee.org/document/7812925/?reload=true).
