@@ -6,6 +6,7 @@ pages:
         - 'Training operators': user_guide/training_operators.md
     - Methods:
         - 'Aperture': methods/aperture.md
+        - 'Two level': methods/two-level.md
 
 extra_javascript: 
     - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML

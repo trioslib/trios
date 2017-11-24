@@ -1,6 +1,5 @@
 # Aperture operators
 
-
 Frequently image operators between gray level images rely mostly on the contrast 
 between the pixels and not in their isolated values. To achieve this "brightness 
 invariance" we can use *Aperture Operators*. This technique is 
@@ -24,4 +23,8 @@ Example of use:
 ```{python}
 {!test/aperture_test.py!}
 ```
+
+Reference: *Hirata Jr, Roberto, et al. "Aperture filters: theory, application, 
+and multiresolution analysis." Advances in Nonlinear Signal and Image Processing 
+(2006): 15-45.* 
 
