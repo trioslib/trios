@@ -1,36 +1,6 @@
-Training WOperators
-======================
+# Training WOperators
 
-Learning image operators involves some preliminary activies such as preparing data and choosing 
-parameters of the methods used. We list below the four steps necessary to start working with
-TRIOSlib. 
 
-Defining a training set
----------------
-
-The first step to is to create a representative training set with pairs of input-output image
-samples as the ones shown below. (source: ....)
-
-.. figure:: _static/image1.png
-    :align: left
-    :width: 40%
-
-    Input image
-    
-.. figure:: _static/image1-out.png
-    :align: right
-    :width: 40%
-
-    Desired output
-
-It is important to select pairs that contain characteristics relevant to the task of interest.
-For instance, when processing music score images (as above), one could include variations in 
-staffline height and curvature. This allows the learned operator to process this specific
-conditions and may also help to generalize better to unseen variations.
-
-Training sets are represented by the class `Imageset`, which is a list of tuples that contain
-the paths to an input image, the desired output and an optional binary mask image. Pixels that 
-are 0 (black) in the mask are ignored.
 
 Window determination
 -----------------------

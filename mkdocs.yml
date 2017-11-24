@@ -2,11 +2,13 @@ site_name: TRIOSlib Documentation
 pages:
     - Home: 'index.md'
     - User Guide: 
-        - 'Introduction': user_guide/introduction.md
-        - 'Training operators': user_guide/training_operators.md
+        - 'Introduction': user-guide/introduction.md
+        - 'Training operators': user-guide/training_operators.md
     - Methods:
         - 'Aperture': methods/aperture.md
         - 'Two level': methods/two-level.md
+        
+    - Publications: 'publications-using-trioslib.md'
 
 extra_javascript: 
     - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML
