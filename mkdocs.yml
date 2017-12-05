@@ -9,6 +9,7 @@ pages:
         - 'Two level': methods/two-level.md
         
     - Publications: 'publications-using-trioslib.md'
+    - Examples: 'examples.md'
 
 extra_javascript: 
     - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML
