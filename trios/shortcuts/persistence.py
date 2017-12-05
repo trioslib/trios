@@ -21,7 +21,7 @@ def load_image(fname):
     return sp.ndimage.imread(fname, mode='L')
 
 def load_mask_image(fname, shape, win):
-    if fname is not None:
+    if fname is not None and fname != '':
         msk = load_image(fname)
     else:
         msk = np.ones(shape, np.uint8)
