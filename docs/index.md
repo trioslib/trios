@@ -33,7 +33,7 @@ We recommend using trios with [Anaconda Python](https://www.anaconda.com/downloa
 ## Quickstart
 
 If you are new to Image Operator Learning we recommend reading our review
-entitled [*Image Operator Learning and Applications*](http://ieeexplore.ieee.org/document/7812925/?reload=true).
+entitled [*Image Operator Learning and Applications*](http://ieeexplore.ieee.org/document/7812925/?reload=true) ([open access](http://www.vision.ime.usp.br/projects/trios/tutorial/tutorial-final-ieee.pdf))
 
 
 * If you read about Image Operator Learning in one of our works and wish to apply
