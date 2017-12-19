@@ -3,6 +3,7 @@ pages:
     - Home: 'index.md'
     - User Guide: 
         - 'Introduction': user-guide/introduction.md
+        - 'Using trained operators': user-guide/using_trained_operators.md
         - 'Training operators': user-guide/training_operators.md
     - Methods:
         - 'Aperture': methods/aperture.md
