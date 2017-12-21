@@ -14,7 +14,10 @@ cdef class FourierExtractor(FeatureExtractor):
         self.dtype = np.float
     
     def __len__(self):
-        return np.greater(self.window, 0).sum()
+        begin = np.transpose(np.nonzero(self.window))[0]
+        end = np.transpose(np.nonzero(self.window))[-1]
+        n = np.ceil((end - begin + 1)/2)
+        return int(n[0]*n[1])
 
     @cython.boundscheck(False)
     @cython.nonecheck(False)
@@ -37,8 +40,8 @@ cdef class FourierExtractor(FeatureExtractor):
         fourier = fft.fft2(mask[begin[0]:end[0],begin[1]:end[1]])
         fourier = np.absolute(fourier)
         
-        for l in range(fourier.shape[0]):
-            for m in range(fourier.shape[1]):
+        for l in range(np.ceil(fourier.shape[0]/2)):
+            for m in range(np.ceil(fourier.shape[1]/2)):
                 if win[l,m] != 0:
                     pattern[k] = fourier[l,m]
                     k += 1
