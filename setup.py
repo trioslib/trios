@@ -43,15 +43,17 @@ extensions = [
             Extension('trios.window_determination.relief', [
                     'trios/window_determination/relief'+ext]),
             Extension('trios.contrib.features.lbp',[ 
-                'trios/contrib/features/lbp'+ext]),
+                    'trios/contrib/features/lbp'+ext]),
             Extension('trios.contrib.features.moments',[ 
-                'trios/contrib/features/moments'+ext]),
+                    'trios/contrib/features/moments'+ext]),
             Extension('trios.contrib.features.fourier',[ 
-                'trios/contrib/features/fourier'+ext]),
+                    'trios/contrib/features/fourier'+ext]),
             Extension('trios.contrib.features.sobel',[ 
-                'trios/contrib/features/sobel'+ext]),
+                    'trios/contrib/features/sobel'+ext]),
             Extension('trios.contrib.features.featurecombination', [
-                'trios/contrib/features/featurecombination'+ext])]
+                    'trios/contrib/features/featurecombination'+ext]),
+            Extension('trios.contrib.features.hog', [
+                    'trios/contrib/features/hog'+ext])]
 
 for extt in extensions:
     extt.include_dirs += includes
