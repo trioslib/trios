@@ -22,11 +22,13 @@ The `WOperator.apply(img, mask)` method takes two images as arguments. The first
 
 The `WOperator.eval(testset)` method evaluates the performance of an operator on a given `trios.Imageset`. For each triple in the Image set it produces a processed version of the input image and (ii) compares it with the expected output. Then the ratio of pixels with incorrect pixel values is computed and returned. Smaller values mean that the processed output resembles more closely the expected one.
 
-The example below illustrates the use of these methods to detect the letter `s` in images from the `jung` dataset. To use it, download this operator and save it as `trained-jung.op.gz` in the same folder as the code below. It is also necessary to download the *jung* dataset and uncompress and name it `jung-images` (the script `download_jung_images.py` already does this).
+The example below illustrates the use of these methods to detect the letter `s` in images from the `jung` dataset. To use it, download [this operator](https://raw.githubusercontent.com/trioslib/trios/master/docs/examples/trained-jung.op.gz) save it as `trained-jung.op.gz` in the same folder as the code below. It is also necessary to download the *jung* dataset and uncompress and name it `jung-images` (the script `download_jung_images.py` already does this).
 
 ```{python}
 {!docs/examples/using_trained_operator.py!}
 ```
+
+The operator should produce an error of about `0.005`, which is a respectable value for this dataset.
 
 Academic users can determine which papers to cite (and read!) by calling `WOperator.cite_me()`. Each technique implemented in TRIOSlib defines a *bibtex* entry that is included when `cite_me()`is called. The example below illustrates its use. 
 
@@ -34,5 +36,33 @@ Academic users can determine which papers to cite (and read!) by calling `WOpera
 {!docs/examples/citing_trained_operators.py!}
 ```
 <pre>
-(output here!)
+@inproceedings{montagner2016image,
+  title={Image operator learning and applications},
+  author={Montagner, Igor S and Hirata, Nina ST and Hirata, Roberto},
+  booktitle={Graphics, Patterns and Images Tutorials (SIBGRAPI-T), SIBGRAPI Conference on},
+  pages={38--50},
+  year={2016},
+  organization={IEEE}
+}
+
+@inproceedings{montagner2016kernel,
+  title={Kernel Approximations for W-operator learning},
+  author={Montagner, Igor S and Hirata, Roberto and Hirata, Nina ST and Canu, St{'e}phane},
+  booktitle={Graphics, Patterns and Images (SIBGRAPI), 2016 29th SIBGRAPI Conference on},
+  pages={386--393},
+  year={2016},
+  organization={IEEE}
+}
+
+@article{scikit-learn,
+ title={Scikit-learn: Machine Learning in {P}ython},
+ author={Pedregosa, F. and Varoquaux, G. and Gramfort, A. and Michel, V.
+         and Thirion, B. and Grisel, O. and Blondel, M. and Prettenhofer, P.
+         and Weiss, R. and Dubourg, V. and Vanderplas, J. and Passos, A. and
+         Cournapeau, D. and Brucher, M. and Perrot, M. and Duchesnay, E.},
+ journal={Journal of Machine Learning Research},
+ volume={12},
+ pages={2825--2830},
+ year={2011}
+}
 </pre>
