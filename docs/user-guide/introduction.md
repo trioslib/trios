@@ -49,3 +49,7 @@ The follow example illustrates the use of the module `trios.shortcuts.window` to
         <td>Cross \(5\times 5\)</td>
     </tr>
 </table>
+
+## Operators 
+
+Local image transformations estimated by TRIOS are called *WOperators* and are represented by the [`trios.WOperator`](https://github.com/trioslib/trios/blob/master/trios/woperator.py) class. In the following pages we will learn how to use instances of this class to transform images and how to estimate new local transformations.
