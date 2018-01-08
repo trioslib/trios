@@ -2,6 +2,7 @@
 *~
 .vs
 .vscode
+.eggs
 build
 dist
 trios.egg-info
@@ -13,3 +14,7 @@ site/output
 trios/*.c
 trios/feature_extractors/*.c
 trios/classifiers/*.c
+
+docs/examples/jung-images
+docs/examples/*gz
+docs/examples/imageset-text.txt
