@@ -4,7 +4,7 @@ This user guide presents a broad view of all concepts needed to use TRIOSlib. Al
 
 ## Image sets
 
-The image processing task we would like to solve is defined by a set of input-output images. For instance, if the task to be solved is staff removal, the following pair of images coudl be used for training. We would like to estimate an image transformation that takes as input the image on the left and produces an output as close as possile to the image on the right. 
+The image processing task we would like to solve is defined by a set of input-output images. For instance, if the task to be solved is staff removal, the following pair of images coudl be used for training. We would like to estimate an image transform that takes as input the image on the left and produces an output as close as possile to the image on the right. 
 
 <table>
     <tr width="100%">
@@ -24,7 +24,7 @@ The `trios.Imageset` class represents this set of input-output images and resemb
 
 ## Windows 
 
-Image operators built with TRIOS are local image transformations that analyse
+Image operators built with TRIOS are local image transforms that analyse
 a small neighborhood window around each point to determine its value in the 
 output image. TRIOS uses 2D numpy arrays of unsigned 8bit ints to store windows. 
 A point is inside the window if its value not `0` (we typically use `1`). Thus, the size (number of points) of a window `win` is `np.sum(win != 0)`. 
@@ -50,6 +50,6 @@ The follow example illustrates the use of the module `trios.shortcuts.window` to
     </tr>
 </table>
 
-## Operators 
+## WOperators 
 
-Local image transformations estimated by TRIOS are called *WOperators* and are represented by the [`trios.WOperator`](https://github.com/trioslib/trios/blob/master/trios/woperator.py) class. In the following pages we will learn how to use instances of this class to transform images and how to estimate new local transformations.
+Local image transforms (or image operators) estimated by TRIOS are called *WOperators* and are represented by the [`trios.WOperator`](https://github.com/trioslib/trios/blob/master/trios/woperator.py) class. In the following pages we will learn how to use instances of this class to transform images and how to estimate new local transformations.

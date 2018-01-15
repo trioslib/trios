@@ -32,12 +32,7 @@ We recommend using trios with [Anaconda Python](https://www.anaconda.com/downloa
 
 ## Quickstart
 
-If you are new to Image Operator Learning we recommend reading our review
+If you are new to Image Transform Learning we recommend reading our review
 entitled [*Image Operator Learning and Applications*](http://ieeexplore.ieee.org/document/7812925/?reload=true) ([open access](http://www.vision.ime.usp.br/projects/trios/tutorial/tutorial-final-ieee.pdf)). See the [User guide](user-guide/introduction.md) for instructions on how to use TRIOSlib and a brief presentation of all concepts needed. 
 
 
-* If you read about Image Operator Learning in one of our works and wish to apply
-a trained operator to your images see the page about [Using trained operators](user-guide/using_trained_operators.md).
-* If you want to train your own operators to solve a new problem or to customize
-the output for a particular type of image see the page about [Creating new operators](user-guide/training_operators.md).
-* In both cases it might be useful to visit the page about [Performance evaluation](user-guide/performance-evaluation.md).
