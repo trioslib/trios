@@ -29,6 +29,7 @@ these measures.
 
 
 ```{python}
+# file docs/examples/using_woperator_eval.py
 {!docs/examples/using_woperator_eval.py!}
 ```
 <pre>
@@ -55,10 +56,13 @@ compute the same performance measures of `WOperator.eval`. See the code below
 for a simple example. 
 
 ```{python}
+# file docs/examples/evaluation_functions.py
 {!docs/examples/evaluation_functions.py!}
 ```
 <pre>
-jkhkj
+Error: 0.005500750102286675
+Error per image: (0.005500750102286675, [(118, 19767), (115, 18197), (116, 20463), (154, 19646), (164, 20033), (95, 21930), (72, 18931), (67, 19107), (54, 20293), (134, 19606)])
+Binary: (11721, 185163, 563, 526)
 </pre>
 
 
@@ -68,4 +72,15 @@ and F<sub>1</sub> measure by calling `ev.binary_evaluation(TP, TN, FP, FN)`, whe
 with `binary=True`. The example below prints a performance report based on
 these measures for problems with binary output images. 
 
-# TODO: código com relatório de desempenho aqui ;)
+```{python}
+# file docs/examples/performance_report.py
+{!docs/examples/performance_report.py!}
+```
+<pre>
+Accuracy: 0.994369
+Recall: 0.954945
+Precision: 0.954168
+Specificity: 0.996972
+NPV: 0.997025
+F1: 0.954557
+</pre>

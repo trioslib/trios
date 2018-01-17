@@ -9,6 +9,6 @@ if __name__ == '__main__':
     testset = trios.Imageset.read('jung-images/test.set')
     
     ev.apply_batch(operator, testset, 'jung-result')
-    print('Error:', ev.compare_folders(teset, 'jung-result'))
-    print('Error per image', ev.compare_folders(teset, 'jung-result', per_image=False))
-    print('Binary:', ev.compare_folders(teset, 'jung-result', binary=True))
+    print('Error:', ev.compare_folders(testset, 'jung-result'))
+    print('Error per image', ev.compare_folders(testset, 'jung-result', per_image=False))
+    print('Binary:', ev.compare_folders(testset, 'jung-result', binary=True))
