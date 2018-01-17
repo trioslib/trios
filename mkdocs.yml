@@ -6,6 +6,7 @@ pages:
         - 'Using trained operators': user-guide/using_trained_operators.md
         - 'Training new operators': user-guide/training_new_operators.md
         - 'Extending TRIOSlib': user-guide/extending_trios.md
+        - 'Performance evaluation': user-guide/performance-evaluation.md
     - Methods:
         - 'Aperture': methods/aperture.md
         - 'Two level': methods/two-level.md
