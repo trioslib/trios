@@ -1,28 +1,31 @@
 # Aperture operators
 
-Frequently image operators between gray level images rely mostly on the contrast 
-between the pixels and not in their isolated values. To achieve this "brightness 
-invariance" we can use *Aperture Operators*. This technique is 
-implemented as a `trios.FeatureExtractor` as a subclass of 
-`trios.feature_extractors.RAWFeatureExtractor`. Given a window *W* with 
-dimensions \\(m\times n\\), it subtracts the center pixel value from all points in 
-the window, saturating at a value $k$. Thus, an Aperture feature extractor 
-produces patterns in the range \\([-k,k]^N\\), where \\(N\\) is the size of \\(W\\). 
-It is defined as follows, where \\(w_{i,j}\\) is the raw pixel value in \\(W\\). 
-
-\begin{equation}
-a_{i,j} = \begin{cases} 
-    0 & i=m/2, j=n/2  \\\\
-    max(-k, min(k, w_{i,j} - w_{m/2,n/2})) & \text{otherwise}
-\end{cases} 
-\end{equation}
+The image transforms learned in TRIOS are locally defined inside a small 
+neighborhood around each pixel. Aperture transforms also put a vertical window 
+of size \\(k\\) centered on the gray-level value of the pixel. Given a window *W* 
+with dimensions \\(m\times n\\), Aperture subtracts the center pixel value from 
+all points in the window, saturating at a value \\(k\\) and \\(-k\\). 
 
 
-Example of use: 
+
+Aperture is very useful when dealing with gray-level problems where changes in 
+brightness do not affect the output image. The most notable application of 
+Aperture was in conjunction with [Two Level](two-level.md) and [NILC](nilc.md) 
+to do retinal vessel segmentation in the [DRIVE 
+dataset](http://www.isi.uu.nl/Research/Databases/DRIVE/) (as reported in [this 
+thesis](http://www.teses.usp.br/teses/disponiveis/45/45134/tde-21082017-111455/publico/tese_final.pdf)). 
+
+Download the [DRIVE dataset](https://www.isi.uu.nl/Research/Databases/DRIVE/download.php)
+and modify the `drive_location` variable to use the code below. It takes about
+2 minutes to run on a regular desktop machine. 
 
 ```{python}
-{!test/aperture_test.py!}
+{!docs/examples/methods/aperture.py!}
 ```
+<pre>
+Error: 0.09204074186141716
+</pre>
+
 
 Reference: *Hirata Jr, Roberto, et al. "Aperture filters: theory, application, 
 and multiresolution analysis." Advances in Nonlinear Signal and Image Processing 

@@ -7,9 +7,12 @@ pages:
         - 'Training new operators': user-guide/training_new_operators.md
         - 'Extending TRIOSlib': user-guide/extending_trios.md
         - 'Performance evaluation': user-guide/performance-evaluation.md
+        - 'Advanced methods': user-guide/advanced_methods.md
     - Methods:
         - 'Aperture': methods/aperture.md
         - 'Two level': methods/two-level.md
+        
+        
         
     - Publications: 'publications-using-trioslib.md'
     - Examples: 'examples.md'
