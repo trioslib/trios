@@ -51,8 +51,12 @@ learning procedure. After saving the image transform can be saved using
 the [last section](using_trained_operators.md).
 
 ```{python}
+# file docs/examples/creating_image_transforms.py
 {!docs/examples/creating_image_transforms.py!}
 ```
+<pre>
+Error: 0.010420612911861719
+</pre>
 
 This example produces as error of about \\(1\%\\), double the value of the 
 trained transform used in the [last section](using_trained_operators.md). 

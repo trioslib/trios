@@ -11,6 +11,7 @@ pages:
     - Methods:
         - 'Aperture': methods/aperture.md
         - 'Two level': methods/two-level.md
+        - 'ISI': methods/ISI.md
         
         
         
