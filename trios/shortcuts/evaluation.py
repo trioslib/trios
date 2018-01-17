@@ -15,49 +15,78 @@ import os.path
 
 from trios.wop_matrix_ops import compare_images, compare_images_binary
 
+import trios.shortcuts.persistence as p
+
 import sys
 
-def __apply_parallel(op, elem):
-    pass
-
-def apply_and_save(operator, testset, folder_prefix, procs=None):
+def apply_batch(operator, testset, folder_prefix, procs=None):
     '''
     Applies an operator in all images of a given testset. The
     images are saved in folder_prefix with the same name as the
     groundtruth images.
     '''
+   
+    for (i, o, m) in testset:
+        inp = p.load_image(i)
+        msk = p.load_mask_image(m, inp.shape, operator.window)
+        o_name = os.path.split(o)[1]
+        res = operator.apply(inp, msk)
+        p.save_image(res, '%s/%s'%(folder_prefix, o_name))
     
-    pass
 
-def compare_folders(testset, res_folder, binary=True):
+def compare_folders(testset, res_folder, window=None, binary=False, per_image=False):
     '''
     Computes the accuracy of a set of processed images saved
     on the disk. Takes as input a testset and the folder where the
     result images are stored. Returns
     the accuracy.
     '''
+    if binary and per_image:
+        raise ValueError('Choose either binary=True or per_image=True')
     
-    if binary:
-        perf = np.zeros(5, np.uint32)
+    if window is not None:
+        ww = window.shape[1]//2
+        hh = window.shape[0]//2
     else:
-        perf = np.zeros(2, np.uint32)
-    for (i, o, m) in testset:
-        print('Comparing', o, file=sys.stderr)
+        ww = 0
+        hh = 0
+    
+    ncols = 2
+    nrows = 1
+    if binary:
+        ncols = 5
+    if per_image:
+        nrows = len(testset)
+    
+    perf = np.zeros((nrows, ncols), np.uint32)
+    
+    for count, (i, o, m) in enumerate(testset):
+        if trios.show_eval_progress:
+            print('Comparing', o, file=sys.stderr)
         out = sp.ndimage.imread(o, mode='L')
         o_name = os.path.split(o)[1]
         msk = sp.ndimage.imread(m, mode='L')
         res = sp.ndimage.imread('%s/%s'%(res_folder, o_name), mode='L')
         
         if binary:
-            perf_i = compare_images_binary(out, msk, res, 0, 0)
+            perf_i = compare_images_binary(out, msk, res, ww, hh)
         else:
-            perf_i = compare_images(out, msk, res, 0, 0)
-        perf = perf + np.asarray(perf_i)
+            perf_i = compare_images(out, msk, res, ww, hh)
+        
+        if per_image:
+            perf[count] = np.asarray(perf_i)
+        else:
+            perf = perf + np.asarray(perf_i)
     
     if binary:
-        return perf[:4]
+        return perf[0][:4]
     else:
-        return perf[0] / perf[1]
+        if per_image:
+            sum_perf = perf.sum(axis=0)
+            acc = sum_perf[0]/sum_perf[1]
+            return (acc, [tuple(r) for r in perf])
+        else:
+            return perf[0][0] / perf[0][1]
     
 def binary_evaluation(op, test, procs=2):
     '''
@@ -65,6 +94,9 @@ def binary_evaluation(op, test, procs=2):
     for the given operator and the given testset
     '''
     TP, TN, FP, FN = op.eval(test, binary=True, procs=procs)
+    return binary_measures(TP, TN, FP, FN)
+    
+def binary_measures(TP, TN, FP, FN):
     acc = (TP + TN)/(TP + TN + FP + FN)
     recall = TP / (TP + FN)
     precision = TP / (TP + FP)

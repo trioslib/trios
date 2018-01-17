@@ -44,6 +44,18 @@ class ImagesetTest(unittest.TestCase):
         self.assertEqual(len(imgset), 0)
         imgset.append(('asdl', '1sdf', 'ldkasl'))
         self.assertEqual(len(imgset), 1)
+        
+    def test_write_read(self):
+        img = trios.Imageset([('a', 'b', None), ('c', 'b', 'er')])
+        img.write('test-imageset.txt')
+        img2 = trios.Imageset.read('test-imageset.txt')
+        
+        self.assertEqual(len(img), len(img2))
+        self.assertEqual(img[0], img2[0])
+        self.assertEqual(img[1], img2[1])
+        
+        
+                
     
 if __name__ == '__main__':
     unittest.main()

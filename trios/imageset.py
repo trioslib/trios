@@ -116,7 +116,10 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
             if ngroups == 2:
                 imgset.append( (input_img, ideal_img, None) )
             else:
-                mask_img = base_dir[2] + lines[line_count+2].strip()
+                if lines[line_count + 2].strip() == '':
+                    mask_img = None
+                else:
+                    mask_img = base_dir[2] + lines[line_count+2].strip()
                 imgset.append( (input_img, ideal_img, mask_img) )
             line_count += ngroups        
         
@@ -139,7 +142,10 @@ Also, Imageset([['input1', 'ideal1', 'mask1'], ['input2', 'ideal2'], ... ]) conv
         f.write('.d\n' + './\n' * ngroups + '\n')
         
         for example in self:
-            f.write('\n'.join(example))
+            if example[-1] != None:
+                f.write('\n'.join(example))
+            else:
+                f.write('\n'.join((example[0], example[1], '')))
             f.write('\n\n')
         
         f.close()
