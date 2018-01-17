@@ -35,7 +35,7 @@ these measures.
 <pre>
 Error: 0.005500750102286675
 Binary: (11721, 185163, 563, 526)
-Error per image: (0.005500750102286675, [(118, 19767), (115, 18197), (116, 20463), (154, 19646), (164, 20033), (95, 21930), (72, 18931), (67, 19107), (54, 20293), (134, 19606)])
+Error per image: (0.005500750102286675, [(118, 19767), (95, 21930), (115, 18197), (72, 18931), (116, 20463), (67, 19107), (154, 19646), (54, 20293), (164, 20033), (134, 19606)])
 </pre> 
 
 In the code above we called eval several times with different parameters and 
@@ -51,20 +51,22 @@ A better way of evaluating performance is by using the functions in the
 
 We can use the `ev.apply_batch(op, testset, result_folder)` function to apply an 
 image transform to all images from a testset and save them in the specified 
-folder. Then, we can call `ev.compare_folders(testset, result_folder)` to 
-compute the same performance measures of `WOperator.eval`. See the code below 
-for a simple example. 
+folder. Then, we can call `ev.compare_folders(testset, result_folder, window)` to 
+compute the same performance measures of `WOperator.eval`. Do not forget to
+pass `operator.window` to `ev.compare_folder`! Since the estimated image transforms
+are local we do not evaluate when the neighborhood selected falls off the image.
+
+See the code below for a simple example. 
 
 ```{python}
 # file docs/examples/evaluation_functions.py
 {!docs/examples/evaluation_functions.py!}
 ```
 <pre>
-Error: 0.005500750102286675
-Error per image: (0.005500750102286675, [(118, 19767), (115, 18197), (116, 20463), (154, 19646), (164, 20033), (95, 21930), (72, 18931), (67, 19107), (54, 20293), (134, 19606)])
-Binary: (11721, 185163, 563, 526)
+Error: 0.00550075010229
+Binary: [ 11721 185163    563    526]
+Error per image (0.0055007501022866752, [(118, 19767), (95, 21930), (115, 18197), (72, 18931), (116, 20463), (67, 19107), (154, 19646), (54, 20293), (164, 20033), (134, 19606)])
 </pre>
-
 
 Finally, we can compute Recall, Specificity, Precision, Negative Preditive Value
 and F<sub>1</sub> measure by calling `ev.binary_evaluation(TP, TN, FP, FN)`, where
