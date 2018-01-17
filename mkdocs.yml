@@ -12,6 +12,7 @@ pages:
         - 'Aperture': methods/aperture.md
         - 'Two level': methods/two-level.md
         - 'ISI': methods/ISI.md
+        - 'NILC': methods/nilc.md
         
         
         

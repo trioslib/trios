@@ -23,6 +23,9 @@ size of a large neighborhood. The code below exemplifies this approach in the
 approach](../user-guide/training_new_operators.md), it is still worse than using more 
 sofisticated methods. 
 
+Two-level is implemented as a feature extractor called `CombinationPattern`. It
+receives operators as arguments and computes the colored feature vector in the
+figure above. 
 
 ```{python}
 # file docs/examples/methods/two-level.py

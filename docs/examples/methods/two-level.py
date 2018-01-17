@@ -13,7 +13,7 @@ if __name__ == '__main__':
     images2 = trios.Imageset.read('../jung-images/level2.set')
     test = trios.Imageset.read('../jung-images/test.set')
 
-    domain = np.ones((7, 7), np.uint8)
+    domain = np.ones((9, 7), np.uint8)
     windows = [w.random_win(domain, 40, True) for i in range(5)]
     ops = []
     for i in range(5):
