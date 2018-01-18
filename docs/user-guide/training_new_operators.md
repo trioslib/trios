@@ -61,6 +61,6 @@ Error: 0.010420612911861719
 This example produces as error of about \\(1\%\\), double the value of the 
 trained transform used in the [last section](using_trained_operators.md). 
 Even in this simple problem using advanced techniques can significantly 
-increase performance. The [Methods section index](../methods/description.md)
+increase performance. The [Advanced Methods](advanced_methods.md) page
 provides an overview of the implemented methods and when to use them. Each 
 method is also documented separately and includes an example of use. 

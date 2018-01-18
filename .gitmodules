@@ -1,0 +1,4 @@
+[submodule "trioslib.github.io"]
+	path = trioslib.github.io
+	url = https://github.com/trioslib/trioslib.github.io.git
+	branch = master
