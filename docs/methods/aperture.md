@@ -27,10 +27,11 @@ and modify the `drive_location` variable to use the code below. It takes about
 use case for Aperture. 
 
 ```{python}
+# file docs/examples/methods/aperture.py
 {!docs/examples/methods/aperture.py!}
 ```
 <pre>
-Error: 0.09204074186141716
+Accuracy: 0.9081394727942615
 </pre>
 
 
