@@ -14,6 +14,23 @@ manager.
 
 Documentation: [http://trioslib.github.io/](http://trioslib.github.io/)
 
+## Building the documentation
+
+The docs use [mkdocs](http://mkdocs.org) and the `markdown-include` extensions.
+
+Both can be installed using `pip`
+
+To view changes live in your browser run
+
+>$ mkdocs serve
+
+and visit `localhost:8000`
+
+To deploy run 
+
+>$ mkdocs build -d trioslib.github.io
+
+and commit/push changes in the submodule. 
 
 Notes for version 2.0.9
 ------------------------

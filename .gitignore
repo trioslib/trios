@@ -18,3 +18,5 @@ trios/classifiers/*.c
 docs/examples/jung-images
 docs/examples/*gz
 docs/examples/imageset-text.txt
+docs/examples/jung-result
+
