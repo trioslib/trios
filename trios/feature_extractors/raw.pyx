@@ -70,7 +70,7 @@ cpdef RAWBitExtract(unsigned char[:,:] win, unsigned char[:,:] img, int i, int j
 
 class RAWBitFeatureExtractor(FeatureExtractor):
     def __init__(self, np.ndarray[unsigned char, ndim=2] window=None):
-        FeatureExtractor.__init__(self, window)
+        FeatureExtractor.__init__(self, window, dtype=np.uint32)
 
     def __len__(self):
         wsize = np.greater(self.window, 0).sum()
