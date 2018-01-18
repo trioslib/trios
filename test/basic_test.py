@@ -6,7 +6,10 @@ import numpy as np
 
 import trios.shortcuts.persistence as p
 
+trios.show_eval_progress=False
+
 if __name__ == '__main__':
+    np.random.seed(10)
     images = trios.Imageset.read('images/level1.set')
     win = np.ones((5, 5), np.uint8)
     
@@ -27,6 +30,12 @@ if __name__ == '__main__':
     p.save_image(out, 'out-dt-jung-1a.png')
     
     test = trios.Imageset.read('images/test.set')
-    print('Accuracy', op.eval(test, procs=1))
+    print('Accuracy', op.eval(test, procs=1, per_image=True))
+    print('Accuracy', op.eval(test, procs=2, per_image=True))
+    print('Accuracy', op.eval(test, procs=8, per_image=True))
+
+
+
+
     
-    print(op2.cite_me())
+    #print(op2.cite_me())
