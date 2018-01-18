@@ -34,7 +34,10 @@ if __name__ == '__main__':
     print('Accuracy', op.eval(test, procs=2, per_image=True))
     print('Accuracy', op.eval(test, procs=8, per_image=True))
 
-
+    op.extractor.batch_size = 100
+    out_5000 = op.apply(img, img)
+    assert np.sum(out_5000 != out) == 0
+    p.save_image(out, 'out-dt-jung-1a-2.png')
 
 
     

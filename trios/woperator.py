@@ -114,12 +114,27 @@ class WOperator(Serializable):
             res = np.zeros(image.shape, np.uint8)
             ww2 = max(self.window.shape[1]//2, 1)
             hh2 = max(self.window.shape[0]//2, 1)
-            y, x = np.nonzero(mask[hh2:-hh2, ww2:-ww2])
-            temp = self.extractor.temp_feature_vector()
-            X = np.zeros((len(y), len(self.extractor)), temp.dtype)
-            self.extractor.extract_batch(image[hh2:-hh2, ww2:-ww2], y, x, X)
-            ypred = self.classifier.apply_batch(X)
-            res[y+hh2,x+ww2] = ypred
+            idx_i, idx_j = np.nonzero(mask[hh2:-hh2, ww2:-ww2])
+
+            image_no_border = image[hh2:-hh2, ww2:-ww2]
+
+            if self.extractor.batch_size > 0:
+                bs = self.extractor.batch_size
+                batch = np.zeros((bs, len(self.extractor)), self.extractor.dtype)
+                for b in range(0, len(idx_i), bs):
+                    end = min(b + bs, len(idx_i))
+                    batch_j = idx_j[b:end]
+                    batch_i = idx_i[b:end]
+                    num = end - b
+
+                    self.extractor.extract_batch(image_no_border, batch_i, batch_j, batch[:num])
+                    batch_pred = self.classifier.apply_batch(batch[:num])
+                    res[batch_i+hh2,batch_j+ww2] = batch_pred
+            else: 
+                features = np.zeros((len(idx_i), len(self.extractor)), self.extractor.dtype)
+                self.extractor.extract_batch(image_no_border, idx_i, idx_j, features)
+                pred = self.classifier.apply_batch(features)
+                res[idx_i+hh2,idx_j+ww2] = pred
             return res
         else:
             return apply_loop(self.window, image, mask, self.classifier, self.extractor)
