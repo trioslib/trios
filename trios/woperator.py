@@ -40,7 +40,7 @@ def worker_eval(t):
     else:
         x_border = y_border = 0
     idx = [ i  for i in range(len(imgset)) if i % nprocs == procnumber]
-    errs = []
+    errs = {}
     for i in idx:
         inp, out, msk = imgset[i]
         if trios.show_eval_progress:
@@ -51,9 +51,9 @@ def worker_eval(t):
         msk = p.load_mask_image(msk, inp.shape, self.window)
         res = self.apply(inp, msk)
         if bin:
-            errs.append(compare_images_binary(out, msk, res, x_border, y_border))
+            errs[i] = compare_images_binary(out, msk, res, x_border, y_border)
         else:
-            errs.append(compare_images(out, msk, res, x_border, y_border))
+            errs[i] = compare_images(out, msk, res, x_border, y_border)
         del inp, out, msk, res
     return errs
 
@@ -125,18 +125,22 @@ class WOperator(Serializable):
             return apply_loop(self.window, image, mask, self.classifier, self.extractor)
 
     def eval(self, imgset, window=None, per_image=False, binary=False, procs=2):
-        errors = []
+        errors = [0] * len(imgset)
         ll = list(zip(itertools.repeat(self), itertools.repeat(window), itertools.repeat(imgset), itertools.repeat(procs), range(procs), itertools.repeat(binary)))
         if trios.mp_support and procs > 1:
             ctx = multiprocessing.get_context('forkserver')
             errors_p = ctx.Pool(processes=procs)
-            errors = errors_p.map(worker_eval, ll)
+            errors_dict = errors_p.map(worker_eval, ll)
             errors_p.close()
             errors_p.join()
             del errors_p
-            errors = list(itertools.chain(*errors))
         else:
-            errors = worker_eval((self, window, imgset, 1, 0, binary))
+            errors_dict = [worker_eval((self, window, imgset, 1, 0, binary))]
+        
+        for worker_errors in errors_dict:
+            for k in worker_errors.keys():
+                errors[k] = worker_errors[k] 
+
         if binary:
             TP = sum([err[0] for err in errors])
             TN = sum([err[1] for err in errors])
