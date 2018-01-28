@@ -30,13 +30,6 @@ ProgressInfo = collections.namedtuple('ProgressInfo', ['val_error',
                                                        'num_operators', 
                                                        'best_iteration'])
 
-def stop_criteria(j):
-    '''
-    Checks whether the error has not decreased for a
-    certain number of iterations or max_iters have passed.
-    '''
-    return False
-
 def opt_condition(Z, y, w, lamb, j):
     C = 1/(lamb*Z.shape[0])
     lin = Z.dot(w[:-1]) + w[-1]
@@ -49,7 +42,7 @@ def opt_condition(Z, y, w, lamb, j):
 def nilc_iteration(Z, y, w, nonzeros_plus_bias, j, operator, lamb, valstate, 
                    operators, progress_info):
     '''
-    |: second-level patterns. 
+    Z: second-level patterns. 
     y: labels
     w: weight vector
     nonzeros_plus_bias: selected operators    
@@ -61,13 +54,13 @@ def nilc_iteration(Z, y, w, nonzeros_plus_bias, j, operator, lamb, valstate,
     progress_info: information about the progress of the method. useful for plots
     '''
     C=1/(lamb*Z.shape[0])
-    model = LogisticRegression(penalty='l1', C=C, fit_intercept=True)
+    model = LogisticRegression(penalty='l1', C=C, fit_intercept=True, random_state=np.random.RandomState(42))
     nonzeros = nonzeros_plus_bias[:-1]
 
     if j == 0:
         nonzeros[0] = True
         model.fit(Z[:, nonzeros], y)
-        w[0] = model.coef_
+        w[0] = model.coef_.reshape(-1)
         w[-1] = model.intercept_
         operators.append(operator)
         progress_info.val_error.append(1-model.score(Z[:,[0]], y))
@@ -76,8 +69,8 @@ def nilc_iteration(Z, y, w, nonzeros_plus_bias, j, operator, lamb, valstate,
             nonzeros[j] = True
             operators.append(operator)
             model.fit(Z[:, nonzeros], y)
-            w[nonzeros_plus_bias] = model.coef_
-            w[-1] = model.intercept_
+            w[nonzeros_plus_bias] = np.r_[model.coef_.reshape(-1), model.intercept_]
+            assert w[-1] == model.intercept_
             
             ww = np.where(nonzeros)[0]
             operators_new = [op for i, op in enumerate(operators) if w[ww[i]] != 0]
@@ -104,9 +97,9 @@ def nilc_iteration(Z, y, w, nonzeros_plus_bias, j, operator, lamb, valstate,
 
 def validation_step(Z, y, operators, nonzeros, valstate):
     '''
-    Checkes if the last addition to w improves the results on a validation set.
+    Checks if the last addition to w improves the results on a validation set.
     '''
-    model_no_reg = LogisticRegression(penalty='l1', C=1)
+    model_no_reg = LogisticRegression(penalty='l1', C=1, random_state=np.random.RandomState(42))
     model_no_reg.fit(Z[:, nonzeros], y)
     err = 1 - model_no_reg.score(Z[:, nonzeros], y)    
     if err < valstate.err:
@@ -188,3 +181,25 @@ def nilc(training_set1, training_set2, operator_generator, domain, lamb=1, max_i
     
     return wop2, progress_info
     
+def plot_progress(pinfo, figtitle='Progress', save_fig_as=None):
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots()
+    plt.title(figtitle)
+    plt.xlabel('Iterations')
+    
+    x = list(range(1, len(pinfo.num_operators) + 1))
+    ax.plot(x, pinfo.num_operators, label='# operators')    
+    
+    ax2 = ax.twinx()
+    ax2.plot(x, pinfo.val_error, color='r', label='Error')
+    
+    plt.axvline(pinfo.best_iteration[-1]+1, color='g', label='Selected')        
+    
+    plt.tight_layout()
+    h1, l1 = ax.get_legend_handles_labels()
+    h2, l2 = ax2.get_legend_handles_labels()
+    plt.legend(h1+h2, l1+l2, loc='center right')
+    if save_fig_as:
+        plt.savefig(save_fig_as)
+    else:
+        plt.show()

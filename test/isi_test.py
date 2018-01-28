@@ -28,4 +28,9 @@ if __name__ == '__main__':
     test = trios.Imageset.read('images/test.set')
     print('Accuracy', op.eval(test, procs=7))
     
-    print(op2.cite_me())
+    #print(op2.cite_me())
+
+    op.extractor.batch_size = 100
+    out_5000 = op.apply(img, img)
+    assert np.sum(out_5000 != out) == 0
+    p.save_image(out, 'out-isi-jung-1a-2.png')

@@ -40,7 +40,7 @@ def worker_eval(t):
     else:
         x_border = y_border = 0
     idx = [ i  for i in range(len(imgset)) if i % nprocs == procnumber]
-    errs = []
+    errs = {}
     for i in idx:
         inp, out, msk = imgset[i]
         if trios.show_eval_progress:
@@ -51,9 +51,9 @@ def worker_eval(t):
         msk = p.load_mask_image(msk, inp.shape, self.window)
         res = self.apply(inp, msk)
         if bin:
-            errs.append(compare_images_binary(out, msk, res, x_border, y_border))
+            errs[i] = compare_images_binary(out, msk, res, x_border, y_border)
         else:
-            errs.append(compare_images(out, msk, res, x_border, y_border))
+            errs[i] = compare_images(out, msk, res, x_border, y_border)
         del inp, out, msk, res
     return errs
 
@@ -114,29 +114,48 @@ class WOperator(Serializable):
             res = np.zeros(image.shape, np.uint8)
             ww2 = max(self.window.shape[1]//2, 1)
             hh2 = max(self.window.shape[0]//2, 1)
-            y, x = np.nonzero(mask[hh2:-hh2, ww2:-ww2])
-            temp = self.extractor.temp_feature_vector()
-            X = np.zeros((len(y), len(self.extractor)), temp.dtype)
-            self.extractor.extract_batch(image[hh2:-hh2, ww2:-ww2], y, x, X)
-            ypred = self.classifier.apply_batch(X)
-            res[y+hh2,x+ww2] = ypred
+            idx_i, idx_j = np.nonzero(mask[hh2:-hh2, ww2:-ww2])
+
+            image_no_border = image[hh2:-hh2, ww2:-ww2]
+
+            if self.extractor.batch_size > 0:
+                bs = self.extractor.batch_size
+                batch = np.zeros((bs, len(self.extractor)), self.extractor.dtype)
+                for b in range(0, len(idx_i), bs):
+                    end = min(b + bs, len(idx_i))
+                    batch_j = idx_j[b:end]
+                    batch_i = idx_i[b:end]
+                    num = end - b
+
+                    self.extractor.extract_batch(image_no_border, batch_i, batch_j, batch[:num])
+                    batch_pred = self.classifier.apply_batch(batch[:num])
+                    res[batch_i+hh2,batch_j+ww2] = batch_pred
+            else: 
+                features = np.zeros((len(idx_i), len(self.extractor)), self.extractor.dtype)
+                self.extractor.extract_batch(image_no_border, idx_i, idx_j, features)
+                pred = self.classifier.apply_batch(features)
+                res[idx_i+hh2,idx_j+ww2] = pred
             return res
         else:
             return apply_loop(self.window, image, mask, self.classifier, self.extractor)
 
     def eval(self, imgset, window=None, per_image=False, binary=False, procs=2):
-        errors = []
+        errors = [0] * len(imgset)
         ll = list(zip(itertools.repeat(self), itertools.repeat(window), itertools.repeat(imgset), itertools.repeat(procs), range(procs), itertools.repeat(binary)))
         if trios.mp_support and procs > 1:
             ctx = multiprocessing.get_context('forkserver')
             errors_p = ctx.Pool(processes=procs)
-            errors = errors_p.map(worker_eval, ll)
+            errors_dict = errors_p.map(worker_eval, ll)
             errors_p.close()
             errors_p.join()
             del errors_p
-            errors = list(itertools.chain(*errors))
         else:
-            errors = worker_eval((self, window, imgset, 1, 0, binary))
+            errors_dict = [worker_eval((self, window, imgset, 1, 0, binary))]
+        
+        for worker_errors in errors_dict:
+            for k in worker_errors.keys():
+                errors[k] = worker_errors[k] 
+
         if binary:
             TP = sum([err[0] for err in errors])
             TN = sum([err[1] for err in errors])

@@ -1,0 +1,26 @@
+site_name: TRIOSlib Documentation
+pages:
+    - Home: 'index.md'
+    - User Guide: 
+        - 'Introduction': user-guide/introduction.md
+        - 'Using trained operators': user-guide/using_trained_operators.md
+        - 'Training new operators': user-guide/training_new_operators.md
+        - 'Extending TRIOSlib': user-guide/extending_trios.md
+        - 'Performance evaluation': user-guide/performance-evaluation.md
+        - 'Advanced methods': user-guide/advanced_methods.md
+    - Methods:
+        - 'Aperture': methods/aperture.md
+        - 'Two level': methods/two-level.md
+        - 'ISI': methods/ISI.md
+        - 'NILC': methods/nilc.md
+        - 'KA': methods/ka.md
+    
+    - Publications: 'publications-using-trioslib.md'
+    - Examples and trained operators: 'examples.md'
+
+extra_javascript: 
+    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+    - mathjax-config.js
+
+markdown_extensions:
+    - markdown_include.include
