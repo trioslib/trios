@@ -12,7 +12,6 @@ cdef class FeatureCombinationExtractor(FeatureExtractor):
 
     def __init__(self, *features, **kwargs):
         self.features = list(features)
-        # win = max window size from features.windows
         win = self.features[0].window
         FeatureExtractor.__init__(self, win, **kwargs)
         self.dtype=np.uint8
@@ -29,13 +28,11 @@ cdef class FeatureCombinationExtractor(FeatureExtractor):
             n = len(self.features[i])
             self.features[i].extract_batch(inp, idx_i, idx_j, X[:,begin:begin+n])
             begin += n
-        
+
     def write_state(self, obj_dict):
         FeatureExtractor.write_state(self, obj_dict)
-        obj_dict['nfeat'] = len(self.features)
-        # write features in dict?
+        obj_dict['features'] = self.features
 
     def set_state(self, obj_dict):
-        FeatureExtractor.write_state(self, obj_dict)
-        self.nfeat = len(self.features)
-        # read features from dict?
+        FeatureExtractor.set_state(self, obj_dict)
+        self.features = obj_dict['features']

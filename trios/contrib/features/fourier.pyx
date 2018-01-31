@@ -12,7 +12,7 @@ cdef class FourierExtractor(FeatureExtractor):
     def __init__(self, window=None, **kw):
         FeatureExtractor.__init__(self,window, **kw)
         self.dtype = np.float
-    
+
     def __len__(self):
         begin = np.transpose(np.nonzero(self.window))[0]
         end = np.transpose(np.nonzero(self.window))[-1]
@@ -39,9 +39,15 @@ cdef class FourierExtractor(FeatureExtractor):
         end = np.transpose(np.nonzero(win))[-1]
         fourier = fft.fft2(mask[begin[0]:end[0],begin[1]:end[1]])
         fourier = np.absolute(fourier)
-        
+
         for l in range(np.ceil(fourier.shape[0]/2)):
             for m in range(np.ceil(fourier.shape[1]/2)):
                 if win[l,m] != 0:
                     pattern[k] = fourier[l,m]
                     k += 1
+
+    def write_state(self, obj_dict):
+        FeatureExtractor.write_state(self, obj_dict)
+
+    def set_state(self, obj_dict):
+        FeatureExtractor.set_state(self, obj_dict)

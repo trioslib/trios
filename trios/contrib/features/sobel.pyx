@@ -21,3 +21,8 @@ cdef class SobelExtractor(RAWFeatureExtractor):
         for l in range(idx_i.shape[0]):
             self.extract(edges, idx_i[l], idx_j[l], X[l])
 
+    def write_state(self, obj_dict):
+        RAWFeatureExtractor.write_state(self, obj_dict)
+
+    def set_state(self, obj_dict):
+        RAWFeatureExtractor.set_state(self, obj_dict)
