@@ -1,7 +1,7 @@
 site_name: TRIOSlib Documentation
 pages:
     - Home: 'index.md'
-    - User Guide: 
+    - User Guide:
         - 'Introduction': user-guide/introduction.md
         - 'Using trained operators': user-guide/using_trained_operators.md
         - 'Training new operators': user-guide/training_new_operators.md
@@ -14,11 +14,17 @@ pages:
         - 'ISI': methods/ISI.md
         - 'NILC': methods/nilc.md
         - 'KA': methods/ka.md
-    
+        - 'Features':
+            - 'LBP': methods/lbp.md
+            - 'Moments': methods/moments.md
+            - 'Fourier': methods/fourier.md
+            - 'Sobel': methods/sobel.md
+            - 'HoG': methods/hog.md
+
     - Publications: 'publications-using-trioslib.md'
     - Examples and trained operators: 'examples.md'
 
-extra_javascript: 
+extra_javascript:
     - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML
     - mathjax-config.js
 
