@@ -8,9 +8,8 @@
 
 * `jung` ([download dataset](http://vision.ime.usp.br/projects/trios/)) - [download](examples/trained-jung.op.gz), error: 0.004. Uses: [KA][methods/ka.md]
 * `veja` ([download dataset](http://vision.ime.usp.br/projects/trios/)) - [download](examples/trained-veja.op.gz), error: 0.017. Uses: [NILC](methods/nilc.md)
-* `staffs` ([download dataset](http://www.cvc.uab.es/cvcmuscima/competition2013/index.htm) [download](examples/trained-staffs.op.gz). error: . Uses: 
+* `staffs` ([download dataset](http://www.cvc.uab.es/cvcmuscima/competition2013/index.htm) [download](examples/trained-staffs.op.gz). Accuracy: 96.71% (white pixels only) . Uses: Uses: [NILC](methods/nilc.md)
 * `DRIVE` ([download dataset](https://www.isi.uu.nl/Research/Databases/DRIVE/)) - [download](examples/trained-drive.op.gz), accuracy: . Uses: [KA](methods/ka.md) 
-
 
 
 ## Code Samples
