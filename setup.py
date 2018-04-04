@@ -24,11 +24,21 @@ extensions = [
             Extension('trios.window_determination.relief', [
                     'trios/window_determination/relief.pyx']),
             Extension('trios.contrib.features.lbp',[ 
-                'trios/contrib/features/lbp.pyx'])]
-try:
-    
-    import numpy as np
 
+                    'trios/contrib/features/lbp'+ext]),
+            Extension('trios.contrib.features.moments',[ 
+                    'trios/contrib/features/moments'+ext]),
+            Extension('trios.contrib.features.fourier',[ 
+                    'trios/contrib/features/fourier'+ext]),
+            Extension('trios.contrib.features.sobel',[ 
+                    'trios/contrib/features/sobel'+ext]),
+            Extension('trios.contrib.features.featurecombination', [
+                    'trios/contrib/features/featurecombination'+ext]),
+            Extension('trios.contrib.features.hog', [
+                    'trios/contrib/features/hog'+ext])]
+try:
+   
+    import numpy as np
     includes = [np.get_include()]
     if platform.system() != 'Windows':
         extra_compile_args = ['-fopenmp']

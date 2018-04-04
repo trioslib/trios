@@ -34,6 +34,7 @@ def apply_batch(operator, testset, folder_prefix, procs=None):
         p.save_image(res, '%s/%s'%(folder_prefix, o_name))
     
 
+
 def compare_folders(testset, res_folder, window=None, binary=False, per_image=False):
     '''
     Computes the accuracy of a set of processed images saved
@@ -78,6 +79,8 @@ def compare_folders(testset, res_folder, window=None, binary=False, per_image=Fa
         else:
             perf = perf + np.asarray(perf_i)
     
+    if per_image:
+        return err_images
     if binary:
         return perf[0][:4]
     else:
