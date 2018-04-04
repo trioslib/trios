@@ -24,18 +24,17 @@ extensions = [
             Extension('trios.window_determination.relief', [
                     'trios/window_determination/relief.pyx']),
             Extension('trios.contrib.features.lbp',[ 
-
-                    'trios/contrib/features/lbp'+ext]),
+                    'trios/contrib/features/lbp.pyx']),
             Extension('trios.contrib.features.moments',[ 
-                    'trios/contrib/features/moments'+ext]),
+                    'trios/contrib/features/moments.pyx']),
             Extension('trios.contrib.features.fourier',[ 
-                    'trios/contrib/features/fourier'+ext]),
+                    'trios/contrib/features/fourier.pyx']),
             Extension('trios.contrib.features.sobel',[ 
-                    'trios/contrib/features/sobel'+ext]),
+                    'trios/contrib/features/sobel.pyx']),
             Extension('trios.contrib.features.featurecombination', [
-                    'trios/contrib/features/featurecombination'+ext]),
+                    'trios/contrib/features/featurecombination.pyx']),
             Extension('trios.contrib.features.hog', [
-                    'trios/contrib/features/hog'+ext])]
+                    'trios/contrib/features/hog.pyx'])]
 try:
    
     import numpy as np
@@ -86,8 +85,10 @@ setup(
         'scikit-learn==0.19.1', 
         'scipy==0.19.1', 
         'pillow', 
-        'numba==0.35.0'
+        'numba==0.35.0',
+        'scikit-image==0.13.1', 
     ], 
     ext_modules = extensions,
+    include_dirs = [np.get_include()],
     cffi_modules = ['trios/legacy/build_legacy.py:c_code'],
 )
